@@ -2127,6 +2127,13 @@
             transform: none;
         }
 
+        .editor-panel .dash-btn:disabled {
+            opacity: 0.48;
+            cursor: not-allowed;
+            background: rgba(255,255,255,0.04);
+            color: var(--muted);
+        }
+
         .editor-panel .dash-btn.dash-primary {
             background: var(--accent);
             border-color: transparent;
@@ -3117,6 +3124,9 @@
                         </div>
 
                         <div class="dash-actions">
+                            <div id="draftStateChip" class="dash-chip">Черновик: без изменений</div>
+                            <button id="applyDraftBtn" type="button" class="dash-btn dash-primary">Применить</button>
+                            <button id="discardDraftBtn" type="button" class="dash-btn">Отменить</button>
                             <button id="exportJsonBtn" type="button" class="dash-btn">Экспорт JSON</button>
                             <button id="importJsonBtn" type="button" class="dash-btn">Импорт JSON</button>
                             <button id="addProductBtn" type="button" class="dash-btn dash-primary">Новый товар</button>
@@ -3215,16 +3225,24 @@
                                                 <div class="dash-field dash-c6"><label>Порядок на витрине</label><input type="number" id="f-showcase-order"></div>
                                                 <div class="dash-field dash-c6"><label>Ссылка на файл / download</label><input type="text" id="f-download" placeholder="./files/example.jar"></div>
                                                 <div class="dash-field dash-c6"><label>Исходный код / GitHub</label><input type="text" id="f-source"></div>
+                                                <div class="dash-field dash-c12">
+                                                    <label for="f-download-file">Файл для GitHub upload</label>
+                                                    <input type="file" id="f-download-file">
+                                                    <p id="f-download-file-meta" class="dash-help">Файл не выбран. Можно оставить ручную ссылку выше.</p>
+                                                    <div class="dash-sync-actions">
+                                                        <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Убрать файл</button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="dash-editor-footer">
-                                    <div class="note">Локальные изменения сначала сохраняются в черновик редактора.</div>
+                                    <div class="note">Изменения копятся в общем черновике. Верхние кнопки «Применить» и «Отменить» работают для всех разделов сразу.</div>
                                     <div class="btns">
                                         <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
-                                        <button id="saveProductBtn" type="button" class="dash-btn dash-primary dash-sm">Сохранить карточку</button>
+                                        <button id="saveProductBtn" type="button" class="dash-btn dash-primary dash-sm">Применить форму</button>
                                     </div>
                                 </div>
 
@@ -3252,10 +3270,10 @@
                                                         <input id="githubToken" type="password" placeholder="Токен не сохраняется в настройках">
                                                     </div>
                                                 </div>
-                                            </div>
+                                        </div>
 
-                                            <div class="dash-form-section">
-                                                <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в опубликованный HTML через GitHub API. Репозиторий и путь определяются автоматически. Токен нужен с правом <span class="mono">Contents: Read and write</span>. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
+                                        <div class="dash-form-section">
+                                                <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в опубликованный HTML через GitHub API. Репозиторий и путь определяются автоматически. Токен нужен с правом <span class="mono">Contents: Read and write</span>. Загруженные в карточках файлы тоже отправляются в GitHub этим же токеном. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
                                             </div>
                                         </div>
 
@@ -3335,10 +3353,10 @@
                                         </div>
 
                                         <div class="dash-editor-footer">
-                                            <div class="note">Карточка участника попадает в публичный блок «Наша команда».</div>
+                                            <div class="note">Карточка участника меняет общий черновик. Верхние кнопки применяют или откатывают весь пакет правок.</div>
                                             <div class="btns">
                                                 <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
-                                                <button id="saveTeamMemberBtn" type="button" class="dash-btn dash-primary dash-sm">Сохранить участника</button>
+                                                <button id="saveTeamMemberBtn" type="button" class="dash-btn dash-primary dash-sm">Применить форму</button>
                                             </div>
                                         </div>
                                     </div>
@@ -3458,6 +3476,7 @@
             branch: 'main',
             path: SITE_FILE_PATH_FALLBACK
         });
+        const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
         const SECRET_SEQUENCE = ['ArrowRight', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'ArrowRight'];
         const HTML_PATH_PATTERN = /\.html?$/i;
         const SITE_DATA_BLOCK_PATTERN = /[ \t]*\/\*__ALEPH_SITE_DATA_START__\*\/[\s\S]*?[ \t]*\/\*__ALEPH_SITE_DATA_END__\*\//;
@@ -3482,6 +3501,7 @@
             { key: 'telegram', label: 'Telegram' }
         ];
 
+        let savedSiteData = deepClone(DEFAULT_SITE_DATA);
         let siteData = deepClone(DEFAULT_SITE_DATA);
         let editorData = deepClone(DEFAULT_SITE_DATA);
         let editorSelectedIndex = -1;
@@ -3494,6 +3514,7 @@
         let sequenceBuffer = [];
         let editorAccessArmed = false;
         let editorAccessTimer = null;
+        const pendingProductUploads = new Map();
 
         const featuredProductsEl = document.getElementById('featured-products');
         const archiveProductsEl = document.getElementById('archive-products');
@@ -3515,6 +3536,9 @@
         const editorShowcaseCountEl = document.getElementById('editorShowcaseCount');
         const addProductBtnEl = document.getElementById('addProductBtn');
         const addTeamMemberBtnEl = document.getElementById('addTeamMemberBtn');
+        const draftStateChipEl = document.getElementById('draftStateChip');
+        const applyDraftBtnEl = document.getElementById('applyDraftBtn');
+        const discardDraftBtnEl = document.getElementById('discardDraftBtn');
         const closeProductEditorBtnEl = document.getElementById('closeProductEditorBtn');
         const saveProductBtnEl = document.getElementById('saveProductBtn');
         const deleteProductBtnEl = document.getElementById('deleteProductBtn');
@@ -3533,6 +3557,9 @@
         const editorFieldShowcaseEl = document.getElementById('f-showcase');
         const editorFieldShowcaseOrderEl = document.getElementById('f-showcase-order');
         const editorFieldDownloadEl = document.getElementById('f-download');
+        const editorFieldDownloadFileEl = document.getElementById('f-download-file');
+        const editorFieldDownloadFileMetaEl = document.getElementById('f-download-file-meta');
+        const clearDownloadFileBtnEl = document.getElementById('clearDownloadFileBtn');
         const editorFieldSourceEl = document.getElementById('f-source');
         const socialYoutubeEl = document.getElementById('socialYoutube');
         const socialDiscordEl = document.getElementById('socialDiscord');
@@ -3581,6 +3608,76 @@
             } catch (error) {
                 return false;
             }
+        }
+
+        function serializeData(value) {
+            return JSON.stringify(normalizeData(value));
+        }
+
+        function getSiteDirectory(path) {
+            const normalized = String(path || SITE_FILE_PATH_FALLBACK).replace(/\\/g, '/');
+            const index = normalized.lastIndexOf('/');
+            return index >= 0 ? normalized.slice(0, index + 1) : '';
+        }
+
+        function buildRepoAssetPath(config, relativePath) {
+            return (getSiteDirectory(config.path) + String(relativePath || '').replace(/^\/+/, '')).replace(/\/{2,}/g, '/');
+        }
+
+        function sanitizeFileSegment(value, fallback = 'file') {
+            const safe = String(value || '')
+                .toLowerCase()
+                .replace(/[^a-z0-9._-]+/g, '-')
+                .replace(/^-+|-+$/g, '');
+            return safe || fallback;
+        }
+
+        function buildProductUploadRelativePath(product, fileName) {
+            const safeId = sanitizeFileSegment(product.id || product.title, 'product');
+            const safeVersion = sanitizeFileSegment(product.version, '');
+            const safeFileName = sanitizeFileSegment(fileName, 'download.bin');
+            const extIndex = safeFileName.lastIndexOf('.');
+            const baseName = extIndex > 0 ? safeFileName.slice(0, extIndex) : safeFileName;
+            const extension = extIndex > 0 ? safeFileName.slice(extIndex) : '';
+            const versionPart = safeVersion ? `-${safeVersion}` : '';
+            return `files/${safeId}${versionPart}-${baseName}${extension}`.replace(/--+/g, '-');
+        }
+
+        function formatBytes(bytes) {
+            const value = Number(bytes) || 0;
+            if (value < 1024) return `${value} B`;
+            if (value < 1024 * 1024) return `${(value / 1024).toFixed(1)} KB`;
+            return `${(value / (1024 * 1024)).toFixed(1)} MB`;
+        }
+
+        function hasStagedUploads() {
+            return pendingProductUploads.size > 0;
+        }
+
+        function hasUnappliedDraftChanges() {
+            return serializeData(editorData) !== serializeData(siteData);
+        }
+
+        function hasUnsavedDraftChanges() {
+            return hasStagedUploads()
+                || serializeData(editorData) !== serializeData(savedSiteData)
+                || serializeData(siteData) !== serializeData(savedSiteData);
+        }
+
+        function syncDraftControls() {
+            const hasPreviewDiff = hasUnappliedDraftChanges();
+            const hasSavedDiff = hasUnsavedDraftChanges();
+
+            if (draftStateChipEl) {
+                if (hasSavedDiff) {
+                    draftStateChipEl.innerHTML = `<strong>Черновик:</strong> ${hasPreviewDiff ? 'ожидает применения' : 'готов к сохранению'}`;
+                } else {
+                    draftStateChipEl.innerHTML = '<strong>Черновик:</strong> без изменений';
+                }
+            }
+
+            if (applyDraftBtnEl) applyDraftBtnEl.disabled = !hasPreviewDiff;
+            if (discardDraftBtnEl) discardDraftBtnEl.disabled = !hasSavedDiff;
         }
 
         function normalizeProduct(product, index) {
@@ -3935,9 +4032,50 @@
 
         async function initializeData() {
             const localData = loadLocalData();
-            siteData = localData || normalizeData(DEFAULT_SITE_DATA);
-            editorData = deepClone(siteData);
+            savedSiteData = localData || normalizeData(DEFAULT_SITE_DATA);
+            siteData = deepClone(savedSiteData);
+            editorData = deepClone(savedSiteData);
             renderSite();
+            syncDraftControls();
+        }
+
+        function applyEditorDataToPreview() {
+            const normalized = normalizeData(editorData);
+            siteData = deepClone(normalized);
+            renderSite();
+            syncDraftControls();
+            return normalized;
+        }
+
+        function persistEditorData(normalizedData) {
+            const normalized = normalizeData(normalizedData);
+            savedSiteData = deepClone(normalized);
+            siteData = deepClone(normalized);
+            editorData = deepClone(normalized);
+            const stored = storageSet(LOCAL_DATA_KEY, JSON.stringify(normalized));
+            renderSite();
+            syncDraftControls();
+            return stored;
+        }
+
+        function resetEditorDraftToSaved() {
+            pendingProductUploads.clear();
+            siteData = deepClone(savedSiteData);
+            editorData = deepClone(savedSiteData);
+            editorSelectedIndex = -1;
+            teamSelectedIndex = -1;
+            editorActiveTab = 'tab-main';
+            editorSearchQuery = '';
+            editorSearchEl.value = '';
+            closeProductEditor(false);
+            closeTeamEditor(false);
+            fillSocialInputs();
+            renderEditorGrid();
+            renderTeamGrid();
+            renderAdminView();
+            renderSite();
+            renderProductUploadMeta();
+            syncDraftControls();
         }
 
         function normalizeGitHubConfig(config) {
@@ -3978,6 +4116,122 @@
                 githubSyncTargetEl.textContent = `Публикация: ${config.owner}/${config.repo} -> ${config.branch}:${config.path}`;
             }
             return config;
+        }
+
+        function getPendingProductUpload(productId) {
+            return pendingProductUploads.get(String(productId || '')) || null;
+        }
+
+        function renderProductUploadMeta() {
+            if (!editorFieldDownloadFileMetaEl) return;
+
+            if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
+                editorFieldDownloadFileMetaEl.textContent = 'Выбери товар, чтобы привязать файл к его кнопке download.';
+                if (clearDownloadFileBtnEl) clearDownloadFileBtnEl.hidden = true;
+                if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
+                return;
+            }
+
+            const product = editorData.products[editorSelectedIndex];
+            const upload = getPendingProductUpload(product.id);
+            if (!upload) {
+                editorFieldDownloadFileMetaEl.textContent = 'Файл не выбран. Можно оставить ручную ссылку выше.';
+                if (clearDownloadFileBtnEl) clearDownloadFileBtnEl.hidden = true;
+                if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
+                return;
+            }
+
+            editorFieldDownloadFileMetaEl.textContent =
+                `Подготовлено: ${upload.originalName} (${formatBytes(upload.file.size)}) -> ./${upload.relativePath}`;
+            if (clearDownloadFileBtnEl) clearDownloadFileBtnEl.hidden = false;
+        }
+
+        function syncPendingUploadForProduct(previousProduct, nextProduct, currentDownloadValue) {
+            const upload = getPendingProductUpload(previousProduct.id);
+            if (!upload) return nextProduct;
+
+            const nextRelativePath = buildProductUploadRelativePath(nextProduct, upload.originalName);
+            const previousAutoUrl = './' + upload.relativePath;
+            const shouldRewriteDownload = currentDownloadValue === previousAutoUrl || previousProduct.downloadUrl === previousAutoUrl;
+            const nextUpload = {
+                ...upload,
+                relativePath: nextRelativePath
+            };
+
+            pendingProductUploads.delete(previousProduct.id);
+            pendingProductUploads.set(nextProduct.id, nextUpload);
+
+            if (shouldRewriteDownload) {
+                nextProduct.downloadUrl = './' + nextRelativePath;
+                editorFieldDownloadEl.value = nextProduct.downloadUrl;
+            }
+
+            return nextProduct;
+        }
+
+        function clearStagedProductDownloadFile(options = {}) {
+            const { preserveUrl = false } = options;
+            if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
+                renderProductUploadMeta();
+                return;
+            }
+
+            const product = editorData.products[editorSelectedIndex];
+            const upload = getPendingProductUpload(product.id);
+            if (!upload) {
+                renderProductUploadMeta();
+                syncDraftControls();
+                return;
+            }
+
+            pendingProductUploads.delete(product.id);
+            if (!preserveUrl) {
+                const expectedUrl = './' + upload.relativePath;
+                if (editorFieldDownloadEl.value.trim() === expectedUrl) {
+                    editorFieldDownloadEl.value = '';
+                }
+                syncSelectedProductFromForm();
+            } else if (editorFieldDownloadFileEl) {
+                editorFieldDownloadFileEl.value = '';
+            }
+
+            renderProductUploadMeta();
+            renderEditorGrid();
+            syncDraftControls();
+        }
+
+        function stageProductDownloadFile(file) {
+            if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
+                showToast('Сначала выбери товар, потом прикрепляй файл.', 'error');
+                if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
+                return;
+            }
+
+            if (!file) {
+                clearStagedProductDownloadFile();
+                return;
+            }
+
+            if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
+                showToast('GitHub Contents API не принимает файлы больше 100 MB.', 'error');
+                if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
+                return;
+            }
+
+            syncSelectedProductFromForm();
+            const product = editorData.products[editorSelectedIndex];
+            const relativePath = buildProductUploadRelativePath(product, file.name);
+            pendingProductUploads.set(product.id, {
+                file,
+                originalName: file.name,
+                relativePath
+            });
+            editorFieldDownloadEl.value = './' + relativePath;
+            syncSelectedProductFromForm();
+            renderProductUploadMeta();
+            renderEditorGrid();
+            syncDraftControls();
+            showToast('Файл добавлен в очередь GitHub sync.', 'success');
         }
 
         function getProductInitials(name) {
@@ -4034,6 +4288,8 @@
             editorFieldShowcaseOrderEl.value = '';
             editorFieldDownloadEl.value = '';
             editorFieldSourceEl.value = '';
+            if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
+            renderProductUploadMeta();
         }
 
         function fillSocialInputs() {
@@ -4190,6 +4446,7 @@
                 description: teamFieldBioEl.value,
                 sortOrder: toNumber(teamFieldOrderEl.value, current.sortOrder || teamSelectedIndex + 1)
             }, teamSelectedIndex);
+            syncDraftControls();
             return true;
         }
 
@@ -4212,7 +4469,19 @@
             teamEditorTitleEl.textContent = 'Редактирование — ' + member.name;
             fillTeamForm(member);
             renderTeamGrid();
-            showToast('Карточка участника сохранена.', 'success');
+            showToast('Форма участника применена в черновик.', 'success');
+        }
+
+        function syncTeamDraftFromInputs(refreshGrid = true) {
+            if (!syncSelectedTeamMemberFromForm()) return false;
+            const member = editorData.team[teamSelectedIndex];
+            if (member) {
+                teamEditorTitleEl.textContent = 'Редактирование — ' + member.name;
+            }
+            if (refreshGrid) {
+                renderTeamGrid();
+            }
+            return true;
         }
 
         function selectTeamMember(index) {
@@ -4237,12 +4506,14 @@
             if (teamSelectedIndex >= 0) {
                 openTeamEditor(teamSelectedIndex);
             }
+            syncDraftControls();
         }
 
         function addTeamMember() {
             commitOpenTeamForm(false);
             editorData.team.push(createEmptyTeamMember());
             openTeamEditor(editorData.team.length - 1);
+            syncDraftControls();
             showToast('Новый участник добавлен.', 'success');
         }
 
@@ -4254,12 +4525,14 @@
             if (!editorData.team.length) {
                 closeTeamEditor(false);
                 renderTeamGrid();
+                syncDraftControls();
                 showToast('Участник удалён.', 'success');
                 return;
             }
 
             const nextIndex = Math.min(teamSelectedIndex, editorData.team.length - 1);
             openTeamEditor(nextIndex);
+            syncDraftControls();
             showToast('Участник удалён.', 'success');
         }
 
@@ -4296,6 +4569,7 @@
             editorFieldShowcaseOrderEl.value = product.featuredOrder;
             editorFieldDownloadEl.value = product.downloadUrl;
             editorFieldSourceEl.value = product.sourceUrl;
+            renderProductUploadMeta();
             syncEditorTabs();
         }
 
@@ -4383,12 +4657,24 @@
             editorOverlayEl.setAttribute('aria-hidden', 'false');
             document.body.classList.add('editor-open');
             renderGitHubSyncTarget();
+            renderProductUploadMeta();
+            syncDraftControls();
         }
 
-        function closeEditor() {
+        function closeEditor(options = {}) {
+            const { force = false } = options;
+            if (!force && (hasUnappliedDraftChanges() || hasStagedUploads())) {
+                const ok = confirm('Есть неприменённые изменения. Закрыть панель и потерять их?');
+                if (!ok) return false;
+                pendingProductUploads.clear();
+                editorData = deepClone(siteData);
+                renderProductUploadMeta();
+                syncDraftControls();
+            }
             editorOverlayEl.classList.remove('open');
             editorOverlayEl.setAttribute('aria-hidden', 'true');
             document.body.classList.remove('editor-open');
+            return true;
         }
 
         function createEmptyProduct() {
@@ -4422,7 +4708,7 @@
         function syncSelectedProductFromForm() {
             if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return false;
             const current = editorData.products[editorSelectedIndex];
-            editorData.products[editorSelectedIndex] = normalizeProduct({
+            let nextProduct = normalizeProduct({
                 ...current,
                 title: editorFieldNameEl.value,
                 id: editorFieldSlugEl.value,
@@ -4440,6 +4726,10 @@
                 downloadUrl: editorFieldDownloadEl.value,
                 sourceUrl: editorFieldSourceEl.value
             }, editorSelectedIndex);
+            nextProduct = syncPendingUploadForProduct(current, nextProduct, editorFieldDownloadEl.value.trim());
+            editorData.products[editorSelectedIndex] = nextProduct;
+            renderProductUploadMeta();
+            syncDraftControls();
             return true;
         }
 
@@ -4461,6 +4751,8 @@
             commitOpenTeamForm(refreshGrid);
             syncSocialsFromInputs();
             renderEditorSocialPreview();
+            renderProductUploadMeta();
+            syncDraftControls();
         }
 
         function saveProductDraft() {
@@ -4469,7 +4761,19 @@
             editorTitleEl.textContent = 'Редактирование — ' + product.title;
             fillEditorForm(product);
             renderEditorGrid();
-            showToast('Карточка сохранена в редакторе.', 'success');
+            showToast('Форма товара применена в черновик.', 'success');
+        }
+
+        function syncProductDraftFromInputs(refreshGrid = true) {
+            if (!syncSelectedProductFromForm()) return false;
+            const product = editorData.products[editorSelectedIndex];
+            if (product) {
+                editorTitleEl.textContent = 'Редактирование — ' + product.title;
+            }
+            if (refreshGrid) {
+                renderEditorGrid();
+            }
+            return true;
         }
 
         function selectProduct(index) {
@@ -4494,12 +4798,14 @@
             if (editorSelectedIndex >= 0) {
                 openProductEditor(editorSelectedIndex);
             }
+            syncDraftControls();
         }
 
         function addProduct() {
             commitOpenProductForm(false);
             editorData.products.push(createEmptyProduct());
             openProductEditor(editorData.products.length - 1);
+            syncDraftControls();
             showToast('Новый продукт добавлен.', 'success');
         }
 
@@ -4507,6 +4813,7 @@
             if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return;
             if (!confirm('Удалить товар?')) return;
 
+            pendingProductUploads.delete(editorData.products[editorSelectedIndex].id);
             editorData.products.splice(editorSelectedIndex, 1);
             if (!editorData.products.length) {
                 editorData.products.push(createEmptyProduct());
@@ -4514,6 +4821,7 @@
 
             const nextIndex = Math.min(editorSelectedIndex, editorData.products.length - 1);
             openProductEditor(nextIndex);
+            syncDraftControls();
             showToast('Товар удалён из редактора.', 'success');
         }
         function exportEditorJson() {
@@ -4530,6 +4838,7 @@
         async function importEditorJson(file) {
             const text = await file.text();
             const parsed = JSON.parse(text);
+            pendingProductUploads.clear();
             editorData = normalizeData(parsed);
             editorSelectedIndex = -1;
             teamSelectedIndex = -1;
@@ -4543,16 +4852,17 @@
             renderEditorGrid();
             renderTeamGrid();
             renderAdminView();
+            renderProductUploadMeta();
+            syncDraftControls();
             showToast('JSON импортирован в редактор.', 'success');
         }
 
-        function applyEditorDataLocally() {
-            const normalized = normalizeData(editorData);
-            siteData = normalized;
-            editorData = deepClone(normalized);
-            const stored = storageSet(LOCAL_DATA_KEY, JSON.stringify(normalized));
-            renderSite();
-            return stored;
+        function saveEditorDataLocally() {
+            const normalized = applyEditorDataToPreview();
+            const stored = persistEditorData(normalized);
+            pendingProductUploads.clear();
+            renderProductUploadMeta();
+            return { normalized, stored };
         }
 
         function uint8ToBase64(bytes) {
@@ -4609,54 +4919,56 @@
             return null;
         }
 
-        async function saveToGitHub(data) {
-            const config = resolveGitHubConfig();
-            const token = document.getElementById('githubToken').value.trim();
-            if (!config.owner || !config.repo || !config.branch || !config.path) {
-                throw new Error('Не удалось определить репозиторий GitHub для публикации.');
-            }
-            if (!token) {
-                throw new Error('Для сохранения в GitHub нужен token.');
-            }
+        function buildGitHubContentsApiUrl(config, repoPath) {
+            return `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${repoPath.split('/').map(encodeURIComponent).join('/')}`;
+        }
 
-            const normalizedPath = config.path.replace(/\\/g, '/');
-            const apiUrl = `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${normalizedPath.split('/').map(encodeURIComponent).join('/')}`;
-            const headers = {
+        function buildGitHubHeaders(token) {
+            return {
                 'Accept': 'application/vnd.github+json',
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             };
+        }
 
-            let sha;
-            let nextContentText;
-            const getResponse = await fetch(apiUrl + `?ref=${encodeURIComponent(config.branch)}`, { headers });
-            if (getResponse.ok) {
-                const existing = await getResponse.json();
-                sha = existing.sha;
-                nextContentText = isHtmlContentPath(normalizedPath)
-                    ? injectInlineSiteData(base64ToText(existing.content || ''), data)
-                    : JSON.stringify(normalizeData(data), null, 2);
-            } else if (getResponse.status === 404) {
-                if (isHtmlContentPath(normalizedPath)) {
-                    throw new Error('HTML-файл по указанному пути не найден в репозитории.');
-                }
-                nextContentText = JSON.stringify(normalizeData(data), null, 2);
-            } else if (getResponse.status !== 404) {
-                const errorText = await getResponse.text();
-                const accessHint = describeGitHubTokenAccessError(getResponse.status, errorText, config);
-                if (accessHint) {
-                    throw new Error(accessHint);
-                }
-                throw new Error('Не удалось прочитать целевой файл: ' + errorText);
+        async function fetchGitHubFileEntry(config, headers, repoPath) {
+            const apiUrl = buildGitHubContentsApiUrl(config, repoPath);
+            const response = await fetch(apiUrl + `?ref=${encodeURIComponent(config.branch)}`, { headers });
+
+            if (response.ok) {
+                return {
+                    apiUrl,
+                    entry: await response.json()
+                };
             }
 
-            const contentBytes = new TextEncoder().encode(nextContentText);
+            if (response.status === 404) {
+                return {
+                    apiUrl,
+                    entry: null
+                };
+            }
+
+            const errorText = await response.text();
+            const accessHint = describeGitHubTokenAccessError(response.status, errorText, config);
+            if (accessHint) {
+                throw new Error(accessHint);
+            }
+            throw new Error('Не удалось прочитать целевой файл: ' + errorText);
+        }
+
+        async function upsertGitHubRepoFile(config, token, repoPath, bytes, message) {
+            const headers = buildGitHubHeaders(token);
+            const { apiUrl, entry } = await fetchGitHubFileEntry(config, headers, repoPath);
             const payload = {
-                message: 'Update Aleph Studio site content',
-                content: uint8ToBase64(contentBytes),
+                message,
+                content: uint8ToBase64(bytes),
                 branch: config.branch
             };
-            if (sha) payload.sha = sha;
+
+            if (entry?.sha) {
+                payload.sha = entry.sha;
+            }
 
             const putResponse = await fetch(apiUrl, {
                 method: 'PUT',
@@ -4674,6 +4986,69 @@
             }
 
             return putResponse.json();
+        }
+
+        async function uploadPendingProductFiles(config, token, data) {
+            if (!hasStagedUploads()) {
+                return normalizeData(data);
+            }
+
+            const normalized = normalizeData(data);
+            for (const product of normalized.products) {
+                const upload = getPendingProductUpload(product.id);
+                if (!upload) continue;
+
+                const bytes = new Uint8Array(await upload.file.arrayBuffer());
+                const repoPath = buildRepoAssetPath(config, upload.relativePath);
+                await upsertGitHubRepoFile(
+                    config,
+                    token,
+                    repoPath,
+                    bytes,
+                    `Upload ${upload.originalName} for ${product.title}`
+                );
+                product.downloadUrl = './' + upload.relativePath;
+            }
+
+            return normalized;
+        }
+
+        async function saveToGitHub(data) {
+            const config = resolveGitHubConfig();
+            const token = document.getElementById('githubToken').value.trim();
+            if (!config.owner || !config.repo || !config.branch || !config.path) {
+                throw new Error('Не удалось определить репозиторий GitHub для публикации.');
+            }
+            if (!token) {
+                throw new Error('Для сохранения в GitHub нужен token.');
+            }
+
+            const normalizedPath = config.path.replace(/\\/g, '/');
+            const headers = buildGitHubHeaders(token);
+            const normalizedWithUploads = await uploadPendingProductFiles(config, token, data);
+            const { entry } = await fetchGitHubFileEntry(config, headers, normalizedPath);
+
+            if (!entry && isHtmlContentPath(normalizedPath)) {
+                throw new Error('HTML-файл по указанному пути не найден в репозитории.');
+            }
+
+            const nextContentText = isHtmlContentPath(normalizedPath)
+                ? injectInlineSiteData(base64ToText(entry?.content || ''), normalizedWithUploads)
+                : JSON.stringify(normalizedWithUploads, null, 2);
+
+            const contentBytes = new TextEncoder().encode(nextContentText);
+            await upsertGitHubRepoFile(
+                config,
+                token,
+                normalizedPath,
+                contentBytes,
+                'Update Aleph Studio site content'
+            );
+
+            pendingProductUploads.clear();
+            renderProductUploadMeta();
+            syncDraftControls();
+            return normalizedWithUploads;
         }
 
         function bindArchiveToggle() {
@@ -4758,6 +5133,69 @@
             addTeamMember();
         });
 
+        applyDraftBtnEl.addEventListener('click', () => {
+            commitAllEditorState();
+            applyEditorDataToPreview();
+            showToast('Черновик применён к странице.', 'success');
+        });
+
+        discardDraftBtnEl.addEventListener('click', () => {
+            if (!hasUnsavedDraftChanges()) return;
+            if (!confirm('Отменить все неприменённые изменения и вернуться к сохранённой версии?')) return;
+            resetEditorDraftToSaved();
+            showToast('Черновик отменён.', 'info');
+        });
+
+        [
+            editorFieldNameEl,
+            editorFieldSlugEl,
+            editorFieldTagEl,
+            editorFieldVersionEl,
+            editorFieldOrderEl,
+            editorFieldStageEl,
+            editorFieldToneEl,
+            editorFieldStatusEl,
+            editorFieldDescEl,
+            editorFieldInstructionsEl,
+            editorFieldNoteEl,
+            editorFieldShowcaseEl,
+            editorFieldShowcaseOrderEl,
+            editorFieldDownloadEl,
+            editorFieldSourceEl
+        ].forEach(field => {
+            field.addEventListener('input', () => {
+                syncProductDraftFromInputs();
+            });
+            field.addEventListener('change', () => {
+                syncProductDraftFromInputs();
+            });
+        });
+
+        [
+            teamFieldNameEl,
+            teamFieldRoleEl,
+            teamFieldAvatarEl,
+            teamFieldOrderEl,
+            teamFieldBioEl
+        ].forEach(field => {
+            field.addEventListener('input', () => {
+                syncTeamDraftFromInputs();
+            });
+            field.addEventListener('change', () => {
+                syncTeamDraftFromInputs();
+            });
+        });
+
+        editorFieldDownloadFileEl.addEventListener('change', (event) => {
+            const file = event.target.files && event.target.files[0];
+            stageProductDownloadFile(file || null);
+        });
+
+        clearDownloadFileBtnEl.addEventListener('click', () => {
+            clearStagedProductDownloadFile();
+            showToast('Файл убран из очереди GitHub sync.', 'info');
+        });
+
         document.getElementById('exportJsonBtn').addEventListener('click', async () => {
             commitAllEditorState();
             exportEditorJson();
@@ -4812,10 +5250,12 @@
             field.addEventListener('input', () => {
                 syncSocialsFromInputs();
                 renderEditorSocialPreview();
+                syncDraftControls();
             });
             field.addEventListener('change', () => {
                 syncSocialsFromInputs();
                 renderEditorSocialPreview();
+                syncDraftControls();
             });
         });
 
@@ -4907,25 +5347,29 @@
 
         document.getElementById('saveLocalBtn').addEventListener('click', () => {
             commitAllEditorState();
-            const stored = applyEditorDataLocally();
-            closeEditor();
+            const hadUploads = hasStagedUploads();
+            const { stored } = saveEditorDataLocally();
+            closeEditor({ force: true });
             showToast(
                 stored
-                    ? 'Локально сохранено. На этом браузере изменения уже видны.'
+                    ? (hadUploads
+                        ? 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.'
+                        : 'Локально сохранено. На этом браузере изменения уже видны.')
                     : 'Изменения применены, но localStorage недоступен в этом браузере.',
-                stored ? 'success' : 'info'
+                stored && !hadUploads ? 'success' : 'info'
             );
         });
 
         document.getElementById('saveGithubBtn').addEventListener('click', async () => {
             commitAllEditorState();
             try {
-                const normalized = normalizeData(editorData);
-                applyEditorDataLocally();
-                await saveToGitHub(normalized);
-                closeEditor();
-                showToast('Данные отправлены в GitHub. После публикации обновится этот HTML-файл.', 'success');
+                const normalized = applyEditorDataToPreview();
+                const savedData = await saveToGitHub(normalized);
+                persistEditorData(savedData);
+                closeEditor({ force: true });
+                showToast('Данные и файлы отправлены в GitHub. После публикации обновится этот HTML-файл.', 'success');
             } catch (error) {
+                syncDraftControls();
                 showToast(error.message || 'Не удалось сохранить в GitHub.', 'error');
             }
         });
