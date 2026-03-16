@@ -4655,6 +4655,19 @@
             return html.replace(SITE_DATA_BLOCK_PATTERN, buildInlineSiteDataBlock(data));
         }
 
+        function describeGitHubTokenAccessError(status, errorText, config) {
+            const text = String(errorText || '');
+            if (status === 403 && /Resource not accessible by personal access token/i.test(text)) {
+                return [
+                    `Токен не имеет доступа к ${config.owner}/${config.repo}.`,
+                    `Если это fine-grained token, укажи Resource owner = ${config.owner},`,
+                    `Repository access = ${config.repo}, Permissions -> Contents: Read and write.`,
+                    'Если это classic token, нужен scope repo.'
+                ].join(' ');
+            }
+            return null;
+        }
+
         async function saveToGitHub(data) {
             const config = saveGitHubConfig();
             const token = document.getElementById('githubToken').value.trim();
@@ -4689,6 +4702,10 @@
                 nextContentText = JSON.stringify(normalizeData(data), null, 2);
             } else if (getResponse.status !== 404) {
                 const errorText = await getResponse.text();
+                const accessHint = describeGitHubTokenAccessError(getResponse.status, errorText, config);
+                if (accessHint) {
+                    throw new Error(accessHint);
+                }
                 throw new Error('Не удалось прочитать целевой файл: ' + errorText);
             }
 
@@ -4708,6 +4725,10 @@
 
             if (!putResponse.ok) {
                 const errorText = await putResponse.text();
+                const accessHint = describeGitHubTokenAccessError(putResponse.status, errorText, config);
+                if (accessHint) {
+                    throw new Error(accessHint);
+                }
                 throw new Error('GitHub не принял обновление: ' + errorText);
             }
 
