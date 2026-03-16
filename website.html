@@ -3234,10 +3234,6 @@
                                     <div class="dash-sync-wrap">
                                         <div class="dash-form-card">
                                             <div class="dash-form-section">
-                                                <div class="dash-field dash-c12">
-                                                    <label for="editorPassword">Пароль для сохранения</label>
-                                                    <input id="editorPassword" type="password" placeholder="Пароль">
-                                                </div>
                                                 <div class="dash-sync-actions">
                                                     <button id="saveLocalBtn" type="button" class="dash-btn">Сохранить локально</button>
                                                     <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Сохранить для всех</button>
@@ -3248,24 +3244,9 @@
 
                                         <div class="dash-form-card">
                                             <div class="dash-form-section">
-                                                <h4>Параметры GitHub sync</h4>
+                                                <h4>GitHub sync</h4>
+                                                <p id="githubSyncTarget" class="dash-help"></p>
                                                 <div class="dash-github-grid">
-                                                    <div class="dash-field dash-c6">
-                                                        <label for="githubOwner">Owner</label>
-                                                        <input id="githubOwner" type="text" placeholder="username or org">
-                                                    </div>
-                                                    <div class="dash-field dash-c6">
-                                                        <label for="githubRepo">Repository</label>
-                                                        <input id="githubRepo" type="text" placeholder="repo-name">
-                                                    </div>
-                                                    <div class="dash-field dash-c6">
-                                                        <label for="githubBranch">Branch</label>
-                                                        <input id="githubBranch" type="text" placeholder="main">
-                                                    </div>
-                                                    <div class="dash-field dash-c6">
-                                                        <label for="githubPath">Путь к HTML / JSON</label>
-                                                        <input id="githubPath" type="text" placeholder="index.html">
-                                                    </div>
                                                     <div class="dash-field dash-c12">
                                                         <label for="githubToken">GitHub token</label>
                                                         <input id="githubToken" type="password" placeholder="Токен не сохраняется в настройках">
@@ -3274,7 +3255,7 @@
                                             </div>
 
                                             <div class="dash-form-section">
-                                                <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в файл сайта через GitHub API. Для GitHub Pages укажи путь к опубликованному HTML, обычно <span class="mono">index.html</span>. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
+                                                <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в опубликованный HTML через GitHub API. Репозиторий и путь определяются автоматически. Токен нужен с правом <span class="mono">Contents: Read and write</span>. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
                                             </div>
                                         </div>
 
@@ -3471,8 +3452,12 @@
         const INLINE_SITE_DATA_START = '/*__ALEPH_SITE_DATA_START__*/';
         const INLINE_SITE_DATA_END = '/*__ALEPH_SITE_DATA_END__*/';
         const LOCAL_DATA_KEY = 'ALEPH_SITE_DATA_LOCAL';
-        const GITHUB_CONFIG_KEY = 'ALEPH_GITHUB_CONFIG';
-        const PASSWORD_HASH = '77880b4f302a36fb79138cc933ab4d2cce196045c7479d3083b5f0d14d65a44d';
+        const GITHUB_SYNC_DEFAULTS = Object.freeze({
+            owner: 'KurumaOfficial',
+            repo: 'kurumaofficial.github.io',
+            branch: 'main',
+            path: SITE_FILE_PATH_FALLBACK
+        });
         const SECRET_SEQUENCE = ['ArrowRight', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'ArrowRight'];
         const HTML_PATH_PATTERN = /\.html?$/i;
         const SITE_DATA_BLOCK_PATTERN = /[ \t]*\/\*__ALEPH_SITE_DATA_START__\*\/[\s\S]*?[ \t]*\/\*__ALEPH_SITE_DATA_END__\*\//;
@@ -3526,7 +3511,6 @@
         const editorPanelEl = document.getElementById('editor');
         const editorTitleEl = document.getElementById('editorTitle');
         const editorSearchEl = document.getElementById('editorSearchInput');
-        const editorPasswordEl = document.getElementById('editorPassword');
         const editorTotalCountEl = document.getElementById('editorTotalCount');
         const editorShowcaseCountEl = document.getElementById('editorShowcaseCount');
         const addProductBtnEl = document.getElementById('addProductBtn');
@@ -3534,6 +3518,7 @@
         const closeProductEditorBtnEl = document.getElementById('closeProductEditorBtn');
         const saveProductBtnEl = document.getElementById('saveProductBtn');
         const deleteProductBtnEl = document.getElementById('deleteProductBtn');
+        const githubSyncTargetEl = document.getElementById('githubSyncTarget');
         const editorFieldNameEl = document.getElementById('f-name');
         const editorFieldSlugEl = document.getElementById('f-slug');
         const editorFieldTagEl = document.getElementById('f-tag');
@@ -3955,60 +3940,44 @@
             renderSite();
         }
 
-        function autoGuessGitHubConfig() {
-            const stored = loadGitHubConfig();
-            if (stored.owner || stored.repo) {
-                fillGitHubConfig(stored);
-                return;
-            }
+        function normalizeGitHubConfig(config) {
+            return {
+                owner: String(config.owner || '').trim(),
+                repo: String(config.repo || '').trim(),
+                branch: String(config.branch || 'main').trim() || 'main',
+                path: (String(config.path || SITE_FILE_PATH_FALLBACK).trim() || SITE_FILE_PATH_FALLBACK).replace(/\\/g, '/')
+            };
+        }
 
+        function resolveGitHubConfig() {
             const host = window.location.hostname;
             const pathParts = window.location.pathname.split('/').filter(Boolean);
 
             if (!host.endsWith('github.io')) {
-                fillGitHubConfig(stored);
-                return;
+                return normalizeGitHubConfig(GITHUB_SYNC_DEFAULTS);
             }
 
-            const owner = host.replace('.github.io', '');
+            const ownerFromHost = host.replace('.github.io', '');
             const isHtmlRequest = pathParts[pathParts.length - 1]?.endsWith('.html');
-            const repo = isHtmlRequest ? (owner + '.github.io') : (pathParts[0] || owner + '.github.io');
+            const repo = isHtmlRequest ? (ownerFromHost + '.github.io') : (pathParts[0] || ownerFromHost + '.github.io');
             const path = isHtmlRequest
                 ? pathParts.join('/')
-                : (pathParts.slice(1).join('/') || 'index.html');
-            const guessed = {
-                owner,
+                : (pathParts.slice(1).join('/') || SITE_FILE_PATH_FALLBACK);
+
+            return normalizeGitHubConfig({
+                owner: repo === GITHUB_SYNC_DEFAULTS.repo ? GITHUB_SYNC_DEFAULTS.owner : ownerFromHost,
                 repo,
-                branch: 'main',
+                branch: GITHUB_SYNC_DEFAULTS.branch,
                 path
-            };
-            fillGitHubConfig(guessed);
+            });
         }
 
-        function fillGitHubConfig(config) {
-            document.getElementById('githubOwner').value = config.owner || '';
-            document.getElementById('githubRepo').value = config.repo || '';
-            document.getElementById('githubBranch').value = config.branch || 'main';
-            document.getElementById('githubPath').value = config.path || SITE_FILE_PATH_FALLBACK;
-        }
-
-        function saveGitHubConfig() {
-            const config = {
-                owner: document.getElementById('githubOwner').value.trim(),
-                repo: document.getElementById('githubRepo').value.trim(),
-                branch: document.getElementById('githubBranch').value.trim() || 'main',
-                path: (document.getElementById('githubPath').value.trim() || SITE_FILE_PATH_FALLBACK).replace(/\\/g, '/')
-            };
-            storageSet(GITHUB_CONFIG_KEY, JSON.stringify(config));
-            return config;
-        }
-
-        function loadGitHubConfig() {
-            try {
-                return JSON.parse(storageGet(GITHUB_CONFIG_KEY) || '{}');
-            } catch (error) {
-                return {};
+        function renderGitHubSyncTarget() {
+            const config = resolveGitHubConfig();
+            if (githubSyncTargetEl) {
+                githubSyncTargetEl.textContent = `Публикация: ${config.owner}/${config.repo} -> ${config.branch}:${config.path}`;
             }
+            return config;
         }
 
         function getProductInitials(name) {
@@ -4413,7 +4382,7 @@
             editorOverlayEl.classList.add('open');
             editorOverlayEl.setAttribute('aria-hidden', 'false');
             document.body.classList.add('editor-open');
-            editorPasswordEl.value = '';
+            renderGitHubSyncTarget();
         }
 
         function closeEditor() {
@@ -4577,34 +4546,6 @@
             showToast('JSON импортирован в редактор.', 'success');
         }
 
-        async function sha256(value) {
-            if (!window.crypto?.subtle) {
-                throw new Error('Web Crypto API недоступен в этом браузере.');
-            }
-            const bytes = new TextEncoder().encode(value);
-            const digest = await crypto.subtle.digest('SHA-256', bytes);
-            return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        async function verifyPassword() {
-            const value = editorPasswordEl.value.trim();
-            if (!value) {
-                showToast('Введи пароль для сохранения.', 'error');
-                return false;
-            }
-            try {
-                const hash = await sha256(value);
-                const ok = hash === PASSWORD_HASH;
-                if (!ok) {
-                    showToast('Неверный пароль.', 'error');
-                }
-                return ok;
-            } catch (error) {
-                showToast(error.message || 'Не удалось проверить пароль.', 'error');
-                return false;
-            }
-        }
-
         function applyEditorDataLocally() {
             const normalized = normalizeData(editorData);
             siteData = normalized;
@@ -4669,10 +4610,10 @@
         }
 
         async function saveToGitHub(data) {
-            const config = saveGitHubConfig();
+            const config = resolveGitHubConfig();
             const token = document.getElementById('githubToken').value.trim();
             if (!config.owner || !config.repo || !config.branch || !config.path) {
-                throw new Error('Заполни owner, repo, branch и путь к файлу.');
+                throw new Error('Не удалось определить репозиторий GitHub для публикации.');
             }
             if (!token) {
                 throw new Error('Для сохранения в GitHub нужен token.');
@@ -4819,7 +4760,6 @@
 
         document.getElementById('exportJsonBtn').addEventListener('click', async () => {
             commitAllEditorState();
-            if (!(await verifyPassword())) return;
             exportEditorJson();
             showToast('JSON выгружен.', 'success');
         });
@@ -4965,15 +4905,8 @@
             deleteTeamMember();
         });
 
-        ['githubOwner', 'githubRepo', 'githubBranch', 'githubPath'].forEach((id) => {
-            const field = document.getElementById(id);
-            field.addEventListener('change', saveGitHubConfig);
-            field.addEventListener('input', saveGitHubConfig);
-        });
-
-        document.getElementById('saveLocalBtn').addEventListener('click', async () => {
+        document.getElementById('saveLocalBtn').addEventListener('click', () => {
             commitAllEditorState();
-            if (!(await verifyPassword())) return;
             const stored = applyEditorDataLocally();
             closeEditor();
             showToast(
@@ -4986,7 +4919,6 @@
 
         document.getElementById('saveGithubBtn').addEventListener('click', async () => {
             commitAllEditorState();
-            if (!(await verifyPassword())) return;
             try {
                 const normalized = normalizeData(editorData);
                 applyEditorDataLocally();
@@ -5034,7 +4966,7 @@
         });
 
         window.addEventListener('DOMContentLoaded', async () => {
-            autoGuessGitHubConfig();
+            renderGitHubSyncTarget();
             await initializeData();
             closeProductEditor(false);
             closeTeamEditor(false);
