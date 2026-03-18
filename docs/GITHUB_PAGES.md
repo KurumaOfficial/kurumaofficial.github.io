@@ -79,3 +79,18 @@ Contents: Read and write
 - `src/github/publisher.js`
 - `README.md`
 - документы в `docs/`
+
+## Locale routing
+
+GitHub Pages now serves these public routes:
+
+- `/`
+- `/ru/`
+- `/en/`
+- `/uk/`
+
+Important compatibility notes:
+
+- nested locale routes use generated `index.html` files inside `ru/`, `en/`, `uk/`
+- these route files are regenerated from the shared root shell by `node scripts/sync-localized-routes.mjs`
+- dynamic local asset links are rewritten at runtime so downloads still resolve correctly from nested routes

@@ -1,8 +1,10 @@
 import { createPublicSite } from './components/public-site.js';
 import { createEditorController } from './admin/editor.js';
+import { createLocaleController } from './i18n/locale-controller.js';
 
 export async function bootstrap() {
-    const publicSite = createPublicSite();
+    const localeController = createLocaleController();
+    const publicSite = createPublicSite({ localeController });
     const editor = createEditorController({ publicSite });
     publicSite.setupGlobalUi();
     await editor.initialize();
