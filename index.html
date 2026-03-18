@@ -61,11 +61,22 @@
                 </span>
             </a>
 
-            <div class="glass-card nav-links">
-                <a href="#products">Продукты</a>
-                <a href="#catalog">Каталог</a>
-                <a href="#studio">Что важно</a>
-                <a href="#proof">Наша команда</a>
+            <div class="nav-actions">
+                <div class="glass-card nav-links">
+                    <a id="navLinkProducts" href="#products">Продукты</a>
+                    <a id="navLinkCatalog" href="#catalog">Каталог</a>
+                    <a id="navLinkStudio" href="#studio">Что важно</a>
+                    <a id="navLinkProof" href="#proof">Наша команда</a>
+                </div>
+
+                <div id="localeSwitcher" class="glass-card locale-switcher">
+                    <button id="localeSwitcherButton" class="locale-switcher-btn mono" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбор языка">
+                        <span id="localeSwitcherFlag" class="locale-switcher-flag" aria-hidden="true"></span>
+                        <span id="localeSwitcherLabel" class="locale-switcher-label">Русский</span>
+                        <span class="locale-switcher-caret" aria-hidden="true">⌄</span>
+                    </button>
+                    <div id="localeSwitcherMenu" class="locale-switcher-menu" role="listbox" aria-label="Выбор языка" hidden></div>
+                </div>
             </div>
         </div>
     </nav>
@@ -76,7 +87,7 @@
             <div class="fade-in" style="animation-delay: 0.1s;">
                 <div class="badge mono">
                     <span class="dot"></span>
-                    Create · Update · Dominate
+                    <span id="heroBadgeText">Create · Update · Dominate</span>
                 </div>
             </div>
 
@@ -91,15 +102,15 @@
                 <span style="display:block;">Studio</span>
             </h1>
 
-            <p class="fade-in" style="animation-delay: 0.32s;">
+            <p id="heroIntro" class="fade-in" style="animation-delay: 0.32s;">
                 <strong>Aleph Studio</strong> — проект где мы разрабатываем моды, игры, DLC и небольшие цифровые релизы. Наше преимущество — открытый исходный код: продукты можно сразу скачать, установить, изучить и запустить.
             </p>
 
             <div class="hero-actions hero-actions--single fade-in" style="animation-delay: 0.4s;">
-                <a href="#products" class="btn btn-primary">Посмотреть продукты</a>
+                <a id="heroCta" href="#products" class="btn btn-primary">Посмотреть продукты</a>
             </div>
 
-            <p class="mono fade-in" style="margin-top: 16px; font-size: 12px; color: var(--muted-2); animation-delay: 0.48s;">
+            <p id="heroNote" class="mono fade-in" style="margin-top: 16px; font-size: 12px; color: var(--muted-2); animation-delay: 0.48s;">
                 Гарантий дальнейших обновлений для конкретного продукта нет
             </p>
         </div>
@@ -110,12 +121,12 @@
     <section class="section" id="approach">
         <div class="container">
             <div style="margin-bottom: 20px;">
-                <span class="eyebrow mono">Принцип</span>
+                <span id="approachEyebrow" class="eyebrow mono">Принцип</span>
             </div>
 
             <div class="glass-card glass-card-hover lead-card accent-gradient reveal">
                 <div style="position:absolute; top:-40px; right:-40px; width:220px; height:220px; border-radius:999px; background:rgba(239,68,68,0.08); filter:blur(70px);"></div>
-                <p>
+                <p id="approachLead">
                     Aleph Studio исходит из того, что пользователь должен понимать, что именно запускается на его компьютере. Поэтому мы максимально придерживаемся <strong>open-source подхода</strong> и, где это применимо, публикуем код под лицензией <strong>GPL</strong>: его можно использовать и развивать в собственных проектах при сохранении той же открытой лицензии.
                 </p>
             </div>
@@ -126,8 +137,8 @@
         <div class="container">
             <div class="section-head products-section-head">
                 <div>
-                    <span class="eyebrow mono">Продукты</span>
-                    <h2 style="font-size: clamp(28px, 3.2vw, 46px);">Главные релизы, остальные — в каталоге</h2>
+                    <span id="productsEyebrow" class="eyebrow mono">Продукты</span>
+                    <h2 id="productsTitle" style="font-size: clamp(28px, 3.2vw, 46px);">Главные релизы, остальные — в каталоге</h2>
                 </div>
             </div>
 
@@ -138,9 +149,9 @@
             <div id="catalog" class="glass-card glass-card-hover catalog-shell reveal" style="margin-top: 24px;">
                 <div class="catalog-head">
                     <div>
-                        <span class="eyebrow mono">Каталог</span>
-                        <h3>Остальные продукты и будущие релизы</h3>
-                        <p>Указанные на странице сроки и даты релиза являются предварительными и могут корректироваться по мере разработки.</p>
+                        <span id="catalogEyebrow" class="eyebrow mono">Каталог</span>
+                        <h3 id="catalogTitle">Остальные продукты и будущие релизы</h3>
+                        <p id="catalogDescription">Указанные на странице сроки и даты релиза являются предварительными и могут корректироваться по мере разработки.</p>
                     </div>
                     <div style="opacity: 0.82;">
                         <svg class="cube-mark" viewBox="0 0 100 100" aria-hidden="true">
@@ -159,27 +170,27 @@
     <section class="section" id="studio">
         <div class="container two-col">
             <div class="glass-card lead-card reveal" style="padding: 34px;">
-                <span class="eyebrow mono">Что важно знать</span>
+                <span id="studioEyebrow" class="eyebrow mono">Что важно знать</span>
                 <div class="tiny-spacer"></div>
                 <div style="display:grid; gap:18px; color:#d6e0eb; font-size:18px; line-height:1.85;">
-                    <p>Бла бла бла бла, бла бла бла бла бла, бла бла бла бла и бла бла бла.</p>
-                    <p>Бла бла бла бла бла бла, бла бла бла бла, бла бла бла бла и бла бла.</p>
-                    <p>Бла бла, бла бла бла и бла бла бла бла, поэтому бла бла бла на текущую карточку и её статус.</p>
+                    <p id="studioParagraph1">Перед установкой всегда сверяй версию игры, загрузчика и зависимости: это убирает большую часть проблем ещё до первого запуска.</p>
+                    <p id="studioParagraph2">Статус в карточке показывает зрелость релиза. Если проект отмечен как alpha или beta, относись к нему как к рабочему прототипу, а не к финальному продукту.</p>
+                    <p id="studioParagraph3">Если у релиза есть исходный код и прямой файл загрузки, ты можешь заранее проверить структуру проекта, понять что именно устанавливаешь и только потом запускать у себя.</p>
                 </div>
             </div>
 
             <div class="case-list">
                 <article class="glass-card glass-card-hover case-item reveal">
-                    <h4>Бла бла бла</h4>
-                    <p>Бла бла бла, бла бла бла и бла бла бла бла под свои задачи в рамках бла бла бла.</p>
+                    <h4 id="studioCase1Title">Открытый код</h4>
+                    <p id="studioCase1Text">Когда это возможно, мы публикуем репозиторий и не прячем структуру проекта за закрытой сборкой.</p>
                 </article>
                 <article class="glass-card glass-card-hover case-item reveal">
-                    <h4>Бла бла бла бла</h4>
-                    <p>Бла бла бла бла бла бла текущее состояние бла бла и бла бла бла корректно оценить ожидания.</p>
+                    <h4 id="studioCase2Title">Честный статус</h4>
+                    <p id="studioCase2Text">На странице должно быть понятно, находится продукт в активной фазе, заморожен или только планируется.</p>
                 </article>
                 <article class="glass-card glass-card-hover case-item reveal">
-                    <h4>Бла бла и бла</h4>
-                    <p>Бла бла бла версии бла, бла бла бла и бла бла запуска без бла бла бла.</p>
+                    <h4 id="studioCase3Title">Прямой доступ</h4>
+                    <p id="studioCase3Text">Если файл уже готов, его можно скачать сразу без лишних переходов и непрозрачных установщиков.</p>
                 </article>
             </div>
         </div>
@@ -189,10 +200,10 @@
         <div class="container">
             <div class="section-head team-section-head">
                 <div>
-                    <span class="eyebrow mono">Наша команда</span>
-                    <h2>Люди, которые развивают Aleph Studio</h2>
+                    <span id="teamEyebrow" class="eyebrow mono">Наша команда</span>
+                    <h2 id="teamTitle">Люди, которые развивают Aleph Studio</h2>
                 </div>
-                <p class="team-intro">Бла бла бла текущая команда, бла бла и бла бла бла каждого участника. Бла бла бла если участников пять и больше, блок бла бла бла в бегущую строку справа налево.</p>
+                <p id="teamIntro" class="team-intro">Здесь собраны участники, которые ведут разработку, поддерживают релизы и держат в порядке публичную часть проекта. Когда карточек становится больше, витрина автоматически превращается в бегущую строку.</p>
             </div>
 
             <div id="teamShowcase" class="team-showcase"></div>
@@ -201,8 +212,8 @@
 
     <footer class="footer mono">
         <div id="footerSocialLinks" class="social-hub social-hub-footer" aria-label="Социальные сети Aleph Studio"></div>
-        <div>© 2026 ALEPH STUDIO</div>
-        <div style="margin-top: 6px;">A SUBSIDIARY PROJECT OF WETTEA.</div>
+        <div id="footerCopyright">© 2026 ALEPH STUDIO</div>
+        <div id="footerSubtitle" style="margin-top: 6px;">A SUBSIDIARY PROJECT OF WETTEA.</div>
     </footer>
 
     <div id="editorOverlay" class="editor-overlay" aria-hidden="true">

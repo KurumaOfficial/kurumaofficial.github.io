@@ -73,3 +73,19 @@ src/data/site-data.js
 - `src/components/public-site.js` — если меняется только публичный рендер.
 - `src/admin/editor.js` — если меняется только UX админки.
 - `src/data/site-data.js` — если меняется только контент.
+
+## Locale routes
+
+The public shell now supports route-based locales:
+
+- `/` remains the legacy Russian entrypoint
+- `/ru/`, `/en/`, `/uk/` are explicit locale routes
+- the header language dropdown navigates between routes instead of using query params
+
+Locale-specific code lives in:
+
+- `src/i18n/config.js`
+- `src/i18n/messages.js`
+- `src/i18n/localized-content.js`
+- `src/i18n/locale-controller.js`
+- `scripts/sync-localized-routes.mjs`

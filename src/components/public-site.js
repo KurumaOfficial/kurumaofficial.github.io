@@ -10,7 +10,7 @@ import {
     renderTeamAvatar
 } from '../core/site-utils.js';
 
-export function createPublicSite() {
+export function createPublicSite({ localeController }) {
     const featuredProductsEl = document.getElementById('featured-products');
     const archiveProductsEl = document.getElementById('archive-products');
     const featuredSocialLinksEl = document.getElementById('featuredSocialLinks');
@@ -18,15 +18,19 @@ export function createPublicSite() {
     const teamShowcaseEl = document.getElementById('teamShowcase');
     const toastEl = document.getElementById('toast');
 
-    let siteData = normalizeData(DEFAULT_SITE_DATA);
+    let siteData = localeController.localizeSiteData(DEFAULT_SITE_DATA);
     let expandedArchiveId = null;
     let toastTimer = null;
+
+    function t(path, fallback = '') {
+        return localeController.t(path, fallback);
+    }
 
     function getSortedTeam(data) {
         return [...data.team].sort((a, b) => {
             const bySort = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
             if (bySort !== 0) return bySort;
-            return a.name.localeCompare(b.name, 'ru');
+            return a.name.localeCompare(b.name, localeController.locale);
         });
     }
 
@@ -34,13 +38,13 @@ export function createPublicSite() {
         return [...data.products].sort((a, b) => {
             const bySort = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
             if (bySort !== 0) return bySort;
-            return a.title.localeCompare(b.title, 'ru');
+            return a.title.localeCompare(b.title, localeController.locale);
         });
     }
 
     function getFeaturedProducts(data) {
         return getSortedProducts(data)
-            .filter(item => item.featured)
+            .filter((item) => item.featured)
             .sort((a, b) => {
                 const byFeaturedOrder = toNumber(a.featuredOrder, 0) - toNumber(b.featuredOrder, 0);
                 if (byFeaturedOrder !== 0) return byFeaturedOrder;
@@ -50,8 +54,8 @@ export function createPublicSite() {
     }
 
     function getArchiveProducts(data) {
-        const featuredIds = new Set(getFeaturedProducts(data).map(item => item.id));
-        return getSortedProducts(data).filter(item => !featuredIds.has(item.id));
+        const featuredIds = new Set(getFeaturedProducts(data).map((item) => item.id));
+        return getSortedProducts(data).filter((item) => !featuredIds.has(item.id));
     }
 
     function renderSocialLinks(target, variant) {
@@ -82,20 +86,28 @@ export function createPublicSite() {
 
         if (product.downloadUrl) {
             const isLocalFile = !/^https?:\/\//i.test(product.downloadUrl);
-            return `<a href="${escapeHtml(product.downloadUrl)}" class="btn ${buttonClass}"${isLocalFile ? ' download' : ''}${inlineStyle}>Скачать</a>`;
+            const href = isLocalFile
+                ? localeController.resolveSitePath(product.downloadUrl)
+                : product.downloadUrl;
+            return `<a href="${escapeHtml(href)}" class="btn ${buttonClass}"${isLocalFile ? ' download' : ''}${inlineStyle}>${escapeHtml(t('products.download', 'Download'))}</a>`;
         }
 
-        return `<button class="btn btn-secondary" type="button" disabled${inlineStyle}>Скоро</button>`;
+        return `<button class="btn btn-secondary" type="button" disabled${inlineStyle}>${escapeHtml(t('products.soon', 'Soon'))}</button>`;
     }
 
     function renderFeaturedProducts() {
         const products = getFeaturedProducts(siteData);
         if (!products.length) {
-            featuredProductsEl.innerHTML = '<div class="glass-card feature-card reveal visible"><h3 style="margin-bottom:12px;">Пока нет главных продуктов</h3><p class="subtext">Открой скрытый редактор по → → ← → ← → →, затем нажми на верхний логотип и поставь галочку «На главной» хотя бы у одного продукта.</p></div>';
+            featuredProductsEl.innerHTML = `
+                <div class="glass-card feature-card reveal visible">
+                    <h3 style="margin-bottom:12px;">${escapeHtml(t('products.noFeaturedTitle', 'No featured products yet'))}</h3>
+                    <p class="subtext">${escapeHtml(t('products.noFeaturedBody', 'Open the hidden editor and feature at least one product.'))}</p>
+                </div>
+            `;
             return;
         }
 
-        featuredProductsEl.innerHTML = products.map(product => {
+        featuredProductsEl.innerHTML = products.map((product) => {
             const toneClass = product.tone === 'green' ? 'tone-green' : 'tone-red';
             const buttonClass = product.tone === 'green' ? 'btn-product' : 'btn-primary';
             const instructionsMarkup = product.instructions.length
@@ -104,7 +116,7 @@ export function createPublicSite() {
                 : '';
             const metaMarkup = [
                 product.sourceUrl
-                    ? `<div>Исходный код: <a class="inline-link" href="${escapeHtml(product.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.sourceUrl.replace(/^https?:\/\//, ''))}</a></div>`
+                    ? `<div>${escapeHtml(t('products.sourceCode', 'Source code'))}: <a class="inline-link" href="${escapeHtml(product.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.sourceUrl.replace(/^https?:\/\//, ''))}</a></div>`
                     : '',
                 product.note ? `<div>${linkify(product.note)}</div>` : ''
             ].filter(Boolean).join('');
@@ -119,7 +131,7 @@ export function createPublicSite() {
                         ${renderFlagBadge(product.flag)}
                     </div>
                     <h3>${escapeHtml(product.title)}</h3>
-                    <div class="product-version mono"><span class="version-dot"></span>версия ${escapeHtml(product.version || 'x')}</div>
+                    <div class="product-version mono"><span class="version-dot"></span>${escapeHtml(t('products.version', 'version'))} ${escapeHtml(product.version || 'x')}</div>
                     ${product.summary ? `<p class="product-copy">${linkify(product.summary)}</p>` : ''}
                     ${instructionsMarkup}
                     ${metaMarkup ? `<div class="product-meta">${metaMarkup}</div>` : ''}
@@ -148,7 +160,7 @@ export function createPublicSite() {
                 : '';
             const metaMarkup = [
                 product.sourceUrl
-                    ? `<div>Исходный код: <a class="inline-link" href="${escapeHtml(product.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.sourceUrl.replace(/^https?:\/\//, ''))}</a></div>`
+                    ? `<div>${escapeHtml(t('products.sourceCode', 'Source code'))}: <a class="inline-link" href="${escapeHtml(product.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(product.sourceUrl.replace(/^https?:\/\//, ''))}</a></div>`
                     : '',
                 product.note ? `<div>${linkify(product.note)}</div>` : ''
             ].filter(Boolean).join('');
@@ -163,11 +175,11 @@ export function createPublicSite() {
                         <div>
                             <span class="archive-index mono">#${String(index + 1).padStart(2, '0')}</span>
                             <h4>${escapeHtml(product.title)}</h4>
-                            <div class="archive-mini-version mono">версия ${escapeHtml(product.version || 'x')} · ${escapeHtml(product.status)}</div>
+                            <div class="archive-mini-version mono">${escapeHtml(t('products.version', 'version'))} ${escapeHtml(product.version || 'x')} · ${escapeHtml(product.status)}</div>
                         </div>
                         <div class="archive-toggle">⌄</div>
                     </div>
-                    <p class="archive-summary">${linkify(product.summary || product.note || 'Карточка готова под будущий релиз.')}</p>
+                    <p class="archive-summary">${linkify(product.summary || product.note || t('products.archiveFallback', 'This card is reserved for a future release.'))}</p>
                     <div class="archive-body">
                         <div class="archive-body-inner">
                             ${instructionsMarkup}
@@ -184,7 +196,7 @@ export function createPublicSite() {
         const members = getSortedTeam(siteData);
         teamShowcaseEl.classList.remove('has-marquee');
         if (!members.length) {
-            teamShowcaseEl.innerHTML = '<div class="team-empty">Команда пока не добавлена. Настрой карточки участников в разделе «Прочее» админ-панели.</div>';
+            teamShowcaseEl.innerHTML = `<div class="team-empty">${escapeHtml(t('team.empty', 'No team members yet.'))}</div>`;
             return;
         }
 
@@ -202,7 +214,7 @@ export function createPublicSite() {
         `;
 
         if (members.length >= 5) {
-            const cards = members.map(member => renderCard(member, 'marquee-card')).join('');
+            const cards = members.map((member) => renderCard(member, 'marquee-card')).join('');
             teamShowcaseEl.classList.add('has-marquee');
             teamShowcaseEl.innerHTML = `
                 <div class="team-marquee">
@@ -215,11 +227,11 @@ export function createPublicSite() {
             return;
         }
 
-        teamShowcaseEl.innerHTML = `<div class="team-grid">${members.map(member => renderCard(member)).join('')}</div>`;
+        teamShowcaseEl.innerHTML = `<div class="team-grid">${members.map((member) => renderCard(member)).join('')}</div>`;
     }
 
     function bindArchiveToggle() {
-        archiveProductsEl.querySelectorAll('[data-archive-card]').forEach(card => {
+        archiveProductsEl.querySelectorAll('[data-archive-card]').forEach((card) => {
             if (card.dataset.bound === '1') return;
             card.dataset.bound = '1';
 
@@ -231,12 +243,12 @@ export function createPublicSite() {
                 attachCardGlowTracking();
             };
 
-            card.addEventListener('click', event => {
+            card.addEventListener('click', (event) => {
                 if (event.target.closest('a, button')) return;
                 toggle();
             });
 
-            card.addEventListener('keydown', event => {
+            card.addEventListener('keydown', (event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
                     toggle();
@@ -246,13 +258,13 @@ export function createPublicSite() {
     }
 
     function attachCardGlowTracking() {
-        document.querySelectorAll('.glass-card').forEach(el => {
+        document.querySelectorAll('.glass-card').forEach((el) => {
             if (el.dataset.glowBound === '1') return;
             el.dataset.glowBound = '1';
-            el.addEventListener('mousemove', (e) => {
+            el.addEventListener('mousemove', (event) => {
                 const rect = el.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                const x = ((event.clientX - rect.left) / rect.width) * 100;
+                const y = ((event.clientY - rect.top) / rect.height) * 100;
                 el.style.setProperty('--mx', x + '%');
                 el.style.setProperty('--my', y + '%');
             });
@@ -260,7 +272,7 @@ export function createPublicSite() {
     }
 
     const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
+        entries.forEach((entry) => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
             }
@@ -271,10 +283,10 @@ export function createPublicSite() {
     });
 
     function setupRevealAnimations() {
-        document.querySelectorAll('.reveal').forEach((el, i) => {
+        document.querySelectorAll('.reveal').forEach((el, index) => {
             if (el.dataset.revealBound === '1') return;
             el.dataset.revealBound = '1';
-            el.style.transition = `opacity 0.6s ease ${(i % 6) * 0.07}s, transform 0.6s ease ${(i % 6) * 0.07}s, border-color 0.35s ease, box-shadow 0.35s ease`;
+            el.style.transition = `opacity 0.6s ease ${(index % 6) * 0.07}s, transform 0.6s ease ${(index % 6) * 0.07}s, border-color 0.35s ease, box-shadow 0.35s ease`;
             revealObserver.observe(el);
         });
     }
@@ -286,7 +298,7 @@ export function createPublicSite() {
     }
 
     function renderSite(nextSiteData = siteData) {
-        siteData = normalizeData(nextSiteData);
+        siteData = localeController.localizeSiteData(normalizeData(nextSiteData));
         renderSocialLinks(featuredSocialLinksEl, 'square');
         renderSocialLinks(footerSocialLinksEl, 'pill');
         renderFeaturedProducts();
@@ -296,13 +308,17 @@ export function createPublicSite() {
     }
 
     function setupGlobalUi() {
+        localeController.applyDocumentMeta();
+        localeController.applyStaticCopy();
+        localeController.mountLanguageSwitcher();
+
         let scrollTicking = false;
         window.addEventListener('scroll', () => {
             if (!scrollTicking) {
                 requestAnimationFrame(() => {
                     const sy = window.scrollY;
-                    document.querySelectorAll('.bg-orbs .orb').forEach((orb, i) => {
-                        orb.style.transform = `translateY(${sy * (0.02 + i * 0.012)}px)`;
+                    document.querySelectorAll('.bg-orbs .orb').forEach((orb, index) => {
+                        orb.style.transform = `translateY(${sy * (0.02 + index * 0.012)}px)`;
                     });
                     scrollTicking = false;
                 });
