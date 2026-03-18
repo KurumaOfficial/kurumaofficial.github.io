@@ -1,5 +1,5 @@
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { FLAG_META, SITE_DATA_MODULE_PATH } from './constants.js';
+import { FLAG_META } from './constants.js';
 
 function deepClone(value) {
     return JSON.parse(JSON.stringify(value));
@@ -35,14 +35,13 @@ function serializeData(value) {
     return JSON.stringify(normalizeData(value));
 }
 
-function getSiteDirectory(path) {
-    const normalized = String(path || SITE_DATA_MODULE_PATH).replace(/\\/g, '/');
-    const index = normalized.lastIndexOf('/');
-    return index >= 0 ? normalized.slice(0, index + 1) : '';
-}
-
-function buildRepoAssetPath(config, relativePath) {
-    return (getSiteDirectory(config.path) + String(relativePath || '').replace(/^\/+/, '')).replace(/\/{2,}/g, '/');
+function buildRepoAssetPath(relativePath) {
+    return String(relativePath || '')
+        .trim()
+        .replace(/\\/g, '/')
+        .replace(/^\.\//, '')
+        .replace(/^\/+/, '')
+        .replace(/\/{2,}/g, '/');
 }
 
 function sanitizeFileSegment(value, fallback = 'file') {
@@ -211,7 +210,6 @@ export {
     storageSet,
     storageRemove,
     serializeData,
-    getSiteDirectory,
     buildRepoAssetPath,
     sanitizeFileSegment,
     buildProductUploadRelativePath,

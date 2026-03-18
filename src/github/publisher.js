@@ -209,7 +209,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
             if (!upload) continue;
 
             const bytes = new Uint8Array(await upload.file.arrayBuffer());
-            const repoPath = buildRepoAssetPath(config, upload.relativePath);
+            const repoPath = buildRepoAssetPath(upload.relativePath);
             await upsertGitHubRepoFile(
                 config,
                 token,
