@@ -1,0 +1,4 @@
+/* Aggregated CSS entrypoint for GitHub Pages. */
+/* Keep this file stable so index.html continues to reference one stylesheet path. */
+@import url('./public.css');
+@import url('./admin.css');
