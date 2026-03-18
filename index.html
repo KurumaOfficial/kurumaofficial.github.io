@@ -291,7 +291,7 @@
                                         <div class="dash-section-head">
                                             <div>
                                                 <h4>Публикация и сохранение</h4>
-                                                <p>Эти действия относятся ко всему сайту, а не к одной карточке товара.</p>
+                                                <p>Эти действия относятся ко всему сайту.</p>
                                             </div>
                                         </div>
 
@@ -309,7 +309,6 @@
                                             <div class="dash-form-card">
                                                 <div class="dash-form-section">
                                                     <h4>GitHub sync</h4>
-                                                    <p id="githubSyncTarget" class="dash-help"></p>
                                                     <div class="dash-github-grid">
                                                         <div class="dash-field dash-c12">
                                                             <label for="githubToken">GitHub token</label>
@@ -317,13 +316,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-                                                <div class="dash-form-section">
-                                                    <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в опубликованный контент сайта через GitHub API. По умолчанию обновляется модуль <span class="mono">src/data/site-data.js</span>; репозиторий и путь определяются автоматически. Токен нужен с правом <span class="mono">Contents: Read and write</span>. Загруженные в карточках файлы тоже отправляются в GitHub этим же токеном. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
-                                                </div>
                                             </div>
-
-                                            <p class="dash-help">Для файла загрузки указывай путь вроде <span class="mono">./assets/files/strange-visuals-latest.jar</span>. Если у продукта есть исходный код, впиши ссылку на репозиторий в поле <span class="mono">«Исходный код / GitHub»</span>. По умолчанию публикация пишет в <span class="mono">src/data/site-data.js</span>, но логика sync при необходимости поддерживает и <span class="mono">.json</span> или <span class="mono">.html</span> цели.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -333,7 +326,6 @@
                                         <div class="dash-section-head">
                                             <div>
                                                 <h4>Сводка сайта</h4>
-                                                <p>Быстрый обзор текущего состояния контента, чтобы не искать важные числа по разным разделам.</p>
                                             </div>
                                         </div>
 
@@ -358,20 +350,6 @@
                                                 <span>Файлов в очереди</span>
                                                 <strong id="homeUploadsCount">0</strong>
                                             </article>
-                                        </div>
-                                    </div>
-
-                                    <div class="dash-form-card">
-                                        <div class="dash-section-head">
-                                            <div>
-                                                <h4>Быстрые переходы</h4>
-                                                <p>Открой нужный раздел без лишних догадок: контент отдельно, публикация отдельно.</p>
-                                            </div>
-                                        </div>
-
-                                        <div class="dash-home-links">
-                                            <button type="button" class="dash-btn" data-admin-switch="products">Перейти к товарам</button>
-                                            <button type="button" class="dash-btn" data-admin-switch="misc">Перейти к команде и соцсетям</button>
                                         </div>
                                     </div>
 
@@ -487,7 +465,6 @@
                                     <div class="note">Изменения копятся в общем черновике. Верхние кнопки «Применить» и «Отменить» работают для всех разделов сразу.</div>
                                     <div class="btns">
                                         <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
-                                        <button id="saveProductBtn" type="button" class="dash-btn dash-primary dash-sm">Применить форму</button>
                                     </div>
                                 </div>
 
@@ -578,7 +555,6 @@
                                             <div class="note">Карточка участника меняет общий черновик. Верхние кнопки применяют или откатывают весь пакет правок.</div>
                                             <div class="btns">
                                                 <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
-                                                <button id="saveTeamMemberBtn" type="button" class="dash-btn dash-primary dash-sm">Применить форму</button>
                                             </div>
                                         </div>
                                     </div>

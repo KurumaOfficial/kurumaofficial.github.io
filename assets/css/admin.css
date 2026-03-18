@@ -1341,11 +1341,6 @@
     letter-spacing: -0.04em;
 }
 
-.dash-home-links {
-    display: grid;
-    gap: 10px;
-}
-
 .dash-home-steps {
     display: grid;
     gap: 12px;

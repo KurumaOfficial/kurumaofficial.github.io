@@ -55,7 +55,6 @@ const discardDraftBtnEl = document.getElementById('discardDraftBtn');
 const homeApplyDraftBtnEl = document.getElementById('homeApplyDraftBtn');
 const homeDiscardDraftBtnEl = document.getElementById('homeDiscardDraftBtn');
 const closeProductEditorBtnEl = document.getElementById('closeProductEditorBtn');
-const saveProductBtnEl = document.getElementById('saveProductBtn');
 const deleteProductBtnEl = document.getElementById('deleteProductBtn');
 const editorFieldNameEl = document.getElementById('f-name');
 const editorFieldSlugEl = document.getElementById('f-slug');
@@ -85,7 +84,6 @@ const teamEditorEl = document.getElementById('teamEditor');
 const teamEditorEmptyEl = document.getElementById('teamEditorEmpty');
 const teamEditorTitleEl = document.getElementById('teamEditorTitle');
 const closeTeamEditorBtnEl = document.getElementById('closeTeamEditorBtn');
-const saveTeamMemberBtnEl = document.getElementById('saveTeamMemberBtn');
 const deleteTeamMemberBtnEl = document.getElementById('deleteTeamMemberBtn');
 const teamFieldNameEl = document.getElementById('team-name');
 const teamFieldRoleEl = document.getElementById('team-role');
@@ -597,15 +595,6 @@ function commitOpenTeamForm(refreshGrid = true) {
     return true;
 }
 
-function saveTeamMemberDraft() {
-    if (!syncSelectedTeamMemberFromForm()) return;
-    const member = editorData.team[teamSelectedIndex];
-    teamEditorTitleEl.textContent = 'Редактирование — ' + member.name;
-    fillTeamForm(member);
-    renderTeamGrid();
-    showToast('Форма участника применена в черновик.', 'success');
-}
-
 function syncTeamDraftFromInputs(refreshGrid = true) {
     if (!syncSelectedTeamMemberFromForm()) return false;
     const member = editorData.team[teamSelectedIndex];
@@ -799,13 +788,10 @@ function openEditor() {
 
 function closeEditor(options = {}) {
     const { force = false } = options;
-    if (!force && (hasUnappliedDraftChanges() || hasStagedUploads())) {
-        const ok = confirm('Есть неприменённые изменения. Закрыть панель и потерять их?');
+    if (!force && hasUnsavedDraftChanges()) {
+        const ok = confirm('Есть несохранённые изменения. Закрыть панель и потерять их?');
         if (!ok) return false;
-        pendingProductUploads.clear();
-        editorData = deepClone(siteData);
-        renderProductUploadMeta();
-        syncDraftControls();
+        resetEditorDraftToSaved();
     }
     editorOverlayEl.classList.remove('open');
     editorOverlayEl.setAttribute('aria-hidden', 'true');
@@ -889,15 +875,6 @@ function commitAllEditorState(refreshGrid = true) {
     renderEditorSocialPreview();
     renderProductUploadMeta();
     syncDraftControls();
-}
-
-function saveProductDraft() {
-    if (!syncSelectedProductFromForm()) return;
-    const product = editorData.products[editorSelectedIndex];
-    editorTitleEl.textContent = 'Редактирование — ' + product.title;
-    fillEditorForm(product);
-    renderEditorGrid();
-    showToast('Форма товара применена в черновик.', 'success');
 }
 
 function syncProductDraftFromInputs(refreshGrid = true) {
@@ -1288,20 +1265,12 @@ closeProductEditorBtnEl.addEventListener('click', () => {
     closeProductEditor();
 });
 
-saveProductBtnEl.addEventListener('click', () => {
-    saveProductDraft();
-});
-
 deleteProductBtnEl.addEventListener('click', () => {
     deleteProduct();
 });
 
 closeTeamEditorBtnEl.addEventListener('click', () => {
     closeTeamEditor();
-});
-
-saveTeamMemberBtnEl.addEventListener('click', () => {
-    saveTeamMemberDraft();
 });
 
 deleteTeamMemberBtnEl.addEventListener('click', () => {

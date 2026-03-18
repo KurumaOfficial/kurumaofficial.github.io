@@ -182,6 +182,7 @@ export function createPublicSite() {
 
     function renderTeamShowcase() {
         const members = getSortedTeam(siteData);
+        teamShowcaseEl.classList.remove('has-marquee');
         if (!members.length) {
             teamShowcaseEl.innerHTML = '<div class="team-empty">Команда пока не добавлена. Настрой карточки участников в разделе «Прочее» админ-панели.</div>';
             return;
@@ -202,6 +203,7 @@ export function createPublicSite() {
 
         if (members.length > 3) {
             const cards = members.map(member => renderCard(member, 'marquee-card')).join('');
+            teamShowcaseEl.classList.add('has-marquee');
             teamShowcaseEl.innerHTML = `
                 <div class="team-marquee">
                     <div class="team-marquee-track">
