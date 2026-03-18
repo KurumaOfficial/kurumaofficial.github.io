@@ -311,6 +311,7 @@ export function createPublicSite({ localeController }) {
         localeController.applyDocumentMeta();
         localeController.applyStaticCopy();
         localeController.mountLanguageSwitcher();
+        setupPageScrollRail();
 
         let scrollTicking = false;
         window.addEventListener('scroll', () => {
@@ -338,6 +339,101 @@ export function createPublicSite({ localeController }) {
 
         observerTarget.observe(featuredProductsEl, { childList: true, subtree: true });
         observerTarget.observe(archiveProductsEl, { childList: true, subtree: true });
+    }
+
+    function setupPageScrollRail() {
+        const rail = document.getElementById('pageScrollRail');
+        const thumb = document.getElementById('pageScrollThumb');
+        if (!rail || !thumb) return;
+
+        let isDragging = false;
+        let pointerOffset = 0;
+
+        function getMetrics() {
+            const railHeight = rail.clientHeight;
+            const scrollTop = window.scrollY || window.pageYOffset || 0;
+            const viewportHeight = window.innerHeight;
+            const documentHeight = Math.max(
+                document.documentElement.scrollHeight,
+                document.body.scrollHeight,
+                viewportHeight
+            );
+            const maxScroll = Math.max(documentHeight - viewportHeight, 0);
+            const thumbHeight = maxScroll > 0
+                ? Math.max((viewportHeight / documentHeight) * railHeight, 72)
+                : railHeight;
+            const maxThumbTop = Math.max(railHeight - thumbHeight, 0);
+            const thumbTop = maxScroll > 0
+                ? (scrollTop / maxScroll) * maxThumbTop
+                : 0;
+
+            return {
+                railHeight,
+                scrollTop,
+                viewportHeight,
+                documentHeight,
+                maxScroll,
+                thumbHeight,
+                maxThumbTop,
+                thumbTop
+            };
+        }
+
+        function applyThumbPosition(metrics = getMetrics()) {
+            rail.classList.toggle('is-hidden', metrics.maxScroll <= 0);
+            thumb.style.height = `${metrics.thumbHeight}px`;
+            thumb.style.transform = `translateY(${metrics.thumbTop}px)`;
+        }
+
+        function scrollFromThumbPosition(clientY, keepPointerOffset = false) {
+            const metrics = getMetrics();
+            if (metrics.maxScroll <= 0) {
+                applyThumbPosition(metrics);
+                return;
+            }
+
+            const railRect = rail.getBoundingClientRect();
+            const offset = keepPointerOffset ? pointerOffset : metrics.thumbHeight / 2;
+            const rawTop = clientY - railRect.top - offset;
+            const clampedTop = Math.max(0, Math.min(rawTop, metrics.maxThumbTop));
+            const nextScroll = (clampedTop / metrics.maxThumbTop) * metrics.maxScroll;
+            window.scrollTo({ top: nextScroll, behavior: 'auto' });
+        }
+
+        function handlePointerMove(event) {
+            if (!isDragging) return;
+            scrollFromThumbPosition(event.clientY, true);
+        }
+
+        function stopDragging() {
+            if (!isDragging) return;
+            isDragging = false;
+            thumb.classList.remove('is-dragging');
+            document.removeEventListener('pointermove', handlePointerMove);
+            document.removeEventListener('pointerup', stopDragging);
+            document.removeEventListener('pointercancel', stopDragging);
+        }
+
+        thumb.addEventListener('pointerdown', (event) => {
+            event.preventDefault();
+            const thumbRect = thumb.getBoundingClientRect();
+            isDragging = true;
+            pointerOffset = event.clientY - thumbRect.top;
+            thumb.classList.add('is-dragging');
+            document.addEventListener('pointermove', handlePointerMove);
+            document.addEventListener('pointerup', stopDragging);
+            document.addEventListener('pointercancel', stopDragging);
+        });
+
+        rail.addEventListener('pointerdown', (event) => {
+            if (event.target === thumb) return;
+            scrollFromThumbPosition(event.clientY, false);
+        });
+
+        window.addEventListener('scroll', () => applyThumbPosition(), { passive: true });
+        window.addEventListener('resize', () => applyThumbPosition(), { passive: true });
+
+        applyThumbPosition();
     }
 
     return {
