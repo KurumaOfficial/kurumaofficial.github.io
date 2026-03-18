@@ -55,7 +55,7 @@ const SITE_DATA_TRANSLATIONS = Object.freeze({
             }
         }
     },
-    uk: {
+    ua: {
         products: {
             'strange-visuals': {
                 tag: 'Активно',

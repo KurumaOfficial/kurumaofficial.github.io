@@ -133,7 +133,7 @@ export const PUBLIC_MESSAGES = Object.freeze({
             subtitle: 'A SUBSIDIARY PROJECT OF WETTEA.'
         }
     },
-    uk: {
+    ua: {
         meta: {
             title: 'Aleph Studio',
             description: 'Aleph Studio створює моди, ігри, DLC та невеликі цифрові релізи з відкритим кодом, зрозумілим встановленням і швидким доступом до актуальної збірки.'

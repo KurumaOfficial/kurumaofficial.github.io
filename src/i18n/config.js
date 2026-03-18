@@ -1,9 +1,9 @@
 export const DEFAULT_LOCALE = 'ru';
-export const LOCALE_ORDER = ['ru', 'en', 'uk'];
+export const LOCALE_ORDER = ['ru', 'en', 'ua'];
 export const LOCALE_ROUTE_MAP = Object.freeze({
     ru: '/ru/',
     en: '/en/',
-    uk: '/uk/'
+    ua: '/ua/'
 });
 
 export const LOCALE_META = Object.freeze({
@@ -17,7 +17,7 @@ export const LOCALE_META = Object.freeze({
         label: 'English',
         shortLabel: 'EN'
     },
-    uk: {
+    ua: {
         code: 'uk',
         label: 'Українська',
         shortLabel: 'UA'
@@ -43,7 +43,7 @@ const FLAG_SVG = Object.freeze({
             <rect y="4.6" width="18" height="2.8" fill="#ef4444"></rect>
         </svg>
     `,
-    uk: `
+    ua: `
         <svg viewBox="0 0 18 12" aria-hidden="true" focusable="false">
             <rect width="18" height="12" rx="2" fill="#2563eb"></rect>
             <rect y="6" width="18" height="6" rx="0" fill="#facc15"></rect>
@@ -55,7 +55,7 @@ export function normalizeLocale(locale) {
     const normalized = String(locale || '')
         .trim()
         .toLowerCase();
-    if (normalized === 'ua') return 'uk';
+    if (normalized === 'uk') return 'ua';
     return LOCALE_META[normalized] ? normalized : DEFAULT_LOCALE;
 }
 
@@ -65,7 +65,8 @@ export function detectLocaleFromPath(pathname = window.location.pathname) {
         .toLowerCase();
 
     if (/^\/en(?:\/|$)/.test(normalizedPath)) return 'en';
-    if (/^\/uk(?:\/|$)/.test(normalizedPath)) return 'uk';
+    if (/^\/ua(?:\/|$)/.test(normalizedPath)) return 'ua';
+    if (/^\/uk(?:\/|$)/.test(normalizedPath)) return 'ua';
     if (/^\/ru(?:\/|$)/.test(normalizedPath)) return 'ru';
 
     return normalizeLocale(window.__ALEPH_ROUTE_LOCALE__);
@@ -80,7 +81,7 @@ export function getRouteAssetPrefix(pathname = window.location.pathname) {
     const normalizedPath = String(pathname || '/')
         .replace(/\\/g, '/')
         .toLowerCase();
-    return /^\/(ru|en|uk)(?:\/|$)/.test(normalizedPath) ? '../' : './';
+    return /^\/(ru|en|ua|uk)(?:\/|$)/.test(normalizedPath) ? '../' : './';
 }
 
 export function resolveRouteRelativePath(path, pathname = window.location.pathname) {
@@ -100,11 +101,15 @@ export function getLocaleMeta(locale) {
     return LOCALE_META[normalizeLocale(locale)];
 }
 
-export function getLocaleOptions(currentPathname = window.location.pathname, currentHash = window.location.hash || '') {
+export function getLocaleOptions(
+    currentPathname = window.location.pathname,
+    currentSearch = window.location.search || '',
+    currentHash = window.location.hash || ''
+) {
     return LOCALE_ORDER.map((locale) => ({
         ...getLocaleMeta(locale),
         locale,
-        href: `${getLocalePath(locale)}${currentHash || ''}`,
+        href: `${getLocalePath(locale)}${currentSearch || ''}${currentHash || ''}`,
         flagSvg: FLAG_SVG[locale]
     }));
 }

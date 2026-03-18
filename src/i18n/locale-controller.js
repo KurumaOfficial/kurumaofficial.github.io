@@ -71,6 +71,7 @@ function ensureHeadLink(id, rel, extraAttributes = {}) {
 export function createLocaleController() {
     const locale = detectLocaleFromPath();
     const messages = PUBLIC_MESSAGES[locale] || PUBLIC_MESSAGES[DEFAULT_LOCALE];
+    const activeLocaleMeta = getLocaleMeta(locale);
     let switcherBound = false;
 
     function t(path, fallback = '') {
@@ -87,7 +88,7 @@ export function createLocaleController() {
     }
 
     function applyDocumentMeta() {
-        document.documentElement.lang = locale;
+        document.documentElement.lang = activeLocaleMeta.code;
         document.body.dataset.locale = locale;
         document.title = t('meta.title', 'Aleph Studio');
 
@@ -102,11 +103,13 @@ export function createLocaleController() {
         const alternateDefault = ensureHeadLink('siteAlternateDefault', 'alternate', { hreflang: 'x-default' });
         alternateDefault.href = `${window.location.origin}/`;
 
-        ['ru', 'en', 'uk'].forEach((code) => {
-            const alternateLink = ensureHeadLink(`siteAlternate-${code}`, 'alternate', { hreflang: code });
-            alternateLink.href = code === 'ru'
-                ? `${window.location.origin}${getLocalePath(code)}`
-                : `${window.location.origin}${getLocalePath(code)}`;
+        [
+            { routeLocale: 'ru', hreflang: 'ru' },
+            { routeLocale: 'en', hreflang: 'en' },
+            { routeLocale: 'ua', hreflang: 'uk' }
+        ].forEach(({ routeLocale, hreflang }) => {
+            const alternateLink = ensureHeadLink(`siteAlternate-${routeLocale}`, 'alternate', { hreflang });
+            alternateLink.href = `${window.location.origin}${getLocalePath(routeLocale)}`;
         });
     }
 
@@ -178,8 +181,11 @@ export function createLocaleController() {
             return;
         }
 
-        const activeLocaleMeta = getLocaleMeta(locale);
-        const options = getLocaleOptions(window.location.pathname, window.location.hash || '');
+        const options = getLocaleOptions(
+            window.location.pathname,
+            window.location.search || '',
+            window.location.hash || ''
+        );
 
         currentFlag.innerHTML = options.find((item) => item.locale === locale)?.flagSvg || '';
         currentLabel.textContent = activeLocaleMeta.label;
@@ -201,6 +207,7 @@ export function createLocaleController() {
                 </span>
             </button>
         `).join('');
+        closeLanguageMenu();
 
         if (switcherBound) {
             return;
@@ -216,8 +223,9 @@ export function createLocaleController() {
             if (!target) return;
 
             const nextLocale = normalizeLocale(target.getAttribute('data-locale-option'));
+            const search = window.location.search || '';
             const hash = window.location.hash || '';
-            window.location.assign(`${getLocalePath(nextLocale)}${hash}`);
+            window.location.assign(`${getLocalePath(nextLocale)}${search}${hash}`);
         });
 
         document.addEventListener('click', (event) => {
