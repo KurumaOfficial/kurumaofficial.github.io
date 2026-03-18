@@ -64,7 +64,7 @@ export const DEFAULT_SITE_DATA = {
             "name": "Kuruma",
             "role": "Основатель",
             "avatarUrl": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcm45aXN6cnFnY2toMzc3dHFucml2czYwa3licHd4OHBpd2JkazBxMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12swa4UfSd6Viw/giphy.gif",
-            "description": "— Что-то не работает?\nу тебя не хватает интелекта",
+            "description": "Попа",
             "sortOrder": 1
         },
         {
