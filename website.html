@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="./assets/icons/favicon-16.png?v=2">
     <link rel="shortcut icon" href="./favicon.ico?v=2" type="image/x-icon">
     <script>
-        window.location.replace('./index.html');
+        window.location.replace('./index.html' + (window.location.search || '') + (window.location.hash || ''));
     </script>
 </head>
 <body>

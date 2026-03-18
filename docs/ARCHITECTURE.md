@@ -79,7 +79,7 @@ src/data/site-data.js
 The public shell now supports route-based locales:
 
 - `/` remains the legacy Russian entrypoint
-- `/ru/`, `/en/`, `/uk/` are explicit locale routes
+- `/ru/`, `/en/`, `/ua/` are explicit locale routes
 - the header language dropdown navigates between routes instead of using query params
 
 Locale-specific code lives in:

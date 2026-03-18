@@ -155,7 +155,7 @@ The public site now supports route-based locales:
 - `/` — Russian legacy entrypoint
 - `/ru/` — Russian route
 - `/en/` — English route
-- `/uk/` — Ukrainian route
+- `/ua/` — Ukrainian route
 
 Language switching is rendered in the public header and navigates between these routes instead of using query params or local-only toggles.
 
@@ -165,7 +165,7 @@ Key files:
 - `src/i18n/messages.js` — localized public UI strings
 - `src/i18n/localized-content.js` — overlay translations for site data with fallback to editable content
 - `src/i18n/locale-controller.js` — document meta, shell translation, language switcher UI
-- `scripts/sync-localized-routes.mjs` — regenerates `ru/index.html`, `en/index.html`, `uk/index.html` from the shared root shell
+- `scripts/sync-localized-routes.mjs` — regenerates `ru/index.html`, `en/index.html`, `ua/index.html` from the shared root shell
 
 If `index.html` changes, run:
 

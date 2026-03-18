@@ -3,6 +3,37 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function () {
+            var rawPath = window.location.pathname || '/';
+            var normalizedPath = rawPath.replace(/\/index\.html$/i, '/').toLowerCase();
+            if (/^\/(ru|en|ua|uk)(?:\/|$)/.test(normalizedPath)) return;
+            if (!(normalizedPath === '/' || normalizedPath === '')) return;
+
+            var languages = Array.isArray(window.navigator.languages) && window.navigator.languages.length
+                ? window.navigator.languages
+                : [window.navigator.language || ''];
+            var target = '/en/';
+
+            for (var i = 0; i < languages.length; i += 1) {
+                var value = String(languages[i] || '').toLowerCase();
+                if (value.indexOf('ru') === 0) {
+                    target = '/ru/';
+                    break;
+                }
+                if (value.indexOf('uk') === 0 || value.indexOf('ua') === 0) {
+                    target = '/ua/';
+                    break;
+                }
+                if (value.indexOf('en') === 0) {
+                    target = '/en/';
+                    break;
+                }
+            }
+
+            window.location.replace(target + (window.location.search || '') + (window.location.hash || ''));
+        })();
+    </script>
     <title>Aleph Studio</title>
     <meta name="description" content="Aleph Studio — моды, игры, DLC и небольшие цифровые релизы с открытым исходным кодом, понятной установкой и быстрым доступом к актуальной версии.">
 
@@ -73,7 +104,9 @@
                     <button id="localeSwitcherButton" class="locale-switcher-btn mono" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Выбор языка">
                         <span id="localeSwitcherFlag" class="locale-switcher-flag" aria-hidden="true"></span>
                         <span id="localeSwitcherLabel" class="locale-switcher-label">Русский</span>
-                        <span class="locale-switcher-caret" aria-hidden="true">⌄</span>
+                        <svg class="locale-switcher-caret" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M4 6.5 8 10 12 6.5"></path>
+                        </svg>
                     </button>
                     <div id="localeSwitcherMenu" class="locale-switcher-menu" role="listbox" aria-label="Выбор языка" hidden></div>
                 </div>

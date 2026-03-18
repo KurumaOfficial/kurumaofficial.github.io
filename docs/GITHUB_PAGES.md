@@ -87,10 +87,10 @@ GitHub Pages now serves these public routes:
 - `/`
 - `/ru/`
 - `/en/`
-- `/uk/`
+- `/ua/`
 
 Important compatibility notes:
 
-- nested locale routes use generated `index.html` files inside `ru/`, `en/`, `uk/`
+- nested locale routes use generated `index.html` files inside `ru/`, `en/`, `ua/`
 - these route files are regenerated from the shared root shell by `node scripts/sync-localized-routes.mjs`
 - dynamic local asset links are rewritten at runtime so downloads still resolve correctly from nested routes
