@@ -7,9 +7,9 @@ import {
     getLocalePath,
     normalizeLocale,
     resolveRouteRelativePath
-} from './config.js';
-import { PUBLIC_MESSAGES } from './messages.js';
-import { localizeSiteData as localizeSiteContent } from './localized-content.js';
+} from './config.js?v=20260318e';
+import { PUBLIC_MESSAGES } from './messages.js?v=20260318e';
+import { localizeSiteData as localizeSiteContent } from './localized-content.js?v=20260318e';
 
 const TEXT_BINDINGS = Object.freeze([
     ['navLinkProducts', 'nav.products'],

@@ -15,7 +15,7 @@ function injectRouteLocale(html, locale) {
     const htmlLang = locale === 'ua' ? 'uk' : locale;
     let result = html.replace('<html lang="ru" class="scroll-smooth">', `<html lang="${htmlLang}" class="scroll-smooth">`);
     result = result.replace(/<meta name="description" content="[^"]*">/, `<meta name="description" content="${routeDescriptions[locale].replace(/"/g, '&quot;')}">`);
-    result = result.replace(/<script type="module" src="\.\/src\/app\.js"><\/script>/, `<script>window.__ALEPH_ROUTE_LOCALE__ = '${locale}';</script>\n    <script type="module" src="../src/app.js"></script>`);
+    result = result.replace(/<script type="module" src="\.\/src\/app\.js\?v=20260318e"><\/script>/, `<script>window.__ALEPH_ROUTE_LOCALE__ = '${locale}';</script>\n    <script type="module" src="../src/app.js?v=20260318e"></script>`);
     result = result.replace(/href="\.\/assets\//g, 'href="../assets/');
     result = result.replace(/src="\.\/assets\//g, 'src="../assets/');
     result = result.replace(/href="\.\/favicon\.ico/g, 'href="../favicon.ico');
