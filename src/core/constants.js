@@ -20,6 +20,10 @@ export const FLAG_META = {
     release: { label: 'Release', className: 'is-release' }
 };
 export const ADMIN_VIEW_COPY = {
+    home: {
+        title: 'Главная',
+        subtitle: 'Центр управления черновиком, публикацией и быстрыми переходами по админке.'
+    },
     products: {
         title: 'Мои товары',
         subtitle: 'Управление карточками товаров, ссылками и публикацией.'

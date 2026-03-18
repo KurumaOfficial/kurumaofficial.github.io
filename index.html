@@ -209,11 +209,11 @@
                     <div class="dash-brand">Aleph <span>Studio</span></div>
 
                     <nav class="dash-nav" aria-label="Разделы админки">
-                        <a href="#" class="dash-nav-link" data-placeholder-nav>
+                        <a href="#" class="dash-nav-link active" data-admin-view="home">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
                             Главная
                         </a>
-                        <a href="#" class="dash-nav-link active" data-admin-view="products">
+                        <a href="#" class="dash-nav-link" data-admin-view="products">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"></rect><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"></path></svg>
                             Товары
                         </a>
@@ -238,8 +238,8 @@
                 <main class="dash-main">
                     <section class="dash-header">
                         <div class="dash-title-wrap">
-                            <h1 id="editorAdminTitle">Мои товары</h1>
-                            <p id="editorAdminSubtitle">Управление карточками товаров, ссылками и публикацией.</p>
+                            <h1 id="editorAdminTitle">Главная</h1>
+                            <p id="editorAdminSubtitle">Центр управления черновиком, публикацией и быстрыми переходами по админке.</p>
                         </div>
 
                         <div class="dash-actions">
@@ -268,7 +268,133 @@
                     <section class="dash-content">
                         <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
 
-                        <div id="productsView" class="dash-view active">
+                        <div id="homeView" class="dash-view active">
+                            <div class="dash-misc-grid">
+                                <div class="dash-misc-column">
+                                    <div class="dash-form-card dash-home-status-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Состояние черновика</h4>
+                                                <p>Все глобальные действия собраны здесь: сначала проверь статус, потом примени изменения, сохрани их локально или опубликуй для всех.</p>
+                                            </div>
+                                        </div>
+
+                                        <div id="homeDraftSummary" class="dash-home-status"></div>
+
+                                        <div class="dash-sync-actions">
+                                            <button id="homeApplyDraftBtn" type="button" class="dash-btn dash-primary">Применить черновик</button>
+                                            <button id="homeDiscardDraftBtn" type="button" class="dash-btn">Откатить черновик</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Публикация и сохранение</h4>
+                                                <p>Эти действия относятся ко всему сайту, а не к одной карточке товара.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="dash-sync-wrap">
+                                            <div class="dash-form-card">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-sync-actions">
+                                                        <button id="saveLocalBtn" type="button" class="dash-btn">Сохранить локально</button>
+                                                        <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Сохранить для всех</button>
+                                                        <button id="clearLocalBtn" type="button" class="dash-btn">Очистить local</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-form-card">
+                                                <div class="dash-form-section">
+                                                    <h4>GitHub sync</h4>
+                                                    <p id="githubSyncTarget" class="dash-help"></p>
+                                                    <div class="dash-github-grid">
+                                                        <div class="dash-field dash-c12">
+                                                            <label for="githubToken">GitHub token</label>
+                                                            <input id="githubToken" type="password" placeholder="Токен не сохраняется в настройках">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="dash-form-section">
+                                                    <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в опубликованный контент сайта через GitHub API. По умолчанию обновляется модуль <span class="mono">src/data/site-data.js</span>; репозиторий и путь определяются автоматически. Токен нужен с правом <span class="mono">Contents: Read and write</span>. Загруженные в карточках файлы тоже отправляются в GitHub этим же токеном. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
+                                                </div>
+                                            </div>
+
+                                            <p class="dash-help">Для файла загрузки указывай путь вроде <span class="mono">./assets/files/strange-visuals-latest.jar</span>. Если у продукта есть исходный код, впиши ссылку на репозиторий в поле <span class="mono">«Исходный код / GitHub»</span>. По умолчанию публикация пишет в <span class="mono">src/data/site-data.js</span>, но логика sync при необходимости поддерживает и <span class="mono">.json</span> или <span class="mono">.html</span> цели.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dash-misc-column">
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Сводка сайта</h4>
+                                                <p>Быстрый обзор текущего состояния контента, чтобы не искать важные числа по разным разделам.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="dash-home-metrics">
+                                            <article class="dash-home-metric">
+                                                <span>Товаров</span>
+                                                <strong id="homeProductsCount">0</strong>
+                                            </article>
+                                            <article class="dash-home-metric">
+                                                <span>На витрине</span>
+                                                <strong id="homeFeaturedCount">0</strong>
+                                            </article>
+                                            <article class="dash-home-metric">
+                                                <span>Команда</span>
+                                                <strong id="homeTeamCount">0</strong>
+                                            </article>
+                                            <article class="dash-home-metric">
+                                                <span>Соцссылок</span>
+                                                <strong id="homeSocialCount">0</strong>
+                                            </article>
+                                            <article class="dash-home-metric">
+                                                <span>Файлов в очереди</span>
+                                                <strong id="homeUploadsCount">0</strong>
+                                            </article>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Быстрые переходы</h4>
+                                                <p>Открой нужный раздел без лишних догадок: контент отдельно, публикация отдельно.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="dash-home-links">
+                                            <button type="button" class="dash-btn" data-admin-switch="products">Перейти к товарам</button>
+                                            <button type="button" class="dash-btn" data-admin-switch="misc">Перейти к команде и соцсетям</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Как обновить сайт</h4>
+                                                <p>Нормальный сценарий публикации теперь начинается именно с этой вкладки.</p>
+                                            </div>
+                                        </div>
+
+                                        <ol class="dash-home-steps">
+                                            <li>Открой «Товары» или «Прочее» и внеси нужные правки.</li>
+                                            <li>Вернись на «Главную» и нажми «Применить черновик», если хочешь сразу увидеть preview.</li>
+                                            <li>Для себя используй «Сохранить локально».</li>
+                                            <li>Для всех вставь GitHub token и нажми «Сохранить для всех».</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="productsView" class="dash-view">
                             <div class="dash-product-grid" id="editorProductGrid"></div>
 
                             <div class="dash-editor" id="editor">
@@ -365,40 +491,17 @@
                                     </div>
                                 </div>
 
-                                <details id="editorSyncDetails" class="dash-sync-details">
-                                    <summary>Сохранение и GitHub sync</summary>
-
-                                    <div class="dash-sync-wrap">
-                                        <div class="dash-form-card">
-                                            <div class="dash-form-section">
-                                                <div class="dash-sync-actions">
-                                                    <button id="saveLocalBtn" type="button" class="dash-btn">Сохранить локально</button>
-                                                    <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Сохранить для всех</button>
-                                                    <button id="clearLocalBtn" type="button" class="dash-btn">Очистить local</button>
-                                                </div>
-                                            </div>
+                                <div class="dash-form-card dash-home-redirect">
+                                    <div class="dash-section-head">
+                                        <div>
+                                            <h4>Глобальная публикация вынесена на «Главную»</h4>
+                                            <p>Сохранение локально, публикация для всех и GitHub token больше не прячутся внутри карточки товара.</p>
                                         </div>
-
-                                        <div class="dash-form-card">
-                                            <div class="dash-form-section">
-                                                <h4>GitHub sync</h4>
-                                                <p id="githubSyncTarget" class="dash-help"></p>
-                                                <div class="dash-github-grid">
-                                                    <div class="dash-field dash-c12">
-                                                        <label for="githubToken">GitHub token</label>
-                                                        <input id="githubToken" type="password" placeholder="Токен не сохраняется в настройках">
-                                                    </div>
-                                                </div>
-                                        </div>
-
-                                        <div class="dash-form-section">
-                                                <p class="dash-help">Кнопка «Сохранить для всех» делает commit прямо в опубликованный контент сайта через GitHub API. По умолчанию обновляется модуль <span class="mono">src/data/site-data.js</span>; репозиторий и путь определяются автоматически. Токен нужен с правом <span class="mono">Contents: Read and write</span>. Загруженные в карточках файлы тоже отправляются в GitHub этим же токеном. Если нужен только локальный черновик в браузере, используй «Сохранить локально».</p>
-                                            </div>
-                                        </div>
-
-                                        <p class="dash-help">Для файла загрузки указывай путь вроде <span class="mono">./assets/files/strange-visuals-latest.jar</span>. Если у продукта есть исходный код, впиши ссылку на репозиторий в поле <span class="mono">«Исходный код / GitHub»</span>. По умолчанию публикация пишет в <span class="mono">src/data/site-data.js</span>, но логика sync при необходимости поддерживает и <span class="mono">.json</span> или <span class="mono">.html</span> цели.</p>
                                     </div>
-                                </details>
+                                    <div class="dash-sync-actions">
+                                        <button type="button" class="dash-btn" data-admin-switch="home">Открыть Главную</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

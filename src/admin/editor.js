@@ -32,8 +32,15 @@ const editorAccessTriggerEl = document.getElementById('editorAccessTrigger');
 const editorAdminTitleEl = document.getElementById('editorAdminTitle');
 const editorAdminSubtitleEl = document.getElementById('editorAdminSubtitle');
 const productsToolbarEl = document.getElementById('productsToolbar');
+const homeViewEl = document.getElementById('homeView');
 const productsViewEl = document.getElementById('productsView');
 const miscViewEl = document.getElementById('miscView');
+const homeDraftSummaryEl = document.getElementById('homeDraftSummary');
+const homeProductsCountEl = document.getElementById('homeProductsCount');
+const homeFeaturedCountEl = document.getElementById('homeFeaturedCount');
+const homeTeamCountEl = document.getElementById('homeTeamCount');
+const homeSocialCountEl = document.getElementById('homeSocialCount');
+const homeUploadsCountEl = document.getElementById('homeUploadsCount');
 const editorProductGridEl = document.getElementById('editorProductGrid');
 const editorPanelEl = document.getElementById('editor');
 const editorTitleEl = document.getElementById('editorTitle');
@@ -45,6 +52,8 @@ const addTeamMemberBtnEl = document.getElementById('addTeamMemberBtn');
 const draftStateChipEl = document.getElementById('draftStateChip');
 const applyDraftBtnEl = document.getElementById('applyDraftBtn');
 const discardDraftBtnEl = document.getElementById('discardDraftBtn');
+const homeApplyDraftBtnEl = document.getElementById('homeApplyDraftBtn');
+const homeDiscardDraftBtnEl = document.getElementById('homeDiscardDraftBtn');
 const closeProductEditorBtnEl = document.getElementById('closeProductEditorBtn');
 const saveProductBtnEl = document.getElementById('saveProductBtn');
 const deleteProductBtnEl = document.getElementById('deleteProductBtn');
@@ -91,7 +100,7 @@ const toastEl = document.getElementById('toast');
     let editorSelectedIndex = -1;
     let teamSelectedIndex = -1;
     let editorActiveTab = 'tab-main';
-    let editorActiveView = 'products';
+    let editorActiveView = 'home';
     let editorSearchQuery = '';
     let sequenceBuffer = [];
     let editorAccessArmed = false;
@@ -114,6 +123,54 @@ function hasUnsavedDraftChanges() {
         || serializeData(siteData) !== serializeData(savedSiteData);
 }
 
+function countEnabledSocials() {
+    return Object.values(editorData.socials || {}).filter(Boolean).length;
+}
+
+function renderHomeDashboard() {
+    if (homeProductsCountEl) homeProductsCountEl.textContent = String(editorData.products.length);
+    if (homeFeaturedCountEl) homeFeaturedCountEl.textContent = String(editorData.products.filter(item => item.featured).length);
+    if (homeTeamCountEl) homeTeamCountEl.textContent = String(editorData.team.length);
+    if (homeSocialCountEl) homeSocialCountEl.textContent = String(countEnabledSocials());
+    if (homeUploadsCountEl) homeUploadsCountEl.textContent = String(pendingProductUploads.size);
+    if (!homeDraftSummaryEl) return;
+
+    const hasPreviewDiff = hasUnappliedDraftChanges();
+    const hasSavedDiff = hasUnsavedDraftChanges();
+    const uploadCount = pendingProductUploads.size;
+    let toneClass = 'is-clean';
+    let badge = 'Без изменений';
+    let lead = 'Черновик синхронизирован с текущей версией сайта. Можно закрывать панель или переходить к новым правкам.';
+
+    if (hasPreviewDiff) {
+        toneClass = 'is-action';
+        badge = 'Нужно применить';
+        lead = 'Есть изменения в формах, которые ещё не применены к preview страницы. Нажми «Применить черновик», чтобы увидеть итог на этой вкладке.';
+    } else if (hasSavedDiff) {
+        toneClass = uploadCount ? 'is-ready' : 'is-warning';
+        badge = uploadCount ? 'Готов к публикации' : 'Нужно сохранить';
+        lead = uploadCount
+            ? 'Черновик уже собран, а выбранные файлы ждут загрузки в GitHub. Теперь можно публиковать изменения для всех.'
+            : 'Черновик уже применён к preview, но ещё не сохранён локально или не опубликован для всех.';
+    }
+
+    const details = [
+        hasPreviewDiff ? 'Preview отстаёт от формы.' : 'Preview синхронизирован с формами.',
+        hasSavedDiff ? 'Есть изменения, которые ещё не закреплены сохранением.' : 'Новых несохранённых изменений нет.',
+        uploadCount ? `В очереди GitHub upload: ${uploadCount}.` : 'Новых файлов в очереди GitHub upload нет.'
+    ];
+
+    homeDraftSummaryEl.innerHTML = `
+        <div class="dash-home-status ${toneClass}">
+            <div class="dash-home-status-badge">${badge}</div>
+            <h3>${lead}</h3>
+            <div class="dash-home-status-list">
+                ${details.map(item => `<div>${item}</div>`).join('')}
+            </div>
+        </div>
+    `;
+}
+
 function syncDraftControls() {
     const hasPreviewDiff = hasUnappliedDraftChanges();
     const hasSavedDiff = hasUnsavedDraftChanges();
@@ -128,6 +185,9 @@ function syncDraftControls() {
 
     if (applyDraftBtnEl) applyDraftBtnEl.disabled = !hasPreviewDiff;
     if (discardDraftBtnEl) discardDraftBtnEl.disabled = !hasSavedDiff;
+    if (homeApplyDraftBtnEl) homeApplyDraftBtnEl.disabled = !hasPreviewDiff;
+    if (homeDiscardDraftBtnEl) homeDiscardDraftBtnEl.disabled = !hasSavedDiff;
+    renderHomeDashboard();
 }
 
 function loadLocalData() {
@@ -388,13 +448,15 @@ function renderEditorSocialPreview() {
             : `href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"`;
         return `<a class="social-link square ${disabled ? 'is-disabled' : ''}" data-social="${key}" ${attrs} aria-label="${label}">${renderSocialIcon(key)}</a>`;
     }).join('');
+    renderHomeDashboard();
 }
 
 function renderAdminView() {
-    const copy = ADMIN_VIEW_COPY[editorActiveView] || ADMIN_VIEW_COPY.products;
+    const copy = ADMIN_VIEW_COPY[editorActiveView] || ADMIN_VIEW_COPY.home;
     editorAdminTitleEl.textContent = copy.title;
     editorAdminSubtitleEl.textContent = copy.subtitle;
     productsToolbarEl.hidden = editorActiveView !== 'products';
+    homeViewEl.classList.toggle('active', editorActiveView === 'home');
     productsViewEl.classList.toggle('active', editorActiveView === 'products');
     miscViewEl.classList.toggle('active', editorActiveView === 'misc');
     addProductBtnEl.hidden = editorActiveView !== 'products';
@@ -402,6 +464,7 @@ function renderAdminView() {
     document.querySelectorAll('[data-admin-view]').forEach(link => {
         link.classList.toggle('active', link.dataset.adminView === editorActiveView);
     });
+    renderHomeDashboard();
 }
 
 function setAdminView(view) {
@@ -451,6 +514,7 @@ function renderTeamGrid() {
     const entries = getTeamEntries();
     if (!entries.length) {
         teamGridEl.innerHTML = '<div class="dash-empty-state">Пока нет карточек команды. Нажми «Новый участник» и собери блок «Наша команда».</div>';
+        renderHomeDashboard();
         return;
     }
 
@@ -470,6 +534,7 @@ function renderTeamGrid() {
             </div>
         </article>
     `).join('');
+    renderHomeDashboard();
 }
 
 function openTeamEditor(index) {
@@ -649,6 +714,7 @@ function renderEditorGrid() {
     const entries = getEditorEntries();
     if (!entries.length) {
         editorProductGridEl.innerHTML = '<div class="dash-empty-state">По вашему запросу ничего не найдено.</div>';
+        renderHomeDashboard();
         return;
     }
 
@@ -668,9 +734,10 @@ function renderEditorGrid() {
                     <button type="button" class="dash-btn dash-sm" data-move-up="${index}">↑</button>
                     <button type="button" class="dash-btn dash-sm" data-move-down="${index}">↓</button>
                 </div>
-            </article>
-        `;
-    }).join('');
+                </article>
+            `;
+        }).join('');
+    renderHomeDashboard();
 }
 
 function openProductEditor(index) {
@@ -713,7 +780,7 @@ function openEditor() {
     editorSelectedIndex = -1;
     teamSelectedIndex = -1;
     editorActiveTab = 'tab-main';
-    editorActiveView = 'products';
+    editorActiveView = 'home';
     editorSearchQuery = '';
     editorSearchEl.value = '';
     closeProductEditor(false);
@@ -912,7 +979,7 @@ async function importEditorJson(file) {
     editorSelectedIndex = -1;
     teamSelectedIndex = -1;
     editorActiveTab = 'tab-main';
-    editorActiveView = 'products';
+    editorActiveView = 'home';
     editorSearchQuery = '';
     editorSearchEl.value = '';
     closeProductEditor(false);
@@ -932,6 +999,59 @@ function saveEditorDataLocally() {
     pendingProductUploads.clear();
     renderProductUploadMeta();
     return { normalized, stored };
+}
+
+function handleApplyDraft() {
+    commitAllEditorState();
+    applyEditorDataToPreview();
+    showToast('Черновик применён к странице.', 'success');
+}
+
+function handleDiscardDraft() {
+    if (!hasUnsavedDraftChanges()) return;
+    if (!confirm('Отменить все неприменённые изменения и вернуться к сохранённой версии?')) return;
+    resetEditorDraftToSaved();
+    showToast('Черновик отменён.', 'info');
+}
+
+function refreshAdminAfterSave() {
+    fillSocialInputs();
+    renderEditorGrid();
+    renderTeamGrid();
+    renderAdminView();
+    renderProductUploadMeta();
+    syncDraftControls();
+}
+
+function handleSaveLocal() {
+    commitAllEditorState();
+    const hadUploads = hasStagedUploads();
+    const { stored } = saveEditorDataLocally();
+    refreshAdminAfterSave();
+    showToast(
+        stored
+            ? (hadUploads
+                ? 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.'
+                : 'Локально сохранено. На этом браузере изменения уже видны.')
+            : 'Изменения применены, но localStorage недоступен в этом браузере.',
+        stored && !hadUploads ? 'success' : 'info'
+    );
+}
+
+async function handleSaveGithub() {
+    commitAllEditorState();
+    try {
+        const normalized = applyEditorDataToPreview();
+        const savedData = await saveToGitHub(normalized);
+        persistEditorData(savedData);
+        const githubTokenEl = document.getElementById('githubToken');
+        if (githubTokenEl) githubTokenEl.value = '';
+        refreshAdminAfterSave();
+        showToast('Данные и файлы отправлены в GitHub. После публикации обновится контент сайта.', 'success');
+    } catch (error) {
+        syncDraftControls();
+        showToast(error.message || 'Не удалось сохранить в GitHub.', 'error');
+    }
 }
 
     const publisher = createGitHubPublisher({
@@ -964,17 +1084,24 @@ addTeamMemberBtnEl.addEventListener('click', () => {
 });
 
 applyDraftBtnEl.addEventListener('click', () => {
-    commitAllEditorState();
-    applyEditorDataToPreview();
-    showToast('Черновик применён к странице.', 'success');
+    handleApplyDraft();
 });
 
 discardDraftBtnEl.addEventListener('click', () => {
-    if (!hasUnsavedDraftChanges()) return;
-    if (!confirm('Отменить все неприменённые изменения и вернуться к сохранённой версии?')) return;
-    resetEditorDraftToSaved();
-    showToast('Черновик отменён.', 'info');
+    handleDiscardDraft();
 });
+
+if (homeApplyDraftBtnEl) {
+    homeApplyDraftBtnEl.addEventListener('click', () => {
+        handleApplyDraft();
+    });
+}
+
+if (homeDiscardDraftBtnEl) {
+    homeDiscardDraftBtnEl.addEventListener('click', () => {
+        handleDiscardDraft();
+    });
+}
 
 [
     editorFieldNameEl,
@@ -1051,6 +1178,12 @@ document.querySelectorAll('[data-admin-view]').forEach(link => {
     link.addEventListener('click', (event) => {
         event.preventDefault();
         setAdminView(link.dataset.adminView);
+    });
+});
+
+document.querySelectorAll('[data-admin-switch]').forEach(button => {
+    button.addEventListener('click', () => {
+        setAdminView(button.dataset.adminSwitch);
     });
 });
 
@@ -1176,32 +1309,11 @@ deleteTeamMemberBtnEl.addEventListener('click', () => {
 });
 
 document.getElementById('saveLocalBtn').addEventListener('click', () => {
-    commitAllEditorState();
-    const hadUploads = hasStagedUploads();
-    const { stored } = saveEditorDataLocally();
-    closeEditor({ force: true });
-    showToast(
-        stored
-            ? (hadUploads
-                ? 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.'
-                : 'Локально сохранено. На этом браузере изменения уже видны.')
-            : 'Изменения применены, но localStorage недоступен в этом браузере.',
-        stored && !hadUploads ? 'success' : 'info'
-    );
+    handleSaveLocal();
 });
 
 document.getElementById('saveGithubBtn').addEventListener('click', async () => {
-    commitAllEditorState();
-    try {
-        const normalized = applyEditorDataToPreview();
-        const savedData = await saveToGitHub(normalized);
-        persistEditorData(savedData);
-        closeEditor({ force: true });
-        showToast('Данные и файлы отправлены в GitHub. После публикации обновится контент сайта.', 'success');
-    } catch (error) {
-        syncDraftControls();
-        showToast(error.message || 'Не удалось сохранить в GitHub.', 'error');
-    }
+    await handleSaveGithub();
 });
 
 document.addEventListener('keydown', (event) => {
