@@ -4,7 +4,7 @@ export const DEFAULT_SITE_DATA = {
         {
             "id": "strange-visuals",
             "title": "Strange Visuals",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "tag": "Активно",
             "flag": "release",
             "status": "активно",
@@ -12,15 +12,15 @@ export const DEFAULT_SITE_DATA = {
             "featuredOrder": 1,
             "sortOrder": 1,
             "tone": "green",
-            "summary": "Визуальный мод для Minecraft Fabric 1.21.8. Доступен для прямой установки, а исходный код открыт в публичном репозитории.",
+            "summary": "Форк Визуального мода для Minecraft Fabric 1.21.8. Доступен для прямой установки, а исходный код открыт в публичном репозитории.",
             "instructions": [
                 "Установите Minecraft Fabric 1.21.8 в вашем лаунчере.",
                 "Скачайте Fabric API: https://modrinth.com/mod/fabric-api и закиньте файл в папку mods.",
                 "После этого скачайте наш мод и тоже закиньте его в папку mods.",
                 "Готово — можно запускать."
             ],
-            "sourceUrl": "https://github.com/strangemap/1.21.8-Strange-Visuals",
-            "downloadUrl": "./assets/files/strange-visuals-1.0-2025-11-13-195254.png",
+            "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
+            "downloadUrl": "./assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar",
             "note": "Файл мода доступен по кнопке ниже."
         },
         {
