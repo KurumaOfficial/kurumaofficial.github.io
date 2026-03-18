@@ -5,7 +5,7 @@ export const DEFAULT_SITE_DATA = {
             "id": "strange-visuals",
             "title": "Strange Visuals",
             "version": "1.0",
-            "tag": "release",
+            "tag": "Активно",
             "flag": "release",
             "status": "активно",
             "featured": true,
@@ -20,7 +20,7 @@ export const DEFAULT_SITE_DATA = {
                 "Готово — можно запускать."
             ],
             "sourceUrl": "https://github.com/strangemap/1.21.8-Strange-Visuals",
-            "downloadUrl": "./files/strange-visuals-1.0-sticker.png",
+            "downloadUrl": "./assets/files/strange-visuals-1.0-2025-11-13-195254.png",
             "note": "Файл мода доступен по кнопке ниже."
         },
         {
@@ -56,6 +56,74 @@ export const DEFAULT_SITE_DATA = {
             "sourceUrl": "",
             "downloadUrl": "",
             "note": "Подробности появятся позже."
+        },
+        {
+            "id": "new-product-1773860715938",
+            "title": "Новый продукт",
+            "version": "x",
+            "tag": "product 04",
+            "flag": "",
+            "status": "позже",
+            "featured": false,
+            "featuredOrder": 4,
+            "sortOrder": 4,
+            "tone": "red",
+            "summary": "",
+            "instructions": [],
+            "sourceUrl": "",
+            "downloadUrl": "",
+            "note": ""
+        },
+        {
+            "id": "new-product-1773860716256",
+            "title": "Новый продукт",
+            "version": "x",
+            "tag": "product 05",
+            "flag": "",
+            "status": "позже",
+            "featured": false,
+            "featuredOrder": 5,
+            "sortOrder": 5,
+            "tone": "red",
+            "summary": "",
+            "instructions": [],
+            "sourceUrl": "",
+            "downloadUrl": "",
+            "note": ""
+        },
+        {
+            "id": "new-product-1773860716444",
+            "title": "Новый продукт",
+            "version": "x",
+            "tag": "product 06",
+            "flag": "",
+            "status": "позже",
+            "featured": false,
+            "featuredOrder": 6,
+            "sortOrder": 6,
+            "tone": "red",
+            "summary": "",
+            "instructions": [],
+            "sourceUrl": "",
+            "downloadUrl": "",
+            "note": ""
+        },
+        {
+            "id": "new-product-1773860716622",
+            "title": "Новый продукт",
+            "version": "x",
+            "tag": "product 07",
+            "flag": "",
+            "status": "позже",
+            "featured": false,
+            "featuredOrder": 7,
+            "sortOrder": 7,
+            "tone": "red",
+            "summary": "",
+            "instructions": [],
+            "sourceUrl": "",
+            "downloadUrl": "",
+            "note": ""
         }
     ],
     "team": [
@@ -69,7 +137,7 @@ export const DEFAULT_SITE_DATA = {
         },
         {
             "id": "team-member-02",
-            "name": "Участник 02",
+            "name": "notyx",
             "role": "Разработка",
             "avatarUrl": "",
             "description": "Здесь можно указать роль, аватарку и описание второго участника команды.",
@@ -82,6 +150,38 @@ export const DEFAULT_SITE_DATA = {
             "avatarUrl": "",
             "description": "Если участников будет больше трёх, блок автоматически превратится в бегущую строку.",
             "sortOrder": 3
+        },
+        {
+            "id": "team-member-1773860077218",
+            "name": "Новый участник",
+            "role": "Роль",
+            "avatarUrl": "",
+            "description": "Добавь описание участника через раздел «Прочее».",
+            "sortOrder": 4
+        },
+        {
+            "id": "team-member-1773860077544",
+            "name": "Новый участник",
+            "role": "Роль",
+            "avatarUrl": "",
+            "description": "Добавь описание участника через раздел «Прочее».",
+            "sortOrder": 5
+        },
+        {
+            "id": "team-member-1773860077717",
+            "name": "Новый участник",
+            "role": "Роль",
+            "avatarUrl": "",
+            "description": "Добавь описание участника через раздел «Прочее».",
+            "sortOrder": 6
+        },
+        {
+            "id": "team-member-1773860077888",
+            "name": "Новый участник",
+            "role": "Роль",
+            "avatarUrl": "",
+            "description": "Добавь описание участника через раздел «Прочее».",
+            "sortOrder": 7
         }
     ],
     "socials": {
