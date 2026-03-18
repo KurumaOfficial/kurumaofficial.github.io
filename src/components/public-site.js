@@ -201,7 +201,7 @@ export function createPublicSite() {
             </article>
         `;
 
-        if (members.length > 3) {
+        if (members.length >= 5) {
             const cards = members.map(member => renderCard(member, 'marquee-card')).join('');
             teamShowcaseEl.classList.add('has-marquee');
             teamShowcaseEl.innerHTML = `
