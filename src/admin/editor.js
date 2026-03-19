@@ -17,6 +17,7 @@ import {
     normalizeData,
     normalizeSocials,
     normalizeTeamMember,
+    normalizeSupporter,
     normalizeProduct,
     toNumber,
     escapeHtml,
@@ -90,6 +91,25 @@ const teamFieldRoleEl = document.getElementById('team-role');
 const teamFieldAvatarEl = document.getElementById('team-avatar');
 const teamFieldOrderEl = document.getElementById('team-order');
 const teamFieldBioEl = document.getElementById('team-bio');
+const addSupporterBtnEl = document.getElementById('addSupporterBtn');
+const supporterMemberCountEl = document.getElementById('supporterMemberCount');
+const supporterGridEl = document.getElementById('supporterGrid');
+const supporterEditorEl = document.getElementById('supporterEditor');
+const supporterEditorEmptyEl = document.getElementById('supporterEditorEmpty');
+const supporterEditorTitleEl = document.getElementById('supporterEditorTitle');
+const closeSupporterEditorBtnEl = document.getElementById('closeSupporterEditorBtn');
+const deleteSupporterBtnEl = document.getElementById('deleteSupporterBtn');
+const supporterFieldNameEl = document.getElementById('supporter-name');
+const supporterFieldRoleEl = document.getElementById('supporter-role');
+const supporterFieldAvatarEl = document.getElementById('supporter-avatar');
+const supporterFieldOrderEl = document.getElementById('supporter-order');
+const homeSupportersCountEl = document.getElementById('homeSupportersCount');
+const viewAllSupportersBtnEl = document.getElementById('viewAllSupportersBtn');
+const supportersAllModalEl = document.getElementById('supportersAllModal');
+const supportersModalBackdropEl = document.getElementById('supportersModalBackdrop');
+const closeSupportersModalBtnEl = document.getElementById('closeSupportersModalBtn');
+const supportersModalSearchEl = document.getElementById('supportersModalSearch');
+const supportersModalListEl = document.getElementById('supportersModalList');
 const toastEl = document.getElementById('toast');
 
     let savedSiteData = deepClone(DEFAULT_SITE_DATA);
@@ -97,6 +117,7 @@ const toastEl = document.getElementById('toast');
     let editorData = deepClone(DEFAULT_SITE_DATA);
     let editorSelectedIndex = -1;
     let teamSelectedIndex = -1;
+    let supporterSelectedIndex = -1;
     let editorActiveTab = 'tab-main';
     let editorActiveView = 'home';
     let editorSearchQuery = '';
@@ -129,6 +150,7 @@ function renderHomeDashboard() {
     if (homeProductsCountEl) homeProductsCountEl.textContent = String(editorData.products.length);
     if (homeFeaturedCountEl) homeFeaturedCountEl.textContent = String(editorData.products.filter(item => item.featured).length);
     if (homeTeamCountEl) homeTeamCountEl.textContent = String(editorData.team.length);
+    if (homeSupportersCountEl) homeSupportersCountEl.textContent = String((editorData.supporters || []).length);
     if (homeSocialCountEl) homeSocialCountEl.textContent = String(countEnabledSocials());
     if (homeUploadsCountEl) homeUploadsCountEl.textContent = String(pendingProductUploads.size);
     if (!homeDraftSummaryEl) return;
@@ -232,14 +254,17 @@ function resetEditorDraftToSaved() {
     editorData = deepClone(savedSiteData);
     editorSelectedIndex = -1;
     teamSelectedIndex = -1;
+    supporterSelectedIndex = -1;
     editorActiveTab = 'tab-main';
     editorSearchQuery = '';
     editorSearchEl.value = '';
+    closeSupporterEditor(false);
     closeProductEditor(false);
     closeTeamEditor(false);
     fillSocialInputs();
     renderEditorGrid();
     renderTeamGrid();
+    renderSupporterGrid();
     renderAdminView();
     renderSite();
     renderProductUploadMeta();
@@ -453,12 +478,15 @@ function renderAdminView() {
     const copy = ADMIN_VIEW_COPY[editorActiveView] || ADMIN_VIEW_COPY.home;
     editorAdminTitleEl.textContent = copy.title;
     editorAdminSubtitleEl.textContent = copy.subtitle;
+    const supportersViewEl = document.getElementById('supportersView');
     productsToolbarEl.hidden = editorActiveView !== 'products';
     homeViewEl.classList.toggle('active', editorActiveView === 'home');
     productsViewEl.classList.toggle('active', editorActiveView === 'products');
     miscViewEl.classList.toggle('active', editorActiveView === 'misc');
+    if (supportersViewEl) supportersViewEl.classList.toggle('active', editorActiveView === 'supporters');
     addProductBtnEl.hidden = editorActiveView !== 'products';
     addTeamMemberBtnEl.hidden = editorActiveView !== 'misc';
+    if (addSupporterBtnEl) addSupporterBtnEl.hidden = editorActiveView !== 'supporters';
     document.querySelectorAll('[data-admin-view]').forEach(link => {
         link.classList.toggle('active', link.dataset.adminView === editorActiveView);
     });
@@ -469,10 +497,12 @@ function setAdminView(view) {
     if (!ADMIN_VIEW_COPY[view]) return;
     commitOpenProductForm(editorActiveView === 'products');
     commitOpenTeamForm(editorActiveView === 'misc');
+    if (editorActiveView === 'supporters') commitOpenSupporterForm(false);
     syncSocialsFromInputs();
     renderEditorSocialPreview();
     editorActiveView = view;
     renderAdminView();
+    if (view === 'supporters') renderSupporterGrid();
 }
 
 function getTeamEntries() {
@@ -659,6 +689,212 @@ function deleteTeamMember() {
     showToast('Участник удалён.', 'success');
 }
 
+// ─── Supporters CRUD ────────────────────────────────────────────────────────
+
+function getSupporterEntries() {
+    return (editorData.supporters || [])
+        .map((supporter, index) => ({ supporter, index }))
+        .sort((a, b) => {
+            const bySort = toNumber(a.supporter.sortOrder, a.index + 1) - toNumber(b.supporter.sortOrder, b.index + 1);
+            if (bySort !== 0) return bySort;
+            return a.supporter.name.localeCompare(b.supporter.name, 'ru');
+        });
+}
+
+function clearSupporterForm() {
+    if (supporterFieldNameEl) supporterFieldNameEl.value = '';
+    if (supporterFieldRoleEl) supporterFieldRoleEl.value = '';
+    if (supporterFieldAvatarEl) supporterFieldAvatarEl.value = '';
+    if (supporterFieldOrderEl) supporterFieldOrderEl.value = '';
+}
+
+function fillSupporterForm(supporter) {
+    if (supporterFieldNameEl) supporterFieldNameEl.value = supporter.name;
+    if (supporterFieldRoleEl) supporterFieldRoleEl.value = supporter.role;
+    if (supporterFieldAvatarEl) supporterFieldAvatarEl.value = supporter.avatarUrl;
+    if (supporterFieldOrderEl) supporterFieldOrderEl.value = supporter.sortOrder;
+}
+
+function renderSupporterGrid() {
+    if (!supporterGridEl) return;
+    if (supporterMemberCountEl) supporterMemberCountEl.textContent = String((editorData.supporters || []).length);
+    const entries = getSupporterEntries();
+    if (!entries.length) {
+        supporterGridEl.innerHTML = '<div class="dash-empty-state">Пока нет карточек. Нажми «Новый поддержавший», чтобы добавить.</div>';
+        renderHomeDashboard();
+        return;
+    }
+
+    supporterGridEl.innerHTML = entries.map(({ supporter, index }) => `
+        <article class="dash-team-card ${index === supporterSelectedIndex ? 'selected' : ''}" data-select-supporter="${index}" tabindex="0" role="button" aria-pressed="${index === supporterSelectedIndex ? 'true' : 'false'}">
+            <div class="dash-team-card-head">
+                ${renderTeamAvatar(supporter, 'dash-team-avatar')}
+                <div class="dash-team-copy">
+                    <h3>${escapeHtml(supporter.name)}</h3>
+                    <p class="mono">${escapeHtml(supporter.role)}</p>
+                </div>
+            </div>
+            <div class="dash-team-actions">
+                <button type="button" class="dash-btn dash-sm" data-supporter-move-up="${index}">↑</button>
+                <button type="button" class="dash-btn dash-sm" data-supporter-move-down="${index}">↓</button>
+            </div>
+        </article>
+    `).join('');
+    renderHomeDashboard();
+}
+
+function openSupporterEditor(index) {
+    if (!editorData.supporters || !editorData.supporters[index]) return;
+    supporterSelectedIndex = index;
+    const supporter = editorData.supporters[index];
+    if (supporterEditorTitleEl) supporterEditorTitleEl.textContent = 'Редактирование — ' + supporter.name;
+    fillSupporterForm(supporter);
+    if (supporterEditorEl) supporterEditorEl.hidden = false;
+    if (supporterEditorEmptyEl) supporterEditorEmptyEl.hidden = true;
+    renderSupporterGrid();
+}
+
+function closeSupporterEditor(renderGrid = true) {
+    supporterSelectedIndex = -1;
+    if (supporterEditorEl) supporterEditorEl.hidden = true;
+    if (supporterEditorEmptyEl) supporterEditorEmptyEl.hidden = false;
+    if (supporterEditorTitleEl) supporterEditorTitleEl.textContent = 'Редактирование';
+    clearSupporterForm();
+    if (renderGrid) renderSupporterGrid();
+}
+
+function syncSelectedSupporterFromForm() {
+    if (supporterSelectedIndex < 0 || !editorData.supporters || !editorData.supporters[supporterSelectedIndex]) return false;
+    const current = editorData.supporters[supporterSelectedIndex];
+    editorData.supporters[supporterSelectedIndex] = normalizeSupporter({
+        ...current,
+        name: supporterFieldNameEl ? supporterFieldNameEl.value : current.name,
+        role: supporterFieldRoleEl ? supporterFieldRoleEl.value : current.role,
+        avatarUrl: supporterFieldAvatarEl ? supporterFieldAvatarEl.value : current.avatarUrl,
+        sortOrder: toNumber(supporterFieldOrderEl ? supporterFieldOrderEl.value : current.sortOrder, current.sortOrder || supporterSelectedIndex + 1)
+    }, supporterSelectedIndex);
+    syncDraftControls();
+    return true;
+}
+
+function commitOpenSupporterForm(refreshGrid = true) {
+    if (!supporterEditorEl || supporterEditorEl.hidden) return false;
+    if (!syncSelectedSupporterFromForm()) return false;
+    const supporter = editorData.supporters[supporterSelectedIndex];
+    if (supporter && supporterEditorTitleEl) {
+        supporterEditorTitleEl.textContent = 'Редактирование — ' + supporter.name;
+    }
+    if (refreshGrid) renderSupporterGrid();
+    return true;
+}
+
+function selectSupporter(index) {
+    commitOpenSupporterForm();
+    openSupporterEditor(index);
+}
+
+function moveSupporterMember(index, direction) {
+    commitOpenSupporterForm(false);
+    const ordered = getSupporterEntries();
+    const position = ordered.findIndex(item => item.index === index);
+    const swapItem = ordered[position + direction];
+    if (position < 0 || !swapItem) return;
+
+    const reordered = ordered.map(item => item.index);
+    [reordered[position], reordered[position + direction]] = [reordered[position + direction], reordered[position]];
+    reordered.forEach((sIdx, order) => {
+        editorData.supporters[sIdx].sortOrder = order + 1;
+    });
+
+    renderSupporterGrid();
+    if (supporterSelectedIndex >= 0) {
+        openSupporterEditor(supporterSelectedIndex);
+    }
+    syncDraftControls();
+}
+
+function createEmptySupporter() {
+    const count = (editorData.supporters || []).length + 1;
+    return normalizeSupporter({
+        id: 'supporter-' + Date.now(),
+        name: 'Новый поддержавший',
+        role: 'Поддержавший',
+        avatarUrl: '',
+        sortOrder: count
+    }, count - 1);
+}
+
+function addSupporterMember() {
+    commitOpenSupporterForm(false);
+    if (!editorData.supporters) editorData.supporters = [];
+    editorData.supporters.push(createEmptySupporter());
+    openSupporterEditor(editorData.supporters.length - 1);
+    syncDraftControls();
+    showToast('Новый поддержавший добавлен.', 'success');
+}
+
+function deleteSupporterMember() {
+    if (supporterSelectedIndex < 0 || !editorData.supporters || !editorData.supporters[supporterSelectedIndex]) return;
+    if (!confirm('Удалить карточку поддержавшего?')) return;
+
+    editorData.supporters.splice(supporterSelectedIndex, 1);
+    if (!editorData.supporters.length) {
+        closeSupporterEditor(false);
+        renderSupporterGrid();
+        syncDraftControls();
+        showToast('Карточка удалена.', 'success');
+        return;
+    }
+
+    const nextIndex = Math.min(supporterSelectedIndex, editorData.supporters.length - 1);
+    openSupporterEditor(nextIndex);
+    syncDraftControls();
+    showToast('Карточка удалена.', 'success');
+}
+
+// ─── Supporters Modal ────────────────────────────────────────────────────────
+
+function renderSupportersModal(query = '') {
+    if (!supportersModalListEl) return;
+    const entries = getSupporterEntries();
+    const normalized = query.trim().toLowerCase();
+    const filtered = normalized
+        ? entries.filter(({ supporter }) =>
+            [supporter.name, supporter.role].some(v => String(v || '').toLowerCase().includes(normalized))
+          )
+        : entries;
+
+    if (!filtered.length) {
+        supportersModalListEl.innerHTML = `<div class="dash-empty-state">${normalized ? 'Ничего не найдено.' : 'Список пуст.'}</div>`;
+        return;
+    }
+
+    supportersModalListEl.innerHTML = filtered.map(({ supporter }) => `
+        <div class="dash-modal-item">
+            ${renderTeamAvatar(supporter, 'dash-team-avatar')}
+            <div class="dash-team-copy">
+                <strong>${escapeHtml(supporter.name)}</strong>
+                <span class="mono">${escapeHtml(supporter.role)}</span>
+            </div>
+        </div>
+    `).join('');
+}
+
+function openSupportersModal() {
+    if (!supportersAllModalEl) return;
+    supportersAllModalEl.hidden = false;
+    if (supportersModalSearchEl) supportersModalSearchEl.value = '';
+    renderSupportersModal('');
+    if (supportersModalSearchEl) supportersModalSearchEl.focus();
+}
+
+function closeSupportersModal() {
+    if (!supportersAllModalEl) return;
+    supportersAllModalEl.hidden = true;
+}
+
+// ─── End Supporters ──────────────────────────────────────────────────────────
+
 function syncEditorTabs() {
     editorPanelEl.querySelectorAll('.dash-tab-btn').forEach(button => {
         button.classList.toggle('active', button.dataset.tab === editorActiveTab);
@@ -768,15 +1004,18 @@ function openEditor() {
     editorData = deepClone(siteData);
     editorSelectedIndex = -1;
     teamSelectedIndex = -1;
+    supporterSelectedIndex = -1;
     editorActiveTab = 'tab-main';
     editorActiveView = 'home';
     editorSearchQuery = '';
     editorSearchEl.value = '';
+    closeSupporterEditor(false);
     closeProductEditor(false);
     closeTeamEditor(false);
     fillSocialInputs();
     renderEditorGrid();
     renderTeamGrid();
+    renderSupporterGrid();
     renderAdminView();
     editorOverlayEl.classList.add('open');
     editorOverlayEl.setAttribute('aria-hidden', 'false');
@@ -1285,6 +1524,65 @@ document.getElementById('saveGithubBtn').addEventListener('click', async () => {
     await handleSaveGithub();
 });
 
+// ─── Supporter event listeners ──────────────────────────────────────────────
+
+if (addSupporterBtnEl) {
+    addSupporterBtnEl.addEventListener('click', () => addSupporterMember());
+}
+
+if (supporterGridEl) {
+    supporterGridEl.addEventListener('click', (event) => {
+        const button = event.target.closest('button');
+        if (button?.hasAttribute('data-supporter-move-up')) {
+            moveSupporterMember(Number(button.getAttribute('data-supporter-move-up')), -1);
+            return;
+        }
+        if (button?.hasAttribute('data-supporter-move-down')) {
+            moveSupporterMember(Number(button.getAttribute('data-supporter-move-down')), 1);
+            return;
+        }
+        const card = event.target.closest('[data-select-supporter]');
+        if (card) selectSupporter(Number(card.getAttribute('data-select-supporter')));
+    });
+
+    supporterGridEl.addEventListener('keydown', (event) => {
+        const card = event.target.closest('[data-select-supporter]');
+        if (!card) return;
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        selectSupporter(Number(card.getAttribute('data-select-supporter')));
+    });
+}
+
+if (closeSupporterEditorBtnEl) closeSupporterEditorBtnEl.addEventListener('click', () => closeSupporterEditor());
+if (deleteSupporterBtnEl) deleteSupporterBtnEl.addEventListener('click', () => deleteSupporterMember());
+
+[supporterFieldNameEl, supporterFieldRoleEl, supporterFieldAvatarEl, supporterFieldOrderEl]
+    .filter(Boolean)
+    .forEach(field => {
+        field.addEventListener('input', () => {
+            if (supporterSelectedIndex < 0) return;
+            syncSelectedSupporterFromForm();
+            const supporter = editorData.supporters[supporterSelectedIndex];
+            if (supporter && supporterEditorTitleEl) {
+                supporterEditorTitleEl.textContent = 'Редактирование — ' + supporter.name;
+            }
+            renderSupporterGrid();
+        });
+    });
+
+if (viewAllSupportersBtnEl) viewAllSupportersBtnEl.addEventListener('click', () => openSupportersModal());
+if (closeSupportersModalBtnEl) closeSupportersModalBtnEl.addEventListener('click', () => closeSupportersModal());
+if (supportersModalBackdropEl) supportersModalBackdropEl.addEventListener('click', () => closeSupportersModal());
+if (supportersModalSearchEl) {
+    supportersModalSearchEl.addEventListener('input', (e) => {
+        const target = e.target;
+        renderSupportersModal(target instanceof HTMLInputElement ? target.value : '');
+    });
+}
+
+// ─── End Supporter listeners ─────────────────────────────────────────────────
+
 document.addEventListener('keydown', (event) => {
     if (editorOverlayEl.classList.contains('open')) {
         if (event.key === 'Escape') closeEditor();
@@ -1310,11 +1608,13 @@ document.addEventListener('keydown', (event) => {
     async function initialize() {
         renderGitHubSyncTarget();
         await initializeData();
+        closeSupporterEditor(false);
         closeProductEditor(false);
         closeTeamEditor(false);
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
+        renderSupporterGrid();
         renderAdminView();
         renderProductUploadMeta();
         syncDraftControls();

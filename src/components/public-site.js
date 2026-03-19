@@ -16,6 +16,7 @@ export function createPublicSite({ localeController }) {
     const featuredSocialLinksEl = document.getElementById('featuredSocialLinks');
     const footerSocialLinksEl = document.getElementById('footerSocialLinks');
     const teamShowcaseEl = document.getElementById('teamShowcase');
+    const supportersShowcaseEl = document.getElementById('supportersShowcase');
     const toastEl = document.getElementById('toast');
 
     let siteData = localeController.localizeSiteData(DEFAULT_SITE_DATA);
@@ -28,6 +29,14 @@ export function createPublicSite({ localeController }) {
 
     function getSortedTeam(data) {
         return [...data.team].sort((a, b) => {
+            const bySort = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
+            if (bySort !== 0) return bySort;
+            return a.name.localeCompare(b.name, localeController.locale);
+        });
+    }
+
+    function getSortedSupporters(data) {
+        return [...(data.supporters || [])].sort((a, b) => {
             const bySort = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
             if (bySort !== 0) return bySort;
             return a.name.localeCompare(b.name, localeController.locale);
@@ -227,7 +236,45 @@ export function createPublicSite({ localeController }) {
             return;
         }
 
-        teamShowcaseEl.innerHTML = `<div class="team-grid">${members.map((member) => renderCard(member)).join('')}</div>`;
+        teamShowcaseEl.innerHTML = `<div class="team-row">${members.map((member) => renderCard(member)).join('')}</div>`;
+    }
+
+    function renderSupportersShowcase() {
+        if (!supportersShowcaseEl) return;
+        const supporters = getSortedSupporters(siteData);
+        supportersShowcaseEl.classList.remove('has-marquee');
+        if (!supporters.length) {
+            supportersShowcaseEl.innerHTML = `<div class="team-empty">${escapeHtml(t('supporters.empty', 'Пока никого нет. Поддержите проект — и вы появитесь здесь.'))}</div>`;
+            return;
+        }
+
+        const renderCard = (supporter, extraClass = '') => `
+            <article class="glass-card glass-card-hover team-card supporter-card ${extraClass}">
+                <div class="team-card-head">
+                    ${renderTeamAvatar(supporter, 'team-avatar')}
+                    <div class="team-copy">
+                        <div class="team-name">${escapeHtml(supporter.name)}</div>
+                        <div class="team-role mono">${escapeHtml(supporter.role)}</div>
+                    </div>
+                </div>
+            </article>
+        `;
+
+        if (supporters.length >= 5) {
+            const cards = supporters.map((s) => renderCard(s, 'marquee-card')).join('');
+            supportersShowcaseEl.classList.add('has-marquee');
+            supportersShowcaseEl.innerHTML = `
+                <div class="team-marquee">
+                    <div class="team-marquee-track">
+                        ${cards}
+                        ${cards}
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        supportersShowcaseEl.innerHTML = `<div class="team-row">${supporters.map((s) => renderCard(s)).join('')}</div>`;
     }
 
     function bindArchiveToggle() {
@@ -304,6 +351,7 @@ export function createPublicSite({ localeController }) {
         renderFeaturedProducts();
         renderArchiveProducts();
         renderTeamShowcase();
+        renderSupportersShowcase();
         hydrateDynamicUi();
     }
 
