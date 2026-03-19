@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aleph Studio</title>
+  <meta name="description" content="Aleph Studio — mods, games, DLC and small digital releases with open source code, clear installation and quick access to the latest version.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Unbounded:wght@200;400;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16.png?v=2">
+  <link rel="shortcut icon" href="../favicon.ico?v=2" type="image/x-icon">
+
+  <link rel="stylesheet" href="../assets/css/main.css?v=20260319a">
+  <link rel="stylesheet" href="../assets/css/admin.css?v=20260319a">
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav class="nav">
+  <a id="editorAccessTrigger" href="#top" class="nav-logo" aria-label="Aleph Studio — back to top">
+    <div class="logo-sq"></div>
+    <span class="logo-text">Aleph Studio</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a id="navLinkProducts" href="#products">Products</a></li>
+    <li><a id="navLinkManifesto" href="#manifesto">Principle</a></li>
+    <li><a id="navLinkTeam" href="#team">Team</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div id="localeSwitcher" class="locale-switcher">
+      <button id="localeSwitcherButton" class="locale-switcher-btn" type="button"
+              aria-haspopup="listbox" aria-expanded="false" aria-label="Select language">
+        <span id="localeSwitcherFlag" class="locale-switcher-flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel" class="locale-switcher-label">EN</span>
+        <svg class="locale-switcher-caret" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 6.5 8 10 12 6.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div id="localeSwitcherMenu" class="locale-switcher-menu" role="listbox"
+           aria-label="Select language" hidden></div>
+    </div>
+    <a href="#" class="nav-badge">WeTTeA ↗</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section id="top" class="hero">
+  <div class="hero-bg-sq" aria-hidden="true"></div>
+
+  <div class="hero-tag">Aleph Studio · Open Source · By WeTTeA</div>
+
+  <h1 class="hero-title">
+    We build.<br>
+    <span>We open.</span>
+    We move.
+  </h1>
+
+  <p id="heroIntro" class="hero-sub">
+    Open source game projects. Mods, games, DLC — everything we make, you can study, modify and run yourself.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#products" class="btn-primary">See products</a>
+    <a href="#manifesto" class="btn-ghost">Our principle</a>
+  </div>
+</section>
+
+<!-- ── MARQUEE ──────────────────────────────────────────────── -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Open Source</span>
+    <span class="marquee-item">GPL License</span>
+    <span class="marquee-item">Game Projects</span>
+    <span class="marquee-item">Mods</span>
+    <span class="marquee-item">Free Code</span>
+    <span class="marquee-item">By WeTTeA</span>
+    <span class="marquee-item">Aleph Studio</span>
+    <span class="marquee-item">Open Source</span>
+    <span class="marquee-item">GPL License</span>
+    <span class="marquee-item">Game Projects</span>
+    <span class="marquee-item">Mods</span>
+    <span class="marquee-item">Free Code</span>
+    <span class="marquee-item">By WeTTeA</span>
+    <span class="marquee-item">Aleph Studio</span>
+  </div>
+</div>
+
+<!-- ── PRINCIPLE ────────────────────────────────────────────── -->
+<section id="manifesto" style="padding-top:140px;">
+  <div class="principle reveal">
+    <div class="principle-visual" aria-hidden="true">
+      <div class="p-sq-outer">
+        <div class="p-sq-inner"></div>
+        <div class="p-sq-center"></div>
+        <div class="p-label">Aleph · ℵ</div>
+      </div>
+    </div>
+    <div class="principle-text">
+      <div class="section-label">Principle</div>
+      <h2 class="section-title">You know what<br>you're running</h2>
+      <p id="approachLead" class="principle-body">
+        Aleph Studio operates on the premise that users should <strong>understand exactly what is running on their machine</strong>. That's why we publish code under the GPL licence — you can study it, extend it, use it in your own projects.
+        <br><br>
+        This isn't altruism. It's a <strong>quality standard</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRODUCTS ─────────────────────────────────────────────── -->
+<section id="products">
+  <div class="section-label reveal">Products</div>
+  <h2 id="productsTitle" class="section-title reveal reveal-delay-1">Main releases</h2>
+
+  <div id="featured-products" class="products-grid reveal reveal-delay-2"></div>
+
+  <div id="featuredSocialLinks" class="social-hub" aria-label="Aleph Studio social links"></div>
+
+  <!-- Catalog -->
+  <div id="catalog" style="margin-top:48px;">
+    <div class="section-label reveal" style="margin-bottom:0;">Catalog</div>
+    <h3 id="catalogTitle" class="section-title reveal reveal-delay-1"
+        style="font-size:clamp(20px,2.5vw,32px);margin-top:8px;margin-bottom:4px;">Other products and upcoming releases</h3>
+    <p id="catalogDescription" class="reveal reveal-delay-2"
+       style="font-size:14px;color:var(--muted);margin-bottom:0;">
+      Dates and timelines are preliminary.
+    </p>
+    <div id="archive-products" class="catalog-grid reveal reveal-delay-3"></div>
+  </div>
+</section>
+
+<!-- ── MANIFESTO ITEMS ───────────────────────────────────────── -->
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <div class="section-label">What matters</div>
+    <p class="manifesto-text reveal">
+      Open source is not a discount on quality.<br>
+      It's <em>respect</em> for the person running it.
+    </p>
+
+    <div class="manifesto-items">
+      <div class="manifesto-item reveal">
+        <div class="m-num">01</div>
+        <div class="m-title" id="studioCase1Title">Open code</div>
+        <p class="m-body" id="studioCase1Text">The repository is public, the structure isn't hidden behind a closed build.</p>
+      </div>
+      <div class="manifesto-item reveal reveal-delay-1">
+        <div class="m-num">02</div>
+        <div class="m-title" id="studioCase2Title">Honest status</div>
+        <p class="m-body" id="studioCase2Text">Alpha is alpha. Beta is beta. No marketing words instead of truth.</p>
+      </div>
+      <div class="manifesto-item reveal reveal-delay-2">
+        <div class="m-num">03</div>
+        <div class="m-title" id="studioCase3Title">Direct access</div>
+        <p class="m-body" id="studioCase3Text">If the file is ready — download it right away. No extra steps or opaque installers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ──────────────────────────────────────────────────── -->
+<section id="team">
+  <div class="section-label reveal">Team</div>
+  <h2 id="teamTitle" class="section-title reveal reveal-delay-1">The people behind the project</h2>
+  <p id="teamIntro" class="reveal reveal-delay-2"
+     style="font-size:15px;color:var(--muted);margin-top:8px;max-width:560px;">
+    Members who lead development, maintain releases and keep the public side of the project in order.
+  </p>
+  <div id="teamShowcase" class="team-grid reveal reveal-delay-3"></div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">
+      <div class="footer-sq"></div>
+      <span class="footer-name">Aleph Studio</span>
+    </div>
+    <p class="footer-desc">A subsidiary project of WeTTeA. Open source game development.</p>
+    <div id="footerSocialLinks" class="social-hub" style="margin-top:16px;"
+         aria-label="Aleph Studio social links"></div>
+  </div>
+
+  <div class="footer-links">
+    <h4>Navigation</h4>
+    <ul>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#catalog">Catalog</a></li>
+      <li><a href="#manifesto">Principle</a></li>
+      <li><a href="#team">Team</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-links">
+    <h4>WeTTeA</h4>
+    <ul>
+      <li><a href="#">WeTTeA.com</a></li>
+      <li><a href="#">Holo Project</a></li>
+      <li><a href="#">Discord</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+  </div>
+
+  <div id="footerCopyright" class="footer-copy">
+    © 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed
+  </div>
+</footer>
+
+<!-- ── ADMIN PANEL ───────────────────────────────────────────── -->
+<div id="editorOverlay" class="editor-overlay" aria-hidden="true">
+  <div class="editor-backdrop" data-close-editor></div>
+  <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
+    <div class="dash-layout">
+
+      <!-- Sidebar -->
+      <aside class="dash-sidebar">
+        <div class="dash-brand">Aleph <span>Studio</span></div>
+
+        <nav class="dash-nav" aria-label="Admin sections">
+          <a href="#" class="dash-nav-link active" data-admin-view="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Home
+          </a>
+          <a href="#" class="dash-nav-link" data-admin-view="products">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+            Products
+          </a>
+          <a href="#" class="dash-nav-link" data-admin-view="misc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Misc
+          </a>
+        </nav>
+
+        <div class="dash-sidebar-footer">
+          Site management panel.<br>
+          Aleph Studio © 2026<br>
+          Hidden entry: <span class="mono">→ → ← → ← → →</span><br>
+          Then click the top logo
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="dash-main">
+        <header class="dash-header">
+          <div class="dash-title-wrap">
+            <h1 id="editorAdminTitle">Home</h1>
+            <p id="editorAdminSubtitle">Manage draft, publish and quick navigation.</p>
+          </div>
+          <div class="dash-actions">
+            <div id="draftStateChip" class="dash-chip">Draft: no changes</div>
+            <button id="applyDraftBtn"   type="button" class="dash-btn dash-primary">Apply</button>
+            <button id="discardDraftBtn" type="button" class="dash-btn">Discard</button>
+            <button id="exportJsonBtn"   type="button" class="dash-btn">Export JSON</button>
+            <button id="importJsonBtn"   type="button" class="dash-btn">Import JSON</button>
+            <button id="addProductBtn"   type="button" class="dash-btn dash-primary">+ Product</button>
+            <button id="addTeamMemberBtn" type="button" class="dash-btn dash-primary" hidden>+ Member</button>
+            <button type="button" class="dash-btn" data-close-editor>Close</button>
+          </div>
+        </header>
+
+        <div id="productsToolbar" class="dash-toolbar">
+          <div class="dash-toolbar-group">
+            <div class="dash-chip"><strong>Total:</strong> <span id="editorTotalCount">0</span></div>
+            <div class="dash-chip"><strong>Featured:</strong> <span id="editorShowcaseCount">0</span></div>
+          </div>
+          <div class="dash-toolbar-group">
+            <input id="editorSearchInput" class="dash-search" type="text" placeholder="Search…">
+          </div>
+        </div>
+
+        <section class="dash-content">
+          <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
+
+          <!-- Home view -->
+          <div id="homeView" class="dash-view active">
+            <div class="dash-misc-grid">
+              <div class="dash-misc-column">
+                <div class="dash-form-card dash-home-status-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Draft</h4>
+                      <p>Check status, apply changes or publish for everyone.</p>
+                    </div>
+                  </div>
+                  <div id="homeDraftSummary" class="dash-home-status"></div>
+                  <div class="dash-sync-actions">
+                    <button id="homeApplyDraftBtn"   type="button" class="dash-btn dash-primary">Apply draft</button>
+                    <button id="homeDiscardDraftBtn" type="button" class="dash-btn">Discard draft</button>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Publishing</h4>
+                      <p>Save locally or publish for everyone.</p>
+                    </div>
+                  </div>
+                  <div class="dash-sync-wrap">
+                    <div class="dash-form-card">
+                      <div class="dash-form-section">
+                        <div class="dash-sync-actions">
+                          <button id="saveLocalBtn"  type="button" class="dash-btn">Save locally</button>
+                          <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Save for everyone</button>
+                          <button id="clearLocalBtn" type="button" class="dash-btn">Clear local</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dash-form-card">
+                      <div class="dash-form-section">
+                        <h4>GitHub sync</h4>
+                        <div class="dash-github-grid">
+                          <div class="dash-field dash-c12">
+                            <label for="githubToken">GitHub token</label>
+                            <input id="githubToken" type="password" placeholder="Token is not saved">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-misc-column">
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div><h4>Summary</h4></div>
+                  </div>
+                  <div class="dash-home-metrics">
+                    <article class="dash-home-metric"><span>Products</span><strong id="homeProductsCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Featured</span><strong id="homeFeaturedCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Team</span><strong id="homeTeamCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Social links</span><strong id="homeSocialCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Files queued</span><strong id="homeUploadsCount">0</strong></article>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>How to update the site</h4>
+                    </div>
+                  </div>
+                  <ol class="dash-home-steps">
+                    <li>Open "Products" or "Misc" and make your changes.</li>
+                    <li>Click "Apply draft" to see the preview.</li>
+                    <li>For yourself — "Save locally".</li>
+                    <li>For everyone — paste a GitHub token and "Save for everyone".</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products view -->
+          <div id="productsView" class="dash-view">
+            <div class="dash-product-grid" id="editorProductGrid"></div>
+
+            <div class="dash-editor" id="editor">
+              <div class="dash-editor-header">
+                <h2 id="editorTitle">Editing</h2>
+                <button id="closeProductEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+              </div>
+
+              <div class="dash-tab-bar">
+                <button type="button" class="dash-tab-btn active" data-tab="tab-main">Main</button>
+                <button type="button" class="dash-tab-btn" data-tab="tab-content">Content</button>
+                <button type="button" class="dash-tab-btn" data-tab="tab-publish">Publish</button>
+              </div>
+
+              <div class="dash-tab-panel active" data-panel="tab-main">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <h4>Main parameters</h4>
+                    <div class="dash-fg">
+                      <div class="dash-field dash-c4"><label>Name</label><input type="text" id="f-name"></div>
+                      <div class="dash-field dash-c4"><label>ID / anchor</label><input type="text" id="f-slug"></div>
+                      <div class="dash-field dash-c4"><label>Tag</label><input type="text" id="f-tag"></div>
+                      <div class="dash-field dash-c3"><label>Version</label><input type="text" id="f-version"></div>
+                      <div class="dash-field dash-c3"><label>Order</label><input type="number" id="f-order"></div>
+                      <div class="dash-field dash-c3">
+                        <label>Stage</label>
+                        <select id="f-stage">
+                          <option value="">No flag</option>
+                          <option value="alpha">Alpha</option>
+                          <option value="beta">Beta</option>
+                          <option value="release">Release</option>
+                        </select>
+                      </div>
+                      <div class="dash-field dash-c3">
+                        <label>Card colour</label>
+                        <select id="f-tone">
+                          <option value="red">Red</option>
+                          <option value="green">Green</option>
+                        </select>
+                      </div>
+                      <div class="dash-field dash-c6"><label>Status</label><input type="text" id="f-status"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-tab-panel" data-panel="tab-content">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Short description</label><textarea id="f-desc"></textarea></div>
+                  </div>
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Instructions (one point per line)</label><textarea id="f-instructions"></textarea></div>
+                  </div>
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Note</label><textarea id="f-note"></textarea></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-tab-panel" data-panel="tab-publish">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <h4>Publishing</h4>
+                    <div class="dash-fg">
+                      <div class="dash-field dash-c6">
+                        <label>Showcase visibility</label>
+                        <label class="dash-inline-check">
+                          <input type="checkbox" id="f-showcase">
+                          <span>Show in showcase</span>
+                        </label>
+                      </div>
+                      <div class="dash-field dash-c6"><label>Showcase order</label><input type="number" id="f-showcase-order"></div>
+                      <div class="dash-field dash-c6"><label>File link / download</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                      <div class="dash-field dash-c6"><label>Source code / GitHub</label><input type="text" id="f-source"></div>
+                      <div class="dash-field dash-c12">
+                        <label for="f-download-file">File for GitHub upload</label>
+                        <input type="file" id="f-download-file">
+                        <p id="f-download-file-meta" class="dash-help">No file selected.</p>
+                        <div class="dash-sync-actions" style="margin-top:8px;">
+                          <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Remove file</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-editor-footer">
+                <div class="note">Changes accumulate in the draft. "Apply" / "Discard" work for all sections.</div>
+                <div class="btns">
+                  <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Delete</button>
+                </div>
+              </div>
+
+              <div class="dash-form-card dash-home-redirect">
+                <div class="dash-section-head">
+                  <div>
+                    <h4>Publishing — on Home</h4>
+                    <p>GitHub token and save buttons are on the "Home" tab.</p>
+                  </div>
+                </div>
+                <div class="dash-sync-actions">
+                  <button type="button" class="dash-btn" data-admin-switch="home">Open Home</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Misc view -->
+          <div id="miscView" class="dash-view">
+            <div class="dash-misc-grid">
+              <div class="dash-misc-column">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <div class="dash-section-head">
+                      <div>
+                        <h4>Social links</h4>
+                        <p>Shown below the product showcase and in the footer.</p>
+                      </div>
+                    </div>
+                    <div class="dash-github-grid">
+                      <div class="dash-field dash-c12">
+                        <label for="socialYoutube">YouTube</label>
+                        <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                      </div>
+                      <div class="dash-field dash-c12">
+                        <label for="socialDiscord">Discord</label>
+                        <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                      </div>
+                      <div class="dash-field dash-c12">
+                        <label for="socialTelegram">Telegram</label>
+                        <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-form-section">
+                    <p class="dash-help" style="margin-bottom:12px;">Button preview:</p>
+                    <div id="editorSocialPreview" class="dash-social-preview"></div>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Team</h4>
+                      <p>With 5+ members the block becomes a marquee.</p>
+                    </div>
+                    <div class="dash-chip"><strong>Cards:</strong> <span id="teamMemberCount">0</span></div>
+                  </div>
+                  <div id="teamGrid" class="dash-team-grid"></div>
+                </div>
+              </div>
+
+              <div class="dash-misc-column">
+                <div id="teamEditorEmpty" class="dash-form-card dash-team-editor-empty">
+                  Select a team member card or click "+ Member".
+                </div>
+
+                <div id="teamEditor" class="dash-team-editor" hidden>
+                  <div class="dash-editor-header">
+                    <h2 id="teamEditorTitle">Member</h2>
+                    <button id="closeTeamEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                  </div>
+                  <div class="dash-form-card">
+                    <div class="dash-form-section">
+                      <h4>Member data</h4>
+                      <div class="dash-fg">
+                        <div class="dash-field dash-c6"><label>Name</label><input type="text" id="team-name"></div>
+                        <div class="dash-field dash-c6"><label>Role</label><input type="text" id="team-role"></div>
+                        <div class="dash-field dash-c9"><label>Avatar URL</label><input type="text" id="team-avatar"></div>
+                        <div class="dash-field dash-c3"><label>Order</label><input type="number" id="team-order"></div>
+                        <div class="dash-field dash-c12"><label>Bio</label><textarea id="team-bio"></textarea></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-editor-footer">
+                    <div class="note">Card changes the shared draft.</div>
+                    <div class="btns">
+                      <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>window.__ALEPH_ROUTE_LOCALE__ = 'en';</script>
+<script type="module" src="../src/app.js?v=20260319a"></script>
+
+</body>
+</html>
