@@ -923,7 +923,46 @@ footer {
 .locale-option:hover { background: rgba(139,26,42,0.06); color: var(--cream); }
 .locale-option[aria-selected="true"] { color: var(--ruby); }
 
-/* ── Responsive ────────────────────────────────────────────── */
+/* Locale option inner layout (rendered by locale-controller.js) */
+.locale-option-flag,
+.locale-switcher-flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.locale-option-flag svg,
+.locale-switcher-flag svg {
+  width: 18px;
+  height: 12px;
+  display: block;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.locale-option-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+}
+.locale-option-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: inherit;
+}
+.locale-option-code {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* ── Mono utility ──────────────────────────────────────────── */
+.mono { font-family: var(--font-mono); }
+
+/* ── Responsive — tablet ───────────────────────────────────── */
 @media (max-width: 960px) {
   .nav { padding: 20px 24px; }
   .nav-links { display: none; }
@@ -937,4 +976,21 @@ footer {
   footer { grid-template-columns: 1fr; padding: 40px 24px; }
   .team-grid { flex-wrap: wrap; }
   .divider { margin: 0 24px; }
+}
+
+/* ── Responsive — mobile ───────────────────────────────────── */
+@media (max-width: 480px) {
+  .nav { padding: 14px 16px; }
+  .hero { padding: 0 16px 48px; }
+  section { padding: 60px 16px; }
+  footer { padding: 40px 16px; gap: 28px; }
+  .divider { margin: 0 16px; }
+  .hero-title { font-size: clamp(38px, 13vw, 64px); }
+  .hero-sub { font-size: 15px; margin-bottom: 40px; }
+  .manifesto-items { grid-template-columns: 1fr; gap: 24px; }
+  .team-card { min-width: 140px; padding: 24px 18px; }
+  .social-hub { flex-wrap: wrap; gap: 8px; }
+  .locale-switcher-menu { right: 0; min-width: 120px; }
+  .products-grid { gap: 8px; }
+  footer .footer-copy { margin-top: 24px; padding-top: 16px; }
 }
