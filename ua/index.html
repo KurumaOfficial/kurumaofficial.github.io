@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aleph Studio</title>
+  <meta name="description" content="Aleph Studio — моди, ігри, DLC та невеликі цифрові релізи з відкритим вихідним кодом, зрозумілою установкою та швидким доступом до актуальної версії.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Unbounded:wght@200;400;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16.png?v=2">
+  <link rel="shortcut icon" href="../favicon.ico?v=2" type="image/x-icon">
+
+  <link rel="stylesheet" href="../assets/css/main.css?v=20260319a">
+  <link rel="stylesheet" href="../assets/css/admin.css?v=20260319a">
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav class="nav">
+  <a id="editorAccessTrigger" href="#top" class="nav-logo" aria-label="Aleph Studio — нагору">
+    <div class="logo-sq"></div>
+    <span class="logo-text">Aleph Studio</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a id="navLinkProducts" href="#products">Продукти</a></li>
+    <li><a id="navLinkManifesto" href="#manifesto">Принцип</a></li>
+    <li><a id="navLinkTeam" href="#team">Команда</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div id="localeSwitcher" class="locale-switcher">
+      <button id="localeSwitcherButton" class="locale-switcher-btn" type="button"
+              aria-haspopup="listbox" aria-expanded="false" aria-label="Вибір мови">
+        <span id="localeSwitcherFlag" class="locale-switcher-flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel" class="locale-switcher-label">UA</span>
+        <svg class="locale-switcher-caret" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 6.5 8 10 12 6.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div id="localeSwitcherMenu" class="locale-switcher-menu" role="listbox"
+           aria-label="Вибір мови" hidden></div>
+    </div>
+    <a href="#" class="nav-badge">WeTTeA ↗</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section id="top" class="hero">
+  <div class="hero-bg-sq" aria-hidden="true"></div>
+
+  <div class="hero-tag">Aleph Studio · Open Source · By WeTTeA</div>
+
+  <h1 class="hero-title">
+    Створюємо.<br>
+    <span>Відкриваємо.</span>
+    Рухаємось.
+  </h1>
+
+  <p id="heroIntro" class="hero-sub">
+    Ігрові проєкти з відкритим вихідним кодом. Моди, ігри, DLC — все що ми робимо, ти можеш вивчити, змінити і запустити сам.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#products" class="btn-primary">Переглянути продукти</a>
+    <a href="#manifesto" class="btn-ghost">Наш принцип</a>
+  </div>
+</section>
+
+<!-- ── MARQUEE ──────────────────────────────────────────────── -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Open Source</span>
+    <span class="marquee-item">GPL License</span>
+    <span class="marquee-item">Ігрові проєкти</span>
+    <span class="marquee-item">Моди</span>
+    <span class="marquee-item">Вільний код</span>
+    <span class="marquee-item">By WeTTeA</span>
+    <span class="marquee-item">Aleph Studio</span>
+    <span class="marquee-item">Open Source</span>
+    <span class="marquee-item">GPL License</span>
+    <span class="marquee-item">Ігрові проєкти</span>
+    <span class="marquee-item">Моди</span>
+    <span class="marquee-item">Вільний код</span>
+    <span class="marquee-item">By WeTTeA</span>
+    <span class="marquee-item">Aleph Studio</span>
+  </div>
+</div>
+
+<!-- ── PRINCIPLE ────────────────────────────────────────────── -->
+<section id="manifesto" style="padding-top:140px;">
+  <div class="principle reveal">
+    <div class="principle-visual" aria-hidden="true">
+      <div class="p-sq-outer">
+        <div class="p-sq-inner"></div>
+        <div class="p-sq-center"></div>
+        <div class="p-label">Aleph · ℵ</div>
+      </div>
+    </div>
+    <div class="principle-text">
+      <div class="section-label">Принцип</div>
+      <h2 class="section-title">Ти знаєш що<br>запускаєш</h2>
+      <p id="approachLead" class="principle-body">
+        Aleph Studio виходить з того, що користувач повинен <strong>розуміти що саме працює на його машині</strong>. Тому ми публікуємо код під ліцензією GPL — його можна вивчити, розвинути, використати у власних проєктах.
+        <br><br>
+        Це не альтруїзм. Це <strong>стандарт якості</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRODUCTS ─────────────────────────────────────────────── -->
+<section id="products">
+  <div class="section-label reveal">Продукти</div>
+  <h2 id="productsTitle" class="section-title reveal reveal-delay-1">Головні релізи</h2>
+
+  <div id="featured-products" class="products-grid reveal reveal-delay-2"></div>
+
+  <div id="featuredSocialLinks" class="social-hub" aria-label="Соціальні мережі Aleph Studio"></div>
+
+  <!-- Catalog -->
+  <div id="catalog" style="margin-top:48px;">
+    <div class="section-label reveal" style="margin-bottom:0;">Каталог</div>
+    <h3 id="catalogTitle" class="section-title reveal reveal-delay-1"
+        style="font-size:clamp(20px,2.5vw,32px);margin-top:8px;margin-bottom:4px;">Інші продукти та майбутні релізи</h3>
+    <p id="catalogDescription" class="reveal reveal-delay-2"
+       style="font-size:14px;color:var(--muted);margin-bottom:0;">
+      Терміни та дати є попередніми.
+    </p>
+    <div id="archive-products" class="catalog-grid reveal reveal-delay-3"></div>
+  </div>
+</section>
+
+<!-- ── MANIFESTO ITEMS ───────────────────────────────────────── -->
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <div class="section-label">Що важливо</div>
+    <p class="manifesto-text reveal">
+      Відкритий код — це не знижка на якість.<br>
+      Це <em>повага</em> до того, хто запускає.
+    </p>
+
+    <div class="manifesto-items">
+      <div class="manifesto-item reveal">
+        <div class="m-num">01</div>
+        <div class="m-title" id="studioCase1Title">Відкритий код</div>
+        <p class="m-body" id="studioCase1Text">Репозиторій публікується, структура не ховається за закритою збіркою.</p>
+      </div>
+      <div class="manifesto-item reveal reveal-delay-1">
+        <div class="m-num">02</div>
+        <div class="m-title" id="studioCase2Title">Чесний статус</div>
+        <p class="m-body" id="studioCase2Text">Alpha це alpha. Beta це beta. Без маркетингових слів замість правди.</p>
+      </div>
+      <div class="manifesto-item reveal reveal-delay-2">
+        <div class="m-num">03</div>
+        <div class="m-title" id="studioCase3Title">Прямий доступ</div>
+        <p class="m-body" id="studioCase3Text">Якщо файл готовий — скачай одразу. Без зайвих переходів і непрозорих інсталяторів.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ──────────────────────────────────────────────────── -->
+<section id="team">
+  <div class="section-label reveal">Команда</div>
+  <h2 id="teamTitle" class="section-title reveal reveal-delay-1">Люди за проєктом</h2>
+  <p id="teamIntro" class="reveal reveal-delay-2"
+     style="font-size:15px;color:var(--muted);margin-top:8px;max-width:560px;">
+    Учасники, які ведуть розробку, підтримують релізи та тримають у порядку публічну частину проєкту.
+  </p>
+  <div id="teamShowcase" class="team-grid reveal reveal-delay-3"></div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">
+      <div class="footer-sq"></div>
+      <span class="footer-name">Aleph Studio</span>
+    </div>
+    <p class="footer-desc">Дочірній проєкт WeTTeA. Ігрові розробки з відкритим вихідним кодом.</p>
+    <div id="footerSocialLinks" class="social-hub" style="margin-top:16px;"
+         aria-label="Соціальні мережі Aleph Studio"></div>
+  </div>
+
+  <div class="footer-links">
+    <h4>Навігація</h4>
+    <ul>
+      <li><a href="#products">Продукти</a></li>
+      <li><a href="#catalog">Каталог</a></li>
+      <li><a href="#manifesto">Принцип</a></li>
+      <li><a href="#team">Команда</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-links">
+    <h4>WeTTeA</h4>
+    <ul>
+      <li><a href="#">WeTTeA.com</a></li>
+      <li><a href="#">Holo Project</a></li>
+      <li><a href="#">Discord</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+  </div>
+
+  <div id="footerCopyright" class="footer-copy">
+    © 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed
+  </div>
+</footer>
+
+<!-- ── ADMIN PANEL ───────────────────────────────────────────── -->
+<div id="editorOverlay" class="editor-overlay" aria-hidden="true">
+  <div class="editor-backdrop" data-close-editor></div>
+  <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
+    <div class="dash-layout">
+
+      <!-- Sidebar -->
+      <aside class="dash-sidebar">
+        <div class="dash-brand">Aleph <span>Studio</span></div>
+
+        <nav class="dash-nav" aria-label="Розділи адмінки">
+          <a href="#" class="dash-nav-link active" data-admin-view="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Головна
+          </a>
+          <a href="#" class="dash-nav-link" data-admin-view="products">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+            Продукти
+          </a>
+          <a href="#" class="dash-nav-link" data-admin-view="misc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Інше
+          </a>
+        </nav>
+
+        <div class="dash-sidebar-footer">
+          Панель керування сайтом.<br>
+          Aleph Studio © 2026<br>
+          Прихований вхід: <span class="mono">→ → ← → ← → →</span><br>
+          Потім натисни верхній логотип
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="dash-main">
+        <header class="dash-header">
+          <div class="dash-title-wrap">
+            <h1 id="editorAdminTitle">Головна</h1>
+            <p id="editorAdminSubtitle">Управління чернеткою, публікацією та швидкі переходи.</p>
+          </div>
+          <div class="dash-actions">
+            <div id="draftStateChip" class="dash-chip">Чернетка: без змін</div>
+            <button id="applyDraftBtn"   type="button" class="dash-btn dash-primary">Застосувати</button>
+            <button id="discardDraftBtn" type="button" class="dash-btn">Скасувати</button>
+            <button id="exportJsonBtn"   type="button" class="dash-btn">Експорт JSON</button>
+            <button id="importJsonBtn"   type="button" class="dash-btn">Імпорт JSON</button>
+            <button id="addProductBtn"   type="button" class="dash-btn dash-primary">+ Продукт</button>
+            <button id="addTeamMemberBtn" type="button" class="dash-btn dash-primary" hidden>+ Учасник</button>
+            <button type="button" class="dash-btn" data-close-editor>Закрити</button>
+          </div>
+        </header>
+
+        <div id="productsToolbar" class="dash-toolbar">
+          <div class="dash-toolbar-group">
+            <div class="dash-chip"><strong>Всього:</strong> <span id="editorTotalCount">0</span></div>
+            <div class="dash-chip"><strong>На вітрині:</strong> <span id="editorShowcaseCount">0</span></div>
+          </div>
+          <div class="dash-toolbar-group">
+            <input id="editorSearchInput" class="dash-search" type="text" placeholder="Пошук…">
+          </div>
+        </div>
+
+        <section class="dash-content">
+          <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
+
+          <!-- Home view -->
+          <div id="homeView" class="dash-view active">
+            <div class="dash-misc-grid">
+              <div class="dash-misc-column">
+                <div class="dash-form-card dash-home-status-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Чернетка</h4>
+                      <p>Перевір статус, застосуй зміни або опублікуй для всіх.</p>
+                    </div>
+                  </div>
+                  <div id="homeDraftSummary" class="dash-home-status"></div>
+                  <div class="dash-sync-actions">
+                    <button id="homeApplyDraftBtn"   type="button" class="dash-btn dash-primary">Застосувати чернетку</button>
+                    <button id="homeDiscardDraftBtn" type="button" class="dash-btn">Відкатити чернетку</button>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Публікація</h4>
+                      <p>Зберегти локально або опублікувати для всіх.</p>
+                    </div>
+                  </div>
+                  <div class="dash-sync-wrap">
+                    <div class="dash-form-card">
+                      <div class="dash-form-section">
+                        <div class="dash-sync-actions">
+                          <button id="saveLocalBtn"  type="button" class="dash-btn">Зберегти локально</button>
+                          <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Зберегти для всіх</button>
+                          <button id="clearLocalBtn" type="button" class="dash-btn">Очистити local</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dash-form-card">
+                      <div class="dash-form-section">
+                        <h4>GitHub sync</h4>
+                        <div class="dash-github-grid">
+                          <div class="dash-field dash-c12">
+                            <label for="githubToken">GitHub token</label>
+                            <input id="githubToken" type="password" placeholder="Токен не зберігається">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-misc-column">
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div><h4>Зведення</h4></div>
+                  </div>
+                  <div class="dash-home-metrics">
+                    <article class="dash-home-metric"><span>Продукти</span><strong id="homeProductsCount">0</strong></article>
+                    <article class="dash-home-metric"><span>На вітрині</span><strong id="homeFeaturedCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Команда</span><strong id="homeTeamCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Соц. посилання</span><strong id="homeSocialCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Файли в черзі</span><strong id="homeUploadsCount">0</strong></article>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Як оновити сайт</h4>
+                    </div>
+                  </div>
+                  <ol class="dash-home-steps">
+                    <li>Відкрий «Продукти» або «Інше» і внеси правки.</li>
+                    <li>Натисни «Застосувати чернетку» щоб побачити preview.</li>
+                    <li>Для себе — «Зберегти локально».</li>
+                    <li>Для всіх — встав GitHub token і «Зберегти для всіх».</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products view -->
+          <div id="productsView" class="dash-view">
+            <div class="dash-product-grid" id="editorProductGrid"></div>
+
+            <div class="dash-editor" id="editor">
+              <div class="dash-editor-header">
+                <h2 id="editorTitle">Редагування</h2>
+                <button id="closeProductEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+              </div>
+
+              <div class="dash-tab-bar">
+                <button type="button" class="dash-tab-btn active" data-tab="tab-main">Основне</button>
+                <button type="button" class="dash-tab-btn" data-tab="tab-content">Контент</button>
+                <button type="button" class="dash-tab-btn" data-tab="tab-publish">Публікація</button>
+              </div>
+
+              <div class="dash-tab-panel active" data-panel="tab-main">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <h4>Основні параметри</h4>
+                    <div class="dash-fg">
+                      <div class="dash-field dash-c4"><label>Назва</label><input type="text" id="f-name"></div>
+                      <div class="dash-field dash-c4"><label>ID / якір</label><input type="text" id="f-slug"></div>
+                      <div class="dash-field dash-c4"><label>Тег</label><input type="text" id="f-tag"></div>
+                      <div class="dash-field dash-c3"><label>Версія</label><input type="text" id="f-version"></div>
+                      <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="f-order"></div>
+                      <div class="dash-field dash-c3">
+                        <label>Стадія</label>
+                        <select id="f-stage">
+                          <option value="">Без прапора</option>
+                          <option value="alpha">Alpha</option>
+                          <option value="beta">Beta</option>
+                          <option value="release">Release</option>
+                        </select>
+                      </div>
+                      <div class="dash-field dash-c3">
+                        <label>Колір картки</label>
+                        <select id="f-tone">
+                          <option value="red">Червоний</option>
+                          <option value="green">Зелений</option>
+                        </select>
+                      </div>
+                      <div class="dash-field dash-c6"><label>Статус</label><input type="text" id="f-status"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-tab-panel" data-panel="tab-content">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Короткий опис</label><textarea id="f-desc"></textarea></div>
+                  </div>
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Інструкція (кожен пункт з нового рядка)</label><textarea id="f-instructions"></textarea></div>
+                  </div>
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Примітка</label><textarea id="f-note"></textarea></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-tab-panel" data-panel="tab-publish">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <h4>Публікація</h4>
+                    <div class="dash-fg">
+                      <div class="dash-field dash-c6">
+                        <label>Показ на вітрині</label>
+                        <label class="dash-inline-check">
+                          <input type="checkbox" id="f-showcase">
+                          <span>Показувати на вітрині</span>
+                        </label>
+                      </div>
+                      <div class="dash-field dash-c6"><label>Порядок на вітрині</label><input type="number" id="f-showcase-order"></div>
+                      <div class="dash-field dash-c6"><label>Посилання на файл / download</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                      <div class="dash-field dash-c6"><label>Вихідний код / GitHub</label><input type="text" id="f-source"></div>
+                      <div class="dash-field dash-c12">
+                        <label for="f-download-file">Файл для GitHub upload</label>
+                        <input type="file" id="f-download-file">
+                        <p id="f-download-file-meta" class="dash-help">Файл не вибрано.</p>
+                        <div class="dash-sync-actions" style="margin-top:8px;">
+                          <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Прибрати файл</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-editor-footer">
+                <div class="note">Зміни накопичуються в чернетці. «Застосувати» / «Скасувати» працюють для всіх розділів.</div>
+                <div class="btns">
+                  <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Видалити</button>
+                </div>
+              </div>
+
+              <div class="dash-form-card dash-home-redirect">
+                <div class="dash-section-head">
+                  <div>
+                    <h4>Публікація — на Головній</h4>
+                    <p>GitHub token і кнопки збереження знаходяться на вкладці «Головна».</p>
+                  </div>
+                </div>
+                <div class="dash-sync-actions">
+                  <button type="button" class="dash-btn" data-admin-switch="home">Відкрити Головну</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Misc view -->
+          <div id="miscView" class="dash-view">
+            <div class="dash-misc-grid">
+              <div class="dash-misc-column">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <div class="dash-section-head">
+                      <div>
+                        <h4>Соціальні посилання</h4>
+                        <p>Відображаються під вітриною продуктів і у футері.</p>
+                      </div>
+                    </div>
+                    <div class="dash-github-grid">
+                      <div class="dash-field dash-c12">
+                        <label for="socialYoutube">YouTube</label>
+                        <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                      </div>
+                      <div class="dash-field dash-c12">
+                        <label for="socialDiscord">Discord</label>
+                        <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                      </div>
+                      <div class="dash-field dash-c12">
+                        <label for="socialTelegram">Telegram</label>
+                        <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-form-section">
+                    <p class="dash-help" style="margin-bottom:12px;">Попередній перегляд кнопок:</p>
+                    <div id="editorSocialPreview" class="dash-social-preview"></div>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Команда</h4>
+                      <p>При 5+ учасниках блок перетворюється на рядок, що біжить.</p>
+                    </div>
+                    <div class="dash-chip"><strong>Карток:</strong> <span id="teamMemberCount">0</span></div>
+                  </div>
+                  <div id="teamGrid" class="dash-team-grid"></div>
+                </div>
+              </div>
+
+              <div class="dash-misc-column">
+                <div id="teamEditorEmpty" class="dash-form-card dash-team-editor-empty">
+                  Вибери картку учасника або натисни «+ Учасник».
+                </div>
+
+                <div id="teamEditor" class="dash-team-editor" hidden>
+                  <div class="dash-editor-header">
+                    <h2 id="teamEditorTitle">Учасник</h2>
+                    <button id="closeTeamEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                  </div>
+                  <div class="dash-form-card">
+                    <div class="dash-form-section">
+                      <h4>Дані учасника</h4>
+                      <div class="dash-fg">
+                        <div class="dash-field dash-c6"><label>Ім'я</label><input type="text" id="team-name"></div>
+                        <div class="dash-field dash-c6"><label>Роль</label><input type="text" id="team-role"></div>
+                        <div class="dash-field dash-c9"><label>Посилання на аватар</label><input type="text" id="team-avatar"></div>
+                        <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="team-order"></div>
+                        <div class="dash-field dash-c12"><label>Опис</label><textarea id="team-bio"></textarea></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-editor-footer">
+                    <div class="note">Картка змінює загальну чернетку.</div>
+                    <div class="btns">
+                      <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Видалити</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>window.__ALEPH_ROUTE_LOCALE__ = 'ua';</script>
+<script type="module" src="../src/app.js?v=20260319a"></script>
+
+</body>
+</html>

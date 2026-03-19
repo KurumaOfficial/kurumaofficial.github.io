@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aleph Studio</title>
+  <meta name="description" content="Aleph Studio — моды, игры, DLC и небольшие цифровые релизы с открытым исходным кодом, понятной установкой и быстрым доступом к актуальной версии.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Unbounded:wght@200;400;700&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="../assets/icons/favicon-32.png?v=2">
+  <link rel="icon" type="image/png" sizes="16x16" href="../assets/icons/favicon-16.png?v=2">
+  <link rel="shortcut icon" href="../favicon.ico?v=2" type="image/x-icon">
+
+  <link rel="stylesheet" href="../assets/css/main.css?v=20260319a">
+  <link rel="stylesheet" href="../assets/css/admin.css?v=20260319a">
+</head>
+<body>
+
+<!-- ── NAV ──────────────────────────────────────────────────── -->
+<nav class="nav">
+  <a id="editorAccessTrigger" href="#top" class="nav-logo" aria-label="Aleph Studio — наверх">
+    <div class="logo-sq"></div>
+    <span class="logo-text">Aleph Studio</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a id="navLinkProducts" href="#products">Продукты</a></li>
+    <li><a id="navLinkManifesto" href="#manifesto">Принцип</a></li>
+    <li><a id="navLinkTeam" href="#team">Команда</a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div id="localeSwitcher" class="locale-switcher">
+      <button id="localeSwitcherButton" class="locale-switcher-btn" type="button"
+              aria-haspopup="listbox" aria-expanded="false" aria-label="Выбор языка">
+        <span id="localeSwitcherFlag" class="locale-switcher-flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel" class="locale-switcher-label">RU</span>
+        <svg class="locale-switcher-caret" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M4 6.5 8 10 12 6.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div id="localeSwitcherMenu" class="locale-switcher-menu" role="listbox"
+           aria-label="Выбор языка" hidden></div>
+    </div>
+    <a href="#" class="nav-badge">WeTTeA ↗</a>
+  </div>
+</nav>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section id="top" class="hero">
+  <div class="hero-bg-sq" aria-hidden="true"></div>
+
+  <div class="hero-tag">Aleph Studio · Open Source · By WeTTeA</div>
+
+  <h1 class="hero-title">
+    Создаём.<br>
+    <span>Открываем.</span>
+    Двигаемся.
+  </h1>
+
+  <p id="heroIntro" class="hero-sub">
+    Игровые проекты с открытым исходным кодом. Моды, игры, DLC — всё что мы делаем, ты можешь изучить, изменить и запустить сам.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#products" class="btn-primary">Смотреть продукты</a>
+    <a href="#manifesto" class="btn-ghost">Наш принцип</a>
+  </div>
+</section>
+
+<!-- ── MARQUEE ──────────────────────────────────────────────── -->
+<div class="marquee-wrap" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Open Source</span>
+    <span class="marquee-item">GPL License</span>
+    <span class="marquee-item">Игровые проекты</span>
+    <span class="marquee-item">Моды</span>
+    <span class="marquee-item">Свободный код</span>
+    <span class="marquee-item">By WeTTeA</span>
+    <span class="marquee-item">Aleph Studio</span>
+    <span class="marquee-item">Open Source</span>
+    <span class="marquee-item">GPL License</span>
+    <span class="marquee-item">Игровые проекты</span>
+    <span class="marquee-item">Моды</span>
+    <span class="marquee-item">Свободный код</span>
+    <span class="marquee-item">By WeTTeA</span>
+    <span class="marquee-item">Aleph Studio</span>
+  </div>
+</div>
+
+<!-- ── PRINCIPLE ────────────────────────────────────────────── -->
+<section id="manifesto" style="padding-top:140px;">
+  <div class="principle reveal">
+    <div class="principle-visual" aria-hidden="true">
+      <div class="p-sq-outer">
+        <div class="p-sq-inner"></div>
+        <div class="p-sq-center"></div>
+        <div class="p-label">Aleph · ℵ</div>
+      </div>
+    </div>
+    <div class="principle-text">
+      <div class="section-label">Принцип</div>
+      <h2 class="section-title">Ты знаешь что<br>запускаешь</h2>
+      <p id="approachLead" class="principle-body">
+        Aleph Studio исходит из того, что пользователь должен <strong>понимать что именно работает на его машине</strong>. Поэтому мы публикуем код под лицензией GPL — его можно изучить, развить, использовать в своих проектах.
+        <br><br>
+        Это не альтруизм. Это <strong>стандарт качества</strong>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRODUCTS ─────────────────────────────────────────────── -->
+<section id="products">
+  <div class="section-label reveal">Продукты</div>
+  <h2 id="productsTitle" class="section-title reveal reveal-delay-1">Главные релизы</h2>
+
+  <div id="featured-products" class="products-grid reveal reveal-delay-2"></div>
+
+  <div id="featuredSocialLinks" class="social-hub" aria-label="Социальные сети Aleph Studio"></div>
+
+  <!-- Catalog -->
+  <div id="catalog" style="margin-top:48px;">
+    <div class="section-label reveal" style="margin-bottom:0;">Каталог</div>
+    <h3 id="catalogTitle" class="section-title reveal reveal-delay-1"
+        style="font-size:clamp(20px,2.5vw,32px);margin-top:8px;margin-bottom:4px;">Остальные продукты и будущие релизы</h3>
+    <p id="catalogDescription" class="reveal reveal-delay-2"
+       style="font-size:14px;color:var(--muted);margin-bottom:0;">
+      Сроки и даты являются предварительными.
+    </p>
+    <div id="archive-products" class="catalog-grid reveal reveal-delay-3"></div>
+  </div>
+</section>
+
+<!-- ── MANIFESTO ITEMS ───────────────────────────────────────── -->
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <div class="section-label">Что важно</div>
+    <p class="manifesto-text reveal">
+      Открытый код — это не скидка на качество.<br>
+      Это <em>уважение</em> к тому, кто запускает.
+    </p>
+
+    <div class="manifesto-items">
+      <div class="manifesto-item reveal">
+        <div class="m-num">01</div>
+        <div class="m-title" id="studioCase1Title">Открытый код</div>
+        <p class="m-body" id="studioCase1Text">Репозиторий публикуется, структура не прячется за закрытой сборкой.</p>
+      </div>
+      <div class="manifesto-item reveal reveal-delay-1">
+        <div class="m-num">02</div>
+        <div class="m-title" id="studioCase2Title">Честный статус</div>
+        <p class="m-body" id="studioCase2Text">Alpha это alpha. Beta это beta. Без маркетинговых слов вместо правды.</p>
+      </div>
+      <div class="manifesto-item reveal reveal-delay-2">
+        <div class="m-num">03</div>
+        <div class="m-title" id="studioCase3Title">Прямой доступ</div>
+        <p class="m-body" id="studioCase3Text">Если файл готов — скачай сразу. Без лишних переходов и непрозрачных установщиков.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ──────────────────────────────────────────────────── -->
+<section id="team">
+  <div class="section-label reveal">Команда</div>
+  <h2 id="teamTitle" class="section-title reveal reveal-delay-1">Люди за проектом</h2>
+  <p id="teamIntro" class="reveal reveal-delay-2"
+     style="font-size:15px;color:var(--muted);margin-top:8px;max-width:560px;">
+    Участники, которые ведут разработку, поддерживают релизы и держат в порядке публичную часть проекта.
+  </p>
+  <div id="teamShowcase" class="team-grid reveal reveal-delay-3"></div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">
+      <div class="footer-sq"></div>
+      <span class="footer-name">Aleph Studio</span>
+    </div>
+    <p class="footer-desc">Дочерний проект WeTTeA. Игровые разработки с открытым исходным кодом.</p>
+    <div id="footerSocialLinks" class="social-hub" style="margin-top:16px;"
+         aria-label="Социальные сети Aleph Studio"></div>
+  </div>
+
+  <div class="footer-links">
+    <h4>Навигация</h4>
+    <ul>
+      <li><a href="#products">Продукты</a></li>
+      <li><a href="#catalog">Каталог</a></li>
+      <li><a href="#manifesto">Принцип</a></li>
+      <li><a href="#team">Команда</a></li>
+    </ul>
+  </div>
+
+  <div class="footer-links">
+    <h4>WeTTeA</h4>
+    <ul>
+      <li><a href="#">WeTTeA.com</a></li>
+      <li><a href="#">Holo Project</a></li>
+      <li><a href="#">Discord</a></li>
+      <li><a href="#">GitHub</a></li>
+    </ul>
+  </div>
+
+  <div id="footerCopyright" class="footer-copy">
+    © 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed
+  </div>
+</footer>
+
+<!-- ── ADMIN PANEL ───────────────────────────────────────────── -->
+<div id="editorOverlay" class="editor-overlay" aria-hidden="true">
+  <div class="editor-backdrop" data-close-editor></div>
+  <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
+    <div class="dash-layout">
+
+      <!-- Sidebar -->
+      <aside class="dash-sidebar">
+        <div class="dash-brand">Aleph <span>Studio</span></div>
+
+        <nav class="dash-nav" aria-label="Разделы админки">
+          <a href="#" class="dash-nav-link active" data-admin-view="home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+            Главная
+          </a>
+          <a href="#" class="dash-nav-link" data-admin-view="products">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+            </svg>
+            Продукты
+          </a>
+          <a href="#" class="dash-nav-link" data-admin-view="misc">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            Прочее
+          </a>
+        </nav>
+
+        <div class="dash-sidebar-footer">
+          Панель управления сайтом.<br>
+          Aleph Studio © 2026<br>
+          Скрытый вход: <span class="mono">→ → ← → ← → →</span><br>
+          Затем нажми на верхний логотип
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <main class="dash-main">
+        <header class="dash-header">
+          <div class="dash-title-wrap">
+            <h1 id="editorAdminTitle">Главная</h1>
+            <p id="editorAdminSubtitle">Управление черновиком, публикацией и быстрые переходы.</p>
+          </div>
+          <div class="dash-actions">
+            <div id="draftStateChip" class="dash-chip">Черновик: без изменений</div>
+            <button id="applyDraftBtn"   type="button" class="dash-btn dash-primary">Применить</button>
+            <button id="discardDraftBtn" type="button" class="dash-btn">Отменить</button>
+            <button id="exportJsonBtn"   type="button" class="dash-btn">Экспорт JSON</button>
+            <button id="importJsonBtn"   type="button" class="dash-btn">Импорт JSON</button>
+            <button id="addProductBtn"   type="button" class="dash-btn dash-primary">+ Продукт</button>
+            <button id="addTeamMemberBtn" type="button" class="dash-btn dash-primary" hidden>+ Участник</button>
+            <button type="button" class="dash-btn" data-close-editor>Закрыть</button>
+          </div>
+        </header>
+
+        <div id="productsToolbar" class="dash-toolbar">
+          <div class="dash-toolbar-group">
+            <div class="dash-chip"><strong>Всего:</strong> <span id="editorTotalCount">0</span></div>
+            <div class="dash-chip"><strong>На витрине:</strong> <span id="editorShowcaseCount">0</span></div>
+          </div>
+          <div class="dash-toolbar-group">
+            <input id="editorSearchInput" class="dash-search" type="text" placeholder="Поиск…">
+          </div>
+        </div>
+
+        <section class="dash-content">
+          <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
+
+          <!-- Home view -->
+          <div id="homeView" class="dash-view active">
+            <div class="dash-misc-grid">
+              <div class="dash-misc-column">
+                <div class="dash-form-card dash-home-status-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Черновик</h4>
+                      <p>Проверь статус, примени изменения или опубликуй для всех.</p>
+                    </div>
+                  </div>
+                  <div id="homeDraftSummary" class="dash-home-status"></div>
+                  <div class="dash-sync-actions">
+                    <button id="homeApplyDraftBtn"   type="button" class="dash-btn dash-primary">Применить черновик</button>
+                    <button id="homeDiscardDraftBtn" type="button" class="dash-btn">Откатить черновик</button>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Публикация</h4>
+                      <p>Сохранить локально или опубликовать для всех.</p>
+                    </div>
+                  </div>
+                  <div class="dash-sync-wrap">
+                    <div class="dash-form-card">
+                      <div class="dash-form-section">
+                        <div class="dash-sync-actions">
+                          <button id="saveLocalBtn"  type="button" class="dash-btn">Сохранить локально</button>
+                          <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Сохранить для всех</button>
+                          <button id="clearLocalBtn" type="button" class="dash-btn">Очистить local</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dash-form-card">
+                      <div class="dash-form-section">
+                        <h4>GitHub sync</h4>
+                        <div class="dash-github-grid">
+                          <div class="dash-field dash-c12">
+                            <label for="githubToken">GitHub token</label>
+                            <input id="githubToken" type="password" placeholder="Токен не сохраняется">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-misc-column">
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div><h4>Сводка</h4></div>
+                  </div>
+                  <div class="dash-home-metrics">
+                    <article class="dash-home-metric"><span>Продукты</span><strong id="homeProductsCount">0</strong></article>
+                    <article class="dash-home-metric"><span>На витрине</span><strong id="homeFeaturedCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Команда</span><strong id="homeTeamCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Соц. ссылки</span><strong id="homeSocialCount">0</strong></article>
+                    <article class="dash-home-metric"><span>Файлы в очереди</span><strong id="homeUploadsCount">0</strong></article>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Как обновить сайт</h4>
+                    </div>
+                  </div>
+                  <ol class="dash-home-steps">
+                    <li>Открой «Продукты» или «Прочее» и внеси правки.</li>
+                    <li>Нажми «Применить черновик» чтобы увидеть preview.</li>
+                    <li>Для себя — «Сохранить локально».</li>
+                    <li>Для всех — вставь GitHub token и «Сохранить для всех».</li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products view -->
+          <div id="productsView" class="dash-view">
+            <div class="dash-product-grid" id="editorProductGrid"></div>
+
+            <div class="dash-editor" id="editor">
+              <div class="dash-editor-header">
+                <h2 id="editorTitle">Редактирование</h2>
+                <button id="closeProductEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+              </div>
+
+              <div class="dash-tab-bar">
+                <button type="button" class="dash-tab-btn active" data-tab="tab-main">Основное</button>
+                <button type="button" class="dash-tab-btn" data-tab="tab-content">Контент</button>
+                <button type="button" class="dash-tab-btn" data-tab="tab-publish">Публикация</button>
+              </div>
+
+              <div class="dash-tab-panel active" data-panel="tab-main">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <h4>Основные параметры</h4>
+                    <div class="dash-fg">
+                      <div class="dash-field dash-c4"><label>Название</label><input type="text" id="f-name"></div>
+                      <div class="dash-field dash-c4"><label>ID / якорь</label><input type="text" id="f-slug"></div>
+                      <div class="dash-field dash-c4"><label>Тег</label><input type="text" id="f-tag"></div>
+                      <div class="dash-field dash-c3"><label>Версия</label><input type="text" id="f-version"></div>
+                      <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="f-order"></div>
+                      <div class="dash-field dash-c3">
+                        <label>Стадия</label>
+                        <select id="f-stage">
+                          <option value="">Без флага</option>
+                          <option value="alpha">Alpha</option>
+                          <option value="beta">Beta</option>
+                          <option value="release">Release</option>
+                        </select>
+                      </div>
+                      <div class="dash-field dash-c3">
+                        <label>Цвет карточки</label>
+                        <select id="f-tone">
+                          <option value="red">Красный</option>
+                          <option value="green">Зелёный</option>
+                        </select>
+                      </div>
+                      <div class="dash-field dash-c6"><label>Статус</label><input type="text" id="f-status"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-tab-panel" data-panel="tab-content">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Краткое описание</label><textarea id="f-desc"></textarea></div>
+                  </div>
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Инструкция (каждый пункт с новой строки)</label><textarea id="f-instructions"></textarea></div>
+                  </div>
+                  <div class="dash-form-section">
+                    <div class="dash-field dash-c12"><label>Примечание</label><textarea id="f-note"></textarea></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-tab-panel" data-panel="tab-publish">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <h4>Публикация</h4>
+                    <div class="dash-fg">
+                      <div class="dash-field dash-c6">
+                        <label>Показ на витрине</label>
+                        <label class="dash-inline-check">
+                          <input type="checkbox" id="f-showcase">
+                          <span>Показывать на витрине</span>
+                        </label>
+                      </div>
+                      <div class="dash-field dash-c6"><label>Порядок на витрине</label><input type="number" id="f-showcase-order"></div>
+                      <div class="dash-field dash-c6"><label>Ссылка на файл / download</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                      <div class="dash-field dash-c6"><label>Исходный код / GitHub</label><input type="text" id="f-source"></div>
+                      <div class="dash-field dash-c12">
+                        <label for="f-download-file">Файл для GitHub upload</label>
+                        <input type="file" id="f-download-file">
+                        <p id="f-download-file-meta" class="dash-help">Файл не выбран.</p>
+                        <div class="dash-sync-actions" style="margin-top:8px;">
+                          <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Убрать файл</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dash-editor-footer">
+                <div class="note">Изменения копятся в черновике. «Применить» / «Отменить» работают для всех разделов.</div>
+                <div class="btns">
+                  <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
+                </div>
+              </div>
+
+              <div class="dash-form-card dash-home-redirect">
+                <div class="dash-section-head">
+                  <div>
+                    <h4>Публикация — на Главной</h4>
+                    <p>GitHub token и кнопки сохранения находятся на вкладке «Главная».</p>
+                  </div>
+                </div>
+                <div class="dash-sync-actions">
+                  <button type="button" class="dash-btn" data-admin-switch="home">Открыть Главную</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Misc view -->
+          <div id="miscView" class="dash-view">
+            <div class="dash-misc-grid">
+              <div class="dash-misc-column">
+                <div class="dash-form-card">
+                  <div class="dash-form-section">
+                    <div class="dash-section-head">
+                      <div>
+                        <h4>Социальные ссылки</h4>
+                        <p>Отображаются под витриной продуктов и в футере.</p>
+                      </div>
+                    </div>
+                    <div class="dash-github-grid">
+                      <div class="dash-field dash-c12">
+                        <label for="socialYoutube">YouTube</label>
+                        <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                      </div>
+                      <div class="dash-field dash-c12">
+                        <label for="socialDiscord">Discord</label>
+                        <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                      </div>
+                      <div class="dash-field dash-c12">
+                        <label for="socialTelegram">Telegram</label>
+                        <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-form-section">
+                    <p class="dash-help" style="margin-bottom:12px;">Превью кнопок:</p>
+                    <div id="editorSocialPreview" class="dash-social-preview"></div>
+                  </div>
+                </div>
+
+                <div class="dash-form-card">
+                  <div class="dash-section-head">
+                    <div>
+                      <h4>Команда</h4>
+                      <p>При 5+ участниках блок превращается в бегущую строку.</p>
+                    </div>
+                    <div class="dash-chip"><strong>Карточек:</strong> <span id="teamMemberCount">0</span></div>
+                  </div>
+                  <div id="teamGrid" class="dash-team-grid"></div>
+                </div>
+              </div>
+
+              <div class="dash-misc-column">
+                <div id="teamEditorEmpty" class="dash-form-card dash-team-editor-empty">
+                  Выбери карточку участника или нажми «+ Участник».
+                </div>
+
+                <div id="teamEditor" class="dash-team-editor" hidden>
+                  <div class="dash-editor-header">
+                    <h2 id="teamEditorTitle">Участник</h2>
+                    <button id="closeTeamEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                  </div>
+                  <div class="dash-form-card">
+                    <div class="dash-form-section">
+                      <h4>Данные участника</h4>
+                      <div class="dash-fg">
+                        <div class="dash-field dash-c6"><label>Имя</label><input type="text" id="team-name"></div>
+                        <div class="dash-field dash-c6"><label>Роль</label><input type="text" id="team-role"></div>
+                        <div class="dash-field dash-c9"><label>Ссылка на аватар</label><input type="text" id="team-avatar"></div>
+                        <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="team-order"></div>
+                        <div class="dash-field dash-c12"><label>Описание</label><textarea id="team-bio"></textarea></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dash-editor-footer">
+                    <div class="note">Карточка меняет общий черновик.</div>
+                    <div class="btns">
+                      <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>window.__ALEPH_ROUTE_LOCALE__ = 'ru';</script>
+<script type="module" src="../src/app.js?v=20260319a"></script>
+
+</body>
+</html>
