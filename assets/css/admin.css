@@ -544,6 +544,57 @@
   min-height: 40px;
 }
 
+.dash-home-status-badge {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border: 1px solid rgba(139,26,42,0.25);
+  color: #5C1019;
+  margin-bottom: 10px;
+}
+
+.dash-home-status h3 {
+  font-size: 13px;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 400;
+  color: #5A4A44;
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+
+.dash-home-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.dash-home-status-list > div {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: #3d2f2c;
+  line-height: 1.6;
+  padding-left: 16px;
+  position: relative;
+}
+.dash-home-status-list > div::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: #5C1019;
+}
+
+/* Tone variants */
+.dash-home-status.is-action .dash-home-status-badge { border-color: rgba(180,120,30,0.4); color: #a07828; }
+.dash-home-status.is-action h3                      { color: #8a6030; }
+.dash-home-status.is-ready  .dash-home-status-badge { border-color: rgba(50,160,80,0.4);  color: #2f9458; }
+.dash-home-status.is-ready  h3                      { color: #3a8850; }
+.dash-home-status.is-warning .dash-home-status-badge { border-color: rgba(160,100,30,0.4); color: #9a6830; }
+.dash-home-status.is-warning h3                      { color: #7a5828; }
+
 /* ── Editor footer ─────────────────────────────────────────── */
 .dash-editor-footer {
   padding: 16px 24px;
@@ -605,6 +656,12 @@
   border-color: rgba(139,26,42,0.1);
 }
 
+/* ── Team editor container ─────────────────────────────────── */
+.dash-team-editor {
+  border: 1px solid rgba(139,26,42,0.12);
+  background: #0a0808;
+}
+
 /* ── Social preview ────────────────────────────────────────── */
 .dash-social-preview {
   display: flex;
@@ -641,4 +698,50 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: auto;
+}
+.toast[data-kind="success"] { border-color: rgba(34,197,94,0.45);  color: #86efac; }
+.toast[data-kind="error"]   { border-color: rgba(239,68,68,0.45);  color: #fca5a5; }
+.toast[data-kind="info"]    { border-color: rgba(139,26,42,0.3);   color: #D4C4BB; }
+
+/* ── Nested form-card ──────────────────────────────────────── */
+/* Form cards inside sync-wrap or another form-card get reduced chrome */
+.dash-sync-wrap > .dash-form-card,
+.dash-form-card > .dash-form-section > .dash-form-card,
+.dash-form-card .dash-sync-wrap > .dash-form-card {
+  padding: 16px;
+  background: rgba(255,255,255,0.012);
+  border-color: rgba(139,26,42,0.07);
+  margin-bottom: 2px;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 720px) {
+  .dash-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0,1fr);
+  }
+  .dash-sidebar {
+    flex-direction: row;
+    align-items: center;
+    padding: 12px 16px;
+    border-right: none;
+    border-bottom: 1px solid rgba(139,26,42,0.15);
+    overflow-y: visible;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+  .dash-brand { margin-bottom: 0; font-size: 10px; flex-shrink: 0; }
+  .dash-nav { flex-direction: row; flex: 1; gap: 2px; flex-wrap: nowrap; }
+  .dash-nav-link { padding: 8px 12px; font-size: 10px; border-left: none; border-bottom: 2px solid transparent; white-space: nowrap; }
+  .dash-nav-link.active { border-left-color: transparent; border-bottom-color: #8B1A2A; }
+  .dash-sidebar-footer { display: none; }
+  .dash-main { min-height: 0; }
+  .dash-header { padding: 12px 16px; flex-wrap: wrap; }
+  .dash-content { padding: 16px; }
+  .dash-misc-grid { grid-template-columns: 1fr; }
+  .dash-home-metrics { grid-template-columns: repeat(2, 1fr); }
+  .dash-fg .dash-c3, .dash-fg .dash-c4 { grid-column: span 6; }
+  .dash-fg .dash-c9 { grid-column: span 12; }
+  .dash-editor-footer { flex-direction: column; align-items: flex-start; }
 }
