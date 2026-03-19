@@ -1110,6 +1110,7 @@ function commitOpenProductForm(refreshGrid = true) {
 function commitAllEditorState(refreshGrid = true) {
     commitOpenProductForm(refreshGrid);
     commitOpenTeamForm(refreshGrid);
+    commitOpenSupporterForm(refreshGrid);
     syncSocialsFromInputs();
     renderEditorSocialPreview();
     renderProductUploadMeta();

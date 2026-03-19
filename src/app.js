@@ -1,6 +1,6 @@
-import { createPublicSite } from './components/public-site.js?v=20260318e';
-import { createEditorController } from './admin/editor.js?v=20260318e';
-import { createLocaleController } from './i18n/locale-controller.js?v=20260318e';
+import { createPublicSite } from './components/public-site.js?v=20260319a';
+import { createEditorController } from './admin/editor.js?v=20260319a';
+import { createLocaleController } from './i18n/locale-controller.js?v=20260319a';
 
 export async function bootstrap() {
     const localeController = createLocaleController();
