@@ -556,6 +556,33 @@ section { padding: 120px 64px; position: relative; }
 }
 .btn-download:hover { background: var(--ruby-lit); }
 
+/* Detail page link — outlined cream button */
+.btn-detail {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--cream);
+  background: transparent;
+  border: 1px solid rgba(212,196,187,0.25);
+  padding: 10px 24px;
+  display: inline-block;
+  transition: background 0.25s, border-color 0.25s;
+}
+.btn-detail:hover {
+  background: rgba(212,196,187,0.07);
+  border-color: rgba(212,196,187,0.55);
+}
+
+/* Page exit fade (transition to detail page) */
+body.page-leaving {
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+}
+
 /* Catalog (archive) grid */
 .catalog-grid {
   margin-top: 16px;
