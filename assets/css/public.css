@@ -256,25 +256,25 @@ button, input, textarea, select { font: inherit; }
 .page-scroll-rail {
     position: fixed;
     top: 108px;
-    right: 10px;
+    right: 6px;
     bottom: 18px;
-    width: 6px;
+    width: 12px;
     padding: 2px;
     border-radius: 999px;
     background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.09);
     z-index: 26;
     cursor: pointer;
     user-select: none;
     touch-action: none;
-    transition: opacity 0.2s ease, width 0.2s ease, right 0.2s ease, background 0.2s ease;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    transition: opacity 0.2s ease, width 0.2s ease, right 0.15s ease, background 0.2s ease, border-color 0.2s ease;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
 }
 
 .page-scroll-rail:hover {
-    width: 14px;
-    right: 6px;
+    width: 16px;
+    right: 4px;
     background: rgba(255,255,255,0.10);
     border-color: rgba(var(--accent-rgb),0.30);
 }
@@ -293,15 +293,21 @@ body.editor-open .page-scroll-rail {
 
 .page-scroll-thumb {
     width: 100%;
-    min-height: 44px;
+    min-height: 40px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.30);
     transition: background 0.18s ease;
+    cursor: grab;
+}
+
+.page-scroll-thumb:active,
+.page-scroll-thumb.is-dragging {
+    cursor: grabbing;
 }
 
 .page-scroll-rail:hover .page-scroll-thumb,
 .page-scroll-thumb.is-dragging {
-    background: rgba(var(--accent-rgb),0.55);
+    background: rgba(var(--accent-rgb),0.60);
 }
 
 .bg-shape {
