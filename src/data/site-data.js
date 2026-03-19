@@ -90,6 +90,14 @@ export const DEFAULT_SITE_DATA = {
             "avatarUrl": "",
             "description": "помогает с багами, поддержкой и мелкими правками. Он следит за проблемами, разбирает ошибки.",
             "sortOrder": 4
+        },
+        {
+            "id": "team-member-1773954356108",
+            "name": "Кот",
+            "role": "Просто кот",
+            "avatarUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDuxKjafe_iTmIKLQUM_rEAuJYUDHay037Sw&s",
+            "description": "Кот любит чилить",
+            "sortOrder": 5
         }
     ],
     "supporters": [
