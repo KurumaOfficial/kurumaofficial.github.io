@@ -618,33 +618,103 @@
 /* ── Team grid (admin) ─────────────────────────────────────── */
 .dash-team-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 2px;
+  margin-top: 16px;
 }
-.dash-team-thumb {
+
+/* .dash-team-card is rendered by renderTeamGrid() in editor.js */
+.dash-team-card {
   background: #0f0b0b;
   border: 1px solid rgba(139,26,42,0.1);
   padding: 16px;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: border-color 0.25s, background 0.25s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  outline: none;
 }
-.dash-team-thumb:hover { border-color: rgba(139,26,42,0.3); }
-.dash-team-thumb.selected { border-color: #8B1A2A; }
+.dash-team-card:hover  { border-color: rgba(139,26,42,0.3); background: #130909; }
+.dash-team-card:focus-visible { border-color: rgba(139,26,42,0.5); }
+.dash-team-card.selected { border-color: #8B1A2A; background: rgba(139,26,42,0.06); }
 
-.dash-team-thumb-name {
+.dash-team-card-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Avatar box rendered by renderTeamAvatar() */
+.dash-team-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 1px solid rgba(139,26,42,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-family: 'Unbounded', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 400;
+  color: #5A4A44;
+  overflow: hidden;
+  background: #0c0909;
+}
+.dash-team-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dash-team-copy { flex: 1; min-width: 0; }
+.dash-team-copy h3 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
   font-weight: 400;
   color: #D4C4BB;
-  margin-bottom: 4px;
   letter-spacing: -0.01em;
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.dash-team-thumb-role {
+.dash-team-copy .mono {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-size: 9px;
+  letter-spacing: 0.12em;
   color: #5C1019;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dash-team-desc {
+  font-size: 11px;
+  color: #3d2f2c;
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.dash-team-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+/* Empty state for team grid */
+.dash-empty-state {
+  font-size: 13px;
+  color: #3d2f2c;
+  padding: 24px 0;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
 }
 
 .dash-team-editor-empty {
@@ -652,8 +722,7 @@
   color: #3d2f2c;
   text-align: center;
   padding: 40px;
-  border-style: dashed;
-  border-color: rgba(139,26,42,0.1);
+  border: 1px dashed rgba(139,26,42,0.1);
 }
 
 /* ── Team editor container ─────────────────────────────────── */
