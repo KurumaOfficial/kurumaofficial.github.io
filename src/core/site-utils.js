@@ -107,7 +107,16 @@ function normalizeTeamMember(member, index) {
         sortOrder: toNumber(member?.sortOrder, index + 1)
     };
 }
-
+function normalizeSupporter(supporter, index) {
+    const name = cleanText(supporter?.name || '', 'Supporter ' + String(index + 1).padStart(2, '0'));
+    return {
+        id: slugify(cleanText(supporter?.id || '', name || ('supporter-' + (index + 1)))),
+        name,
+        role: cleanText(supporter?.role || '', 'Поддержавший'),
+        avatarUrl: cleanText(supporter?.avatarUrl || '', ''),
+        sortOrder: toNumber(supporter?.sortOrder, index + 1)
+    };
+}
 function cleanUrl(value) {
     const text = String(value ?? '').trim();
     if (!text) return '';
@@ -127,9 +136,11 @@ function normalizeData(data) {
     const fallback = deepClone(DEFAULT_SITE_DATA);
     const rawProducts = Array.isArray(data?.products) && data.products.length ? data.products : fallback.products;
     const rawTeam = Array.isArray(data?.team) ? data.team : fallback.team;
+    const rawSupporters = Array.isArray(data?.supporters) ? data.supporters : (fallback.supporters || []);
     return {
         products: rawProducts.map((item, index) => normalizeProduct(item, index)),
         team: rawTeam.map((item, index) => normalizeTeamMember(item, index)),
+        supporters: rawSupporters.map((item, index) => normalizeSupporter(item, index)),
         socials: normalizeSocials(data?.socials, fallback.socials)
     };
 }
@@ -216,6 +227,7 @@ export {
     formatBytes,
     normalizeProduct,
     normalizeTeamMember,
+    normalizeSupporter,
     cleanUrl,
     normalizeSocials,
     normalizeData,

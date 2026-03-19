@@ -256,24 +256,27 @@ button, input, textarea, select { font: inherit; }
 .page-scroll-rail {
     position: fixed;
     top: 108px;
-    right: 14px;
+    right: 10px;
     bottom: 18px;
-    width: 16px;
-    padding: 3px;
+    width: 6px;
+    padding: 2px;
     border-radius: 999px;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
-    border: 1px solid rgba(255,255,255,0.12);
-    box-shadow:
-        0 20px 40px rgba(0,0,0,0.24),
-        inset 0 1px 0 rgba(255,255,255,0.14);
-    backdrop-filter: blur(16px) saturate(1.2);
-    -webkit-backdrop-filter: blur(16px) saturate(1.2);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
     z-index: 26;
     cursor: pointer;
     user-select: none;
     touch-action: none;
-    transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    transition: opacity 0.2s ease, width 0.2s ease, right 0.2s ease, background 0.2s ease;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.page-scroll-rail:hover {
+    width: 14px;
+    right: 6px;
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(var(--accent-rgb),0.30);
 }
 
 .page-scroll-rail.is-hidden {
@@ -288,32 +291,17 @@ body.editor-open .page-scroll-rail {
     transform: translateX(10px);
 }
 
-.page-scroll-rail:hover {
-    border-color: rgba(var(--accent-rgb),0.24);
-}
-
 .page-scroll-thumb {
     width: 100%;
-    min-height: 72px;
+    min-height: 44px;
     border-radius: 999px;
-    background:
-        linear-gradient(180deg, rgba(255,255,255,0.34), rgba(255,255,255,0.12)) padding-box,
-        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04)) border-box;
-    border: 1px solid transparent;
-    box-shadow:
-        0 12px 26px rgba(0,0,0,0.2),
-        inset 0 1px 0 rgba(255,255,255,0.26);
-    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    background: rgba(255,255,255,0.28);
+    transition: background 0.18s ease;
 }
 
 .page-scroll-rail:hover .page-scroll-thumb,
 .page-scroll-thumb.is-dragging {
-    background:
-        linear-gradient(180deg, rgba(var(--accent-rgb),0.36), rgba(255,255,255,0.16)) padding-box,
-        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)) border-box;
-    box-shadow:
-        0 16px 32px rgba(0,0,0,0.24),
-        inset 0 1px 0 rgba(255,255,255,0.28);
+    background: rgba(var(--accent-rgb),0.55);
 }
 
 .bg-shape {
@@ -1044,6 +1032,29 @@ body.editor-open .page-scroll-rail {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
+}
+
+/* Static row for small team / supporters (< 5 cards) */
+.team-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.team-row .team-card {
+    flex: 0 0 min(300px, calc(100vw - 48px));
+    width: min(300px, calc(100vw - 48px));
+}
+
+/* Supporter card — compact, no bio space */
+.supporter-card .team-bio {
+    display: none;
+}
+
+.supporter-card {
+    gap: 12px;
 }
 
 .team-marquee {

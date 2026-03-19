@@ -92,6 +92,7 @@ export const DEFAULT_SITE_DATA = {
             "sortOrder": 4
         }
     ],
+    "supporters": [],
     "socials": {
         "youtube": "https://www.youtube.com/@KurumaBestWaify",
         "discord": "https://discord.gg/3YxB2R6eqQ",
