@@ -107,9 +107,30 @@ export function createPublicSite({ localeController }) {
         }
 
         featuredProductsEl.innerHTML = products.map(product => {
-            const isActive  = !!(product.downloadUrl);
-            const dotClass  = isActive ? 'status-dot' : 'status-dot inactive';
+            const dotClass  = (product.downloadUrl || product.detailUrl) ? 'status-dot' : 'status-dot inactive';
             const flagBadge = renderFlagBadge(product.flag);
+
+            /* ── Products with a dedicated detail page ── */
+            if (product.detailUrl) {
+                const detailHref = localeController.resolveSitePath(product.detailUrl);
+                return `
+<div class="product-card" id="${escapeHtml(product.id)}">
+  <div class="product-status">
+    <span class="${dotClass}"></span>
+    ${escapeHtml(product.status || product.tag)}
+    ${flagBadge}
+  </div>
+  <div class="product-name">${escapeHtml(product.title)}</div>
+  <div class="product-version">v${escapeHtml(product.version || 'x')}</div>
+  ${product.summary ? `<p class="product-desc">${linkify(product.summary)}</p>` : ''}
+  <div class="product-meta">
+    <span class="product-tag">${escapeHtml(product.tag)}</span>
+    <a class="btn-detail" href="${escapeHtml(detailHref)}" data-detail-nav>Подробнее</a>
+  </div>
+</div>`;
+            }
+
+            /* ── Regular products — full card ── */
             const instructionsMarkup = product.instructions.length
                 ? `<ol class="product-steps">${product.instructions.map((item, i) =>
                     `<li><span class="step-num">${i + 1}</span><span>${linkify(item)}</span></li>`).join('')}</ol>`
@@ -137,6 +158,21 @@ export function createPublicSite({ localeController }) {
   </div>
 </div>`;
         }).join('');
+
+        setupDetailNavLinks();
+    }
+
+    /* ── Detail page nav with exit animation ───────────────── */
+    function setupDetailNavLinks() {
+        document.querySelectorAll('[data-detail-nav]').forEach(link => {
+            if (link.dataset.detailNavBound) return;
+            link.dataset.detailNavBound = '1';
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                document.body.classList.add('page-leaving');
+                setTimeout(() => { window.location.href = link.getAttribute('href'); }, 280);
+            });
+        });
     }
 
     function renderArchiveProducts() {
@@ -219,8 +255,9 @@ export function createPublicSite({ localeController }) {
         localeController.applyStaticCopy();
         localeController.mountLanguageSwitcher();
         setupRevealAnimations();
+        setupDetailNavLinks();
 
-        const mo = new MutationObserver(() => setupRevealAnimations());
+        const mo = new MutationObserver(() => { setupRevealAnimations(); setupDetailNavLinks(); });
         if (featuredProductsEl) mo.observe(featuredProductsEl, { childList: true, subtree: true });
         if (archiveProductsEl)  mo.observe(archiveProductsEl,  { childList: true, subtree: true });
     }
