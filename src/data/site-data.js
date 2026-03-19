@@ -98,6 +98,14 @@ export const DEFAULT_SITE_DATA = {
             "avatarUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTDuxKjafe_iTmIKLQUM_rEAuJYUDHay037Sw&s",
             "description": "Кот любит чилить",
             "sortOrder": 5
+        },
+        {
+            "id": "team-member-1773954450812",
+            "name": "Собака",
+            "role": "Друг кота",
+            "avatarUrl": "https://storage.yandexcloud.net/yac-wh-sb-prod-s3-media-03005/uploads/article/1598/abce4a3bc3a9f343180cc20b81fbbeb4.webp",
+            "description": "Любит играть вместе с котом",
+            "sortOrder": 6
         }
     ],
     "supporters": [
