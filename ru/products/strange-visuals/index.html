@@ -1,417 +1,344 @@
-<!doctype html>
-<html lang="ru" dir="ltr" data-theme="dark">
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Strange Visuals — Aleph Studio</title>
-  <meta name="description" content="Strange Visuals — визуальный Minecraft-мод. Боксы, трейсеры, фуллбрайт, HUD и десятки модулей. Бесплатно.">
-  <meta name="theme-color" content="#111110">
-  <meta name="color-scheme" content="dark light">
-
-  <meta property="og:type"        content="website">
-  <meta property="og:title"       content="Strange Visuals — Aleph Studio">
-  <meta property="og:description" content="Визуальный Minecraft-мод. Боксы, трейсеры, HUD и десятки модулей. Бесплатно.">
-  <meta property="og:locale"      content="ru_RU">
-  <meta property="og:site_name"   content="Aleph Studio">
-
-  <link rel="icon" href="../../../favicon.ico" sizes="48x48">
-  <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-  <link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strange Visuals — Minecraft Visual Mod</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════
-     SITE NAV (заменяет оригинальный nav)
-     ═══════════════════════════════════════ -->
-<nav class="site-nav" role="navigation" aria-label="Основная навигация">
+<nav class="site-nav">
   <a class="site-nav-logo" href="../../" aria-label="Aleph Studio — на главную">
     <span class="logo-sq" aria-hidden="true"></span>
     <span class="logo-text">Aleph Studio</span>
   </a>
-
   <div class="site-nav-links">
     <a class="site-nav__link" href="../../#products">Продукты</a>
     <a class="site-nav__link" href="../../#manifesto">Принцип</a>
     <a class="site-nav__link" href="../../#team">Команда</a>
   </div>
-
   <div class="site-nav-right">
-    <a class="site-nav-badge" href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">
-      GitHub ↗
-    </a>
-    <button id="themeBtn" class="theme-btn" type="button" aria-label="Сменить тему">
-      <span id="themeIco" class="material-icons">light_mode</span>
+    <a class="site-nav-badge" href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    <button class="theme-btn" id="themeBtn">
+      <span class="material-icons" id="themeIco">light_mode</span>
     </button>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════
-     HERO
-     ═══════════════════════════════════════ -->
-<section class="hero">
-  <div class="hero-bg">
-    <div class="hero-glow"></div>
+<section class="hero-store">
+  <div class="hero-left-fog"></div>
+  <div class="hero-left-shade"></div>
+
+  <div class="hero-store-top">
+    <a href="#" class="hero-store-back" aria-label="Назад">
+      <span class="material-icons">arrow_back</span>
+    </a>
+    <div class="hero-store-title">Strange Visuals</div>
+    <div class="hero-store-actions">
+      <a href="#" class="hero-store-action" aria-label="Ещё">
+        <span class="material-icons">more_vert</span>
+      </a>
+    </div>
   </div>
 
-  <div class="hero-inner wrap">
-
-    <!-- Store top row -->
-    <div class="hero-store-top">
-      <button class="hero-back-btn" onclick="history.back()" aria-label="Назад">
-        <span class="material-icons">arrow_back</span>
-      </button>
-      <span class="hero-store-title">Strange Visuals</span>
-      <button class="hero-action-btn" aria-label="Ещё">
-        <span class="material-icons">more_vert</span>
-      </button>
-    </div>
-
-    <!-- App identity -->
-    <div class="hero-app-row">
+  <div class="hero-store-content">
+    <div class="hero-store-card">
       <div class="hero-icon-wrap" id="heroIconWrap">
-        <!-- SVG логотип — полная оригинальная версия с анимацией -->
-        <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" class="hero-app-icon">
-          <rect x="30"  y="20"  width="80" height="80" rx="12" fill="currentColor"/>
-          <rect x="190" y="20"  width="80" height="80" rx="12" fill="currentColor"/>
-          <rect x="110" y="100" width="80" height="40" rx="8"  fill="currentColor"/>
-          <rect x="70"  y="140" width="160" height="80" rx="12" fill="currentColor"/>
-          <rect x="70"  y="220" width="40"  height="40" rx="6"  fill="currentColor"/>
-          <rect x="190" y="220" width="40"  height="40" rx="6"  fill="currentColor"/>
-          <!-- Левый глаз — слеза -->
-          <rect x="82" y="250" width="16" height="16" rx="4" fill="var(--accent)">
-            <animate attributeName="y" values="250;290;250" dur="2.4s" repeatCount="indefinite" begin="0s"/>
-            <animate attributeName="opacity" values="1;0;1" dur="2.4s" repeatCount="indefinite" begin="0s"/>
-          </rect>
-          <!-- Правый глаз — слеза -->
-          <rect x="202" y="250" width="16" height="16" rx="4" fill="var(--accent)">
-            <animate attributeName="y" values="250;290;250" dur="2.4s" repeatCount="indefinite" begin="1.2s"/>
-            <animate attributeName="opacity" values="1;0;1" dur="2.4s" repeatCount="indefinite" begin="1.2s"/>
-          </rect>
-        </svg>
+        <div class="hero-app-icon">
+          <svg viewBox="0 0 300 300" fill="currentColor">
+            <rect x="30"  y="20"  width="80"  height="80"/>
+            <rect x="190" y="20"  width="80"  height="80"/>
+            <rect x="110" y="100" width="80"  height="40"/>
+            <rect x="70"  y="140" width="160" height="80"/>
+            <rect x="70"  y="220" width="40"  height="40"/>
+            <rect x="190" y="220" width="40"  height="40"/>
+            <rect x="60" y="99" width="16" height="0" fill="currentColor" opacity=".16" rx="8">
+              <animate attributeName="height" values="0;20;130;22;0" dur="5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.25 0 0.75 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+              <animate attributeName="y" values="99;99;150;280;420" dur="5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.25 0 0.75 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+              <animate attributeName="opacity" values="0;.2;.12;.04;0" dur="5s" repeatCount="indefinite"/>
+            </rect>
+            <rect x="224" y="99" width="16" height="0" fill="currentColor" opacity=".16" rx="8">
+              <animate attributeName="height" values="0;20;130;22;0" dur="5s" begin="2.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.25 0 0.75 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+              <animate attributeName="y" values="99;99;150;280;420" dur="5s" begin="2.5s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.25 0 0.75 1;0.4 0 0.6 1;0.4 0 0.6 1"/>
+              <animate attributeName="opacity" values="0;.2;.12;.04;0" dur="5s" begin="2.5s" repeatCount="indefinite"/>
+            </rect>
+          </svg>
+        </div>
       </div>
 
       <div class="hero-info" id="heroInfo">
-        <h1 class="hero-app-name">Strange Visuals</h1>
-        <div class="hero-app-author">Aleph Studio</div>
+        <h1 class="hero-app-name">Strange <em>Visuals</em></h1>
 
-        <!-- Мета-статистика -->
+        <a href="#" class="hero-dev">
+          Aleph Studio
+          <span class="hero-verified">
+            <span class="material-icons">check</span>
+          </span>
+        </a>
+
+        <div class="hero-category">Визуальные моды · Minecraft 1.21.8 · Бесплатно</div>
+
         <div class="hero-meta">
           <div class="hero-meta-item">
-            <span class="hero-meta-val">4.9★</span>
-            <span class="hero-meta-label">1 284 отзыва</span>
+            <div class="hero-meta-value">4.9 <span class="hero-star">★</span></div>
+            <div class="hero-meta-label">1 284 отзыва</div>
           </div>
-          <div class="hero-meta-sep"></div>
           <div class="hero-meta-item">
-            <span class="hero-meta-val">30+</span>
-            <span class="hero-meta-label">Модулей</span>
+            <div class="hero-meta-value">30+</div>
+            <div class="hero-meta-label">Модулей</div>
           </div>
-          <div class="hero-meta-sep"></div>
           <div class="hero-meta-item">
-            <span class="hero-meta-val">1.21.8</span>
-            <span class="hero-meta-label">Версия MC</span>
+            <div class="hero-meta-value">1.21.8</div>
+            <div class="hero-meta-label">Версия MC</div>
           </div>
-          <div class="hero-meta-sep"></div>
           <div class="hero-meta-item">
-            <span class="hero-meta-val">0.0.0</span>
-            <span class="hero-meta-label">Версия мода</span>
+            <div class="hero-meta-value">0.0.0</div>
+            <div class="hero-meta-label">Версия мода</div>
           </div>
         </div>
 
-        <!-- Категория -->
-        <div class="hero-category">Визуальные моды · Minecraft 1.21.8 · Бесплатно</div>
-
-        <!-- Действия -->
         <div class="hero-actions">
-          <button id="installBtn" class="btn btn-solid" type="button">СКАЧАТЬ</button>
-          <button class="hero-side-btn" aria-label="Сохранить">
+          <button class="hero-install-btn" id="installBtn" data-installed="false">СКАЧАТЬ</button>
+          <button class="hero-side-btn" title="Добавить в избранное" aria-label="Добавить в избранное">
             <span class="material-icons">bookmark_border</span>
           </button>
-          <button class="hero-side-btn" aria-label="Поделиться">
+          <button class="hero-side-btn" title="Поделиться" aria-label="Поделиться">
             <span class="material-icons">share</span>
           </button>
         </div>
       </div>
     </div>
-
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     FEATURES
-     ═══════════════════════════════════════ -->
-<div id="features" class="wrap" style="padding-top:20px">
-  <p class="eyebrow reveal">Возможности</p>
-  <h2 class="s-title reveal">Всё, что нужно<br><em>для игры</em></h2>
-  <p class="s-desc reveal">Визуальные улучшения, продуманный HUD и полезные утилиты — всё в одном моде без лишнего.</p>
-
-  <div class="feat-grid">
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">select_all</span>
+<div class="wrap" id="features">
+  <div class="feat-head reveal">
+    <div>
+      <div class="eyebrow">Возможности</div>
+      <h2 class="s-title">Всё что нужно<br>для игры</h2>
+    </div>
+    <p class="s-desc">Strange Visuals сфокусирован на визуальных улучшениях, которые не нарушают правила серверов.</p>
+  </div>
+  <div class="feat-grid reveal">
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">crop_square</span></div>
       <h3>Боксы и Хитбоксы</h3>
-      <p>Точные ESP-боксы и хитбоксы для любого существа. Режимы 2D, 3D и corner.</p>
+      <p>Визуализация хитбоксов игроков и мобов. Настраиваемый цвет и стиль.</p>
     </div>
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">timeline</span>
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">near_me</span></div>
       <h3>Трейсеры</h3>
-      <p>Линии-трейсеры к игрокам, мобам и предметам. Настраиваемые цвета и типы цели.</p>
+      <p>Линии-указатели к игрокам, дропам и мобам в видимой зоне.</p>
     </div>
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">flare</span>
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">blur_on</span></div>
       <h3>Снаряды и Частицы</h3>
-      <p>Визуализация траекторий снарядов и кастомные частицы с настройкой плотности.</p>
+      <p>Подсветка летящих снарядов и кастомные эффекты частиц.</p>
     </div>
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">dashboard</span>
+    <div class="feat-card w2">
+      <div class="feat-ico"><span class="material-icons">dashboard_customize</span></div>
       <h3>Полный HUD</h3>
-      <p>Armour status, speedometer, координаты, таймер, скорборд и другие HUD-элементы.</p>
+      <p>Массив лист, ватермарка, кейбинды, нотификации, кроссхейр, скорборд, хотбар и табулист — весь интерфейс настраивается под вас.</p>
     </div>
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">wb_sunny</span>
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">wb_sunny</span></div>
       <h3>Фуллбрайт</h3>
-      <p>Максимальная яркость без факелов. Работает в пещерах, ночью и в Незере.</p>
+      <p>Полная яркость без факелов. Отключение визуальных оверлеев.</p>
     </div>
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">palette</span>
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">palette</span></div>
       <h3>Темы оформления</h3>
-      <p>Четыре встроенные темы: Стандарт, Минимализм, Неон, Ретро. Переключение в GUI.</p>
+      <p>Стандарт, Минимализм, Неон и Ретро. Светлый и тёмный режим.</p>
     </div>
-    <div class="feat-card reveal">
-      <span class="material-icons feat-icon">build</span>
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">bolt</span></div>
       <h3>Утилиты</h3>
-      <p>Авто-спринт, Авто-тул, No-overlay, Ник-хайдер и другие полезные утилиты.</p>
+      <p>Авто спринт, авто инструмент, координаты, таймер.</p>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     COMPARE
-     ═══════════════════════════════════════ -->
-<div id="compare" class="wrap" style="padding-top:20px">
-  <p class="eyebrow reveal">Сравнение</p>
-  <h2 class="s-title reveal">Разница<br><em>заметна сразу</em></h2>
-  <p class="s-desc reveal">Перетащите ползунок и убедитесь сами — ESP, боксы и трейсеры работают чисто.</p>
+<div class="wrap" id="compare" style="padding-top:20px">
+  <div class="compare-section-head reveal">
+    <div>
+      <div class="eyebrow">До / После</div>
+      <h2 class="s-title">Сравнение<br>визуала</h2>
+    </div>
+    <p class="s-desc">Здесь заготовка под систему сравнения. Ты сможешь вставить свои изображения "до" и "после", а ползунок по центру будет двигаться для сравнения результата.</p>
+  </div>
 
-  <div class="compare-wrap reveal">
-    <div class="compare-before">
-      <div class="compare-label">До</div>
-      <div class="compare-screen compare-screen-before">
-        <div class="compare-placeholder">
-          <span class="material-icons" style="font-size:48px;opacity:.3">image</span>
-          <span style="opacity:.4;font-size:13px;margin-top:8px">Vanilla</span>
+  <div class="compare-card reveal">
+    <div class="compare-stage" id="compareStage">
+      <div class="compare-label before">До</div>
+      <div class="compare-label after">После</div>
+
+      <div class="compare-image compare-before">
+        <span>Место под изображение "До"</span>
+      </div>
+
+      <div class="compare-after-wrap" id="compareAfterWrap">
+        <div class="compare-image compare-after">
+          <span>Место под изображение "После"</span>
         </div>
       </div>
-    </div>
-    <div class="compare-after-wrap" id="compareAfterWrap">
-      <div class="compare-label">После</div>
-      <div class="compare-screen compare-screen-after">
-        <div class="compare-placeholder">
-          <span class="material-icons" style="font-size:48px;opacity:.5;color:var(--accent)">auto_awesome</span>
-          <span style="opacity:.6;font-size:13px;margin-top:8px;color:var(--accent)">Strange Visuals</span>
-        </div>
+
+      <div class="compare-divider" id="compareDivider"></div>
+      <div class="compare-handle" id="compareHandle">
+        <span class="material-icons">drag_indicator</span>
+      </div>
+
+      <input
+        type="range"
+        min="0"
+        max="100"
+        value="50"
+        class="compare-slider"
+        id="compareSlider"
+        aria-label="Сравнение до и после"
+      >
+
+      <div class="compare-slot">
+        Здесь можно будет поставить свою картинку или полноценный слой изображения
       </div>
     </div>
-    <div class="compare-divider" id="compareDivider"></div>
-    <div class="compare-handle" id="compareHandle">
-      <span class="material-icons">drag_indicator</span>
-    </div>
-    <input type="range" class="compare-slider" id="compareSlider" min="0" max="100" value="50" aria-label="Сравнение">
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     PREVIEW (GUI)
-     ═══════════════════════════════════════ -->
-<div id="preview" class="wrap" style="padding-top:20px">
-  <p class="eyebrow reveal">Интерфейс</p>
-  <h2 class="s-title reveal">Чистый GUI<br><em>в двух темах</em></h2>
-  <p class="s-desc reveal" style="max-width:360px">Glassmorphism-стиль с поддержкой тёмной и светлой темы. Всё интерактивно — попробуйте сами.</p>
-
-  <div class="preview-tags reveal">
-    <span class="tag">Glassmorphism</span>
-    <span class="tag">Light &amp; Dark</span>
-    <span class="tag">Анимации</span>
-    <span class="tag">Интерактивный</span>
-  </div>
-
+<div class="wrap" id="preview" style="padding-top:20px">
   <div class="preview-row">
 
-    <!-- GUI Widget -->
-    <div class="gui-w reveal">
-      <div class="gw-header">
-        <div class="gw-logo-wrap">
-          <!-- SVG логотип внутри GUI -->
-          <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" class="gw-logo-svg" style="width:28px;height:28px">
-            <rect x="30"  y="20"  width="80" height="80" rx="12" fill="var(--gui-title)"/>
-            <rect x="190" y="20"  width="80" height="80" rx="12" fill="var(--gui-title)"/>
-            <rect x="110" y="100" width="80" height="40" rx="8"  fill="var(--gui-title)"/>
-            <rect x="70"  y="140" width="160" height="80" rx="12" fill="var(--gui-title)"/>
-            <rect x="70"  y="220" width="40"  height="40" rx="6"  fill="var(--gui-title)"/>
-            <rect x="190" y="220" width="40"  height="40" rx="6"  fill="var(--gui-title)"/>
+    <div class="reveal">
+      <div class="eyebrow">Интерфейс</div>
+      <h2 class="s-title">Чистый GUI<br><em>в двух темах</em></h2>
+      <p class="s-desc" style="max-width:360px">
+        Glassmorphism-дизайн с плавными переходами.
+        Нажми кнопку в шапке — GUI обновится вместе со страницей.
+      </p>
+      <div class="preview-tags">
+        <span class="tag">Glassmorphism</span>
+        <span class="tag">Light &amp; Dark</span>
+        <span class="tag">Анимации</span>
+        <span class="tag">Интерактивный</span>
+      </div>
+    </div>
+
+    <div class="gui-outer reveal">
+      <div class="gui-w">
+
+        <div class="gw-hdr">
+          <svg class="gw-logo" viewBox="0 0 300 300" fill="var(--gui-title)">
+            <rect x="30"  y="20"  width="80"  height="80"/>
+            <rect x="190" y="20"  width="80"  height="80"/>
+            <rect x="110" y="100" width="80"  height="40"/>
+            <rect x="70"  y="140" width="160" height="80"/>
+            <rect x="70"  y="220" width="40"  height="40"/>
+            <rect x="190" y="220" width="40"  height="40"/>
           </svg>
+          <div class="gw-htxt">
+            <div class="gw-title">Strange Visuals</div>
+            <div class="gw-sub">FREE</div>
+          </div>
         </div>
-        <div class="gw-title-col">
-          <span class="gw-title">Strange Visuals</span>
-          <span class="gw-subtitle">FREE</span>
-        </div>
-        <button class="gw-close" aria-label="Закрыть"><span class="material-icons">close</span></button>
-      </div>
 
-      <!-- Табы с текстовыми метками -->
-      <div class="gw-tabs" id="gwTabs">
-        <span class="active" data-tab="player">На игроке</span>
-        <span data-tab="world">В мире</span>
-        <span data-tab="utils">Утилиты</span>
-        <span data-tab="other">Остальное</span>
-        <span data-tab="interface">Интерфейс</span>
-        <span data-tab="themes">Темы</span>
-      </div>
-
-      <div class="gw-body fin" id="gwBody">
-        <div class="gw-sec-label" id="gwSec"></div>
-        <div class="gw-scroll">
-          <div class="gw-items" id="gwItems"></div>
+        <div class="gw-tabs" id="gwTabs">
+          <span class="active" data-tab="player">На игроке</span>
+          <span data-tab="world">В мире</span>
+          <span data-tab="utils">Утилиты</span>
+          <span data-tab="other">Остальное</span>
+          <span data-tab="interface">Интерфейс</span>
+          <span data-tab="themes">Темы</span>
         </div>
+
+        <div class="gw-body fin" id="gwBody">
+          <div class="gw-sec" id="gwSec">На игроке</div>
+          <div class="gw-scroll">
+            <div class="gw-items" id="gwItems"></div>
+          </div>
+        </div>
+
       </div>
     </div>
 
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     MODULES
-     ═══════════════════════════════════════ -->
-<div id="modules" class="wrap" style="padding-top:20px">
-  <p class="eyebrow reveal">Модули</p>
-  <h2 class="s-title reveal">30+ модулей<br><em>в 6 категориях</em></h2>
-  <p class="s-desc reveal">Каждый модуль можно включить или отключить независимо. Никаких лишних функций — только то, что вам нужно.</p>
-
+<div class="wrap" id="modules" style="padding-top:20px">
+  <div class="reveal">
+    <div class="eyebrow">Список модулей</div>
+    <h2 class="s-title">Все функции</h2>
+    <p class="s-desc">Полный список по категориям</p>
+  </div>
   <div class="mod-grid">
-    <div class="mod-category reveal">
-      <div class="mod-cat-header">
-        <span class="material-icons">person</span>
-        <span>На игроке</span>
-        <span class="mod-count">5</span>
-      </div>
-      <div class="mod-list">
-        <div class="mod-item"><span class="mod-name">Боксы</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Джампики</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Китайская шляпа</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Таргет рендер</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Хит бабл</span><span class="mod-badge off">ВЫКЛ</span></div>
+
+    <div class="mod-group reveal">
+      <div class="mod-head"><span class="material-icons">person</span><span class="mod-head-name">На игроке</span><span class="mod-head-ct">5</span></div>
+      <div class="mod-items">
+        <div class="mod-item"><span class="mod-item-name">Боксы</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Джампики</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Китайская шляпа</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Таргет рендер</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Хит бабл</span><span class="mod-badge off">ВЫКЛ</span></div>
       </div>
     </div>
 
-    <div class="mod-category reveal">
-      <div class="mod-cat-header">
-        <span class="material-icons">public</span>
-        <span>В мире</span>
-        <span class="mod-count">7</span>
-      </div>
-      <div class="mod-list">
-        <div class="mod-item"><span class="mod-name">Чамсы</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Трейсеры</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Снаряды</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Частицы</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Блок оверлей</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Дроп рендер</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Скелетон</span><span class="mod-badge off">ВЫКЛ</span></div>
+    <div class="mod-group reveal">
+      <div class="mod-head"><span class="material-icons">public</span><span class="mod-head-name">В мире</span><span class="mod-head-ct">7</span></div>
+      <div class="mod-items">
+        <div class="mod-item"><span class="mod-item-name">Чамсы</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Трейсеры</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Снаряды</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Частицы</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Блок оверлей</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Дроп рендер</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Скелетон</span><span class="mod-badge off">ВЫКЛ</span></div>
       </div>
     </div>
 
-    <div class="mod-category reveal">
-      <div class="mod-cat-header">
-        <span class="material-icons">build</span>
-        <span>Утилиты</span>
-        <span class="mod-count">6</span>
-      </div>
-      <div class="mod-list">
-        <div class="mod-item"><span class="mod-name">Авто спринт</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Авто тул</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Фуллбрайт</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Ноу оверлей</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Координаты</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Таймер</span><span class="mod-badge off">ВЫКЛ</span></div>
+    <div class="mod-group reveal">
+      <div class="mod-head"><span class="material-icons">build</span><span class="mod-head-name">Утилиты</span><span class="mod-head-ct">6</span></div>
+      <div class="mod-items">
+        <div class="mod-item"><span class="mod-item-name">Авто спринт</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Авто тул</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Фуллбрайт</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Ноу оверлей</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Координаты</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Таймер</span><span class="mod-badge off">ВЫКЛ</span></div>
       </div>
     </div>
 
-    <div class="mod-category reveal">
-      <div class="mod-cat-header">
-        <span class="material-icons">more_horiz</span>
-        <span>Остальное</span>
-        <span class="mod-count">4</span>
-      </div>
-      <div class="mod-list">
-        <div class="mod-item"><span class="mod-name">Антибот</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Прокси</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Дебаг мод</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Ник хайдер</span><span class="mod-badge on">ВКЛ</span></div>
-      </div>
-    </div>
-
-    <div class="mod-category reveal">
-      <div class="mod-cat-header">
-        <span class="material-icons">dashboard</span>
-        <span>Интерфейс</span>
-        <span class="mod-count">8</span>
-      </div>
-      <div class="mod-list">
-        <div class="mod-item"><span class="mod-name">Массив лист</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Ватермарка</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Кейбинды</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Нотификации</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Хотбар</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Скорборд</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Табулист</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Кроссхейр</span><span class="mod-badge on">ВКЛ</span></div>
+    <div class="mod-group reveal">
+      <div class="mod-head"><span class="material-icons">dashboard</span><span class="mod-head-name">Интерфейс</span><span class="mod-head-ct">8</span></div>
+      <div class="mod-items">
+        <div class="mod-item"><span class="mod-item-name">Массив лист</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Ватермарка</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Кейбинды</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Нотификации</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Хотбар</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Скорборд</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Табулист</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Кроссхейр</span><span class="mod-badge on">ВКЛ</span></div>
       </div>
     </div>
 
-    <div class="mod-category reveal">
-      <div class="mod-cat-header">
-        <span class="material-icons">palette</span>
-        <span>Темы</span>
-        <span class="mod-count">4</span>
-      </div>
-      <div class="mod-list">
-        <div class="mod-item"><span class="mod-name">Стандарт</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Минимализм</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Неон</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-name">Ретро</span><span class="mod-badge off">ВЫКЛ</span></div>
-      </div>
-    </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     FOOTER
-     ═══════════════════════════════════════ -->
-<footer class="footer wrap">
-  <div class="footer-top">
-    <!-- Footer SVG logo -->
-    <svg viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg" class="footer-logo" style="width:36px;height:36px;opacity:.5">
-      <rect x="30"  y="20"  width="80" height="80" rx="12" fill="currentColor"/>
-      <rect x="190" y="20"  width="80" height="80" rx="12" fill="currentColor"/>
-      <rect x="110" y="100" width="80" height="40" rx="8"  fill="currentColor"/>
-      <rect x="70"  y="140" width="160" height="80" rx="12" fill="currentColor"/>
-      <rect x="70"  y="220" width="40"  height="40" rx="6"  fill="currentColor"/>
-      <rect x="190" y="220" width="40"  height="40" rx="6"  fill="currentColor"/>
+<footer>
+  <div class="footer-logo">
+    <svg viewBox="0 0 300 300" fill="currentColor">
+      <rect x="30"  y="20"  width="80"  height="80"/>
+      <rect x="190" y="20"  width="80"  height="80"/>
+      <rect x="110" y="100" width="80"  height="40"/>
+      <rect x="70"  y="140" width="160" height="80"/>
+      <rect x="70"  y="220" width="40"  height="40"/>
+      <rect x="190" y="220" width="40"  height="40"/>
     </svg>
-    <span class="footer-name">Strange Visuals</span>
+    Strange Visuals
   </div>
-  <p class="footer-note">Minecraft 1.21.8 · Визуальные и разрешённые функции · Бесплатно</p>
-  <div class="footer-links">
-    <a href="#">Скачать</a>
-    <a href="#">Исходный код</a>
-    <a href="#">Сообщить об ошибке</a>
-    <a href="../../">Aleph Studio</a>
-  </div>
-  <p class="footer-copy">&copy; 2025 Aleph Studio. MIT License.</p>
+  <span class="footer-note">Minecraft 1.21.8 · Визуальные и разрешённые функции · Бесплатно</span>
 </footer>
 
 <script src="../../../src/products/strange-visuals.js"></script>
