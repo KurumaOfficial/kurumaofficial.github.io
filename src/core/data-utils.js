@@ -1,0 +1,212 @@
+/**
+ * @fileoverview Pure data helpers — normalisation, cloning, formatting.
+ * No DOM, no side-effects.
+ * @module core/data-utils
+ */
+
+import { FLAG_META } from './constants.js';
+
+// ── Primitives ──────────────────────────────────────────────
+
+/**
+ * Deep-clone a JSON-safe value.
+ * @template T
+ * @param {T} value
+ * @returns {T}
+ */
+export function deepClone(value) {
+    return JSON.parse(JSON.stringify(value));
+}
+
+/**
+ * Convert to number or return fallback.
+ * @param {unknown} value
+ * @param {number} fallback
+ * @returns {number}
+ */
+export function toNumber(value, fallback) {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : fallback;
+}
+
+/**
+ * Trim a string or return fallback.
+ * @param {unknown} value
+ * @param {string} fallback
+ * @returns {string}
+ */
+export function cleanText(value, fallback) {
+    const text = String(value ?? '').trim();
+    return text || fallback;
+}
+
+/**
+ * Generate a URL-safe slug.
+ * @param {string} value
+ * @returns {string}
+ */
+export function slugify(value) {
+    return (
+        String(value || '')
+            .toLowerCase()
+            .replace(/[^a-z0-9а-яёії]+/gi, '-')
+            .replace(/^-+|-+$/g, '') ||
+        'item-' + Math.random().toString(36).slice(2, 8)
+    );
+}
+
+/**
+ * Format byte count for human display.
+ * @param {number} bytes
+ * @returns {string}
+ */
+export function formatBytes(bytes) {
+    const v = Number(bytes) || 0;
+    if (v < 1024) return `${v} B`;
+    if (v < 1024 * 1024) return `${(v / 1024).toFixed(1)} KB`;
+    return `${(v / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+// ── Data normalisation ──────────────────────────────────────
+
+/** Valid release stage keys. */
+const VALID_FLAGS = /** @type {const} */ (['alpha', 'beta', 'release']);
+
+/**
+ * @typedef {Object} Product
+ * @property {string}   id
+ * @property {string}   title
+ * @property {string}   version
+ * @property {string}   tag
+ * @property {string}   flag
+ * @property {string}   status
+ * @property {boolean}  featured
+ * @property {number}   featuredOrder
+ * @property {number}   sortOrder
+ * @property {string}   tone
+ * @property {string}   summary
+ * @property {string[]} instructions
+ * @property {string}   sourceUrl
+ * @property {string}   downloadUrl
+ * @property {string}   [detailUrl]
+ * @property {string}   note
+ */
+
+/**
+ * Normalise a single product record.
+ * @param {Record<string, unknown>} raw
+ * @param {number} index
+ * @returns {Product}
+ */
+export function normalizeProduct(raw = {}, index = 0) {
+    const title = cleanText(raw.title, 'Новый продукт');
+    const id = cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(title);
+
+    /** @type {string[]} */
+    let instructions;
+    if (Array.isArray(raw.instructions)) {
+        instructions = raw.instructions.map((v) => cleanText(v, '')).filter(Boolean);
+    } else {
+        instructions = String(raw.instructions || '')
+            .split('\n')
+            .map((v) => v.trim())
+            .filter(Boolean);
+    }
+
+    return {
+        id,
+        title,
+        version: cleanText(raw.version, 'x'),
+        tag: cleanText(raw.tag, `product ${String(index + 1).padStart(2, '0')}`),
+        flag: VALID_FLAGS.includes(/** @type {any} */ (raw.flag)) ? /** @type {string} */ (raw.flag) : '',
+        status: cleanText(raw.status, 'позже'),
+        featured: Boolean(raw.featured),
+        featuredOrder: toNumber(raw.featuredOrder, index + 1),
+        sortOrder: toNumber(raw.sortOrder, index + 1),
+        tone: raw.tone === 'green' ? 'green' : 'red',
+        summary: cleanText(raw.summary, ''),
+        instructions,
+        sourceUrl: cleanText(raw.sourceUrl, ''),
+        downloadUrl: cleanText(raw.downloadUrl, ''),
+        detailUrl: cleanText(raw.detailUrl, ''),
+        note: cleanText(raw.note, ''),
+    };
+}
+
+/**
+ * @typedef {Object} TeamMember
+ * @property {string} id
+ * @property {string} name
+ * @property {string} role
+ * @property {string} avatarUrl
+ * @property {string} description
+ * @property {number} sortOrder
+ */
+
+/**
+ * Normalise a single team member record.
+ * @param {Record<string, unknown>} raw
+ * @param {number} index
+ * @returns {TeamMember}
+ */
+export function normalizeTeamMember(raw = {}, index = 0) {
+    const name = cleanText(raw.name, `Участник ${String(index + 1).padStart(2, '0')}`);
+    return {
+        id: slugify(cleanText(raw.id, name)),
+        name,
+        role: cleanText(raw.role, 'Роль'),
+        avatarUrl: cleanText(raw.avatarUrl, ''),
+        description: cleanText(raw.description, ''),
+        sortOrder: toNumber(raw.sortOrder, index + 1),
+    };
+}
+
+/**
+ * @typedef {Object} SocialsData
+ * @property {string} youtube
+ * @property {string} discord
+ * @property {string} telegram
+ */
+
+/** @param {unknown} raw @returns {SocialsData} */
+function normalizeSocials(raw) {
+    const src = /** @type {Record<string, unknown>} */ (raw || {});
+    return {
+        youtube: String(src.youtube || '').trim(),
+        discord: String(src.discord || '').trim(),
+        telegram: String(src.telegram || '').trim(),
+    };
+}
+
+/**
+ * @typedef {Object} SiteData
+ * @property {Product[]}    products
+ * @property {TeamMember[]} team
+ * @property {SocialsData}  socials
+ */
+
+/**
+ * Normalise an entire site-data payload.
+ * Guarantees every field has a sensible default.
+ * @param {Record<string, unknown>} data
+ * @returns {SiteData}
+ */
+export function normalizeData(data = {}) {
+    const rawProducts = Array.isArray(data.products) && data.products.length ? data.products : [];
+    const rawTeam = Array.isArray(data.team) ? data.team : [];
+
+    return {
+        products: rawProducts.map((p, i) => normalizeProduct(p, i)),
+        team: rawTeam.map((m, i) => normalizeTeamMember(m, i)),
+        socials: normalizeSocials(data.socials),
+    };
+}
+
+/**
+ * Get badge metadata for a release flag.
+ * @param {string} flag
+ * @returns {{ label: string; className: string } | null}
+ */
+export function getFlagMeta(flag) {
+    return FLAG_META[/** @type {keyof typeof FLAG_META} */ (flag)] ?? null;
+}

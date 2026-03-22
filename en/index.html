@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+    <!-- ─── Encoding & Viewport ────────────────────────────── -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ─── Primary Meta ───────────────────────────────────── -->
+    <title>Aleph Studio</title>
+    <meta name="description" content="Aleph Studio — mods, games, DLC and small digital releases with open source code, clear installation and quick access to the latest version.">
+    <meta name="theme-color" content="#080606">
+    <meta name="color-scheme" content="dark">
+    <meta name="author" content="WeTTeA">
+
+    <!-- ─── Open Graph ─────────────────────────────────────── -->
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       content="Aleph Studio">
+    <meta property="og:description" content="Mods, games, DLC — open source, clear installation, quick access.">
+    <meta property="og:locale"      content="en_US">
+    <meta property="og:site_name"   content="Aleph Studio">
+
+    <!-- ─── Twitter Card ───────────────────────────────────── -->
+    <meta name="twitter:card"  content="summary">
+    <meta name="twitter:title" content="Aleph Studio">
+
+    <!-- ─── Favicons ───────────────────────────────────────── -->
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+
+    <!-- ─── Fonts (swap = no FOIT) ─────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&family=JetBrains+Mono:wght@400&family=Unbounded:wght@200;400;700&display=swap">
+
+    <!-- ─── Stylesheet ─────────────────────────────────────── -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+
+    <!-- ─── Locale Marker ──────────────────────────────────── -->
+    <script>window.__ALEPH_LOCALE__ = 'en';</script>
+</head>
+<body>
+
+    <!-- ─ Skip-to-content (a11y) ───────────────────────────── -->
+    <a id="skipLink" class="skip-link" href="#main">
+        Skip to main content
+    </a>
+
+    <!-- ═══════════════════════════════════════════════════════
+         § NAVIGATION
+         ═══════════════════════════════════════════════════════ -->
+    <nav class="nav" role="navigation" aria-label="Main navigation">
+
+        <!-- Logo ────────────────────────────────────────────── -->
+        <a id="logoLink" class="nav-logo" href="#" aria-label="Aleph Studio — back to top">
+            <span class="logo-sq" aria-hidden="true"></span>
+            <span class="logo-text">Aleph Studio</span>
+        </a>
+
+        <!-- Desktop links ───────────────────────────────────── -->
+        <div class="nav-links" role="list">
+            <a id="navLinkProducts"  class="nav__link" href="#products"  role="listitem">Products</a>
+            <a id="navLinkManifesto" class="nav__link" href="#manifesto" role="listitem">Principle</a>
+            <a id="navLinkTeam"      class="nav__link" href="#team"      role="listitem">Team</a>
+        </div>
+
+        <!-- Right group ─────────────────────────────────────── -->
+        <div class="nav-right">
+            <a class="nav-badge" href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">
+                GitHub ↗
+            </a>
+
+            <!-- Locale switcher ─────────────────────────────── -->
+            <div id="localeSwitcher" class="locale-switcher">
+                <button
+                    id="localeSwitcherTrigger"
+                    class="locale-switcher__trigger"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-label="Language switcher"
+                >
+                    <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                    <span id="localeSwitcherLabel">EN</span>
+                    <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+                        <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div
+                    id="localeSwitcherMenu"
+                    class="locale-switcher__menu"
+                    role="listbox"
+                    aria-label="Choose language"
+                    hidden
+                ></div>
+            </div>
+        </div>
+
+        <!-- Mobile toggle (CSS-only via :checked) ───────────── -->
+        <input id="nav-toggle" class="visually-hidden" type="checkbox" aria-label="Open menu">
+    </nav>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § HERO
+         ═══════════════════════════════════════════════════════ -->
+    <section class="hero" id="main" aria-labelledby="heroTitle">
+
+        <!-- Decorative background square -->
+        <div class="hero-bg-sq" aria-hidden="true"></div>
+
+        <span class="hero-tag" aria-hidden="true">Game Development</span>
+        <h1 id="heroTitle" class="hero-title">Aleph<span>Studio</span></h1>
+
+        <p id="heroIntro" class="hero-sub">
+            Open source game projects. Mods, games, DLC — everything we make, you can study, modify and run yourself.
+        </p>
+
+        <div class="hero-actions">
+            <a id="heroCta1" class="btn-primary" href="#products">See products</a>
+            <a id="heroCta2" class="btn-ghost"   href="#manifesto">Our principle</a>
+        </div>
+    </section>
+
+
+    <!-- Social links (below hero) ──────────────────────────── -->
+    <div class="social-hub" style="padding: 0 var(--page-gutter); margin-top: calc(-1 * var(--space-10));" id="featuredSocialLinks" aria-label="Social networks"></div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § MARQUEE
+         ═══════════════════════════════════════════════════════ -->
+    <div class="marquee-wrap" aria-hidden="true">
+        <div class="marquee-track">
+            <span class="marquee-item">Open Source</span>
+            <span class="marquee-item">Mods</span>
+            <span class="marquee-item">Games</span>
+            <span class="marquee-item">DLC</span>
+            <span class="marquee-item">Free Access</span>
+            <span class="marquee-item">GPL License</span>
+            <span class="marquee-item">Open Source</span>
+            <span class="marquee-item">Mods</span>
+            <span class="marquee-item">Games</span>
+            <span class="marquee-item">DLC</span>
+            <span class="marquee-item">Free Access</span>
+            <span class="marquee-item">GPL License</span>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § APPROACH / PRINCIPLE
+         ═══════════════════════════════════════════════════════ -->
+    <section class="reveal" aria-labelledby="approachTitle">
+        <div class="principle">
+            <div class="principle-visual" aria-hidden="true">
+                <div class="p-sq-outer">
+                    <div class="p-sq-inner"></div>
+                    <div class="p-sq-center"></div>
+                </div>
+                <span class="p-label">Structure</span>
+            </div>
+            <div class="principle-text">
+                <span class="section-label">Approach</span>
+                <h2 id="approachTitle" class="section-title">How we work</h2>
+                <p id="approachLead" class="principle-body">
+                    Aleph Studio operates on the premise that users should <strong>understand exactly what is running on their machine</strong>. That's why we publish code under the GPL licence — you can study it, extend it, use it in your own projects.<br><br>This isn't altruism. It's a <strong>quality standard</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § PRODUCTS (Featured)
+         ═══════════════════════════════════════════════════════ -->
+    <section id="products" class="reveal" aria-labelledby="productsTitle">
+        <span class="section-label">Releases</span>
+        <h2 id="productsTitle" class="section-title">Main releases</h2>
+        <div id="featured-products" class="products-grid" role="list">
+            <!-- JS: rendered by renderer.js -->
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § CATALOG (Archive)
+         ═══════════════════════════════════════════════════════ -->
+    <section class="reveal" aria-labelledby="catalogTitle">
+        <h3 id="catalogTitle" class="section-title" style="font-size: clamp(18px, 2.5vw, 28px);">Other products and upcoming releases</h3>
+        <p  id="catalogDesc" style="color: var(--color-text-muted); font-size: 14px; margin-top: var(--space-2);">Dates and timelines are preliminary.</p>
+        <div id="archive-products" class="catalog-grid" role="list">
+            <!-- JS: rendered by renderer.js -->
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § MANIFESTO
+         ═══════════════════════════════════════════════════════ -->
+    <section id="manifesto" class="manifesto reveal" aria-labelledby="manifestoHeading">
+        <div class="manifesto-inner">
+            <span class="section-label">Manifesto</span>
+            <h2 id="manifestoHeading" class="section-title">What matters</h2>
+            <p id="manifestoText" class="manifesto-text">
+                Open source is not a discount on quality.<br>It's <em>respect</em> for the person running it.
+            </p>
+
+            <div class="manifesto-items">
+                <div class="manifesto-item">
+                    <span class="m-num">01</span>
+                    <h3 id="case1Title" class="m-title">Open code</h3>
+                    <p  id="case1Text"  class="m-body">The repository is public, the structure isn't hidden behind a closed build.</p>
+                </div>
+                <div class="manifesto-item">
+                    <span class="m-num">02</span>
+                    <h3 id="case2Title" class="m-title">Honest status</h3>
+                    <p  id="case2Text"  class="m-body">Alpha is alpha. Beta is beta. No marketing words instead of truth.</p>
+                </div>
+                <div class="manifesto-item">
+                    <span class="m-num">03</span>
+                    <h3 id="case3Title" class="m-title">Direct access</h3>
+                    <p  id="case3Text"  class="m-body">If the file is ready — download it right away. No extra steps or opaque installers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § TEAM
+         ═══════════════════════════════════════════════════════ -->
+    <section id="team" class="reveal" aria-labelledby="teamTitle">
+        <span class="section-label">Team</span>
+        <h2 id="teamTitle" class="section-title">The people behind the project</h2>
+        <p  id="teamIntro" style="color: var(--color-text-muted); font-size: 15px; margin-top: var(--space-2); max-width: 520px;">
+            Members who lead development, maintain releases and keep the public side of the project in order.
+        </p>
+        <div id="teamShowcase" class="team-grid">
+            <!-- JS: rendered by renderer.js -->
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § FOOTER
+         ═══════════════════════════════════════════════════════ -->
+    <footer role="contentinfo">
+        <div class="footer-brand">
+            <div class="footer-logo" aria-hidden="true">
+                <span class="footer-sq"></span>
+                <span class="footer-name">Aleph Studio</span>
+            </div>
+            <p id="footerDesc" class="footer-desc">A subsidiary project of WeTTeA. Open source game development.</p>
+            <div id="footerSocialLinks" class="social-hub" aria-label="Social networks"></div>
+        </div>
+
+        <div class="footer-links">
+            <h4 id="footerNavHeading">Navigation</h4>
+            <ul>
+                <li><a class="nav__link" href="#products">Products</a></li>
+                <li><a class="nav__link" href="#manifesto">Principle</a></li>
+                <li><a class="nav__link" href="#team">Team</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links">
+            <h4 id="footerWetteaHeading">WeTTeA</h4>
+            <ul>
+                <li><a href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+
+        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed</p>
+    </footer>
+
+
+    <!-- ─ Toast (a11y live region) ─────────────────────────── -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+
+    <!-- ─ Application ──────────────────────────────────────── -->
+    <script type="module" src="../src/app.js"></script>
+</body>
+</html>

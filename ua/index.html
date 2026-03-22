@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="uk" dir="ltr">
+<head>
+    <!-- ─── Encoding & Viewport ────────────────────────────── -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- ─── Primary Meta ───────────────────────────────────── -->
+    <title>Aleph Studio</title>
+    <meta name="description" content="Aleph Studio — моди, ігри, DLC та невеликі цифрові релізи з відкритим вихідним кодом, зрозумілою установкою та швидким доступом до актуальної версії.">
+    <meta name="theme-color" content="#080606">
+    <meta name="color-scheme" content="dark">
+    <meta name="author" content="WeTTeA">
+
+    <!-- ─── Open Graph ─────────────────────────────────────── -->
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       content="Aleph Studio">
+    <meta property="og:description" content="Моди, ігри, DLC — відкритий вихідний код, зрозуміла установка, швидкий доступ.">
+    <meta property="og:locale"      content="uk_UA">
+    <meta property="og:site_name"   content="Aleph Studio">
+
+    <!-- ─── Twitter Card ───────────────────────────────────── -->
+    <meta name="twitter:card"  content="summary">
+    <meta name="twitter:title" content="Aleph Studio">
+
+    <!-- ─── Favicons ───────────────────────────────────────── -->
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+
+    <!-- ─── Fonts (swap = no FOIT) ─────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&family=JetBrains+Mono:wght@400&family=Unbounded:wght@200;400;700&display=swap">
+
+    <!-- ─── Stylesheet ─────────────────────────────────────── -->
+    <link rel="stylesheet" href="../assets/css/main.css">
+
+    <!-- ─── Locale Marker ──────────────────────────────────── -->
+    <script>window.__ALEPH_LOCALE__ = 'ua';</script>
+</head>
+<body>
+
+    <!-- ─ Skip-to-content (a11y) ───────────────────────────── -->
+    <a id="skipLink" class="skip-link" href="#main">
+        Перейти до основного вмісту
+    </a>
+
+    <!-- ═══════════════════════════════════════════════════════
+         § NAVIGATION
+         ═══════════════════════════════════════════════════════ -->
+    <nav class="nav" role="navigation" aria-label="Основна навігація">
+
+        <!-- Logo ────────────────────────────────────────────── -->
+        <a id="logoLink" class="nav-logo" href="#" aria-label="Aleph Studio — нагору">
+            <span class="logo-sq" aria-hidden="true"></span>
+            <span class="logo-text">Aleph Studio</span>
+        </a>
+
+        <!-- Desktop links ───────────────────────────────────── -->
+        <div class="nav-links" role="list">
+            <a id="navLinkProducts"  class="nav__link" href="#products"  role="listitem">Продукти</a>
+            <a id="navLinkManifesto" class="nav__link" href="#manifesto" role="listitem">Принцип</a>
+            <a id="navLinkTeam"      class="nav__link" href="#team"      role="listitem">Команда</a>
+        </div>
+
+        <!-- Right group ─────────────────────────────────────── -->
+        <div class="nav-right">
+            <a class="nav-badge" href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">
+                GitHub ↗
+            </a>
+
+            <!-- Locale switcher ─────────────────────────────── -->
+            <div id="localeSwitcher" class="locale-switcher">
+                <button
+                    id="localeSwitcherTrigger"
+                    class="locale-switcher__trigger"
+                    type="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-label="Перемикач мови"
+                >
+                    <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                    <span id="localeSwitcherLabel">UA</span>
+                    <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+                        <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div
+                    id="localeSwitcherMenu"
+                    class="locale-switcher__menu"
+                    role="listbox"
+                    aria-label="Оберіть мову"
+                    hidden
+                ></div>
+            </div>
+        </div>
+
+        <!-- Mobile toggle (CSS-only via :checked) ───────────── -->
+        <input id="nav-toggle" class="visually-hidden" type="checkbox" aria-label="Відкрити меню">
+    </nav>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § HERO
+         ═══════════════════════════════════════════════════════ -->
+    <section class="hero" id="main" aria-labelledby="heroTitle">
+
+        <!-- Decorative background square -->
+        <div class="hero-bg-sq" aria-hidden="true"></div>
+
+        <span class="hero-tag" aria-hidden="true">Game Development</span>
+        <h1 id="heroTitle" class="hero-title">Aleph<span>Studio</span></h1>
+
+        <p id="heroIntro" class="hero-sub">
+            Ігрові проєкти з відкритим вихідним кодом. Моди, ігри, DLC — все що ми робимо, ти можеш вивчити, змінити і запустити сам.
+        </p>
+
+        <div class="hero-actions">
+            <a id="heroCta1" class="btn-primary" href="#products">Переглянути продукти</a>
+            <a id="heroCta2" class="btn-ghost"   href="#manifesto">Наш принцип</a>
+        </div>
+    </section>
+
+
+    <!-- Social links (below hero) ──────────────────────────── -->
+    <div class="social-hub" style="padding: 0 var(--page-gutter); margin-top: calc(-1 * var(--space-10));" id="featuredSocialLinks" aria-label="Соціальні мережі"></div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § MARQUEE
+         ═══════════════════════════════════════════════════════ -->
+    <div class="marquee-wrap" aria-hidden="true">
+        <div class="marquee-track">
+            <span class="marquee-item">Open Source</span>
+            <span class="marquee-item">Mods</span>
+            <span class="marquee-item">Games</span>
+            <span class="marquee-item">DLC</span>
+            <span class="marquee-item">Free Access</span>
+            <span class="marquee-item">GPL License</span>
+            <span class="marquee-item">Open Source</span>
+            <span class="marquee-item">Mods</span>
+            <span class="marquee-item">Games</span>
+            <span class="marquee-item">DLC</span>
+            <span class="marquee-item">Free Access</span>
+            <span class="marquee-item">GPL License</span>
+        </div>
+    </div>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § APPROACH / PRINCIPLE
+         ═══════════════════════════════════════════════════════ -->
+    <section class="reveal" aria-labelledby="approachTitle">
+        <div class="principle">
+            <div class="principle-visual" aria-hidden="true">
+                <div class="p-sq-outer">
+                    <div class="p-sq-inner"></div>
+                    <div class="p-sq-center"></div>
+                </div>
+                <span class="p-label">Structure</span>
+            </div>
+            <div class="principle-text">
+                <span class="section-label">Підхід</span>
+                <h2 id="approachTitle" class="section-title">Як ми працюємо</h2>
+                <p id="approachLead" class="principle-body">
+                    Aleph Studio виходить з того, що користувач повинен <strong>розуміти що саме працює на його машині</strong>. Тому ми публікуємо код під ліцензією GPL — його можна вивчити, розвинути, використати у власних проєктах.<br><br>Це не альтруїзм. Це <strong>стандарт якості</strong>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § PRODUCTS (Featured)
+         ═══════════════════════════════════════════════════════ -->
+    <section id="products" class="reveal" aria-labelledby="productsTitle">
+        <span class="section-label">Релізи</span>
+        <h2 id="productsTitle" class="section-title">Головні релізи</h2>
+        <div id="featured-products" class="products-grid" role="list">
+            <!-- JS: rendered by renderer.js -->
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § CATALOG (Archive)
+         ═══════════════════════════════════════════════════════ -->
+    <section class="reveal" aria-labelledby="catalogTitle">
+        <h3 id="catalogTitle" class="section-title" style="font-size: clamp(18px, 2.5vw, 28px);">Інші продукти та майбутні релізи</h3>
+        <p  id="catalogDesc" style="color: var(--color-text-muted); font-size: 14px; margin-top: var(--space-2);">Терміни та дати є попередніми.</p>
+        <div id="archive-products" class="catalog-grid" role="list">
+            <!-- JS: rendered by renderer.js -->
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § MANIFESTO
+         ═══════════════════════════════════════════════════════ -->
+    <section id="manifesto" class="manifesto reveal" aria-labelledby="manifestoHeading">
+        <div class="manifesto-inner">
+            <span class="section-label">Маніфест</span>
+            <h2 id="manifestoHeading" class="section-title">Що важливо</h2>
+            <p id="manifestoText" class="manifesto-text">
+                Відкритий код — це не знижка на якість.<br>Це <em>повага</em> до того, хто запускає.
+            </p>
+
+            <div class="manifesto-items">
+                <div class="manifesto-item">
+                    <span class="m-num">01</span>
+                    <h3 id="case1Title" class="m-title">Відкритий код</h3>
+                    <p  id="case1Text"  class="m-body">Репозиторій публікується, структура не ховається за закритою збіркою.</p>
+                </div>
+                <div class="manifesto-item">
+                    <span class="m-num">02</span>
+                    <h3 id="case2Title" class="m-title">Чесний статус</h3>
+                    <p  id="case2Text"  class="m-body">Alpha це alpha. Beta це beta. Без маркетингових слів замість правди.</p>
+                </div>
+                <div class="manifesto-item">
+                    <span class="m-num">03</span>
+                    <h3 id="case3Title" class="m-title">Прямий доступ</h3>
+                    <p  id="case3Text"  class="m-body">Якщо файл готовий — скачай одразу. Без зайвих переходів і непрозорих інсталяторів.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § TEAM
+         ═══════════════════════════════════════════════════════ -->
+    <section id="team" class="reveal" aria-labelledby="teamTitle">
+        <span class="section-label">Команда</span>
+        <h2 id="teamTitle" class="section-title">Люди за проєктом</h2>
+        <p  id="teamIntro" style="color: var(--color-text-muted); font-size: 15px; margin-top: var(--space-2); max-width: 520px;">
+            Учасники, які ведуть розробку, підтримують релізи та тримають у порядку публічну частину проєкту.
+        </p>
+        <div id="teamShowcase" class="team-grid">
+            <!-- JS: rendered by renderer.js -->
+        </div>
+    </section>
+
+
+    <!-- ═══════════════════════════════════════════════════════
+         § FOOTER
+         ═══════════════════════════════════════════════════════ -->
+    <footer role="contentinfo">
+        <div class="footer-brand">
+            <div class="footer-logo" aria-hidden="true">
+                <span class="footer-sq"></span>
+                <span class="footer-name">Aleph Studio</span>
+            </div>
+            <p id="footerDesc" class="footer-desc">Дочірній проєкт WeTTeA. Ігрові розробки з відкритим вихідним кодом.</p>
+            <div id="footerSocialLinks" class="social-hub" aria-label="Соціальні мережі"></div>
+        </div>
+
+        <div class="footer-links">
+            <h4 id="footerNavHeading">Навігація</h4>
+            <ul>
+                <li><a class="nav__link" href="#products">Продукти</a></li>
+                <li><a class="nav__link" href="#manifesto">Принцип</a></li>
+                <li><a class="nav__link" href="#team">Команда</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links">
+            <h4 id="footerWetteaHeading">WeTTeA</h4>
+            <ul>
+                <li><a href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </div>
+
+        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed</p>
+    </footer>
+
+
+    <!-- ─ Toast (a11y live region) ─────────────────────────── -->
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+
+    <!-- ─ Application ──────────────────────────────────────── -->
+    <script type="module" src="../src/app.js"></script>
+</body>
+</html>

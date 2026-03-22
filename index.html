@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aleph Studio — Redirecting…</title>
+    <meta name="robots" content="noindex">
+
+    <!-- Instant redirect for JS-enabled browsers -->
+    <script>
+        (function () {
+            'use strict';
+
+            var supported = { ru: '/ru/', en: '/en/', ua: '/ua/' };
+            var fallback  = '/ru/';
+
+            /** Derive best locale from Accept-Language / navigator. */
+            function detect() {
+                var raw = (navigator.languages || [navigator.language || ''])
+                    .map(function (l) { return l.split('-')[0].toLowerCase(); });
+
+                for (var i = 0; i < raw.length; i++) {
+                    if (raw[i] === 'uk' || raw[i] === 'ua') return '/ua/';
+                    if (supported[raw[i]])                   return supported[raw[i]];
+                }
+                return fallback;
+            }
+
+            var dest = detect() + (location.search || '') + (location.hash || '');
+            location.replace(dest);
+        })();
+    </script>
+
+    <!-- Fallback for NoScript users -->
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/ru/">
+    </noscript>
+
+    <style>
+        body {
+            background: #080606;
+            color: #5a4a44;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        p { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; }
+        a { color: #8b1a2a; }
+    </style>
+</head>
+<body>
+    <p>Redirecting… <a href="/ru/">RU</a> · <a href="/en/">EN</a> · <a href="/ua/">UA</a></p>
+</body>
+</html>
