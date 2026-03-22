@@ -3,6 +3,18 @@
    Clean, dark, ruby-accented. No gradients, no noise.
    ============================================================ */
 
+:root {
+  --admin-bg: #141110;
+  --admin-bg-elevated: #1a1615;
+  --admin-bg-hover: #221c1a;
+  --admin-sidebar: #120f0e;
+  --admin-border: rgba(139,26,42,0.18);
+  --admin-border-strong: rgba(139,26,42,0.3);
+  --admin-text: #e3d7cf;
+  --admin-text-muted: #8d7d76;
+  --admin-text-soft: #6d5c56;
+}
+
 /* ── Overlay ───────────────────────────────────────────────── */
 .editor-overlay {
   position: fixed;
@@ -964,6 +976,105 @@
   background: rgba(255,255,255,0.012);
   border-color: rgba(139,26,42,0.07);
   margin-bottom: 2px;
+}
+
+/* ── Lightened admin polish ───────────────────────────────── */
+.editor-backdrop {
+  background: rgba(0,0,0,0.72);
+}
+
+.editor-panel,
+.dash-main {
+  background: var(--admin-bg);
+}
+
+.dash-sidebar {
+  background: var(--admin-sidebar);
+  border-right-color: var(--admin-border);
+}
+
+.dash-header,
+.dash-toolbar,
+.dash-editor,
+.dash-team-editor,
+.dash-team-editor-empty,
+.dash-form-card,
+.dash-sync-wrap > .dash-form-card,
+.dash-form-card > .dash-form-section > .dash-form-card,
+.dash-form-card .dash-sync-wrap > .dash-form-card,
+.dash-home-metric,
+.dash-product-card,
+.dash-product-item,
+.dash-team-card,
+.toast {
+  background: var(--admin-bg-elevated);
+}
+
+.dash-product-card:hover,
+.dash-product-item:hover,
+.dash-team-card:hover {
+  background: var(--admin-bg-hover);
+}
+
+.dash-brand,
+.dash-title-wrap h1,
+.dash-chip strong,
+.dash-product-info h3,
+.dash-product-name,
+.dash-editor-header h2,
+.dash-form-section h4,
+.dash-home-metric strong,
+.dash-team-card-name,
+.dash-team-editor h2,
+.toast[data-kind="info"] {
+  color: var(--admin-text);
+}
+
+.dash-nav-link,
+.dash-title-wrap p,
+.dash-btn,
+.dash-chip,
+.dash-search,
+.dash-product-info p,
+.dash-product-status,
+.dash-form-section p,
+.dash-home-metric span,
+.dash-editor-footer .note,
+.dash-sidebar-footer,
+.dash-help,
+.dash-team-card-role,
+.dash-team-card-bio,
+.dash-team-editor-empty {
+  color: var(--admin-text-muted);
+}
+
+.dash-sidebar-footer,
+.dash-search::placeholder {
+  color: var(--admin-text-soft);
+}
+
+.dash-btn,
+.dash-chip,
+.dash-search,
+.dash-header,
+.dash-toolbar,
+.dash-sidebar,
+.dash-product-card,
+.dash-product-item,
+.dash-team-card,
+.dash-editor,
+.dash-team-editor,
+.dash-form-card,
+.toast {
+  border-color: var(--admin-border);
+}
+
+.dash-btn:hover,
+.dash-search:focus,
+.dash-team-card:focus-visible,
+.dash-product-card:hover,
+.dash-product-item:hover {
+  border-color: var(--admin-border-strong);
 }
 
 /* ── Responsive ────────────────────────────────────────────── */

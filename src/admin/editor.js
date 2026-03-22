@@ -1110,6 +1110,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }, editorSelectedIndex);
         nextProduct = syncPendingUploadForProduct(current, nextProduct, editorFieldDownloadEl?.value.trim() || '');
         editorData.products[editorSelectedIndex] = nextProduct;
+
+        if (nextProduct.autoRouteRedirect) {
+            editorData.products = editorData.products.map((product, index) => {
+                if (index === editorSelectedIndex) return product;
+                return { ...product, autoRouteRedirect: false };
+            });
+        }
+
         renderProductUploadMeta();
         syncDraftControls();
         return true;
@@ -1285,7 +1293,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             const githubTokenEl = document.getElementById('githubToken');
             if (githubTokenEl) githubTokenEl.value = '';
             refreshAdminAfterSave();
-            emitToast(locale === 'en' ? 'Content and files were pushed to GitHub.' : locale === 'ua' ? 'Дані та файли відправлено в GitHub.' : 'Данные и файлы отправлены в GitHub. После публикации обновится контент сайта.', 'success');
+            emitToast(
+                locale === 'en'
+                    ? 'Saved for everyone. Content and files were pushed to GitHub.'
+                    : locale === 'ua'
+                        ? 'Збережено для всіх. Дані та файли відправлено в GitHub.'
+                        : 'Сохранено для всех. Данные и файлы отправлены в GitHub, сайт обновится после публикации GitHub Pages.',
+                'success',
+            );
         } catch (error) {
             syncDraftControls();
             emitToast(error?.message || (locale === 'en' ? 'Could not save to GitHub.' : locale === 'ua' ? 'Не вдалося зберегти в GitHub.' : 'Не удалось сохранить в GitHub.'), 'error');

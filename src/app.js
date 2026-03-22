@@ -12,7 +12,7 @@ import { createEditorController }   from './admin/editor.js';
 import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
-import { initSharedThemeToggle, initSmoothRouteTransitions } from './core/site-shell.js';
+import { applyGlobalRouteRedirect, initSharedThemeToggle, initSmoothRouteTransitions } from './core/site-shell.js';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -31,6 +31,9 @@ function boot() {
 
     /* 3 — Stamp static text copies (nav, hero, manifesto, footer) -- */
     lc.applyStaticCopy();
+
+    /* 3.1 — Global redirect to enabled product route --------------- */
+    if (applyGlobalRouteRedirect()) return;
 
     /* 4 — Mount language switcher ---------------------------------- */
     lc.mountLanguageSwitcher();
