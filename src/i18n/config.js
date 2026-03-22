@@ -121,10 +121,14 @@ export function getLocaleOptions(
     search = window.location.search || '',
     hash = window.location.hash || '',
 ) {
+    const normalizedPath = String(pathname || '/').replace(/\\/g, '/');
+    const routeSuffix = normalizedPath.replace(/^\/(?:ru|en|ua|uk)(?=\/|$)/i, '') || '/';
+    const cleanSuffix = routeSuffix.startsWith('/') ? routeSuffix : `/${routeSuffix}`;
+
     return LOCALE_ORDER.map((locale) => ({
         ...getLocaleMeta(locale),
         locale,
-        href: `${getLocalePath(locale)}${search}${hash}`,
+        href: `${getLocalePath(locale).replace(/\/$/, '')}${cleanSuffix}${search}${hash}`,
         flagSvg: FLAG_SVG[locale],
     }));
 }

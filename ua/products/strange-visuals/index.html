@@ -4,26 +4,45 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Strange Visuals — Minecraft Visual Mod</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>window.__ALEPH_LOCALE__ = 'ua';</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
 </head>
 <body>
 
-<nav class="site-nav">
-  <a class="site-nav-logo" href="../../" aria-label="Aleph Studio — на головну">
+<nav class="nav" role="navigation" aria-label="Основна навігація">
+  <a class="nav-logo" href="../../" aria-label="Aleph Studio — на головну">
     <span class="logo-sq" aria-hidden="true"></span>
     <span class="logo-text">Aleph Studio</span>
   </a>
-  <div class="site-nav-links">
-    <a class="site-nav__link" href="../../#products">Продукти</a>
-    <a class="site-nav__link" href="../../#manifesto">Принцип</a>
-    <a class="site-nav__link" href="../../#team">Команда</a>
+  <div class="nav-links" role="list">
+    <a class="nav__link" href="../../#products" role="listitem">Продукти</a>
+    <a class="nav__link" href="../../#manifesto" role="listitem">Принцип</a>
+    <a class="nav__link" href="../../#team" role="listitem">Команда</a>
   </div>
-  <div class="site-nav-right">
+  <div class="nav-right">
     <button class="theme-btn" id="themeBtn">
       <span class="material-icons" id="themeIco">light_mode</span>
     </button>
+
+    <div id="localeSwitcher" class="locale-switcher">
+      <button
+        id="localeSwitcherTrigger"
+        class="locale-switcher__trigger"
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-label="Вибір мови"
+      >
+        <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel">UA</span>
+        <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+          <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        </svg>
+      </button>
+      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="listbox" aria-label="Змінити мову" hidden></div>
+    </div>
   </div>
 </nav>
 
@@ -32,15 +51,11 @@
   <div class="hero-left-shade"></div>
 
   <div class="hero-store-top">
-    <a href="#" class="hero-store-back" aria-label="Назад">
+    <a href="../../" class="hero-store-back" aria-label="Назад на головну сторінку Aleph Studio">
       <span class="material-icons">arrow_back</span>
+      <span class="hero-store-back-label">Strange Visuals</span>
     </a>
-    <div class="hero-store-title">Strange Visuals</div>
-    <div class="hero-store-actions">
-      <a href="#" class="hero-store-action" aria-label="Більше">
-        <span class="material-icons">more_vert</span>
-      </a>
-    </div>
+    <div class="hero-store-actions"></div>
   </div>
 
   <div class="hero-store-content">
@@ -71,7 +86,7 @@
       <div class="hero-info" id="heroInfo">
         <h1 class="hero-app-name">Strange <em>Visuals</em></h1>
 
-        <a href="#" class="hero-dev">
+        <a href="../../" class="hero-dev">
           Aleph Studio
           <span class="hero-verified">
             <span class="material-icons">check</span>
@@ -83,28 +98,26 @@
         <div class="hero-meta">
           <div class="hero-meta-item">
             <div class="hero-meta-value">4.9 <span class="hero-star">★</span></div>
-            <div class="hero-meta-label">1 284 відгуки</div>
+            <div class="hero-meta-label">рейтинг</div>
           </div>
           <div class="hero-meta-item">
-            <div class="hero-meta-value">30+</div>
-            <div class="hero-meta-label">Модулів</div>
+            <div class="hero-meta-value">1.5.0</div>
+            <div class="hero-meta-label">версія</div>
           </div>
           <div class="hero-meta-item">
-            <div class="hero-meta-value">1.21.8</div>
-            <div class="hero-meta-label">Версія MC</div>
+            <div class="hero-meta-value">Fabric</div>
+            <div class="hero-meta-label">Завантажувач</div>
           </div>
           <div class="hero-meta-item">
-            <div class="hero-meta-value">0.0.0</div>
-            <div class="hero-meta-label">Версія мода</div>
+            <div class="hero-meta-value">GPL</div>
+            <div class="hero-meta-label">Ліцензія</div>
           </div>
         </div>
 
         <div class="hero-actions">
-          <button class="hero-install-btn" id="installBtn" data-installed="false">ЗАВАНТАЖИТИ</button>
-          <button class="hero-side-btn" title="Додати до обраного" aria-label="Додати до обраного">
-            <span class="material-icons">bookmark_border</span>
-          </button>
-          <button class="hero-side-btn" title="Поділитися" aria-label="Поділитися">
+          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar" download>ЗАВАНТАЖИТИ</a>
+          <a class="hero-source-btn" title="Відкрити вихідний код" aria-label="Відкрити вихідний код" href="https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy" target="_blank" rel="noopener noreferrer"><span class="material-icons" aria-hidden="true">code</span><span>Вихідний код</span></a>
+          <button class="hero-side-btn" id="shareBtn" title="Поділитися" aria-label="Поділитися">
             <span class="material-icons">share</span>
           </button>
         </div>
@@ -340,6 +353,6 @@
   <span class="footer-note">Minecraft 1.21.8 · Візуальні та дозволені функції · Безкоштовно</span>
 </footer>
 
-<script src="../../../src/products/strange-visuals.js"></script>
+<script type="module" src="../../../src/products/strange-visuals.js"></script>
 </body>
 </html>

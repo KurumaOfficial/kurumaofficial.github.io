@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ru" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aleph Studio — Admin</title>
+    <meta name="description" content="Aleph Studio admin route.">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="theme-color" content="#080606">
+    <meta name="color-scheme" content="dark">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&family=JetBrains+Mono:wght@400&family=Unbounded:wght@200;400;700&display=swap">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <script>window.__ALEPH_LOCALE__ = 'ru';</script>
+    <script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
+</head>
+<body data-admin-page="true" data-admin-home="../ru/">
+    <div id="editorOverlay" class="editor-overlay" aria-hidden="true">
+        <div class="editor-backdrop" data-close-editor></div>
+        <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
+            <div class="dash-layout">
+                <aside class="dash-sidebar">
+                    <div class="dash-brand">Aleph <span>Studio</span></div>
+
+                    <nav class="dash-nav" aria-label="Разделы админки">
+                        <a href="#" class="dash-nav-link active" data-admin-view="home">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                            </svg>
+                            Главная
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="products">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                            </svg>
+                            Продукты
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="misc">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            Прочее
+                        </a>
+                    </nav>
+
+                    <div class="dash-sidebar-footer">
+                        Панель управления сайтом.<br>
+                        Aleph Studio © 2026<br>
+                        Отдельный маршрут: <span class="mono">/admin/</span><br>
+                        Возврат — по кнопке «Закрыть»
+                    </div>
+                </aside>
+
+                <main class="dash-main">
+                    <header class="dash-header">
+                        <div class="dash-title-wrap">
+                            <h1 id="editorAdminTitle">Главная</h1>
+                            <p id="editorAdminSubtitle">Управление черновиком, публикацией и быстрые переходы.</p>
+                        </div>
+                        <div class="dash-actions">
+                            <div id="draftStateChip" class="dash-chip">Черновик: без изменений</div>
+                            <button id="applyDraftBtn" type="button" class="dash-btn dash-primary">Применить</button>
+                            <button id="discardDraftBtn" type="button" class="dash-btn">Отменить</button>
+                            <button id="exportJsonBtn" type="button" class="dash-btn">Экспорт JSON</button>
+                            <button id="importJsonBtn" type="button" class="dash-btn">Импорт JSON</button>
+                            <button id="addProductBtn" type="button" class="dash-btn dash-primary">+ Продукт</button>
+                            <button id="addTeamMemberBtn" type="button" class="dash-btn dash-primary" hidden>+ Участник</button>
+                            <button type="button" class="dash-btn" data-close-editor>Закрыть</button>
+                        </div>
+                    </header>
+
+                    <div id="productsToolbar" class="dash-toolbar">
+                        <div class="dash-toolbar-group">
+                            <div class="dash-chip"><strong>Всего:</strong> <span id="editorTotalCount">0</span></div>
+                            <div class="dash-chip"><strong>На витрине:</strong> <span id="editorShowcaseCount">0</span></div>
+                        </div>
+                        <div class="dash-toolbar-group">
+                            <input id="editorSearchInput" class="dash-search" type="text" placeholder="Поиск…">
+                        </div>
+                    </div>
+
+                    <section class="dash-content">
+                        <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
+
+                        <div id="homeView" class="dash-view active">
+                            <div class="dash-misc-grid">
+                                <div class="dash-misc-column">
+                                    <div class="dash-form-card dash-home-status-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Черновик</h4>
+                                                <p>Проверь статус, примени изменения или опубликуй для всех.</p>
+                                            </div>
+                                        </div>
+                                        <div id="homeDraftSummary" class="dash-home-status"></div>
+                                        <div class="dash-sync-actions">
+                                            <button id="homeApplyDraftBtn" type="button" class="dash-btn dash-primary">Применить черновик</button>
+                                            <button id="homeDiscardDraftBtn" type="button" class="dash-btn">Откатить черновик</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Публикация</h4>
+                                                <p>Сохранить локально или опубликовать для всех.</p>
+                                            </div>
+                                        </div>
+                                        <div class="dash-sync-wrap">
+                                            <div class="dash-form-card">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-sync-actions">
+                                                        <button id="saveLocalBtn" type="button" class="dash-btn">Сохранить локально</button>
+                                                        <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">Сохранить для всех</button>
+                                                        <button id="clearLocalBtn" type="button" class="dash-btn">Очистить local</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-form-card">
+                                                <div class="dash-form-section">
+                                                    <h4>GitHub sync</h4>
+                                                    <div class="dash-github-grid">
+                                                        <div class="dash-field dash-c12">
+                                                            <label for="githubToken">GitHub token</label>
+                                                            <input id="githubToken" type="password" placeholder="Токен не сохраняется">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dash-misc-column">
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div><h4>Сводка</h4></div>
+                                        </div>
+                                        <div class="dash-home-metrics">
+                                            <article class="dash-home-metric"><span>Продукты</span><strong id="homeProductsCount">0</strong></article>
+                                            <article class="dash-home-metric"><span>На витрине</span><strong id="homeFeaturedCount">0</strong></article>
+                                            <article class="dash-home-metric"><span>Команда</span><strong id="homeTeamCount">0</strong></article>
+                                            <article class="dash-home-metric"><span>Соц. ссылки</span><strong id="homeSocialCount">0</strong></article>
+                                            <article class="dash-home-metric"><span>Файлы в очереди</span><strong id="homeUploadsCount">0</strong></article>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Как обновить сайт</h4>
+                                            </div>
+                                        </div>
+                                        <ol class="dash-home-steps">
+                                            <li>Открой «Продукты» или «Прочее» и внеси правки.</li>
+                                            <li>Нажми «Применить черновик», чтобы увидеть preview.</li>
+                                            <li>Для себя — «Сохранить локально».</li>
+                                            <li>Для всех — вставь GitHub token и «Сохранить для всех».</li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="productsView" class="dash-view">
+                            <div class="dash-product-grid" id="editorProductGrid"></div>
+
+                            <div class="dash-editor" id="editor">
+                                <div class="dash-editor-header">
+                                    <h2 id="editorTitle">Редактирование</h2>
+                                    <button id="closeProductEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                                </div>
+
+                                <div class="dash-tab-bar">
+                                    <button type="button" class="dash-tab-btn active" data-tab="tab-main">Основное</button>
+                                    <button type="button" class="dash-tab-btn" data-tab="tab-content">Контент</button>
+                                    <button type="button" class="dash-tab-btn" data-tab="tab-publish">Публикация</button>
+                                </div>
+
+                                <div class="dash-tab-panel active" data-panel="tab-main">
+                                    <div class="dash-form-card">
+                                        <div class="dash-form-section">
+                                            <h4>Основные параметры</h4>
+                                            <div class="dash-fg">
+                                                <div class="dash-field dash-c4"><label>Название</label><input type="text" id="f-name"></div>
+                                                <div class="dash-field dash-c4"><label>ID / якорь</label><input type="text" id="f-slug"></div>
+                                                <div class="dash-field dash-c4"><label>Тег</label><input type="text" id="f-tag"></div>
+                                                <div class="dash-field dash-c3"><label>Версия</label><input type="text" id="f-version"></div>
+                                                <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="f-order"></div>
+                                                <div class="dash-field dash-c3">
+                                                    <label>Стадия</label>
+                                                    <select id="f-stage">
+                                                        <option value="">Без флага</option>
+                                                        <option value="alpha">Alpha</option>
+                                                        <option value="beta">Beta</option>
+                                                        <option value="release">Release</option>
+                                                    </select>
+                                                </div>
+                                                <div class="dash-field dash-c3">
+                                                    <label>Цвет карточки</label>
+                                                    <select id="f-tone">
+                                                        <option value="red">Красный</option>
+                                                        <option value="green">Зелёный</option>
+                                                    </select>
+                                                </div>
+                                                <div class="dash-field dash-c6"><label>Статус</label><input type="text" id="f-status"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dash-tab-panel" data-panel="tab-content">
+                                    <div class="dash-form-card">
+                                        <div class="dash-form-section">
+                                            <div class="dash-field dash-c12"><label>Краткое описание</label><textarea id="f-desc"></textarea></div>
+                                        </div>
+                                        <div class="dash-form-section">
+                                            <div class="dash-field dash-c12"><label>Инструкция (каждый пункт с новой строки)</label><textarea id="f-instructions"></textarea></div>
+                                        </div>
+                                        <div class="dash-form-section">
+                                            <div class="dash-field dash-c12"><label>Примечание</label><textarea id="f-note"></textarea></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dash-tab-panel" data-panel="tab-publish">
+                                    <div class="dash-form-card">
+                                        <div class="dash-form-section">
+                                            <h4>Публикация</h4>
+                                            <div class="dash-fg">
+                                                <div class="dash-field dash-c6">
+                                                    <label>Показ на витрине</label>
+                                                    <label class="dash-inline-check">
+                                                        <input type="checkbox" id="f-showcase">
+                                                        <span>Показывать на витрине</span>
+                                                    </label>
+                                                </div>
+                                                <div class="dash-field dash-c6"><label>Порядок на витрине</label><input type="number" id="f-showcase-order"></div>
+                                                <div class="dash-field dash-c6"><label>Ссылка на файл / download</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                                                <div class="dash-field dash-c6"><label>Исходный код / GitHub</label><input type="text" id="f-source"></div>
+                                                <div class="dash-field dash-c12">
+                                                    <label for="f-download-file">Файл для GitHub upload</label>
+                                                    <input type="file" id="f-download-file">
+                                                    <p id="f-download-file-meta" class="dash-help">Файл не выбран.</p>
+                                                    <div class="dash-sync-actions" style="margin-top:8px;">
+                                                        <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Убрать файл</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="dash-editor-footer">
+                                    <div class="note">Изменения копятся в черновике. «Применить» / «Отменить» работают для всех разделов.</div>
+                                    <div class="btns">
+                                        <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
+                                    </div>
+                                </div>
+
+                                <div class="dash-form-card dash-home-redirect">
+                                    <div class="dash-section-head">
+                                        <div>
+                                            <h4>Публикация — на Главной</h4>
+                                            <p>GitHub token и кнопки сохранения находятся на вкладке «Главная».</p>
+                                        </div>
+                                    </div>
+                                    <div class="dash-sync-actions">
+                                        <button type="button" class="dash-btn" data-admin-switch="home">Открыть Главную</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="miscView" class="dash-view">
+                            <div class="dash-misc-grid">
+                                <div class="dash-misc-column">
+                                    <div class="dash-form-card">
+                                        <div class="dash-form-section">
+                                            <div class="dash-section-head">
+                                                <div>
+                                                    <h4>Социальные ссылки</h4>
+                                                    <p>Отображаются под витриной продуктов и в футере.</p>
+                                                </div>
+                                            </div>
+                                            <div class="dash-github-grid">
+                                                <div class="dash-field dash-c12">
+                                                    <label for="socialYoutube">YouTube</label>
+                                                    <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                                                </div>
+                                                <div class="dash-field dash-c12">
+                                                    <label for="socialDiscord">Discord</label>
+                                                    <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                                                </div>
+                                                <div class="dash-field dash-c12">
+                                                    <label for="socialTelegram">Telegram</label>
+                                                    <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dash-form-section">
+                                            <p class="dash-help" style="margin-bottom:12px;">Превью кнопок:</p>
+                                            <div id="editorSocialPreview" class="dash-social-preview"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Команда</h4>
+                                                <p>При 5+ участниках блок превращается в бегущую строку.</p>
+                                            </div>
+                                            <div class="dash-chip"><strong>Карточек:</strong> <span id="teamMemberCount">0</span></div>
+                                        </div>
+                                        <div id="teamGrid" class="dash-team-grid"></div>
+                                    </div>
+                                </div>
+
+                                <div class="dash-misc-column">
+                                    <div id="teamEditorEmpty" class="dash-form-card dash-team-editor-empty">
+                                        Выбери карточку участника или нажми «+ Участник».
+                                    </div>
+
+                                    <div id="teamEditor" class="dash-team-editor" hidden>
+                                        <div class="dash-editor-header">
+                                            <h2 id="teamEditorTitle">Участник</h2>
+                                            <button id="closeTeamEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                                        </div>
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <h4>Данные участника</h4>
+                                                <div class="dash-fg">
+                                                    <div class="dash-field dash-c6"><label>Имя</label><input type="text" id="team-name"></div>
+                                                    <div class="dash-field dash-c6"><label>Роль</label><input type="text" id="team-role"></div>
+                                                    <div class="dash-field dash-c9"><label>Ссылка на аватар</label><input type="text" id="team-avatar"></div>
+                                                    <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="team-order"></div>
+                                                    <div class="dash-field dash-c12"><label>Описание</label><textarea id="team-bio"></textarea></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="dash-editor-footer">
+                                            <div class="note">Карточка меняет общий черновик.</div>
+                                            <div class="btns">
+                                                <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+    <script type="module" src="../src/app.js"></script>
+</body>
+</html>

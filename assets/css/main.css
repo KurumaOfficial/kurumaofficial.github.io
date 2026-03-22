@@ -900,7 +900,14 @@ section {
 
 /* ── §14 Team ─────────────────────────────────────────────── */
 
+    transition: opacity 0.24s ease, transform 0.24s ease;
 .team-grid {
+
+body.route-leaving {
+    opacity: 0.64;
+    transform: translateY(10px);
+    pointer-events: none;
+}
     display: flex;
     gap: 2px;
     margin-top: var(--space-16);

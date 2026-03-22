@@ -8,9 +8,11 @@
  */
 
 import { createLocaleController } from './i18n/controller.js';
+import { createEditorController }   from './admin/editor.js';
 import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
+import { initSharedThemeToggle, initSmoothRouteTransitions } from './core/site-shell.js';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -37,16 +39,27 @@ function boot() {
     const renderer = createRenderer({ localeController: lc });
     renderer.renderSite();
 
+    /* 5.1 — Hidden admin panel for site owner --------------------- */
+    const editor = createEditorController({
+        renderSite: renderer.renderSite,
+        showToast,
+        locale: lc.locale,
+    });
+
     /* 6 — Activate scroll-reveal ----------------------------------- */
     initReveal();
 
     /* 7 — Bind global UI helpers ----------------------------------- */
     bindNavClose();
     bindSkipLink();
-    bindThemeToggle();
+    initSharedThemeToggle();
+    initSmoothRouteTransitions();
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
+
+    /* 9 — Finalise admin state (loads local draft if present) ------ */
+    void editor.initialize();
 }
 
 /* ------------------------------------------------------------------ */
@@ -84,31 +97,6 @@ function bindSkipLink() {
             target.focus({ preventScroll: false });
             target.removeAttribute('tabindex');
         }
-    });
-}
-
-/**
- * Toggle light / dark theme and persist choice in localStorage.
- */
-function bindThemeToggle() {
-    const btn = /** @type {HTMLButtonElement | null} */ (document.getElementById('themeBtn'));
-    const ico = document.getElementById('themeIco');
-    if (!btn || !ico) return;
-
-    const STORAGE_KEY = 'aleph-theme';
-    const root = document.documentElement;
-
-    function applyTheme(/** @type {string} */ t) {
-        root.setAttribute('data-theme', t);
-        ico.textContent = t === 'dark' ? 'light_mode' : 'dark_mode';
-        localStorage.setItem(STORAGE_KEY, t);
-    }
-
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'light' || saved === 'dark') applyTheme(saved);
-
-    btn.addEventListener('click', () => {
-        applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
 }
 

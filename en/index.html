@@ -121,168 +121,168 @@
         <p id="heroIntro" class="hero-sub">
             Open source game projects. Mods, games, DLC — everything we make, you can study, modify and run yourself.
         </p>
+                                                        </select>
+                                                    </div>
+                                                    <div class="dash-field dash-c3">
+                                                        <label>Card colour</label>
+                                                        <select id="f-tone">
+                                                            <option value="red">Red</option>
+                                                            <option value="green">Green</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="dash-field dash-c6"><label>Status</label><input type="text" id="f-status"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-        <div class="hero-actions">
-            <a id="heroCta1" class="btn-primary" href="#products">See products</a>
-            <a id="heroCta2" class="btn-ghost"   href="#manifesto">Our principle</a>
-        </div>
-    </section>
+                                    <div class="dash-tab-panel" data-panel="tab-content">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <div class="dash-field dash-c12"><label>Short description</label><textarea id="f-desc"></textarea></div>
+                                            </div>
+                                            <div class="dash-form-section">
+                                                <div class="dash-field dash-c12"><label>Instructions (one item per line)</label><textarea id="f-instructions"></textarea></div>
+                                            </div>
+                                            <div class="dash-form-section">
+                                                <div class="dash-field dash-c12"><label>Note</label><textarea id="f-note"></textarea></div>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="dash-tab-panel" data-panel="tab-publish">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <h4>Publishing</h4>
+                                                <div class="dash-fg">
+                                                    <div class="dash-field dash-c6">
+                                                        <label>Showcase visibility</label>
+                                                        <label class="dash-inline-check">
+                                                            <input type="checkbox" id="f-showcase">
+                                                            <span>Show in showcase</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="dash-field dash-c6"><label>Showcase order</label><input type="number" id="f-showcase-order"></div>
+                                                    <div class="dash-field dash-c6"><label>File link / download</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                                                    <div class="dash-field dash-c6"><label>Source code / GitHub</label><input type="text" id="f-source"></div>
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="f-download-file">File for GitHub upload</label>
+                                                        <input type="file" id="f-download-file">
+                                                        <p id="f-download-file-meta" class="dash-help">No file selected.</p>
+                                                        <div class="dash-sync-actions" style="margin-top:8px;">
+                                                            <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Remove file</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <!-- Social links (below hero) ──────────────────────────── -->
-    <div class="social-hub" style="padding: 0 var(--page-gutter); margin-top: calc(-1 * var(--space-10));" id="featuredSocialLinks" aria-label="Social networks"></div>
+                                    <div class="dash-editor-footer">
+                                        <div class="note">Changes accumulate in the draft. “Apply” / “Discard” affect every section.</div>
+                                        <div class="btns">
+                                            <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Delete</button>
+                                        </div>
+                                    </div>
 
+                                    <div class="dash-form-card dash-home-redirect">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Publishing — on Home</h4>
+                                                <p>GitHub token and save buttons are placed on the “Home” tab.</p>
+                                            </div>
+                                        </div>
+                                        <div class="dash-sync-actions">
+                                            <button type="button" class="dash-btn" data-admin-switch="home">Open Home</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         § MARQUEE
-         ═══════════════════════════════════════════════════════ -->
-    <div class="marquee-wrap" aria-hidden="true">
-        <div class="marquee-track">
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
-            <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
-            <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
-        </div>
-    </div>
+                            <div id="miscView" class="dash-view">
+                                <div class="dash-misc-grid">
+                                    <div class="dash-misc-column">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <div class="dash-section-head">
+                                                    <div>
+                                                        <h4>Social links</h4>
+                                                        <p>Displayed below the product showcase and inside the footer.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="dash-github-grid">
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="socialYoutube">YouTube</label>
+                                                        <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                                                    </div>
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="socialDiscord">Discord</label>
+                                                        <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                                                    </div>
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="socialTelegram">Telegram</label>
+                                                        <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-form-section">
+                                                <p class="dash-help" style="margin-bottom:12px;">Button preview:</p>
+                                                <div id="editorSocialPreview" class="dash-social-preview"></div>
+                                            </div>
+                                        </div>
 
+                                        <div class="dash-form-card">
+                                            <div class="dash-section-head">
+                                                <div>
+                                                    <h4>Team</h4>
+                                                    <p>With 5+ members the block turns into a marquee.</p>
+                                                </div>
+                                                <div class="dash-chip"><strong>Cards:</strong> <span id="teamMemberCount">0</span></div>
+                                            </div>
+                                            <div id="teamGrid" class="dash-team-grid"></div>
+                                        </div>
+                                    </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         § APPROACH / PRINCIPLE
-         ═══════════════════════════════════════════════════════ -->
-    <section class="reveal" aria-labelledby="approachTitle">
-        <div class="principle">
-            <div class="principle-visual" aria-hidden="true">
-                <div class="p-sq-outer">
-                    <div class="p-sq-inner"></div>
-                    <div class="p-sq-center"></div>
+                                    <div class="dash-misc-column">
+                                        <div id="teamEditorEmpty" class="dash-form-card dash-team-editor-empty">
+                                            Select a member card or click “+ Member”.
+                                        </div>
+
+                                        <div id="teamEditor" class="dash-team-editor" hidden>
+                                            <div class="dash-editor-header">
+                                                <h2 id="teamEditorTitle">Member</h2>
+                                                <button id="closeTeamEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                                            </div>
+                                            <div class="dash-form-card">
+                                                <div class="dash-form-section">
+                                                    <h4>Member data</h4>
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6"><label>Name</label><input type="text" id="team-name"></div>
+                                                        <div class="dash-field dash-c6"><label>Role</label><input type="text" id="team-role"></div>
+                                                        <div class="dash-field dash-c9"><label>Avatar URL</label><input type="text" id="team-avatar"></div>
+                                                        <div class="dash-field dash-c3"><label>Order</label><input type="number" id="team-order"></div>
+                                                        <div class="dash-field dash-c12"><label>Bio</label><textarea id="team-bio"></textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-editor-footer">
+                                                <div class="note">This card changes the shared draft.</div>
+                                                <div class="btns">
+                                                    <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Delete</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
                 </div>
-                <span class="p-label">Structure</span>
-            </div>
-            <div class="principle-text">
-                <span class="section-label">Approach</span>
-                <h2 id="approachTitle" class="section-title">How we work</h2>
-                <p id="approachLead" class="principle-body">
-                    Aleph Studio operates on the premise that users should <strong>understand exactly what is running on their machine</strong>. That's why we publish code under the GPL licence — you can study it, extend it, use it in your own projects.<br><br>This isn't altruism. It's a <strong>quality standard</strong>.
-                </p>
             </div>
         </div>
-    </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § PRODUCTS (Featured)
-         ═══════════════════════════════════════════════════════ -->
-    <section id="products" class="reveal" aria-labelledby="productsTitle">
-        <span class="section-label">Releases</span>
-        <h2 id="productsTitle" class="section-title">Main releases</h2>
-        <div id="featured-products" class="products-grid" role="list">
-            <!-- JS: rendered by renderer.js -->
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § CATALOG (Archive)
-         ═══════════════════════════════════════════════════════ -->
-    <section class="reveal" aria-labelledby="catalogTitle">
-        <h3 id="catalogTitle" class="section-title" style="font-size: clamp(18px, 2.5vw, 28px);">Other products and upcoming releases</h3>
-        <p  id="catalogDesc" style="color: var(--color-text-muted); font-size: 14px; margin-top: var(--space-2);">Dates and timelines are preliminary.</p>
-        <div id="archive-products" class="catalog-grid" role="list">
-            <!-- JS: rendered by renderer.js -->
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § MANIFESTO
-         ═══════════════════════════════════════════════════════ -->
-    <section id="manifesto" class="manifesto reveal" aria-labelledby="manifestoHeading">
-        <div class="manifesto-inner">
-            <span class="section-label">Manifesto</span>
-            <h2 id="manifestoHeading" class="section-title">What matters</h2>
-            <p id="manifestoText" class="manifesto-text">
-                Open source is not a discount on quality.<br>It's <em>respect</em> for the person running it.
-            </p>
-
-            <div class="manifesto-items">
-                <div class="manifesto-item">
-                    <span class="m-num">01</span>
-                    <h3 id="case1Title" class="m-title">Open code</h3>
-                    <p  id="case1Text"  class="m-body">The repository is public, the structure isn't hidden behind a closed build.</p>
-                </div>
-                <div class="manifesto-item">
-                    <span class="m-num">02</span>
-                    <h3 id="case2Title" class="m-title">Honest status</h3>
-                    <p  id="case2Text"  class="m-body">Alpha is alpha. Beta is beta. No marketing words instead of truth.</p>
-                </div>
-                <div class="manifesto-item">
-                    <span class="m-num">03</span>
-                    <h3 id="case3Title" class="m-title">Direct access</h3>
-                    <p  id="case3Text"  class="m-body">If the file is ready — download it right away. No extra steps or opaque installers.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § TEAM
-         ═══════════════════════════════════════════════════════ -->
-    <section id="team" class="reveal" aria-labelledby="teamTitle">
-        <span class="section-label">Team</span>
-        <h2 id="teamTitle" class="section-title">The people behind the project</h2>
-        <p  id="teamIntro" style="color: var(--color-text-muted); font-size: 15px; margin-top: var(--space-2); max-width: 520px;">
-            Members who lead development, maintain releases and keep the public side of the project in order.
-        </p>
-        <div id="teamShowcase" class="team-grid">
-            <!-- JS: rendered by renderer.js -->
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § FOOTER
-         ═══════════════════════════════════════════════════════ -->
-    <footer role="contentinfo">
-        <div class="footer-brand">
-            <div class="footer-logo" aria-hidden="true">
-                <span class="footer-sq"></span>
-                <span class="footer-name">Aleph Studio</span>
-            </div>
-            <p id="footerDesc" class="footer-desc">A subsidiary project of WeTTeA. Open source game development.</p>
-            <div id="footerSocialLinks" class="social-hub" aria-label="Social networks"></div>
-        </div>
-
-        <div class="footer-links">
-            <h4 id="footerNavHeading">Navigation</h4>
-            <ul>
-                <li><a class="nav__link" href="#products">Products</a></li>
-                <li><a class="nav__link" href="#manifesto">Principle</a></li>
-                <li><a class="nav__link" href="#team">Team</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-links">
-            <h4 id="footerWetteaHeading">WeTTeA</h4>
-            <ul>
-                <li><a href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            </ul>
-        </div>
-
-        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed</p>
-    </footer>
-
-
-    <!-- ─ Toast (a11y live region) ─────────────────────────── -->
-    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+        <!-- ─ Toast (a11y live region) ─────────────────────────── -->
+        <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
 
     <!-- ─ Application ──────────────────────────────────────── -->

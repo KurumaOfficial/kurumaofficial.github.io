@@ -204,6 +204,7 @@ export function createLocaleController() {
             btn.setAttribute('role', 'option');
             btn.setAttribute('aria-selected', String(opt.locale === locale));
             btn.dataset.locale = opt.locale;
+            btn.dataset.href = opt.href;
 
             const flagSpan = document.createElement('span');
             flagSpan.className = 'locale-option__flag';
@@ -246,10 +247,21 @@ export function createLocaleController() {
         menu.addEventListener('click', (e) => {
             const btn = /** @type {HTMLElement | null} */ (/** @type {HTMLElement} */ (e.target).closest('[data-locale]'));
             if (!btn) return;
+            const nextHref = btn.dataset.href;
+            if (nextHref) {
+                document.body.classList.add('route-leaving');
+                window.setTimeout(() => {
+                    window.location.assign(nextHref);
+                }, 170);
+                return;
+            }
             const next = normalizeLocale(btn.dataset.locale ?? '');
             const search = window.location.search || '';
             const hash = window.location.hash || '';
-            window.location.assign(`${getLocalePath(next)}${search}${hash}`);
+            document.body.classList.add('route-leaving');
+            window.setTimeout(() => {
+                window.location.assign(`${getLocalePath(next)}${search}${hash}`);
+            }, 170);
         });
 
         /* Click outside */

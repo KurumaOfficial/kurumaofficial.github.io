@@ -1,27 +1,35 @@
-const html     = document.documentElement;
-const themeBtn = document.getElementById('themeBtn');
-const themeIco = document.getElementById('themeIco');
+import { createLocaleController } from '../i18n/controller.js';
+import { initAdminRouteAccess, initSharedThemeToggle, initSmoothRouteTransitions } from '../core/site-shell.js';
 
-function applyTheme(t) {
-  html.setAttribute('data-theme', t);
-  themeIco.textContent = t === 'dark' ? 'light_mode' : 'dark_mode';
-  localStorage.setItem('sv-theme', t);
+const shareBtn = document.getElementById('shareBtn');
+
+const localeController = createLocaleController();
+localeController.mountLanguageSwitcher();
+initSharedThemeToggle();
+initAdminRouteAccess({ adminHref: new URL('../../admin/', window.location.href).toString() });
+initSmoothRouteTransitions();
+
+if (shareBtn) {
+  shareBtn.addEventListener('click', async () => {
+    const shareData = {
+      title: document.title,
+      text: 'Strange Visuals',
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+        return;
+      }
+      await navigator.clipboard.writeText(window.location.href);
+      shareBtn.classList.add('installed');
+      window.setTimeout(() => shareBtn.classList.remove('installed'), 1200);
+    } catch {
+      /* ignore cancelled share / clipboard errors */
+    }
+  });
 }
-
-themeBtn.addEventListener('click', () => {
-  applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-});
-
-const saved = localStorage.getItem('sv-theme');
-if (saved) applyTheme(saved);
-
-const installBtn = document.getElementById('installBtn');
-installBtn.addEventListener('click', () => {
-  const installed = installBtn.dataset.installed === 'true';
-  installBtn.dataset.installed = installed ? 'false' : 'true';
-  installBtn.textContent = installed ? 'СКАЧАТЬ' : '✓ СКАЧАНО';
-  installBtn.classList.toggle('installed', !installed);
-});
 
 const tabs = {
   player:    { title:'На игроке',  icon:'person',     items:[{n:'Боксы',on:true},{n:'Джампики',on:true},{n:'Китайская шляпа',on:true},{n:'Таргет рендер',on:true},{n:'Хит бабл',on:false}] },

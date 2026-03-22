@@ -121,168 +121,168 @@
         <p id="heroIntro" class="hero-sub">
             Ігрові проєкти з відкритим вихідним кодом. Моди, ігри, DLC — все що ми робимо, ти можеш вивчити, змінити і запустити сам.
         </p>
+                                                        </select>
+                                                    </div>
+                                                    <div class="dash-field dash-c3">
+                                                        <label>Колір картки</label>
+                                                        <select id="f-tone">
+                                                            <option value="red">Червоний</option>
+                                                            <option value="green">Зелений</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="dash-field dash-c6"><label>Статус</label><input type="text" id="f-status"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-        <div class="hero-actions">
-            <a id="heroCta1" class="btn-primary" href="#products">Переглянути продукти</a>
-            <a id="heroCta2" class="btn-ghost"   href="#manifesto">Наш принцип</a>
-        </div>
-    </section>
+                                    <div class="dash-tab-panel" data-panel="tab-content">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <div class="dash-field dash-c12"><label>Короткий опис</label><textarea id="f-desc"></textarea></div>
+                                            </div>
+                                            <div class="dash-form-section">
+                                                <div class="dash-field dash-c12"><label>Інструкція (кожен пункт із нового рядка)</label><textarea id="f-instructions"></textarea></div>
+                                            </div>
+                                            <div class="dash-form-section">
+                                                <div class="dash-field dash-c12"><label>Примітка</label><textarea id="f-note"></textarea></div>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    <div class="dash-tab-panel" data-panel="tab-publish">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <h4>Публікація</h4>
+                                                <div class="dash-fg">
+                                                    <div class="dash-field dash-c6">
+                                                        <label>Показ на вітрині</label>
+                                                        <label class="dash-inline-check">
+                                                            <input type="checkbox" id="f-showcase">
+                                                            <span>Показувати на вітрині</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="dash-field dash-c6"><label>Порядок на вітрині</label><input type="number" id="f-showcase-order"></div>
+                                                    <div class="dash-field dash-c6"><label>Посилання на файл / download</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                                                    <div class="dash-field dash-c6"><label>Вихідний код / GitHub</label><input type="text" id="f-source"></div>
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="f-download-file">Файл для GitHub upload</label>
+                                                        <input type="file" id="f-download-file">
+                                                        <p id="f-download-file-meta" class="dash-help">Файл не вибрано.</p>
+                                                        <div class="dash-sync-actions" style="margin-top:8px;">
+                                                            <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Прибрати файл</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-    <!-- Social links (below hero) ──────────────────────────── -->
-    <div class="social-hub" style="padding: 0 var(--page-gutter); margin-top: calc(-1 * var(--space-10));" id="featuredSocialLinks" aria-label="Соціальні мережі"></div>
+                                    <div class="dash-editor-footer">
+                                        <div class="note">Зміни накопичуються в чернетці. «Застосувати» / «Скасувати» працюють для всіх розділів.</div>
+                                        <div class="btns">
+                                            <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">Видалити</button>
+                                        </div>
+                                    </div>
 
+                                    <div class="dash-form-card dash-home-redirect">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Публікація — на Головній</h4>
+                                                <p>GitHub token і кнопки збереження розміщені на вкладці «Головна».</p>
+                                            </div>
+                                        </div>
+                                        <div class="dash-sync-actions">
+                                            <button type="button" class="dash-btn" data-admin-switch="home">Відкрити Головну</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         § MARQUEE
-         ═══════════════════════════════════════════════════════ -->
-    <div class="marquee-wrap" aria-hidden="true">
-        <div class="marquee-track">
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
-            <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
-            <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
-        </div>
-    </div>
+                            <div id="miscView" class="dash-view">
+                                <div class="dash-misc-grid">
+                                    <div class="dash-misc-column">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <div class="dash-section-head">
+                                                    <div>
+                                                        <h4>Соціальні посилання</h4>
+                                                        <p>Відображаються під вітриною продуктів і у футері.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="dash-github-grid">
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="socialYoutube">YouTube</label>
+                                                        <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                                                    </div>
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="socialDiscord">Discord</label>
+                                                        <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                                                    </div>
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="socialTelegram">Telegram</label>
+                                                        <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-form-section">
+                                                <p class="dash-help" style="margin-bottom:12px;">Попередній перегляд кнопок:</p>
+                                                <div id="editorSocialPreview" class="dash-social-preview"></div>
+                                            </div>
+                                        </div>
 
+                                        <div class="dash-form-card">
+                                            <div class="dash-section-head">
+                                                <div>
+                                                    <h4>Команда</h4>
+                                                    <p>За 5+ учасників блок перетворюється на біжучий рядок.</p>
+                                                </div>
+                                                <div class="dash-chip"><strong>Карток:</strong> <span id="teamMemberCount">0</span></div>
+                                            </div>
+                                            <div id="teamGrid" class="dash-team-grid"></div>
+                                        </div>
+                                    </div>
 
-    <!-- ═══════════════════════════════════════════════════════
-         § APPROACH / PRINCIPLE
-         ═══════════════════════════════════════════════════════ -->
-    <section class="reveal" aria-labelledby="approachTitle">
-        <div class="principle">
-            <div class="principle-visual" aria-hidden="true">
-                <div class="p-sq-outer">
-                    <div class="p-sq-inner"></div>
-                    <div class="p-sq-center"></div>
+                                    <div class="dash-misc-column">
+                                        <div id="teamEditorEmpty" class="dash-form-card dash-team-editor-empty">
+                                            Вибери картку учасника або натисни «+ Учасник».
+                                        </div>
+
+                                        <div id="teamEditor" class="dash-team-editor" hidden>
+                                            <div class="dash-editor-header">
+                                                <h2 id="teamEditorTitle">Учасник</h2>
+                                                <button id="closeTeamEditorBtn" type="button" class="dash-btn dash-sm">✕</button>
+                                            </div>
+                                            <div class="dash-form-card">
+                                                <div class="dash-form-section">
+                                                    <h4>Дані учасника</h4>
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6"><label>Ім'я</label><input type="text" id="team-name"></div>
+                                                        <div class="dash-field dash-c6"><label>Роль</label><input type="text" id="team-role"></div>
+                                                        <div class="dash-field dash-c9"><label>Посилання на аватар</label><input type="text" id="team-avatar"></div>
+                                                        <div class="dash-field dash-c3"><label>Порядок</label><input type="number" id="team-order"></div>
+                                                        <div class="dash-field dash-c12"><label>Опис</label><textarea id="team-bio"></textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-editor-footer">
+                                                <div class="note">Ця картка змінює спільну чернетку.</div>
+                                                <div class="btns">
+                                                    <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Видалити</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </main>
                 </div>
-                <span class="p-label">Structure</span>
-            </div>
-            <div class="principle-text">
-                <span class="section-label">Підхід</span>
-                <h2 id="approachTitle" class="section-title">Як ми працюємо</h2>
-                <p id="approachLead" class="principle-body">
-                    Aleph Studio виходить з того, що користувач повинен <strong>розуміти що саме працює на його машині</strong>. Тому ми публікуємо код під ліцензією GPL — його можна вивчити, розвинути, використати у власних проєктах.<br><br>Це не альтруїзм. Це <strong>стандарт якості</strong>.
-                </p>
             </div>
         </div>
-    </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § PRODUCTS (Featured)
-         ═══════════════════════════════════════════════════════ -->
-    <section id="products" class="reveal" aria-labelledby="productsTitle">
-        <span class="section-label">Релізи</span>
-        <h2 id="productsTitle" class="section-title">Головні релізи</h2>
-        <div id="featured-products" class="products-grid" role="list">
-            <!-- JS: rendered by renderer.js -->
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § CATALOG (Archive)
-         ═══════════════════════════════════════════════════════ -->
-    <section class="reveal" aria-labelledby="catalogTitle">
-        <h3 id="catalogTitle" class="section-title" style="font-size: clamp(18px, 2.5vw, 28px);">Інші продукти та майбутні релізи</h3>
-        <p  id="catalogDesc" style="color: var(--color-text-muted); font-size: 14px; margin-top: var(--space-2);">Терміни та дати є попередніми.</p>
-        <div id="archive-products" class="catalog-grid" role="list">
-            <!-- JS: rendered by renderer.js -->
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § MANIFESTO
-         ═══════════════════════════════════════════════════════ -->
-    <section id="manifesto" class="manifesto reveal" aria-labelledby="manifestoHeading">
-        <div class="manifesto-inner">
-            <span class="section-label">Маніфест</span>
-            <h2 id="manifestoHeading" class="section-title">Що важливо</h2>
-            <p id="manifestoText" class="manifesto-text">
-                Відкритий код — це не знижка на якість.<br>Це <em>повага</em> до того, хто запускає.
-            </p>
-
-            <div class="manifesto-items">
-                <div class="manifesto-item">
-                    <span class="m-num">01</span>
-                    <h3 id="case1Title" class="m-title">Відкритий код</h3>
-                    <p  id="case1Text"  class="m-body">Репозиторій публікується, структура не ховається за закритою збіркою.</p>
-                </div>
-                <div class="manifesto-item">
-                    <span class="m-num">02</span>
-                    <h3 id="case2Title" class="m-title">Чесний статус</h3>
-                    <p  id="case2Text"  class="m-body">Alpha це alpha. Beta це beta. Без маркетингових слів замість правди.</p>
-                </div>
-                <div class="manifesto-item">
-                    <span class="m-num">03</span>
-                    <h3 id="case3Title" class="m-title">Прямий доступ</h3>
-                    <p  id="case3Text"  class="m-body">Якщо файл готовий — скачай одразу. Без зайвих переходів і непрозорих інсталяторів.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § TEAM
-         ═══════════════════════════════════════════════════════ -->
-    <section id="team" class="reveal" aria-labelledby="teamTitle">
-        <span class="section-label">Команда</span>
-        <h2 id="teamTitle" class="section-title">Люди за проєктом</h2>
-        <p  id="teamIntro" style="color: var(--color-text-muted); font-size: 15px; margin-top: var(--space-2); max-width: 520px;">
-            Учасники, які ведуть розробку, підтримують релізи та тримають у порядку публічну частину проєкту.
-        </p>
-        <div id="teamShowcase" class="team-grid">
-            <!-- JS: rendered by renderer.js -->
-        </div>
-    </section>
-
-
-    <!-- ═══════════════════════════════════════════════════════
-         § FOOTER
-         ═══════════════════════════════════════════════════════ -->
-    <footer role="contentinfo">
-        <div class="footer-brand">
-            <div class="footer-logo" aria-hidden="true">
-                <span class="footer-sq"></span>
-                <span class="footer-name">Aleph Studio</span>
-            </div>
-            <p id="footerDesc" class="footer-desc">Дочірній проєкт WeTTeA. Ігрові розробки з відкритим вихідним кодом.</p>
-            <div id="footerSocialLinks" class="social-hub" aria-label="Соціальні мережі"></div>
-        </div>
-
-        <div class="footer-links">
-            <h4 id="footerNavHeading">Навігація</h4>
-            <ul>
-                <li><a class="nav__link" href="#products">Продукти</a></li>
-                <li><a class="nav__link" href="#manifesto">Принцип</a></li>
-                <li><a class="nav__link" href="#team">Команда</a></li>
-            </ul>
-        </div>
-
-        <div class="footer-links">
-            <h4 id="footerWetteaHeading">WeTTeA</h4>
-            <ul>
-                <li><a href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-            </ul>
-        </div>
-
-        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed</p>
-    </footer>
-
-
-    <!-- ─ Toast (a11y live region) ─────────────────────────── -->
-    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+        <!-- ─ Toast (a11y live region) ─────────────────────────── -->
+        <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
 
     <!-- ─ Application ──────────────────────────────────────── -->
