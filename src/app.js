@@ -43,6 +43,7 @@ function boot() {
     /* 7 — Bind global UI helpers ----------------------------------- */
     bindNavClose();
     bindSkipLink();
+    bindThemeToggle();
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
@@ -83,6 +84,31 @@ function bindSkipLink() {
             target.focus({ preventScroll: false });
             target.removeAttribute('tabindex');
         }
+    });
+}
+
+/**
+ * Toggle light / dark theme and persist choice in localStorage.
+ */
+function bindThemeToggle() {
+    const btn = /** @type {HTMLButtonElement | null} */ (document.getElementById('themeBtn'));
+    const ico = document.getElementById('themeIco');
+    if (!btn || !ico) return;
+
+    const STORAGE_KEY = 'aleph-theme';
+    const root = document.documentElement;
+
+    function applyTheme(/** @type {string} */ t) {
+        root.setAttribute('data-theme', t);
+        ico.textContent = t === 'dark' ? 'light_mode' : 'dark_mode';
+        localStorage.setItem(STORAGE_KEY, t);
+    }
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'light' || saved === 'dark') applyTheme(saved);
+
+    btn.addEventListener('click', () => {
+        applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
 }
 

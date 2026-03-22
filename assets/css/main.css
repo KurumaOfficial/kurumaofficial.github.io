@@ -72,6 +72,27 @@
     --z-toast:    400;
 }
 
+[data-theme="light"] {
+    --color-bg:             #f5f0ee;
+    --color-bg-elevated:    #ede8e4;
+    --color-bg-hover:       #e5deda;
+    --color-text-primary:   #1f0e0b;
+    --color-text-heading:   #2d1512;
+    --color-text-muted:     #9a7068;
+    --border-subtle:        rgba(139, 26, 42, 0.07);
+    --border-default:       rgba(139, 26, 42, 0.12);
+    --border-strong:        rgba(139, 26, 42, 0.20);
+    --border-accent:        rgba(139, 26, 42, 0.15);
+}
+
+[data-theme="light"] body {
+    background: var(--color-bg);
+}
+
+[data-theme="light"] .nav {
+    background: rgba(245, 240, 238, 0.88);
+}
+
 
 /* ── §2 Reset ──────────────────────────────────────────────── */
 
@@ -254,6 +275,30 @@ body::before {
     border-color: var(--color-ruby);
     color: var(--color-ruby-light);
 }
+
+.theme-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-text-muted);
+    transition:
+        border-color var(--duration-base) var(--ease-default),
+        color var(--duration-base) var(--ease-default),
+        background var(--duration-base) var(--ease-default);
+}
+
+.theme-btn:hover {
+    border-color: var(--border-default);
+    color: var(--color-text-heading);
+}
+
+.theme-btn .material-icons { font-size: 16px; }
 
 
 /* ── §6 Hero ───────────────────────────────────────────────── */

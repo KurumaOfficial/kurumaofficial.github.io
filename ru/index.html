@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" dir="ltr">
+<html lang="ru" dir="ltr" data-theme="dark">
 <head>
     <!-- ─── Encoding & Viewport ────────────────────────────── -->
     <meta charset="utf-8">
@@ -39,6 +39,10 @@
 
     <!-- ─── Locale Marker ──────────────────────────────────── -->
     <script>window.__ALEPH_LOCALE__ = 'ru';</script>
+
+    <!-- ─── Icons & Theme bootstrap ────────────────────────── -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body>
 
@@ -67,9 +71,10 @@
 
         <!-- Right group ─────────────────────────────────────── -->
         <div class="nav-right">
-            <a class="nav-badge" href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer">
-                GitHub ↗
-            </a>
+            <!-- Theme toggle ────────────────────────────────── -->
+            <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
+                <span class="material-icons" id="themeIco">light_mode</span>
+            </button>
 
             <!-- Locale switcher ─────────────────────────────── -->
             <div id="localeSwitcher" class="locale-switcher">
