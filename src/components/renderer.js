@@ -11,6 +11,7 @@ import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { SOCIAL_PLATFORMS } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
 import { escapeHtml, linkify, $ } from '../core/dom.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js';
 
 // ── Social icon SVGs (static, trusted) ──────────────────────
 
@@ -235,10 +236,7 @@ export function createRenderer({ localeController }) {
             /** @type {HTMLElement} */ (link).dataset.bound = '1';
             link.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.body.classList.add('page-leaving');
-                setTimeout(() => {
-                    window.location.href = /** @type {HTMLAnchorElement} */ (link).href;
-                }, 280);
+                navigateWithRouteTransition(/** @type {HTMLAnchorElement} */ (link).href);
             });
         });
 
@@ -249,10 +247,7 @@ export function createRenderer({ localeController }) {
             const navigate = () => {
                 const href = /** @type {HTMLElement} */ (card).dataset.detailCard;
                 if (!href) return;
-                document.body.classList.add('page-leaving');
-                setTimeout(() => {
-                    window.location.href = href;
-                }, 280);
+                navigateWithRouteTransition(href);
             };
 
             card.addEventListener('click', (event) => {

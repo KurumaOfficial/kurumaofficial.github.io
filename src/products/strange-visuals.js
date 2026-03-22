@@ -1,6 +1,18 @@
-import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { createLocaleController } from '../i18n/controller.js';
-import { initAdminRouteAccess, initSharedThemeToggle, initSmoothRouteTransitions } from '../core/site-shell.js';
+import {
+  applyGlobalRouteRedirect,
+  getAdminHref,
+  getEffectiveSiteData,
+  initAdminRouteAccess,
+  initSharedThemeToggle,
+  initSmoothRouteTransitions,
+} from '../core/site-shell.js';
+
+const siteData = getEffectiveSiteData();
+
+if (applyGlobalRouteRedirect(siteData)) {
+  /* route redirect is already in progress */
+}
 
 const localeController = createLocaleController();
 const shareBtn = document.getElementById('shareBtn');
@@ -74,9 +86,9 @@ function resolveRouteAsset(path) {
 function getRouteProduct() {
   const match = window.location.pathname.match(/\/products\/([^/]+)\/?/i);
   const slug = match?.[1] || 'strange-visuals';
-  return DEFAULT_SITE_DATA.products.find((product) => product.id === slug)
-    || DEFAULT_SITE_DATA.products.find((product) => String(product.detailUrl || '').includes(`/products/${slug}/`) || String(product.detailUrl || '').includes(`products/${slug}/`))
-    || DEFAULT_SITE_DATA.products[0];
+  return siteData.products.find((product) => product.id === slug)
+    || siteData.products.find((product) => String(product.detailUrl || '').includes(`/products/${slug}/`) || String(product.detailUrl || '').includes(`products/${slug}/`))
+    || siteData.products[0];
 }
 
 const routeProduct = getRouteProduct();
@@ -86,7 +98,7 @@ const tabKeys = ['player', 'world', 'utils', 'other', 'interface', 'themes'].fil
 
 localeController.mountLanguageSwitcher();
 initSharedThemeToggle();
-initAdminRouteAccess({ adminHref: new URL('../../admin/', window.location.href).toString() });
+initAdminRouteAccess({ adminHref: getAdminHref() });
 initSmoothRouteTransitions();
 
 if (installBtn && routeProduct?.downloadUrl) {

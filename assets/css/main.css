@@ -905,14 +905,24 @@ section {
 
 /* ── §14 Team ─────────────────────────────────────────────── */
 
-    transition: opacity 0.24s ease, transform 0.24s ease;
-.team-grid {
+body.route-transitions {
+    animation: route-enter 320ms ease both;
+}
 
-body.route-leaving {
+body.route-ready {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+body.route-leaving,
+body.page-leaving {
     opacity: 0.64;
     transform: translateY(10px);
     pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
 }
+
+.team-grid {
     display: flex;
     gap: 2px;
     margin-top: var(--space-16);
@@ -1325,12 +1335,6 @@ footer {
 
 /* ── §22 Page Transition ──────────────────────────────────── */
 
-body.page-leaving {
-    opacity: 0;
-    transition: opacity 0.28s ease;
-    pointer-events: none;
-}
-
 
 /* ── §23 Utility ──────────────────────────────────────────── */
 
@@ -1352,6 +1356,11 @@ body.page-leaving {
 
 @keyframes fade-up {
     from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes route-enter {
+    from { opacity: 0.72; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
