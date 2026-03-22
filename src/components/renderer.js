@@ -125,7 +125,8 @@ export function createRenderer({ localeController }) {
 
             /* Card with detail page link */
             if (product.detailUrl) {
-                const href = localeController.resolveSitePath(product.detailUrl);
+                /* detailUrl is locale-relative, resolve against current directory */
+                const href = './' + product.detailUrl.replace(/^\.\//, '');
                 return `
 <article class="product-card" id="${escapeHtml(product.id)}">
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>

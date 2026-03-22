@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="uk" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Strange Visuals — Aleph Studio</title>
+    <meta name="description" content="Strange Visuals — візуальний мод для Minecraft Fabric 1.21.8. Чамси, трейсери, ESP, GUI-віджет та кастомні теми.">
+    <meta name="theme-color" content="#111110">
+    <meta name="color-scheme" content="dark light">
+    <meta name="author" content="WeTTeA">
+
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       content="Strange Visuals — Aleph Studio">
+    <meta property="og:description" content="Форк візуального мода для Minecraft Fabric 1.21.8. Відкритий код, пряме встановлення.">
+    <meta property="og:locale"      content="uk_UA">
+    <meta property="og:site_name"   content="Aleph Studio">
+
+    <meta name="twitter:card"  content="summary">
+    <meta name="twitter:title" content="Strange Visuals — Aleph Studio">
+
+    <link rel="icon" href="../../../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,700;1,400&family=JetBrains+Mono:wght@400&family=Karla:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
+</head>
+<body>
+
+    <!-- ═══ NAVIGATION ═══ -->
+    <nav class="sv-nav" role="navigation" aria-label="Навігація сторінки продукту">
+        <a class="sv-nav-logo" href="../../" aria-label="Aleph Studio — на головну">
+            <svg viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                <rect x="60" y="60" width="60" height="60"/><rect x="180" y="60" width="60" height="60"/>
+                <rect x="120" y="120" width="60" height="30"/><rect x="90" y="150" width="120" height="30"/>
+                <rect x="60" y="180" width="60" height="60"/><rect x="180" y="180" width="60" height="60"/>
+            </svg>
+        </a>
+        <div class="sv-nav-right">
+            <button id="themeBtn" class="sv-theme-btn" type="button" aria-label="Перемкнути тему">
+                <span id="themeIco" class="material-icons">light_mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO · STORE CARD ═══ -->
+    <section class="hero-store" aria-labelledby="heroAppName">
+        <div class="hero-left-fog" aria-hidden="true"></div>
+        <div class="hero-left-shade" aria-hidden="true"></div>
+
+        <div class="hero-store-top">
+            <a class="hero-store-back" href="../../#products" aria-label="Назад до продуктів">
+                <span class="material-icons">arrow_back</span>
+            </a>
+            <span class="hero-store-title">Магазин</span>
+            <div class="hero-store-actions">
+                <button class="hero-store-action" type="button" aria-label="Додати в обране"><span class="material-icons">bookmark_border</span></button>
+                <button class="hero-store-action" type="button" aria-label="Поділитися"><span class="material-icons">share</span></button>
+                <button class="hero-store-action" type="button" aria-label="Ще"><span class="material-icons">more_vert</span></button>
+            </div>
+        </div>
+
+        <div class="hero-store-content">
+            <div class="hero-store-card">
+                <div class="hero-icon-wrap">
+                    <div class="hero-app-icon">
+                        <svg viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                            <rect x="60" y="60" width="60" height="60" opacity=".85"/><rect x="180" y="60" width="60" height="60" opacity=".85"/>
+                            <rect x="120" y="120" width="60" height="30" opacity=".7"/><rect x="90" y="150" width="120" height="30" opacity=".7"/>
+                            <rect x="60" y="180" width="60" height="60" opacity=".6"/><rect x="180" y="180" width="60" height="60" opacity=".6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="hero-info">
+                    <h1 id="heroAppName" class="hero-app-name">Strange <em>Visuals</em></h1>
+                    <a class="hero-dev" href="../../" rel="noopener">
+                        Aleph Studio
+                        <span class="hero-verified" aria-label="Підтверджений розробник"><span class="material-icons">check</span></span>
+                    </a>
+                    <span class="hero-category">Візуальний мод · Fabric 1.21.8</span>
+
+                    <div class="hero-meta" role="list">
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">4.8 <span class="hero-star" aria-hidden="true">★</span></div>
+                            <div class="hero-meta-label">Рейтинг</div>
+                        </div>
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">v1.1.0</div>
+                            <div class="hero-meta-label">Версія</div>
+                        </div>
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">Fabric</div>
+                            <div class="hero-meta-label">Завантажувач</div>
+                        </div>
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">GPL</div>
+                            <div class="hero-meta-label">Ліцензія</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button id="installBtn" class="hero-install-btn" type="button" data-installed="false">ЗАВАНТАЖИТИ</button>
+                        <button class="hero-side-btn" type="button" aria-label="Вихідний код"><span class="material-icons">code</span></button>
+                        <button class="hero-side-btn" type="button" aria-label="Ще дії"><span class="material-icons">more_vert</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FEATURES ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <div class="feat-head">
+            <div>
+                <span class="sv-eyebrow">Можливості</span>
+                <h2 class="sv-title">Що всередині</h2>
+            </div>
+            <p class="sv-desc">Зібраний набір візуальних модулів, кожен з яких можна увімкнути або налаштувати окремо через вбудований GUI.</p>
+        </div>
+        <div class="feat-grid">
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">crop_square</span></div>
+                <h3>Чамси</h3>
+                <p>Підсвітка сутностей крізь стіни. Підтримка гравців, мобів та предметів.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">near_me</span></div>
+                <h3>Трейсери</h3>
+                <p>Лінії від камери до цілей — зручна навігація навіть при великому FOV.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">blur_on</span></div>
+                <h3>ESP-частинки</h3>
+                <p>Візуалізація хітбоксів, польоту снарядів та інших ігрових подій.</p>
+            </div>
+            <div class="feat-card w2">
+                <div class="feat-ico"><span class="material-icons">dashboard</span></div>
+                <h3>GUI-віджет</h3>
+                <p>Вбудований інтерфейс керування: увімкнення модулів, зміна тем, перегляд статусів — прямо в грі.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">palette</span></div>
+                <h3>Теми</h3>
+                <p>4 візуальних стилі: Стандарт, Мінімалізм, Неон, Ретро.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ COMPARE ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <div class="compare-section-head">
+            <div>
+                <span class="sv-eyebrow">Порівняння</span>
+                <h2 class="sv-title">До і після</h2>
+            </div>
+            <p class="sv-desc">Пересувайте розділювач щоб побачити різницю між стандартним Minecraft та версією з активним модом.</p>
+        </div>
+        <div class="compare-card">
+            <div class="compare-stage">
+                <div class="compare-image compare-before">Vanilla Minecraft</div>
+                <div id="compareAfterWrap" class="compare-after-wrap">
+                    <div class="compare-image compare-after">Strange Visuals ON</div>
+                </div>
+                <span class="compare-label before">До</span>
+                <span class="compare-label after">Після</span>
+                <div id="compareDivider" class="compare-divider"></div>
+                <div id="compareHandle" class="compare-handle"><span class="material-icons">drag_indicator</span></div>
+                <input id="compareSlider" class="compare-slider" type="range" min="0" max="100" value="50" aria-label="Позиція розділювача порівняння">
+            </div>
+            <div class="compare-slot">Перетягніть скріншоти сюди або завантажте пізніше</div>
+        </div>
+    </div>
+
+    <!-- ═══ MODULES ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <span class="sv-eyebrow">Модулі</span>
+        <h2 class="sv-title">Повний список</h2>
+        <p class="sv-desc">Все що входить до поточної збірки — з позначкою стану за замовчуванням.</p>
+        <div class="mod-grid">
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">person</span><span class="mod-head-name">На гравцеві</span><span class="mod-head-ct">5 модулів</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Бокси</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Джампіки</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Китайський капелюх</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Таргет рендер</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Хіт бабл</span><span class="mod-badge off">OFF</span></div>
+                </div>
+            </div>
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">public</span><span class="mod-head-name">У світі</span><span class="mod-head-ct">7 модулів</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Чамси</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Трейсери</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Снаряди</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Частинки</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Блок оверлей</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Дроп рендер</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Скелетон</span><span class="mod-badge off">OFF</span></div>
+                </div>
+            </div>
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">build</span><span class="mod-head-name">Утиліти</span><span class="mod-head-ct">6 модулів</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Авто спринт</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Авто тул</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Фуллбрайт</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Ноу оверлей</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Координати</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Таймер</span><span class="mod-badge off">OFF</span></div>
+                </div>
+            </div>
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">dashboard</span><span class="mod-head-name">Інтерфейс</span><span class="mod-head-ct">8 модулів</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Масив ліст</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Ватермарка</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Кейбінди</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Нотифікації</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Хотбар</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Скорборд</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Табуліст</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Кросхейр</span><span class="mod-badge on">ON</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ GUI PREVIEW ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <div class="preview-row">
+            <div>
+                <span class="sv-eyebrow">Передперегляд</span>
+                <h2 class="sv-title">GUI в дії</h2>
+                <p class="sv-desc">Інтерактивна копія внутрішньоігрового інтерфейсу. Перемикайте вкладки, вмикайте та вимикайте модулі — точно так, як це працює у Minecraft.</p>
+                <div class="preview-tags">
+                    <span class="sv-tag">6 вкладок</span>
+                    <span class="sv-tag">36 модулів</span>
+                    <span class="sv-tag">4 теми</span>
+                    <span class="sv-tag">real-time</span>
+                </div>
+            </div>
+            <div class="gui-outer">
+                <div class="gui-w">
+                    <div class="gw-hdr">
+                        <svg class="gw-logo" viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                            <rect x="60" y="60" width="60" height="60"/><rect x="180" y="60" width="60" height="60"/>
+                            <rect x="120" y="120" width="60" height="30"/><rect x="90" y="150" width="120" height="30"/>
+                            <rect x="60" y="180" width="60" height="60"/><rect x="180" y="180" width="60" height="60"/>
+                        </svg>
+                        <div class="gw-htxt">
+                            <span class="gw-title">Strange Visuals</span>
+                            <span class="gw-sub">v1.1.0</span>
+                        </div>
+                    </div>
+                    <div id="gwTabs" class="gw-tabs" role="tablist" aria-label="Категорії модулів">
+                        <span data-tab="player" class="active" role="tab" tabindex="0"><span class="material-icons">person</span></span>
+                        <span data-tab="world" role="tab" tabindex="0"><span class="material-icons">public</span></span>
+                        <span data-tab="utils" role="tab" tabindex="0"><span class="material-icons">build</span></span>
+                        <span data-tab="other" role="tab" tabindex="0"><span class="material-icons">more_horiz</span></span>
+                        <span data-tab="interface" role="tab" tabindex="0"><span class="material-icons">dashboard</span></span>
+                        <span data-tab="themes" role="tab" tabindex="0"><span class="material-icons">palette</span></span>
+                    </div>
+                    <div id="gwBody" class="gw-body fin">
+                        <div id="gwSec" class="gw-sec">На гравцеві</div>
+                        <div class="gw-scroll"><div id="gwItems" class="gw-items"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="sv-footer" role="contentinfo">
+        <div class="sv-footer-logo">
+            <svg viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                <rect x="60" y="60" width="60" height="60"/><rect x="180" y="60" width="60" height="60"/>
+                <rect x="120" y="120" width="60" height="30"/><rect x="90" y="150" width="120" height="30"/>
+                <rect x="60" y="180" width="60" height="60"/><rect x="180" y="180" width="60" height="60"/>
+            </svg>
+            Strange Visuals
+        </div>
+        <span class="sv-footer-note">© 2026 Aleph Studio · GPL Licensed</span>
+    </footer>
+
+    <script src="../../../src/products/strange-visuals.js"></script>
+</body>
+</html>

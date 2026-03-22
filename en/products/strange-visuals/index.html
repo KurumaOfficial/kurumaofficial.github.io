@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Strange Visuals — Aleph Studio</title>
+    <meta name="description" content="Strange Visuals — visual mod for Minecraft Fabric 1.21.8. Chams, tracers, ESP, GUI widget and custom themes.">
+    <meta name="theme-color" content="#111110">
+    <meta name="color-scheme" content="dark light">
+    <meta name="author" content="WeTTeA">
+
+    <meta property="og:type"        content="website">
+    <meta property="og:title"       content="Strange Visuals — Aleph Studio">
+    <meta property="og:description" content="Visual mod fork for Minecraft Fabric 1.21.8. Open source, direct install.">
+    <meta property="og:locale"      content="en_US">
+    <meta property="og:site_name"   content="Aleph Studio">
+
+    <meta name="twitter:card"  content="summary">
+    <meta name="twitter:title" content="Strange Visuals — Aleph Studio">
+
+    <link rel="icon" href="../../../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;0,700;1,400&family=JetBrains+Mono:wght@400&family=Karla:wght@300;400;500;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
+</head>
+<body>
+
+    <!-- ═══ NAVIGATION ═══ -->
+    <nav class="sv-nav" role="navigation" aria-label="Product page navigation">
+        <a class="sv-nav-logo" href="../../" aria-label="Aleph Studio — home">
+            <svg viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                <rect x="60" y="60" width="60" height="60"/><rect x="180" y="60" width="60" height="60"/>
+                <rect x="120" y="120" width="60" height="30"/><rect x="90" y="150" width="120" height="30"/>
+                <rect x="60" y="180" width="60" height="60"/><rect x="180" y="180" width="60" height="60"/>
+            </svg>
+        </a>
+        <div class="sv-nav-right">
+            <button id="themeBtn" class="sv-theme-btn" type="button" aria-label="Toggle theme">
+                <span id="themeIco" class="material-icons">light_mode</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══ HERO · STORE CARD ═══ -->
+    <section class="hero-store" aria-labelledby="heroAppName">
+        <div class="hero-left-fog" aria-hidden="true"></div>
+        <div class="hero-left-shade" aria-hidden="true"></div>
+
+        <div class="hero-store-top">
+            <a class="hero-store-back" href="../../#products" aria-label="Back to products">
+                <span class="material-icons">arrow_back</span>
+            </a>
+            <span class="hero-store-title">Store</span>
+            <div class="hero-store-actions">
+                <button class="hero-store-action" type="button" aria-label="Bookmark"><span class="material-icons">bookmark_border</span></button>
+                <button class="hero-store-action" type="button" aria-label="Share"><span class="material-icons">share</span></button>
+                <button class="hero-store-action" type="button" aria-label="More"><span class="material-icons">more_vert</span></button>
+            </div>
+        </div>
+
+        <div class="hero-store-content">
+            <div class="hero-store-card">
+                <div class="hero-icon-wrap">
+                    <div class="hero-app-icon">
+                        <svg viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                            <rect x="60" y="60" width="60" height="60" opacity=".85"/><rect x="180" y="60" width="60" height="60" opacity=".85"/>
+                            <rect x="120" y="120" width="60" height="30" opacity=".7"/><rect x="90" y="150" width="120" height="30" opacity=".7"/>
+                            <rect x="60" y="180" width="60" height="60" opacity=".6"/><rect x="180" y="180" width="60" height="60" opacity=".6"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="hero-info">
+                    <h1 id="heroAppName" class="hero-app-name">Strange <em>Visuals</em></h1>
+                    <a class="hero-dev" href="../../" rel="noopener">
+                        Aleph Studio
+                        <span class="hero-verified" aria-label="Verified developer"><span class="material-icons">check</span></span>
+                    </a>
+                    <span class="hero-category">Visual mod · Fabric 1.21.8</span>
+
+                    <div class="hero-meta" role="list">
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">4.8 <span class="hero-star" aria-hidden="true">★</span></div>
+                            <div class="hero-meta-label">Rating</div>
+                        </div>
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">v1.1.0</div>
+                            <div class="hero-meta-label">Version</div>
+                        </div>
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">Fabric</div>
+                            <div class="hero-meta-label">Loader</div>
+                        </div>
+                        <div class="hero-meta-item" role="listitem">
+                            <div class="hero-meta-value">GPL</div>
+                            <div class="hero-meta-label">License</div>
+                        </div>
+                    </div>
+
+                    <div class="hero-actions">
+                        <button id="installBtn" class="hero-install-btn" type="button" data-installed="false">DOWNLOAD</button>
+                        <button class="hero-side-btn" type="button" aria-label="Source code"><span class="material-icons">code</span></button>
+                        <button class="hero-side-btn" type="button" aria-label="More actions"><span class="material-icons">more_vert</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ FEATURES ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <div class="feat-head">
+            <div>
+                <span class="sv-eyebrow">Features</span>
+                <h2 class="sv-title">What's inside</h2>
+            </div>
+            <p class="sv-desc">A curated set of visual modules, each configurable independently through the built-in GUI.</p>
+        </div>
+        <div class="feat-grid">
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">crop_square</span></div>
+                <h3>Chams</h3>
+                <p>Entity highlighting through walls. Supports players, mobs and items.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">near_me</span></div>
+                <h3>Tracers</h3>
+                <p>Lines from camera to targets — convenient navigation even at high FOV.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">blur_on</span></div>
+                <h3>ESP Particles</h3>
+                <p>Hit-box visualization, projectile trajectories and other game events.</p>
+            </div>
+            <div class="feat-card w2">
+                <div class="feat-ico"><span class="material-icons">dashboard</span></div>
+                <h3>GUI Widget</h3>
+                <p>Built-in control interface: toggle modules, switch themes, view statuses — right in the game.</p>
+            </div>
+            <div class="feat-card">
+                <div class="feat-ico"><span class="material-icons">palette</span></div>
+                <h3>Themes</h3>
+                <p>4 visual styles: Standard, Minimalism, Neon, Retro.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ COMPARE ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <div class="compare-section-head">
+            <div>
+                <span class="sv-eyebrow">Comparison</span>
+                <h2 class="sv-title">Before &amp; After</h2>
+            </div>
+            <p class="sv-desc">Move the divider to see the difference between vanilla Minecraft and the mod-enabled version.</p>
+        </div>
+        <div class="compare-card">
+            <div class="compare-stage">
+                <div class="compare-image compare-before">Vanilla Minecraft</div>
+                <div id="compareAfterWrap" class="compare-after-wrap">
+                    <div class="compare-image compare-after">Strange Visuals ON</div>
+                </div>
+                <span class="compare-label before">Before</span>
+                <span class="compare-label after">After</span>
+                <div id="compareDivider" class="compare-divider"></div>
+                <div id="compareHandle" class="compare-handle"><span class="material-icons">drag_indicator</span></div>
+                <input id="compareSlider" class="compare-slider" type="range" min="0" max="100" value="50" aria-label="Comparison divider position">
+            </div>
+            <div class="compare-slot">Drag screenshots here or upload later</div>
+        </div>
+    </div>
+
+    <!-- ═══ MODULES ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <span class="sv-eyebrow">Modules</span>
+        <h2 class="sv-title">Full list</h2>
+        <p class="sv-desc">Everything included in the current build — with default state.</p>
+        <div class="mod-grid">
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">person</span><span class="mod-head-name">Player</span><span class="mod-head-ct">5 modules</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Boxes</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Jumpies</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Chinese Hat</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Target Render</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Hit Bubble</span><span class="mod-badge off">OFF</span></div>
+                </div>
+            </div>
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">public</span><span class="mod-head-name">World</span><span class="mod-head-ct">7 modules</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Chams</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Tracers</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Projectiles</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Particles</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Block Overlay</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Drop Render</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Skeleton</span><span class="mod-badge off">OFF</span></div>
+                </div>
+            </div>
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">build</span><span class="mod-head-name">Utilities</span><span class="mod-head-ct">6 modules</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Auto Sprint</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Auto Tool</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Fullbright</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">No Overlay</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Coordinates</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Timer</span><span class="mod-badge off">OFF</span></div>
+                </div>
+            </div>
+            <div class="mod-group">
+                <div class="mod-head"><span class="material-icons">dashboard</span><span class="mod-head-name">Interface</span><span class="mod-head-ct">8 modules</span></div>
+                <div class="mod-items">
+                    <div class="mod-item"><span class="mod-item-name">Array List</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Watermark</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Keybinds</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Notifications</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Hotbar</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Scoreboard</span><span class="mod-badge off">OFF</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Tab List</span><span class="mod-badge on">ON</span></div>
+                    <div class="mod-item"><span class="mod-item-name">Crosshair</span><span class="mod-badge on">ON</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ GUI PREVIEW ═══ -->
+    <div class="sv-wrap sv-reveal">
+        <div class="preview-row">
+            <div>
+                <span class="sv-eyebrow">Preview</span>
+                <h2 class="sv-title">GUI in action</h2>
+                <p class="sv-desc">Interactive replica of the in-game interface. Switch tabs, toggle modules — exactly as it works in Minecraft.</p>
+                <div class="preview-tags">
+                    <span class="sv-tag">6 tabs</span>
+                    <span class="sv-tag">36 modules</span>
+                    <span class="sv-tag">4 themes</span>
+                    <span class="sv-tag">real-time</span>
+                </div>
+            </div>
+            <div class="gui-outer">
+                <div class="gui-w">
+                    <div class="gw-hdr">
+                        <svg class="gw-logo" viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                            <rect x="60" y="60" width="60" height="60"/><rect x="180" y="60" width="60" height="60"/>
+                            <rect x="120" y="120" width="60" height="30"/><rect x="90" y="150" width="120" height="30"/>
+                            <rect x="60" y="180" width="60" height="60"/><rect x="180" y="180" width="60" height="60"/>
+                        </svg>
+                        <div class="gw-htxt">
+                            <span class="gw-title">Strange Visuals</span>
+                            <span class="gw-sub">v1.1.0</span>
+                        </div>
+                    </div>
+                    <div id="gwTabs" class="gw-tabs" role="tablist" aria-label="Module categories">
+                        <span data-tab="player" class="active" role="tab" tabindex="0"><span class="material-icons">person</span></span>
+                        <span data-tab="world" role="tab" tabindex="0"><span class="material-icons">public</span></span>
+                        <span data-tab="utils" role="tab" tabindex="0"><span class="material-icons">build</span></span>
+                        <span data-tab="other" role="tab" tabindex="0"><span class="material-icons">more_horiz</span></span>
+                        <span data-tab="interface" role="tab" tabindex="0"><span class="material-icons">dashboard</span></span>
+                        <span data-tab="themes" role="tab" tabindex="0"><span class="material-icons">palette</span></span>
+                    </div>
+                    <div id="gwBody" class="gw-body fin">
+                        <div id="gwSec" class="gw-sec">Player</div>
+                        <div class="gw-scroll"><div id="gwItems" class="gw-items"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="sv-footer" role="contentinfo">
+        <div class="sv-footer-logo">
+            <svg viewBox="0 0 300 300" fill="currentColor" aria-hidden="true">
+                <rect x="60" y="60" width="60" height="60"/><rect x="180" y="60" width="60" height="60"/>
+                <rect x="120" y="120" width="60" height="30"/><rect x="90" y="150" width="120" height="30"/>
+                <rect x="60" y="180" width="60" height="60"/><rect x="180" y="180" width="60" height="60"/>
+            </svg>
+            Strange Visuals
+        </div>
+        <span class="sv-footer-note">© 2026 Aleph Studio · GPL Licensed</span>
+    </footer>
+
+    <script src="../../../src/products/strange-visuals.js"></script>
+</body>
+</html>

@@ -28,7 +28,7 @@ export const DEFAULT_SITE_DATA = {
             ],
             "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
             "downloadUrl": "./assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar",
-            "detailUrl": "",
+            "detailUrl": "products/strange-visuals/",
             "note": "Файл мода доступен по кнопке ниже."
         },
         {
