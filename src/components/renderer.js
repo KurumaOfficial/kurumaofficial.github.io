@@ -127,8 +127,11 @@ export function createRenderer({ localeController }) {
             if (product.detailUrl) {
                 /* detailUrl is locale-relative, resolve against current directory */
                 const href = './' + product.detailUrl.replace(/^\.\//, '');
+                                const cardAttrs = product.autoRouteRedirect
+                                        ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
+                                        : '';
                 return `
-<article class="product-card" id="${escapeHtml(product.id)}">
+<article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}"${cardAttrs}>
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
@@ -236,6 +239,32 @@ export function createRenderer({ localeController }) {
                 setTimeout(() => {
                     window.location.href = /** @type {HTMLAnchorElement} */ (link).href;
                 }, 280);
+            });
+        });
+
+        document.querySelectorAll('[data-detail-card]').forEach((card) => {
+            if (/** @type {HTMLElement} */ (card).dataset.boundCard) return;
+            /** @type {HTMLElement} */ (card).dataset.boundCard = '1';
+
+            const navigate = () => {
+                const href = /** @type {HTMLElement} */ (card).dataset.detailCard;
+                if (!href) return;
+                document.body.classList.add('page-leaving');
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 280);
+            };
+
+            card.addEventListener('click', (event) => {
+                const target = event.target instanceof Element ? event.target.closest('a, button, input, textarea, select') : null;
+                if (target) return;
+                navigate();
+            });
+
+            card.addEventListener('keydown', (event) => {
+                if (event.key !== 'Enter' && event.key !== ' ') return;
+                event.preventDefault();
+                navigate();
             });
         });
     }

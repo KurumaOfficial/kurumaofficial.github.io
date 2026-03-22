@@ -6,13 +6,20 @@ import {
     getFlagMeta,
     normalizeData,
     normalizeProduct,
+    normalizeRouteModules,
     normalizeTeamMember,
+    ROUTE_MODULE_KEYS,
     toNumber,
 } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml } from '../core/dom.js';
 import { createGitHubPublisher } from '../github/publisher.js';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
+const ROUTE_MODULE_LABELS = Object.freeze({
+    ru: { player: 'На игроке', world: 'В мире', utils: 'Утилиты', other: 'Остальное', interface: 'Интерфейс', themes: 'Темы' },
+    en: { player: 'Player', world: 'World', utils: 'Utilities', other: 'Other', interface: 'Interface', themes: 'Themes' },
+    ua: { player: 'На гравці', world: 'У світі', utils: 'Утиліти', other: 'Інше', interface: 'Інтерфейс', themes: 'Теми' },
+});
 
 const ADMIN_VIEW_COPY = Object.freeze({
     ru: {
@@ -173,6 +180,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const editorFieldDownloadFileMetaEl = document.getElementById('f-download-file-meta');
     const clearDownloadFileBtnEl = document.getElementById('clearDownloadFileBtn');
     const editorFieldSourceEl = document.getElementById('f-source');
+    const editorFieldAutoRouteRedirectEl = document.getElementById('f-auto-route-redirect');
+    const routeModuleCategoryEl = document.getElementById('route-module-category');
+    const routeModuleListEl = document.getElementById('routeModuleList');
+    const addRouteModuleBtnEl = document.getElementById('addRouteModuleBtn');
     const socialYoutubeEl = document.getElementById('socialYoutube');
     const socialDiscordEl = document.getElementById('socialDiscord');
     const socialTelegramEl = document.getElementById('socialTelegram');
@@ -580,8 +591,56 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (editorFieldShowcaseOrderEl) editorFieldShowcaseOrderEl.value = '';
         if (editorFieldDownloadEl) editorFieldDownloadEl.value = '';
         if (editorFieldSourceEl) editorFieldSourceEl.value = '';
+        if (editorFieldAutoRouteRedirectEl) editorFieldAutoRouteRedirectEl.checked = false;
         if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
+        if (routeModuleCategoryEl) routeModuleCategoryEl.value = 'player';
+        renderRouteModuleEditor();
         renderProductUploadMeta();
+    }
+
+    function getRouteModuleLabel(key) {
+        const labels = ROUTE_MODULE_LABELS[locale] || ROUTE_MODULE_LABELS.ru;
+        return labels[key] || key;
+    }
+
+    function getSelectedRouteModuleKey() {
+        const raw = String(routeModuleCategoryEl?.value || 'player');
+        return ROUTE_MODULE_KEYS.includes(/** @type {any} */ (raw)) ? raw : 'player';
+    }
+
+    function ensureSelectedProductRouteModules() {
+        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return null;
+        const product = editorData.products[editorSelectedIndex];
+        product.routeModules = normalizeRouteModules(product.routeModules);
+        return product.routeModules;
+    }
+
+    function renderRouteModuleEditor() {
+        if (!routeModuleListEl) return;
+
+        const routeModules = ensureSelectedProductRouteModules();
+        if (!routeModules) {
+            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${locale === 'en' ? 'Select a product to edit route modules.' : locale === 'ua' ? 'Оберіть продукт, щоб редагувати route-модулі.' : 'Выбери продукт, чтобы редактировать route-модули.'}</div>`;
+            return;
+        }
+
+        const activeKey = getSelectedRouteModuleKey();
+        const items = routeModules[activeKey] || [];
+        if (!items.length) {
+            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${locale === 'en' ? 'No functions in this category yet.' : locale === 'ua' ? 'У цій категорії ще немає функцій.' : 'В этой категории пока нет функций.'}</div>`;
+            return;
+        }
+
+        routeModuleListEl.innerHTML = items.map((item, index) => `
+            <div class="dash-route-row" data-route-module-row="${index}">
+                <input type="text" value="${escapeHtml(item.name)}" data-route-module-name="${index}" aria-label="${escapeHtml(getRouteModuleLabel(activeKey))}">
+                <label class="dash-route-toggle">
+                    <input type="checkbox" data-route-module-enabled="${index}" ${item.enabled ? 'checked' : ''}>
+                    <span>${locale === 'en' ? 'Enabled' : locale === 'ua' ? 'Увімкнено' : 'Включено'}</span>
+                </label>
+                <button type="button" class="dash-btn dash-sm dash-route-remove" data-route-module-remove="${index}">✕</button>
+            </div>
+        `).join('');
     }
 
     function fillSocialInputs() {
@@ -831,7 +890,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     function setEditorTab(tab) {
-        editorActiveTab = ['tab-main', 'tab-content', 'tab-publish'].includes(tab) ? tab : 'tab-main';
+        editorActiveTab = ['tab-main', 'tab-content', 'tab-publish', 'tab-route'].includes(tab) ? tab : 'tab-main';
         syncEditorTabs();
     }
 
@@ -851,6 +910,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (editorFieldShowcaseOrderEl) editorFieldShowcaseOrderEl.value = product.featuredOrder;
         if (editorFieldDownloadEl) editorFieldDownloadEl.value = product.downloadUrl;
         if (editorFieldSourceEl) editorFieldSourceEl.value = product.sourceUrl;
+        if (editorFieldAutoRouteRedirectEl) editorFieldAutoRouteRedirectEl.checked = Boolean(product.autoRouteRedirect);
+        if (routeModuleCategoryEl && !routeModuleCategoryEl.value) routeModuleCategoryEl.value = 'player';
+        renderRouteModuleEditor();
         renderProductUploadMeta();
         syncEditorTabs();
     }
@@ -1010,6 +1072,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             downloadUrl: '',
             detailUrl: '',
             note: '',
+            autoRouteRedirect: false,
+            routeModules: {},
         }, count - 1);
     }
 
@@ -1041,6 +1105,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             downloadUrl: editorFieldDownloadEl?.value,
             sourceUrl: editorFieldSourceEl?.value,
             detailUrl: current.detailUrl,
+            autoRouteRedirect: Boolean(editorFieldAutoRouteRedirectEl?.checked),
+            routeModules: current.routeModules,
         }, editorSelectedIndex);
         nextProduct = syncPendingUploadForProduct(current, nextProduct, editorFieldDownloadEl?.value.trim() || '');
         editorData.products[editorSelectedIndex] = nextProduct;
@@ -1262,6 +1328,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorFieldShowcaseOrderEl,
         editorFieldDownloadEl,
         editorFieldSourceEl,
+        editorFieldAutoRouteRedirectEl,
     ].filter(Boolean).forEach((field) => {
         field.addEventListener('input', () => syncProductDraftFromInputs());
         field.addEventListener('change', () => syncProductDraftFromInputs());
@@ -1303,6 +1370,66 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             emitToast(locale === 'en' ? 'Could not import JSON.' : locale === 'ua' ? 'Не вдалося імпортувати JSON.' : 'Не удалось импортировать JSON.', 'error');
         }
         input.value = '';
+    });
+
+    routeModuleCategoryEl?.addEventListener('change', () => {
+        renderRouteModuleEditor();
+    });
+
+    addRouteModuleBtnEl?.addEventListener('click', () => {
+        const routeModules = ensureSelectedProductRouteModules();
+        if (!routeModules) return;
+        const activeKey = getSelectedRouteModuleKey();
+        routeModules[activeKey].push({
+            name: locale === 'en' ? 'New function' : locale === 'ua' ? 'Нова функція' : 'Новая функция',
+            enabled: true,
+        });
+        renderRouteModuleEditor();
+        syncDraftControls();
+    });
+
+    routeModuleListEl?.addEventListener('input', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+
+        const routeModules = ensureSelectedProductRouteModules();
+        if (!routeModules) return;
+        const activeKey = getSelectedRouteModuleKey();
+
+        if (target.hasAttribute('data-route-module-name')) {
+            const index = Number(target.getAttribute('data-route-module-name'));
+            if (!routeModules[activeKey][index]) return;
+            routeModules[activeKey][index].name = target.value;
+            syncDraftControls();
+        }
+    });
+
+    routeModuleListEl?.addEventListener('change', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+
+        const routeModules = ensureSelectedProductRouteModules();
+        if (!routeModules) return;
+        const activeKey = getSelectedRouteModuleKey();
+
+        if (target.hasAttribute('data-route-module-enabled')) {
+            const index = Number(target.getAttribute('data-route-module-enabled'));
+            if (!routeModules[activeKey][index]) return;
+            routeModules[activeKey][index].enabled = target.checked;
+            syncDraftControls();
+        }
+    });
+
+    routeModuleListEl?.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('[data-route-module-remove]') : null;
+        if (!target) return;
+        const routeModules = ensureSelectedProductRouteModules();
+        if (!routeModules) return;
+        const activeKey = getSelectedRouteModuleKey();
+        const index = Number(target.getAttribute('data-route-module-remove'));
+        routeModules[activeKey].splice(index, 1);
+        renderRouteModuleEditor();
+        syncDraftControls();
     });
 
     document.querySelectorAll('[data-admin-view]').forEach((link) => {

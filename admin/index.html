@@ -177,6 +177,7 @@
                                     <button type="button" class="dash-tab-btn active" data-tab="tab-main">Основное</button>
                                     <button type="button" class="dash-tab-btn" data-tab="tab-content">Контент</button>
                                     <button type="button" class="dash-tab-btn" data-tab="tab-publish">Публикация</button>
+                                    <button type="button" class="dash-tab-btn" data-tab="tab-route">Route</button>
                                 </div>
 
                                 <div class="dash-tab-panel active" data-panel="tab-main">
@@ -252,6 +253,51 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                    <div class="dash-tab-panel" data-panel="tab-route">
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <h4>Настройки route</h4>
+                                                <div class="dash-fg">
+                                                    <div class="dash-field dash-c12">
+                                                        <label class="dash-inline-check">
+                                                            <input type="checkbox" id="f-auto-route-redirect">
+                                                            <span>Моментально открывать route со страницы продукта на главной</span>
+                                                        </label>
+                                                        <p class="dash-help">Если включено — карточка Strange Visuals на главной становится прямой ссылкой на route.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dash-form-card">
+                                            <div class="dash-form-section">
+                                                <div class="dash-section-head">
+                                                    <div>
+                                                        <h4>Список модулей</h4>
+                                                        <p>Эти функции одновременно используются в блоке «Список модулей» и в GUI-вкладках route Strange Visuals.</p>
+                                                    </div>
+                                                </div>
+                                                <div class="dash-route-toolbar">
+                                                    <div class="dash-field dash-c6">
+                                                        <label for="route-module-category">Категория</label>
+                                                        <select id="route-module-category">
+                                                            <option value="player">На игроке</option>
+                                                            <option value="world">В мире</option>
+                                                            <option value="utils">Утилиты</option>
+                                                            <option value="other">Остальное</option>
+                                                            <option value="interface">Интерфейс</option>
+                                                            <option value="themes">Темы</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="dash-route-actions">
+                                                        <button id="addRouteModuleBtn" type="button" class="dash-btn dash-primary">+ Функция</button>
+                                                    </div>
+                                                </div>
+                                                <div id="routeModuleList" class="dash-route-list"></div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 <div class="dash-editor-footer">
                                     <div class="note">Изменения копятся в черновике. «Применить» / «Отменить» работают для всех разделов.</div>

@@ -29,7 +29,56 @@ export const DEFAULT_SITE_DATA = {
             "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
             "downloadUrl": "./assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar",
             "detailUrl": "products/strange-visuals/",
-            "note": "Файл мода доступен по кнопке ниже."
+            "note": "Файл мода доступен по кнопке ниже.",
+            "autoRouteRedirect": false,
+            "routeModules": {
+                "player": [
+                    { "name": "Боксы", "enabled": true },
+                    { "name": "Джампики", "enabled": true },
+                    { "name": "Китайская шляпа", "enabled": true },
+                    { "name": "Таргет рендер", "enabled": true },
+                    { "name": "Хит бабл", "enabled": false }
+                ],
+                "world": [
+                    { "name": "Чамсы", "enabled": true },
+                    { "name": "Трейсеры", "enabled": false },
+                    { "name": "Снаряды", "enabled": true },
+                    { "name": "Частицы", "enabled": true },
+                    { "name": "Блок оверлей", "enabled": false },
+                    { "name": "Дроп рендер", "enabled": true },
+                    { "name": "Скелетон", "enabled": false }
+                ],
+                "utils": [
+                    { "name": "Авто спринт", "enabled": true },
+                    { "name": "Авто тул", "enabled": false },
+                    { "name": "Фуллбрайт", "enabled": true },
+                    { "name": "Ноу оверлей", "enabled": true },
+                    { "name": "Координаты", "enabled": true },
+                    { "name": "Таймер", "enabled": false }
+                ],
+                "other": [
+                    { "name": "Антибот", "enabled": false },
+                    { "name": "Прокси", "enabled": false },
+                    { "name": "Дебаг мод", "enabled": true },
+                    { "name": "Ник хайдер", "enabled": true }
+                ],
+                "interface": [
+                    { "name": "Массив лист", "enabled": true },
+                    { "name": "Ватермарка", "enabled": true },
+                    { "name": "Кейбинды", "enabled": false },
+                    { "name": "Нотификации", "enabled": true },
+                    { "name": "Хотбар", "enabled": true },
+                    { "name": "Скорборд", "enabled": false },
+                    { "name": "Табулист", "enabled": true },
+                    { "name": "Кроссхейр", "enabled": true }
+                ],
+                "themes": [
+                    { "name": "Стандарт", "enabled": true },
+                    { "name": "Минимализм", "enabled": false },
+                    { "name": "Неон", "enabled": false },
+                    { "name": "Ретро", "enabled": false }
+                ]
+            }
         },
         {
             "id": "next-release",
@@ -47,7 +96,9 @@ export const DEFAULT_SITE_DATA = {
             "sourceUrl": "",
             "downloadUrl": "",
             "detailUrl": "",
-            "note": "Подробности появятся позже."
+            "note": "Подробности появятся позже.",
+            "autoRouteRedirect": false,
+            "routeModules": {}
         },
         {
             "id": "third-project",
@@ -65,7 +116,9 @@ export const DEFAULT_SITE_DATA = {
             "sourceUrl": "",
             "downloadUrl": "",
             "detailUrl": "",
-            "note": "Подробности появятся позже."
+            "note": "Подробности появятся позже.",
+            "autoRouteRedirect": false,
+            "routeModules": {}
         }
     ],
     "team": [

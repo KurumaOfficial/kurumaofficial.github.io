@@ -294,6 +294,7 @@ body::before {
 }
 
 .theme-btn:hover {
+    background: var(--color-bg-hover);
     border-color: var(--border-default);
     color: var(--color-text-heading);
 }
@@ -659,6 +660,10 @@ section {
     transition: background var(--duration-base) var(--ease-default);
     display: flex;
     flex-direction: column;
+}
+
+.product-card.is-route-card {
+    cursor: pointer;
 }
 
 .product-card:last-child {

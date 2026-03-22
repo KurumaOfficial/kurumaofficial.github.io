@@ -71,6 +71,59 @@ export function formatBytes(bytes) {
 
 /** Valid release stage keys. */
 const VALID_FLAGS = /** @type {const} */ (['alpha', 'beta', 'release']);
+export const ROUTE_MODULE_KEYS = /** @type {const} */ (['player', 'world', 'utils', 'other', 'interface', 'themes']);
+
+/**
+ * @typedef {{ name: string; enabled: boolean }} RouteModuleItem
+ */
+
+/**
+ * @typedef {{
+ *   player: RouteModuleItem[];
+ *   world: RouteModuleItem[];
+ *   utils: RouteModuleItem[];
+ *   other: RouteModuleItem[];
+ *   interface: RouteModuleItem[];
+ *   themes: RouteModuleItem[];
+ * }} RouteModules
+ */
+
+/**
+ * @param {unknown} raw
+ * @param {string} [fallback]
+ * @returns {RouteModuleItem}
+ */
+function normalizeRouteModuleItem(raw, fallback = 'Новая функция') {
+    const src = /** @type {Record<string, unknown>} */ (raw || {});
+    return {
+        name: cleanText(src.name, fallback),
+        enabled: Boolean(src.enabled ?? src.on),
+    };
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {RouteModules}
+ */
+export function normalizeRouteModules(raw) {
+    const src = /** @type {Record<string, unknown>} */ (raw || {});
+    /** @type {RouteModules} */
+    const result = {
+        player: [],
+        world: [],
+        utils: [],
+        other: [],
+        interface: [],
+        themes: [],
+    };
+
+    ROUTE_MODULE_KEYS.forEach((key) => {
+        const items = Array.isArray(src[key]) ? src[key] : [];
+        result[key] = items.map((item, index) => normalizeRouteModuleItem(item, `Функция ${index + 1}`));
+    });
+
+    return result;
+}
 
 /**
  * @typedef {Object} Product
@@ -90,6 +143,8 @@ const VALID_FLAGS = /** @type {const} */ (['alpha', 'beta', 'release']);
  * @property {string}   downloadUrl
  * @property {string}   [detailUrl]
  * @property {string}   note
+ * @property {boolean}  [autoRouteRedirect]
+ * @property {RouteModules} [routeModules]
  */
 
 /**
@@ -130,6 +185,8 @@ export function normalizeProduct(raw = {}, index = 0) {
         downloadUrl: cleanText(raw.downloadUrl, ''),
         detailUrl: cleanText(raw.detailUrl, ''),
         note: cleanText(raw.note, ''),
+        autoRouteRedirect: Boolean(raw.autoRouteRedirect),
+        routeModules: normalizeRouteModules(raw.routeModules),
     };
 }
 

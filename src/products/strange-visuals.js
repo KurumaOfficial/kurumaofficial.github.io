@@ -1,19 +1,112 @@
+import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { createLocaleController } from '../i18n/controller.js';
 import { initAdminRouteAccess, initSharedThemeToggle, initSmoothRouteTransitions } from '../core/site-shell.js';
 
-const shareBtn = document.getElementById('shareBtn');
-
 const localeController = createLocaleController();
+const shareBtn = document.getElementById('shareBtn');
+const installBtn = document.getElementById('installBtn');
+const sourceBtn = document.getElementById('sourceBtn');
+const gwTabsEl = document.getElementById('gwTabs');
+const gwSecEl = document.getElementById('gwSec');
+const gwBodyEl = document.getElementById('gwBody');
+const gwItemsEl = document.getElementById('gwItems');
+const modGridEl = document.getElementById('modGrid');
+
+const ROUTE_CATEGORY_META = Object.freeze({
+  ru: {
+    player: { title: 'На игроке', icon: 'person' },
+    world: { title: 'В мире', icon: 'public' },
+    utils: { title: 'Утилиты', icon: 'build' },
+    other: { title: 'Остальное', icon: 'more_horiz' },
+    interface: { title: 'Интерфейс', icon: 'dashboard' },
+    themes: { title: 'Темы', icon: 'palette' },
+    enabled: 'ВКЛЮЧЕНО',
+    disabled: 'ВЫКЛЮЧЕНО',
+    badgeOn: 'ВКЛ',
+    badgeOff: 'ВЫКЛ',
+  },
+  en: {
+    player: { title: 'Player', icon: 'person' },
+    world: { title: 'World', icon: 'public' },
+    utils: { title: 'Utilities', icon: 'build' },
+    other: { title: 'Other', icon: 'more_horiz' },
+    interface: { title: 'Interface', icon: 'dashboard' },
+    themes: { title: 'Themes', icon: 'palette' },
+    enabled: 'ENABLED',
+    disabled: 'DISABLED',
+    badgeOn: 'ON',
+    badgeOff: 'OFF',
+  },
+  ua: {
+    player: { title: 'На гравці', icon: 'person' },
+    world: { title: 'У світі', icon: 'public' },
+    utils: { title: 'Утиліти', icon: 'build' },
+    other: { title: 'Інше', icon: 'more_horiz' },
+    interface: { title: 'Інтерфейс', icon: 'dashboard' },
+    themes: { title: 'Теми', icon: 'palette' },
+    enabled: 'УВІМКНЕНО',
+    disabled: 'ВИМКНЕНО',
+    badgeOn: 'УВІМК',
+    badgeOff: 'ВИМК',
+  },
+});
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getLocaleMeta() {
+  return ROUTE_CATEGORY_META[localeController.locale] || ROUTE_CATEGORY_META.ru;
+}
+
+function resolveRouteAsset(path) {
+  const value = String(path || '').trim();
+  if (!value || /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value)) return value;
+  const cleaned = value.replace(/^\.\//, '').replace(/^\/+/, '');
+  return new URL(`../../../${cleaned}`, window.location.href).toString();
+}
+
+function getRouteProduct() {
+  const match = window.location.pathname.match(/\/products\/([^/]+)\/?/i);
+  const slug = match?.[1] || 'strange-visuals';
+  return DEFAULT_SITE_DATA.products.find((product) => product.id === slug)
+    || DEFAULT_SITE_DATA.products.find((product) => String(product.detailUrl || '').includes(`/products/${slug}/`) || String(product.detailUrl || '').includes(`products/${slug}/`))
+    || DEFAULT_SITE_DATA.products[0];
+}
+
+const routeProduct = getRouteProduct();
+const localeMeta = getLocaleMeta();
+const tabs = routeProduct?.routeModules || {};
+const tabKeys = ['player', 'world', 'utils', 'other', 'interface', 'themes'].filter((key) => localeMeta[key]);
+
 localeController.mountLanguageSwitcher();
 initSharedThemeToggle();
 initAdminRouteAccess({ adminHref: new URL('../../admin/', window.location.href).toString() });
 initSmoothRouteTransitions();
 
+if (installBtn && routeProduct?.downloadUrl) {
+  installBtn.href = resolveRouteAsset(routeProduct.downloadUrl);
+}
+
+if (sourceBtn) {
+  const sourceUrl = routeProduct?.sourceUrl || sourceBtn.getAttribute('href') || '';
+  if (sourceUrl) {
+    sourceBtn.href = sourceUrl;
+  } else {
+    sourceBtn.hidden = true;
+  }
+}
+
 if (shareBtn) {
   shareBtn.addEventListener('click', async () => {
     const shareData = {
       title: document.title,
-      text: 'Strange Visuals',
+      text: routeProduct?.title || 'Strange Visuals',
       url: window.location.href,
     };
 
@@ -31,68 +124,89 @@ if (shareBtn) {
   });
 }
 
-const tabs = {
-  player:    { title:'На игроке',  icon:'person',     items:[{n:'Боксы',on:true},{n:'Джампики',on:true},{n:'Китайская шляпа',on:true},{n:'Таргет рендер',on:true},{n:'Хит бабл',on:false}] },
-  world:     { title:'В мире',     icon:'public',     items:[{n:'Чамсы',on:true},{n:'Трейсеры',on:false},{n:'Снаряды',on:true},{n:'Частицы',on:true},{n:'Блок оверлей',on:false},{n:'Дроп рендер',on:true},{n:'Скелетон',on:false}] },
-  utils:     { title:'Утилиты',    icon:'build',      items:[{n:'Авто спринт',on:true},{n:'Авто тул',on:false},{n:'Фуллбрайт',on:true},{n:'Ноу оверлей',on:true},{n:'Координаты',on:true},{n:'Таймер',on:false}] },
-  other:     { title:'Остальное',  icon:'more_horiz', items:[{n:'Антибот',on:false},{n:'Прокси',on:false},{n:'Дебаг мод',on:true},{n:'Ник хайдер',on:true}] },
-  interface: { title:'Интерфейс', icon:'dashboard',  items:[{n:'Массив лист',on:true},{n:'Ватермарка',on:true},{n:'Кейбинды',on:false},{n:'Нотификации',on:true},{n:'Хотбар',on:true},{n:'Скорборд',on:false},{n:'Табулист',on:true},{n:'Кроссхейр',on:true}] },
-  themes:    { title:'Темы',       icon:'palette',    items:[{n:'Стандарт',on:true},{n:'Минимализм',on:false},{n:'Неон',on:false},{n:'Ретро',on:false}] },
-};
+function renderGwTabs() {
+  if (!gwTabsEl) return;
+  gwTabsEl.innerHTML = tabKeys.map((key, index) => `
+    <span class="${index === 0 ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</span>
+  `).join('');
+
+  gwTabsEl.querySelectorAll('span').forEach((tab) => {
+    tab.addEventListener('click', function () {
+      gwTabsEl.querySelectorAll('span').forEach((item) => item.classList.remove('active'));
+      this.classList.add('active');
+      buildGui(this.dataset.tab || tabKeys[0]);
+    });
+  });
+}
 
 function buildGui(key) {
-  const d    = tabs[key];
-  const body = document.getElementById('gwBody');
-  const sec  = document.getElementById('gwSec');
-  const list = document.getElementById('gwItems');
-  const scrl = body.querySelector('.gw-scroll');
+  const meta = localeMeta[key] || localeMeta.player;
+  const items = Array.isArray(tabs[key]) ? tabs[key] : [];
+  if (!gwBodyEl || !gwSecEl || !gwItemsEl) return;
 
-  body.style.transition = 'opacity .18s ease, transform .18s ease';
-  body.classList.replace('fin','fout');
+  const scrollEl = gwBodyEl.querySelector('.gw-scroll');
+  gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
+  gwBodyEl.classList.replace('fin', 'fout');
 
-  setTimeout(() => {
-    sec.textContent = d.title;
-    list.innerHTML  = '';
-    d.items.forEach(it => {
+  window.setTimeout(() => {
+    gwSecEl.textContent = meta.title;
+    gwItemsEl.innerHTML = '';
+    items.forEach((item) => {
       const el = document.createElement('div');
       el.className = 'gw-item';
-      el.onclick   = () => toggleGw(el);
+      el.onclick = () => toggleGw(el);
       el.innerHTML = `
-        <div class="gw-av"><span class="material-icons">${d.icon}</span></div>
+        <div class="gw-av"><span class="material-icons">${meta.icon}</span></div>
         <div class="gw-info">
-          <div class="gw-name">${it.n}</div>
-          <div class="gw-status ${it.on?'on':'off'}">${it.on?'ВКЛЮЧЕНО':'ВЫКЛЮЧЕНО'}</div>
+          <div class="gw-name">${escapeHtml(item.name)}</div>
+          <div class="gw-status ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.enabled : localeMeta.disabled}</div>
         </div>
         <div class="gw-dots"><span class="material-icons">more_vert</span></div>
       `;
-      list.appendChild(el);
+      gwItemsEl.appendChild(el);
     });
-    scrl.scrollTop = 0;
-    body.style.transition = 'opacity .22s ease, transform .22s ease';
-    body.classList.replace('fout','fin');
+
+    if (scrollEl) scrollEl.scrollTop = 0;
+    gwBodyEl.style.transition = 'opacity .22s ease, transform .22s ease';
+    gwBodyEl.classList.replace('fout', 'fin');
   }, 170);
 }
 
 function toggleGw(el) {
-  const s = el.querySelector('.gw-status');
+  const statusEl = el.querySelector('.gw-status');
+  if (!statusEl) return;
   el.style.transform = 'scale(.97)';
-  setTimeout(() => { el.style.transform = ''; }, 110);
-  if (s.classList.contains('on')) {
-    s.classList.replace('on','off'); s.textContent = 'ВЫКЛЮЧЕНО';
+  window.setTimeout(() => { el.style.transform = ''; }, 110);
+  if (statusEl.classList.contains('on')) {
+    statusEl.classList.replace('on', 'off');
+    statusEl.textContent = localeMeta.disabled;
   } else {
-    s.classList.replace('off','on'); s.textContent = 'ВКЛЮЧЕНО';
+    statusEl.classList.replace('off', 'on');
+    statusEl.textContent = localeMeta.enabled;
   }
 }
 
-document.getElementById('gwTabs').querySelectorAll('span').forEach(tab => {
-  tab.addEventListener('click', function() {
-    document.getElementById('gwTabs').querySelectorAll('span').forEach(t => t.classList.remove('active'));
-    this.classList.add('active');
-    buildGui(this.dataset.tab);
-  });
-});
+function renderModuleList() {
+  if (!modGridEl) return;
+  modGridEl.innerHTML = tabKeys.map((key) => {
+    const meta = localeMeta[key] || localeMeta.player;
+    const items = Array.isArray(tabs[key]) ? tabs[key] : [];
+    return `
+      <div class="mod-group reveal">
+        <div class="mod-head"><span class="material-icons">${meta.icon}</span><span class="mod-head-name">${meta.title}</span><span class="mod-head-ct">${items.length}</span></div>
+        <div class="mod-items">
+          ${items.map((item) => `
+            <div class="mod-item"><span class="mod-item-name">${escapeHtml(item.name)}</span><span class="mod-badge ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.badgeOn : localeMeta.badgeOff}</span></div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
 
-buildGui('player');
+renderGwTabs();
+buildGui(tabKeys[0] || 'player');
+renderModuleList();
 
 const compareSlider = document.getElementById('compareSlider');
 const compareAfterWrap = document.getElementById('compareAfterWrap');
@@ -101,9 +215,9 @@ const compareHandle = document.getElementById('compareHandle');
 
 function updateCompare(value) {
   const v = Math.max(0, Math.min(100, Number(value)));
-  compareAfterWrap.style.width = v + '%';
-  compareDivider.style.left = v + '%';
-  compareHandle.style.left = v + '%';
+  if (compareAfterWrap) compareAfterWrap.style.width = `${v}%`;
+  if (compareDivider) compareDivider.style.left = `${v}%`;
+  if (compareHandle) compareHandle.style.left = `${v}%`;
 }
 
 if (compareSlider) {
@@ -111,16 +225,15 @@ if (compareSlider) {
   updateCompare(compareSlider.value);
 }
 
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('on'), parseInt(e.target.dataset.d)||0);
-      obs.unobserve(e.target);
-    }
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    window.setTimeout(() => entry.target.classList.add('on'), parseInt(entry.target.dataset.d || '0', 10) || 0);
+    obs.unobserve(entry.target);
   });
-}, { threshold:.08, rootMargin:'0px 0px -28px 0px' });
+}, { threshold: .08, rootMargin: '0px 0px -28px 0px' });
 
-document.querySelectorAll('.reveal').forEach((el,i) => {
-  el.dataset.d = (i % 4) * 90;
+document.querySelectorAll('.reveal').forEach((el, index) => {
+  el.dataset.d = String((index % 4) * 90);
   obs.observe(el);
 });

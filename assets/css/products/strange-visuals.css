@@ -119,8 +119,8 @@ body::after {
   padding:28px var(--page-gutter);
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
-  background:rgba(8, 6, 6, 0.75);
-  border-bottom:1px solid var(--border);
+  background:rgba(24, 21, 18, 0.78);
+  border-bottom:1px solid color-mix(in srgb, var(--accent) 18%, var(--border-hi) 82%);
 }
 
 .nav-logo {
@@ -624,8 +624,10 @@ body::after {
 }
 
 .hero-source-btn {
+  width:52px;
+  min-width:52px;
   min-height:52px;
-  padding:0 22px;
+  padding:0;
   border-radius:14px;
   border:1px solid var(--border-hi);
   background:transparent;
@@ -639,7 +641,7 @@ body::after {
   letter-spacing:.12em;
   text-transform:uppercase;
   white-space:nowrap;
-  gap:10px;
+  gap:0;
 }
 
 .hero-source-btn:hover {
@@ -649,7 +651,7 @@ body::after {
 }
 
 .hero-source-btn .material-icons {
-  font-size:18px;
+  font-size:19px;
 }
 
 .hero-side-btn {
@@ -1160,7 +1162,9 @@ footer {
   .hero-store-action,
   .hero-source-btn {
     min-height:38px;
-    padding:0 12px;
+    min-width:38px;
+    width:38px;
+    padding:0;
   }
 
   .hero-store-back-label,
