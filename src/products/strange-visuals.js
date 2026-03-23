@@ -16,6 +16,11 @@ if (applyGlobalRouteRedirect(siteData)) {
 
 const localeController = createLocaleController();
 const shareBtn = document.getElementById('shareBtn');
+const shareDock = document.getElementById('shareDock');
+const shareMenu = document.getElementById('shareMenu');
+const shareTelegramBtn = document.getElementById('shareTelegramBtn');
+const shareDiscordBtn = document.getElementById('shareDiscordBtn');
+const shareYoutubeBtn = document.getElementById('shareYoutubeBtn');
 const installBtn = document.getElementById('installBtn');
 const sourceBtn = document.getElementById('sourceBtn');
 const gwTabsEl = document.getElementById('gwTabs');
@@ -63,6 +68,33 @@ const ROUTE_CATEGORY_META = Object.freeze({
   },
 });
 
+const ROUTE_SHARE_META = Object.freeze({
+  ru: {
+    menuLabel: 'Поделиться в соцсетях',
+    openLabel: 'Открыть меню ссылок',
+    closeLabel: 'Закрыть меню ссылок',
+    telegram: 'Telegram',
+    discord: 'Discord',
+    youtube: 'YouTube',
+  },
+  en: {
+    menuLabel: 'Share on social platforms',
+    openLabel: 'Open links menu',
+    closeLabel: 'Close links menu',
+    telegram: 'Telegram',
+    discord: 'Discord',
+    youtube: 'YouTube',
+  },
+  ua: {
+    menuLabel: 'Поділитися у соцмережах',
+    openLabel: 'Відкрити меню посилань',
+    closeLabel: 'Закрити меню посилань',
+    telegram: 'Telegram',
+    discord: 'Discord',
+    youtube: 'YouTube',
+  },
+});
+
 function escapeHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -74,6 +106,10 @@ function escapeHtml(value) {
 
 function getLocaleMeta() {
   return ROUTE_CATEGORY_META[localeController.locale] || ROUTE_CATEGORY_META.ru;
+}
+
+function getShareMeta() {
+  return ROUTE_SHARE_META[localeController.locale] || ROUTE_SHARE_META.ru;
 }
 
 function resolveRouteAsset(path) {
@@ -93,6 +129,7 @@ function getRouteProduct() {
 
 const routeProduct = getRouteProduct();
 const localeMeta = getLocaleMeta();
+const shareMeta = getShareMeta();
 const tabs = routeProduct?.routeModules || {};
 const tabKeys = ['player', 'world', 'utils', 'other', 'interface', 'themes'].filter((key) => localeMeta[key]);
 
@@ -114,27 +151,74 @@ if (sourceBtn) {
   }
 }
 
-if (shareBtn) {
-  shareBtn.addEventListener('click', async () => {
-    const shareData = {
-      title: document.title,
-      text: routeProduct?.title || 'Strange Visuals',
-      url: window.location.href,
-    };
+function initShareDock() {
+  if (!shareDock || !shareBtn) return;
 
-    try {
-      if (navigator.share) {
-        await navigator.share(shareData);
-        return;
-      }
-      await navigator.clipboard.writeText(window.location.href);
-      shareBtn.classList.add('installed');
-      window.setTimeout(() => shareBtn.classList.remove('installed'), 1200);
-    } catch {
-      /* ignore cancelled share / clipboard errors */
+  const socials = siteData.socials || {};
+  const shareLinks = [
+    { key: 'telegram', el: shareTelegramBtn },
+    { key: 'discord', el: shareDiscordBtn },
+    { key: 'youtube', el: shareYoutubeBtn },
+  ];
+
+  let visibleCount = 0;
+
+  shareLinks.forEach(({ key, el }) => {
+    if (!el) return;
+
+    const href = resolveRouteAsset(socials[key] || el.getAttribute('href') || '');
+    if (!href) {
+      el.hidden = true;
+      el.removeAttribute('href');
+      return;
     }
+
+    visibleCount += 1;
+    el.hidden = false;
+    el.href = href;
+    el.style.setProperty('--share-index', String(visibleCount));
+    el.setAttribute('aria-label', shareMeta[key] || key);
+    el.setAttribute('title', shareMeta[key] || key);
+    el.addEventListener('click', () => setShareDockOpen(false));
+  });
+
+  if (!visibleCount) {
+    shareDock.hidden = true;
+    return;
+  }
+
+  if (shareMenu) {
+    shareMenu.setAttribute('aria-label', shareMeta.menuLabel);
+  }
+
+  shareDock.style.setProperty('--share-count', String(visibleCount));
+  setShareDockOpen(false);
+
+  shareBtn.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setShareDockOpen(!shareDock.classList.contains('open'));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Node) || shareDock.contains(event.target)) return;
+    setShareDockOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    setShareDockOpen(false);
   });
 }
+
+function setShareDockOpen(isOpen) {
+  if (!shareDock || !shareBtn) return;
+  shareDock.classList.toggle('open', isOpen);
+  shareBtn.setAttribute('aria-expanded', String(isOpen));
+  shareBtn.setAttribute('aria-label', isOpen ? shareMeta.closeLabel : shareMeta.openLabel);
+}
+
+initShareDock();
 
 function renderGwTabs() {
   if (!gwTabsEl) return;
