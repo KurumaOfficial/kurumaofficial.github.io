@@ -41,7 +41,7 @@ export const DEFAULT_SITE_DATA = {
                 ],
                 "world": [
                     { "name": "Чамсы", "enabled": true },
-                    { "name": "Трейсеры", "enabled": false },
+                    { "name": "Поддержка", "enabled": false },
                     { "name": "Снаряды", "enabled": true },
                     { "name": "Частицы", "enabled": true },
                     { "name": "Блок оверлей", "enabled": false },
@@ -155,6 +155,28 @@ export const DEFAULT_SITE_DATA = {
             "sortOrder": 4
         }
     ],
+    "supportPage": {
+        "minimumAmountUsd": 2,
+        "buttons": [
+            {
+                "id": "support-fanpay",
+                "label": "Оплата картой",
+                "title": "FanPay",
+                "note": "Visa / Mastercard / СБП",
+                "url": "",
+                "sortOrder": 1
+            },
+            {
+                "id": "support-donationalerts",
+                "label": "Donation Alerts",
+                "title": "Donate",
+                "note": "Быстрый донат со стримов",
+                "url": "",
+                "sortOrder": 2
+            }
+        ],
+        "supporters": []
+    },
     "socials": {
         "youtube": "https://www.youtube.com/@KurumaBestWaify",
         "discord": "https://discord.gg/3YxB2R6eqQ",

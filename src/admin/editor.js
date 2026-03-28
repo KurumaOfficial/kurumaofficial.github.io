@@ -7,6 +7,9 @@ import {
     normalizeData,
     normalizeProduct,
     normalizeRouteModules,
+    normalizeSupportButton,
+    normalizeSupportPage,
+    normalizeSupporter,
     normalizeTeamMember,
     ROUTE_MODULE_KEYS,
     toNumber,
@@ -188,6 +191,13 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const socialDiscordEl = document.getElementById('socialDiscord');
     const socialTelegramEl = document.getElementById('socialTelegram');
     const editorSocialPreviewEl = document.getElementById('editorSocialPreview');
+    const supportMinimumAmountEl = document.getElementById('supportMinimumAmount');
+    const supportButtonsCountEl = document.getElementById('supportButtonsCount');
+    const supportButtonsListEl = document.getElementById('supportButtonsList');
+    const addSupportButtonBtnEl = document.getElementById('addSupportButtonBtn');
+    const supporterCountEl = document.getElementById('supporterCount');
+    const supporterListEl = document.getElementById('supporterList');
+    const addSupporterBtnEl = document.getElementById('addSupporterBtn');
     const teamMemberCountEl = document.getElementById('teamMemberCount');
     const teamGridEl = document.getElementById('teamGrid');
     const teamEditorEl = document.getElementById('teamEditor');
@@ -674,6 +684,165 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderHomeDashboard();
     }
 
+    function getSupportPageDraft() {
+        editorData.supportPage = normalizeSupportPage(editorData.supportPage || DEFAULT_SITE_DATA.supportPage);
+        return editorData.supportPage;
+    }
+
+    function getSupportButtonEntries() {
+        return getSupportPageDraft().buttons
+            .map((button, index) => ({ button, index }))
+            .sort((a, b) => {
+                const bySort = toNumber(a.button.sortOrder, a.index + 1) - toNumber(b.button.sortOrder, b.index + 1);
+                if (bySort !== 0) return bySort;
+                return a.button.title.localeCompare(b.button.title, locale === 'ua' ? 'uk' : locale);
+            });
+    }
+
+    function getSupporterEntries() {
+        return getSupportPageDraft().supporters
+            .map((supporter, index) => ({ supporter, index }))
+            .sort((a, b) => {
+                const bySort = toNumber(a.supporter.sortOrder, a.index + 1) - toNumber(b.supporter.sortOrder, b.index + 1);
+                if (bySort !== 0) return bySort;
+                return a.supporter.name.localeCompare(b.supporter.name, locale === 'ua' ? 'uk' : locale);
+            });
+    }
+
+    function renderSupportButtonsList() {
+        if (!supportButtonsListEl) return;
+        const supportPage = getSupportPageDraft();
+        if (supportMinimumAmountEl && document.activeElement !== supportMinimumAmountEl) {
+            supportMinimumAmountEl.value = String(supportPage.minimumAmountUsd || 0);
+        }
+        if (supportButtonsCountEl) supportButtonsCountEl.textContent = String(supportPage.buttons.length);
+
+        const entries = getSupportButtonEntries();
+        if (!entries.length) {
+            supportButtonsListEl.innerHTML = `<div class="dash-empty-state">${locale === 'en' ? 'No payment buttons yet.' : locale === 'ua' ? 'Ще немає кнопок оплати.' : 'Пока нет кнопок оплаты.'}</div>`;
+            renderHomeDashboard();
+            return;
+        }
+
+        supportButtonsListEl.innerHTML = entries.map(({ button, index }, order) => `
+            <article class="dash-inline-editor" data-support-button-row="${index}">
+                <div class="dash-inline-editor-head">
+                    <div class="dash-inline-editor-title">${locale === 'en' ? 'Button' : locale === 'ua' ? 'Кнопка' : 'Кнопка'} #${String(order + 1).padStart(2, '0')}</div>
+                    <div class="dash-inline-editor-actions">
+                        <button type="button" class="dash-btn dash-sm" data-support-button-move-up="${index}">↑</button>
+                        <button type="button" class="dash-btn dash-sm" data-support-button-move-down="${index}">↓</button>
+                        <button type="button" class="dash-btn dash-sm dash-danger" data-support-button-remove="${index}">Удалить</button>
+                    </div>
+                </div>
+                <div class="dash-fg">
+                    <div class="dash-field dash-c3"><label>Верхняя метка</label><input type="text" value="${escapeHtml(button.label)}" data-support-button-field="label" data-support-button-index="${index}"></div>
+                    <div class="dash-field dash-c3"><label>Основной текст</label><input type="text" value="${escapeHtml(button.title)}" data-support-button-field="title" data-support-button-index="${index}"></div>
+                    <div class="dash-field dash-c4"><label>Нижняя подпись</label><input type="text" value="${escapeHtml(button.note)}" data-support-button-field="note" data-support-button-index="${index}"></div>
+                    <div class="dash-field dash-c2"><label>Порядок</label><input type="number" value="${escapeHtml(button.sortOrder)}" data-support-button-field="sortOrder" data-support-button-index="${index}"></div>
+                    <div class="dash-field dash-c12"><label>Ссылка</label><input type="url" value="${escapeHtml(button.url)}" placeholder="https://..." data-support-button-field="url" data-support-button-index="${index}"></div>
+                </div>
+            </article>
+        `).join('');
+        renderHomeDashboard();
+    }
+
+    function renderSupporterList() {
+        if (!supporterListEl) return;
+        const supportPage = getSupportPageDraft();
+        if (supporterCountEl) supporterCountEl.textContent = String(supportPage.supporters.length);
+
+        const entries = getSupporterEntries();
+        if (!entries.length) {
+            supporterListEl.innerHTML = `<div class="dash-empty-state">${locale === 'en' ? 'No supporters yet.' : locale === 'ua' ? 'Ще немає карток підтримки.' : 'Пока нет карточек поддержавших.'}</div>`;
+            renderHomeDashboard();
+            return;
+        }
+
+        supporterListEl.innerHTML = entries.map(({ supporter, index }, order) => `
+            <article class="dash-inline-editor" data-supporter-row="${index}">
+                <div class="dash-inline-editor-head">
+                    <div class="dash-inline-editor-title">${locale === 'en' ? 'Supporter' : locale === 'ua' ? 'Підтримавший' : 'Поддержавший'} #${String(order + 1).padStart(2, '0')}</div>
+                    <div class="dash-inline-editor-actions">
+                        <button type="button" class="dash-btn dash-sm" data-supporter-move-up="${index}">↑</button>
+                        <button type="button" class="dash-btn dash-sm" data-supporter-move-down="${index}">↓</button>
+                        <button type="button" class="dash-btn dash-sm dash-danger" data-supporter-remove="${index}">Удалить</button>
+                    </div>
+                </div>
+                <div class="dash-fg">
+                    <div class="dash-field dash-c4"><label>Ник</label><input type="text" value="${escapeHtml(supporter.name)}" data-supporter-field="name" data-supporter-index="${index}"></div>
+                    <div class="dash-field dash-c4"><label>Ссылка на аватар</label><input type="url" value="${escapeHtml(supporter.avatarUrl)}" placeholder="https://..." data-supporter-field="avatarUrl" data-supporter-index="${index}"></div>
+                    <div class="dash-field dash-c2"><label>Сумма, $</label><input type="number" min="0" step="0.01" value="${escapeHtml(supporter.amountUsd)}" data-supporter-field="amountUsd" data-supporter-index="${index}"></div>
+                    <div class="dash-field dash-c2"><label>Порядок</label><input type="number" value="${escapeHtml(supporter.sortOrder)}" data-supporter-field="sortOrder" data-supporter-index="${index}"></div>
+                </div>
+            </article>
+        `).join('');
+        renderHomeDashboard();
+    }
+
+    function createEmptySupportButton() {
+        const count = getSupportPageDraft().buttons.length + 1;
+        return normalizeSupportButton({
+            id: `support-button-${Date.now()}`,
+            label: locale === 'en' ? 'Payment' : locale === 'ua' ? 'Оплата' : 'Оплата',
+            title: locale === 'en' ? 'New button' : locale === 'ua' ? 'Нова кнопка' : 'Новая кнопка',
+            note: '',
+            url: '',
+            sortOrder: count,
+        }, count - 1);
+    }
+
+    function createEmptySupporter() {
+        const supportPage = getSupportPageDraft();
+        const count = supportPage.supporters.length + 1;
+        return normalizeSupporter({
+            id: `supporter-${Date.now()}`,
+            name: locale === 'en' ? 'New supporter' : locale === 'ua' ? 'Новий підтримавший' : 'Новый поддержавший',
+            avatarUrl: '',
+            amountUsd: supportPage.minimumAmountUsd || 2,
+            sortOrder: count,
+        }, count - 1);
+    }
+
+    function syncSupportMinimumFromInput() {
+        const supportPage = getSupportPageDraft();
+        supportPage.minimumAmountUsd = Math.max(0, toNumber(supportMinimumAmountEl?.value, supportPage.minimumAmountUsd || 2));
+        syncDraftControls();
+    }
+
+    function moveSupportButton(index, direction) {
+        const supportPage = getSupportPageDraft();
+        const ordered = getSupportButtonEntries();
+        const position = ordered.findIndex((item) => item.index === index);
+        const swapItem = ordered[position + direction];
+        if (position < 0 || !swapItem) return;
+
+        const reordered = ordered.map((item) => item.index);
+        [reordered[position], reordered[position + direction]] = [reordered[position + direction], reordered[position]];
+        reordered.forEach((buttonIndex, order) => {
+            supportPage.buttons[buttonIndex].sortOrder = order + 1;
+        });
+
+        renderSupportButtonsList();
+        syncDraftControls();
+    }
+
+    function moveSupporter(index, direction) {
+        const supportPage = getSupportPageDraft();
+        const ordered = getSupporterEntries();
+        const position = ordered.findIndex((item) => item.index === index);
+        const swapItem = ordered[position + direction];
+        if (position < 0 || !swapItem) return;
+
+        const reordered = ordered.map((item) => item.index);
+        [reordered[position], reordered[position + direction]] = [reordered[position + direction], reordered[position]];
+        reordered.forEach((supporterIndex, order) => {
+            supportPage.supporters[supporterIndex].sortOrder = order + 1;
+        });
+
+        renderSupporterList();
+        syncDraftControls();
+    }
+
     function renderAdminView() {
         const viewCopy = copy[editorActiveView] || copy.home;
         editorAdminTitleEl.textContent = viewCopy.title;
@@ -695,7 +864,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         commitOpenProductForm(editorActiveView === 'products');
         commitOpenTeamForm(editorActiveView === 'misc');
         syncSocialsFromInputs();
+        syncSupportMinimumFromInput();
         renderEditorSocialPreview();
+        renderSupportButtonsList();
+        renderSupporterList();
         editorActiveView = view;
         renderAdminView();
     }
@@ -996,6 +1168,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         closeProductEditor(false);
         closeTeamEditor(false);
         fillSocialInputs();
+        renderSupportButtonsList();
+        renderSupporterList();
         renderEditorGrid();
         renderTeamGrid();
         renderAdminView();
@@ -1016,6 +1190,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         closeProductEditor(false);
         closeTeamEditor(false);
         fillSocialInputs();
+        renderSupportButtonsList();
+        renderSupporterList();
         renderEditorGrid();
         renderTeamGrid();
         renderAdminView();
@@ -1138,7 +1314,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         commitOpenProductForm(refreshGrid);
         commitOpenTeamForm(refreshGrid);
         syncSocialsFromInputs();
+        syncSupportMinimumFromInput();
         renderEditorSocialPreview();
+        renderSupportButtonsList();
+        renderSupporterList();
         renderProductUploadMeta();
         syncDraftControls();
     }
@@ -1223,6 +1402,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         closeProductEditor(false);
         closeTeamEditor(false);
         fillSocialInputs();
+        renderSupportButtonsList();
+        renderSupporterList();
         renderEditorGrid();
         renderTeamGrid();
         renderAdminView();
@@ -1254,6 +1435,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function refreshAdminAfterSave() {
         fillSocialInputs();
+        renderSupportButtonsList();
+        renderSupporterList();
         renderEditorGrid();
         renderTeamGrid();
         renderAdminView();
@@ -1486,6 +1669,129 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
     });
 
+    supportMinimumAmountEl?.addEventListener('input', () => {
+        syncSupportMinimumFromInput();
+    });
+
+    supportMinimumAmountEl?.addEventListener('change', () => {
+        syncSupportMinimumFromInput();
+        renderSupportButtonsList();
+        renderSupporterList();
+    });
+
+    addSupportButtonBtnEl?.addEventListener('click', () => {
+        const supportPage = getSupportPageDraft();
+        supportPage.buttons.push(createEmptySupportButton());
+        renderSupportButtonsList();
+        syncDraftControls();
+        emitToast(locale === 'en' ? 'Payment button added.' : locale === 'ua' ? 'Кнопку оплати додано.' : 'Кнопка оплаты добавлена.', 'success');
+    });
+
+    addSupporterBtnEl?.addEventListener('click', () => {
+        const supportPage = getSupportPageDraft();
+        supportPage.supporters.push(createEmptySupporter());
+        renderSupporterList();
+        syncDraftControls();
+        emitToast(locale === 'en' ? 'Supporter card added.' : locale === 'ua' ? 'Картку підтримки додано.' : 'Карточка поддержавшего добавлена.', 'success');
+    });
+
+    supportButtonsListEl?.addEventListener('input', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+
+        const index = Number(target.getAttribute('data-support-button-index'));
+        const field = target.getAttribute('data-support-button-field');
+        const supportPage = getSupportPageDraft();
+        if (!field || !supportPage.buttons[index]) return;
+
+        if (field === 'sortOrder') {
+            supportPage.buttons[index].sortOrder = toNumber(target.value, supportPage.buttons[index].sortOrder || index + 1);
+        } else {
+            supportPage.buttons[index][field] = target.value;
+        }
+        syncDraftControls();
+    });
+
+    supportButtonsListEl?.addEventListener('change', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+        if (target.getAttribute('data-support-button-field') === 'sortOrder') {
+            renderSupportButtonsList();
+        }
+    });
+
+    supportButtonsListEl?.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('button') : null;
+        if (!target) return;
+
+        if (target.hasAttribute('data-support-button-move-up')) {
+            moveSupportButton(Number(target.getAttribute('data-support-button-move-up')), -1);
+            return;
+        }
+        if (target.hasAttribute('data-support-button-move-down')) {
+            moveSupportButton(Number(target.getAttribute('data-support-button-move-down')), 1);
+            return;
+        }
+        if (target.hasAttribute('data-support-button-remove')) {
+            const index = Number(target.getAttribute('data-support-button-remove'));
+            const supportPage = getSupportPageDraft();
+            supportPage.buttons.splice(index, 1);
+            renderSupportButtonsList();
+            syncDraftControls();
+            emitToast(locale === 'en' ? 'Payment button removed.' : locale === 'ua' ? 'Кнопку оплати видалено.' : 'Кнопка оплаты удалена.', 'info');
+        }
+    });
+
+    supporterListEl?.addEventListener('input', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+
+        const index = Number(target.getAttribute('data-supporter-index'));
+        const field = target.getAttribute('data-supporter-field');
+        const supportPage = getSupportPageDraft();
+        if (!field || !supportPage.supporters[index]) return;
+
+        if (field === 'amountUsd') {
+            supportPage.supporters[index].amountUsd = Math.max(0, toNumber(target.value, supportPage.supporters[index].amountUsd));
+        } else if (field === 'sortOrder') {
+            supportPage.supporters[index].sortOrder = toNumber(target.value, supportPage.supporters[index].sortOrder || index + 1);
+        } else {
+            supportPage.supporters[index][field] = target.value;
+        }
+        syncDraftControls();
+    });
+
+    supporterListEl?.addEventListener('change', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+        const field = target.getAttribute('data-supporter-field');
+        if (field === 'sortOrder' || field === 'amountUsd') {
+            renderSupporterList();
+        }
+    });
+
+    supporterListEl?.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('button') : null;
+        if (!target) return;
+
+        if (target.hasAttribute('data-supporter-move-up')) {
+            moveSupporter(Number(target.getAttribute('data-supporter-move-up')), -1);
+            return;
+        }
+        if (target.hasAttribute('data-supporter-move-down')) {
+            moveSupporter(Number(target.getAttribute('data-supporter-move-down')), 1);
+            return;
+        }
+        if (target.hasAttribute('data-supporter-remove')) {
+            const index = Number(target.getAttribute('data-supporter-remove'));
+            const supportPage = getSupportPageDraft();
+            supportPage.supporters.splice(index, 1);
+            renderSupporterList();
+            syncDraftControls();
+            emitToast(locale === 'en' ? 'Supporter removed.' : locale === 'ua' ? 'Картку підтримки видалено.' : 'Карточка поддержавшего удалена.', 'info');
+        }
+    });
+
     editorProductGridEl.addEventListener('click', (event) => {
         const target = event.target instanceof Element ? event.target : null;
         const button = target?.closest('button');
@@ -1573,6 +1879,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         closeProductEditor(false);
         closeTeamEditor(false);
         fillSocialInputs();
+        renderSupportButtonsList();
+        renderSupporterList();
         renderEditorGrid();
         renderTeamGrid();
         renderAdminView();

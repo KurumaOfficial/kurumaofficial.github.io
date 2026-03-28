@@ -115,7 +115,7 @@
         </div>
 
         <div class="hero-actions">
-          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar" download>ЗАВАНТАЖИТИ</a>
+          <a class="hero-install-btn" id="installBtn" href="../../donate/">ЗАВАНТАЖИТИ</a>
           <a class="hero-source-btn" id="sourceBtn" title="Відкрити вихідний код" aria-label="Відкрити вихідний код" href="https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy" target="_blank" rel="noopener noreferrer"><span class="material-icons" aria-hidden="true">code</span></a>
           <div class="hero-share-dock" id="shareDock">
             <div class="hero-share-bg" aria-hidden="true"></div>
@@ -145,7 +145,7 @@
   <div class="feat-head reveal">
     <div>
       <div class="eyebrow">Можливості</div>
-      <h2 class="s-title">Все що потрібно<br>для гри</h2>
+      <h2 class="s-title">Все, що потрібно знати про мод</h2>
     </div>
     <p class="s-desc">Strange Visuals зосереджений на візуальних покращеннях, які не порушують правила серверів.</p>
   </div>
@@ -161,29 +161,34 @@
       <p>Лінії-вказівники до гравців, дропів та мобів у видимій зоні.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">blur_on</span></div>
-      <h3>Снаряди та Частинки</h3>
-      <p>Підсвітка літаючих снарядів та кастомні ефекти частинок.</p>
+      <div class="feat-ico"><span class="material-icons">code</span></div>
+      <h3>Open Source</h3>
+      <p>Проект розповсюджується під ліцензією MIT — це забезпечує прозорість розробки та вільний доступ до коду. Ми вітаємо контриб'юторів, форки та сторонні проєкти за умови збереження ліцензії MIT і авторських прав.</p>
     </div>
     <div class="feat-card w2">
-      <div class="feat-ico"><span class="material-icons">dashboard_customize</span></div>
-      <h3>Повний HUD</h3>
-      <p>Масив ліст, ватермарка, кейбінди, нотифікації, кроссхейр, скорборд, хотбар та табуліст — весь інтерфейс налаштовується під вас.</p>
+      <div class="feat-ico"><span class="material-icons">public</span></div>
+      <h3>Мультисерверність</h3>
+      <p>Мод може використовуватися на серверах з різними правилами. Гнучка система приховування окремих функцій автоматично вимикає те, що заборонено на конкретному сервері.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">wb_sunny</span></div>
-      <h3>Фуллбрайт</h3>
-      <p>Повна яскравість без факелів. Вимкнення візуальних оверлеїв.</p>
+      <div class="feat-ico"><span class="material-icons">layers</span></div>
+      <h3>Сумісність</h3>
+      <p>Мод сумісний з іншими Fabric-модами і підходить для збірок. Рекомендуємо використовувати його разом з модами для оптимізації та іншими клієнтськими доповненнями.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">palette</span></div>
-      <h3>Теми оформлення</h3>
-      <p>Стандарт, Мінімалізм, Неон та Ретро. Світлий і темний режим.</p>
+      <div class="feat-ico"><span class="material-icons">update</span></div>
+      <h3>Версія Minecraft</h3>
+      <p>Мод розроблений та підтримується для версії 1.21.8 і може бути оновлений у майбутньому.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">bolt</span></div>
-      <h3>Утиліти</h3>
+      <div class="feat-ico"><span class="material-icons">extension</span></div>
+      <h3>Версія Fabric</h3>
       <p>Авто спринт, авто інструмент, координати, таймер.</p>
+    </div>
+    <div class="feat-card">
+      <div class="feat-ico"><span class="material-icons">support_agent</span></div>
+      <h3>Підтримка</h3>
+      <p>Документація, звіти про помилки та обговорення — канал підтримки проєкту.</p>
     </div>
   </div>
 </div>
@@ -203,12 +208,12 @@
       <div class="compare-label after">Після</div>
 
       <div class="compare-image compare-before">
-        <span>Місце для зображення "До"</span>
+        <img id="compareBeforeImage" src="../../../assets/images/products/strange-visuals/before.webp" alt="Strange Visuals до" loading="lazy">
       </div>
 
       <div class="compare-after-wrap" id="compareAfterWrap">
         <div class="compare-image compare-after">
-          <span>Місце для зображення "Після"</span>
+          <img id="compareAfterImage" src="../../../assets/images/products/strange-visuals/after.webp" alt="Strange Visuals після" loading="lazy">
         </div>
       </div>
 
@@ -227,7 +232,7 @@
         aria-label="Порівняння до і після"
       >
 
-      <div class="compare-slot">
+      <div class="compare-slot" id="compareSlot">
         Тут можна буде поставити своє зображення або повноцінний шар зображення
       </div>
     </div>
@@ -271,12 +276,12 @@
         </div>
 
         <div class="gw-tabs" id="gwTabs">
-          <span class="active" data-tab="player">На гравці</span>
-          <span data-tab="world">У світі</span>
-          <span data-tab="utils">Утиліти</span>
-          <span data-tab="other">Інше</span>
-          <span data-tab="interface">Інтерфейс</span>
-          <span data-tab="themes">Теми</span>
+          <button type="button" class="active" data-tab="player">На гравці</button>
+          <button type="button" data-tab="world">У світі</button>
+          <button type="button" data-tab="utils">Утиліти</button>
+          <button type="button" data-tab="other">Інше</button>
+          <button type="button" data-tab="interface">Інтерфейс</button>
+          <button type="button" data-tab="themes">Теми</button>
         </div>
 
         <div class="gw-body fin" id="gwBody">
