@@ -328,7 +328,7 @@
                                             <div class="dash-section-head">
                                                 <div>
                                                     <h4>Социальные ссылки</h4>
-                                                    <p>Отображаются под витриной продуктов и в футере.</p>
+                                                    <p>Отображаются под витриной продуктов, в футере и на странице поддержки.</p>
                                                 </div>
                                             </div>
                                             <div class="dash-github-grid">
@@ -349,6 +349,37 @@
                                         <div class="dash-form-section">
                                             <p class="dash-help" style="margin-bottom:12px;">Превью кнопок:</p>
                                             <div id="editorSocialPreview" class="dash-social-preview"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-form-section">
+                                            <div class="dash-section-head">
+                                                <div>
+                                                    <h4>Страница поддержки</h4>
+                                                    <p>Управляет роутом <span class="mono">/donate/</span> и кнопками поддержки на Strange Visuals.</p>
+                                                </div>
+                                            </div>
+                                            <div class="dash-fg">
+                                                <div class="dash-field dash-c4">
+                                                    <label for="supportMinimumAmount">Минимум для роли, $</label>
+                                                    <input id="supportMinimumAmount" type="number" min="0" step="0.01" placeholder="2">
+                                                </div>
+                                            </div>
+                                            <p class="dash-help">Значение используется в тексте страницы поддержки. Ссылка на Discord берётся из поля выше.</p>
+                                        </div>
+                                        <div class="dash-form-section">
+                                            <div class="dash-section-head">
+                                                <div>
+                                                    <h4>Кнопки оплаты</h4>
+                                                    <p>Можно создать сколько угодно кнопок с любым текстом и ссылкой.</p>
+                                                </div>
+                                                <div class="dash-section-actions">
+                                                    <div class="dash-chip"><strong>Кнопок:</strong> <span id="supportButtonsCount">0</span></div>
+                                                    <button id="addSupportButtonBtn" type="button" class="dash-btn dash-primary dash-sm">+ Кнопка</button>
+                                                </div>
+                                            </div>
+                                            <div id="supportButtonsList" class="dash-inline-list"></div>
                                         </div>
                                     </div>
 
@@ -392,6 +423,20 @@
                                                 <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">Удалить</button>
                                             </div>
                                         </div>
+                                    </div>
+
+                                    <div class="dash-form-card">
+                                        <div class="dash-section-head">
+                                            <div>
+                                                <h4>Поддержавшие</h4>
+                                                <p>Карточки сортируются на странице поддержки по сумме доната, затем по ручному порядку.</p>
+                                            </div>
+                                            <div class="dash-section-actions">
+                                                <div class="dash-chip"><strong>Карточек:</strong> <span id="supporterCount">0</span></div>
+                                                <button id="addSupporterBtn" type="button" class="dash-btn dash-primary dash-sm">+ Поддержавший</button>
+                                            </div>
+                                        </div>
+                                        <div id="supporterList" class="dash-inline-list"></div>
                                     </div>
                                 </div>
                             </div>

@@ -1,4 +1,6 @@
+import { initReveal } from '../components/reveal.js';
 import { createLocaleController } from '../i18n/controller.js';
+import { escapeHtml } from '../core/dom.js';
 import {
   applyGlobalRouteRedirect,
   getAdminHref,
@@ -8,26 +10,7 @@ import {
   initSmoothRouteTransitions,
 } from '../core/site-shell.js';
 
-const siteData = getEffectiveSiteData();
-
-if (applyGlobalRouteRedirect(siteData)) {
-  /* route redirect is already in progress */
-}
-
-const localeController = createLocaleController();
-const shareBtn = document.getElementById('shareBtn');
-const shareDock = document.getElementById('shareDock');
-const shareMenu = document.getElementById('shareMenu');
-const shareTelegramBtn = document.getElementById('shareTelegramBtn');
-const shareDiscordBtn = document.getElementById('shareDiscordBtn');
-const shareYoutubeBtn = document.getElementById('shareYoutubeBtn');
-const installBtn = document.getElementById('installBtn');
-const sourceBtn = document.getElementById('sourceBtn');
-const gwTabsEl = document.getElementById('gwTabs');
-const gwSecEl = document.getElementById('gwSec');
-const gwBodyEl = document.getElementById('gwBody');
-const gwItemsEl = document.getElementById('gwItems');
-const modGridEl = document.getElementById('modGrid');
+const CATEGORY_ORDER = Object.freeze(['player', 'world', 'utils', 'other', 'interface', 'themes']);
 
 const ROUTE_CATEGORY_META = Object.freeze({
   ru: {
@@ -95,21 +78,55 @@ const ROUTE_SHARE_META = Object.freeze({
   },
 });
 
-function escapeHtml(value) {
-  return String(value ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+const COMPARE_COPY = Object.freeze({
+  ru: {
+    hint: 'Положите before.webp и after.webp в assets/images/products/strange-visuals/',
+  },
+  en: {
+    hint: 'Place before.webp and after.webp into assets/images/products/strange-visuals/',
+  },
+  ua: {
+    hint: 'Покладіть before.webp і after.webp в assets/images/products/strange-visuals/',
+  },
+});
+
+function getElements() {
+  return {
+    shareBtn: document.getElementById('shareBtn'),
+    shareDock: document.getElementById('shareDock'),
+    shareMenu: document.getElementById('shareMenu'),
+    shareTelegramBtn: document.getElementById('shareTelegramBtn'),
+    shareDiscordBtn: document.getElementById('shareDiscordBtn'),
+    shareYoutubeBtn: document.getElementById('shareYoutubeBtn'),
+    installBtn: document.getElementById('installBtn'),
+    sourceBtn: document.getElementById('sourceBtn'),
+    gwTabsEl: document.getElementById('gwTabs'),
+    gwSecEl: document.getElementById('gwSec'),
+    gwBodyEl: document.getElementById('gwBody'),
+    gwItemsEl: document.getElementById('gwItems'),
+    modGridEl: document.getElementById('modGrid'),
+    compareSlider: document.getElementById('compareSlider'),
+    compareAfterWrap: document.getElementById('compareAfterWrap'),
+    compareDivider: document.getElementById('compareDivider'),
+    compareHandle: document.getElementById('compareHandle'),
+    compareBeforeImage: document.getElementById('compareBeforeImage'),
+    compareAfterImage: document.getElementById('compareAfterImage'),
+    compareSlot: document.getElementById('compareSlot'),
+    supportDiscordLink: document.getElementById('supportDiscordLink'),
+    donateLinks: [...document.querySelectorAll('[data-donate-link]')],
+  };
 }
 
-function getLocaleMeta() {
-  return ROUTE_CATEGORY_META[localeController.locale] || ROUTE_CATEGORY_META.ru;
+function getLocaleMeta(locale) {
+  return ROUTE_CATEGORY_META[locale] || ROUTE_CATEGORY_META.ru;
 }
 
-function getShareMeta() {
-  return ROUTE_SHARE_META[localeController.locale] || ROUTE_SHARE_META.ru;
+function getShareMeta(locale) {
+  return ROUTE_SHARE_META[locale] || ROUTE_SHARE_META.ru;
+}
+
+function getCompareCopy(locale) {
+  return COMPARE_COPY[locale] || COMPARE_COPY.ru;
 }
 
 function resolveRouteAsset(path) {
@@ -119,46 +136,55 @@ function resolveRouteAsset(path) {
   return new URL(`../../../${cleaned}`, window.location.href).toString();
 }
 
-function getRouteProduct() {
+function getDonateHref() {
+  return new URL('../../donate/', window.location.href).toString();
+}
+
+function getRouteProduct(products) {
+  const items = Array.isArray(products) ? products : [];
   const match = window.location.pathname.match(/\/products\/([^/]+)\/?/i);
   const slug = match?.[1] || 'strange-visuals';
-  return siteData.products.find((product) => product.id === slug)
-    || siteData.products.find((product) => String(product.detailUrl || '').includes(`/products/${slug}/`) || String(product.detailUrl || '').includes(`products/${slug}/`))
-    || siteData.products[0];
+
+  return items.find((product) => product.id === slug)
+    || items.find((product) => String(product.detailUrl || '').includes(`/products/${slug}/`) || String(product.detailUrl || '').includes(`products/${slug}/`))
+    || items[0]
+    || null;
 }
 
-const routeProduct = getRouteProduct();
-const localeMeta = getLocaleMeta();
-const shareMeta = getShareMeta();
-const tabs = routeProduct?.routeModules || {};
-const tabKeys = ['player', 'world', 'utils', 'other', 'interface', 'themes'].filter((key) => localeMeta[key]);
-
-localeController.mountLanguageSwitcher();
-initSharedThemeToggle();
-initAdminRouteAccess({ adminHref: getAdminHref() });
-initSmoothRouteTransitions();
-
-if (installBtn && routeProduct?.downloadUrl) {
-  installBtn.href = resolveRouteAsset(routeProduct.downloadUrl);
+function getTabKeys(localeMeta, tabs) {
+  return CATEGORY_ORDER.filter((key) => localeMeta[key] && Array.isArray(tabs[key]) && tabs[key].length);
 }
 
-if (sourceBtn) {
-  const sourceUrl = routeProduct?.sourceUrl || sourceBtn.getAttribute('href') || '';
-  if (sourceUrl) {
-    sourceBtn.href = sourceUrl;
-  } else {
-    sourceBtn.hidden = true;
+function setShareDockOpen(elements, isOpen, shareMeta) {
+  if (!elements.shareDock || !elements.shareBtn) return;
+  elements.shareDock.classList.toggle('open', isOpen);
+  elements.shareBtn.setAttribute('aria-expanded', String(isOpen));
+  elements.shareBtn.setAttribute('aria-label', isOpen ? shareMeta.closeLabel : shareMeta.openLabel);
+}
+
+function syncSupportDiscordLink(elements, siteData) {
+  if (!elements.supportDiscordLink) return;
+
+  const discordHref = resolveRouteAsset(siteData.socials?.discord || '');
+  if (!discordHref) {
+    elements.supportDiscordLink.removeAttribute('href');
+    elements.supportDiscordLink.removeAttribute('target');
+    elements.supportDiscordLink.removeAttribute('rel');
+    return;
   }
+
+  elements.supportDiscordLink.href = discordHref;
+  elements.supportDiscordLink.target = '_blank';
+  elements.supportDiscordLink.rel = 'noopener noreferrer';
 }
 
-function initShareDock() {
-  if (!shareDock || !shareBtn) return;
+function initShareDock(elements, siteData, shareMeta) {
+  if (!elements.shareDock || !elements.shareBtn) return;
 
-  const socials = siteData.socials || {};
   const shareLinks = [
-    { key: 'telegram', el: shareTelegramBtn },
-    { key: 'discord', el: shareDiscordBtn },
-    { key: 'youtube', el: shareYoutubeBtn },
+    { key: 'telegram', el: elements.shareTelegramBtn },
+    { key: 'discord', el: elements.shareDiscordBtn },
+    { key: 'youtube', el: elements.shareYoutubeBtn },
   ];
 
   let visibleCount = 0;
@@ -166,7 +192,7 @@ function initShareDock() {
   shareLinks.forEach(({ key, el }) => {
     if (!el) return;
 
-    const href = resolveRouteAsset(socials[key] || el.getAttribute('href') || '');
+    const href = resolveRouteAsset(siteData.socials?.[key] || el.getAttribute('href') || '');
     if (!href) {
       el.hidden = true;
       el.removeAttribute('href');
@@ -179,79 +205,113 @@ function initShareDock() {
     el.style.setProperty('--share-index', String(visibleCount));
     el.setAttribute('aria-label', shareMeta[key] || key);
     el.setAttribute('title', shareMeta[key] || key);
-    el.addEventListener('click', () => setShareDockOpen(false));
+    el.addEventListener('click', () => setShareDockOpen(elements, false, shareMeta));
   });
 
+  syncSupportDiscordLink(elements, siteData);
+
   if (!visibleCount) {
-    shareDock.hidden = true;
+    elements.shareDock.hidden = true;
     return;
   }
 
-  if (shareMenu) {
-    shareMenu.setAttribute('aria-label', shareMeta.menuLabel);
+  if (elements.shareMenu) {
+    elements.shareMenu.setAttribute('aria-label', shareMeta.menuLabel);
   }
 
-  shareDock.style.setProperty('--share-count', String(visibleCount));
-  setShareDockOpen(false);
+  elements.shareDock.hidden = false;
+  elements.shareDock.style.setProperty('--share-count', String(visibleCount));
+  setShareDockOpen(elements, false, shareMeta);
 
-  shareBtn.addEventListener('click', (event) => {
+  elements.shareBtn.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    setShareDockOpen(!shareDock.classList.contains('open'));
+    setShareDockOpen(elements, !elements.shareDock.classList.contains('open'), shareMeta);
   });
 
   document.addEventListener('click', (event) => {
-    if (!(event.target instanceof Node) || shareDock.contains(event.target)) return;
-    setShareDockOpen(false);
+    if (!(event.target instanceof Node) || elements.shareDock.contains(event.target)) return;
+    setShareDockOpen(elements, false, shareMeta);
   });
 
   document.addEventListener('keydown', (event) => {
     if (event.key !== 'Escape') return;
-    setShareDockOpen(false);
+    setShareDockOpen(elements, false, shareMeta);
   });
 }
 
-function setShareDockOpen(isOpen) {
-  if (!shareDock || !shareBtn) return;
-  shareDock.classList.toggle('open', isOpen);
-  shareBtn.setAttribute('aria-expanded', String(isOpen));
-  shareBtn.setAttribute('aria-label', isOpen ? shareMeta.closeLabel : shareMeta.openLabel);
-}
+function syncDonateLinks(elements) {
+  const donateHref = getDonateHref();
 
-initShareDock();
+  if (elements.installBtn) {
+    elements.installBtn.href = donateHref;
+    elements.installBtn.removeAttribute('download');
+  }
 
-function renderGwTabs() {
-  if (!gwTabsEl) return;
-  gwTabsEl.innerHTML = tabKeys.map((key, index) => `
-    <span class="${index === 0 ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</span>
-  `).join('');
-
-  gwTabsEl.querySelectorAll('span').forEach((tab) => {
-    tab.addEventListener('click', function () {
-      gwTabsEl.querySelectorAll('span').forEach((item) => item.classList.remove('active'));
-      this.classList.add('active');
-      buildGui(this.dataset.tab || tabKeys[0]);
-    });
+  elements.donateLinks.forEach((link) => {
+    if (!(link instanceof HTMLAnchorElement)) return;
+    link.href = donateHref;
   });
 }
 
-function buildGui(key) {
+function initActionButtons(elements, routeProduct) {
+  syncDonateLinks(elements);
+
+  if (elements.installBtn && !routeProduct?.downloadUrl) {
+    elements.installBtn.removeAttribute('download');
+  }
+
+  if (!elements.sourceBtn) return;
+
+  const sourceUrl = routeProduct?.sourceUrl || elements.sourceBtn.getAttribute('href') || '';
+  if (!sourceUrl) {
+    elements.sourceBtn.hidden = true;
+    return;
+  }
+
+  elements.sourceBtn.hidden = false;
+  elements.sourceBtn.href = sourceUrl;
+}
+
+function toggleGwItem(itemEl, localeMeta) {
+  const statusEl = itemEl.querySelector('.gw-status');
+  if (!(statusEl instanceof HTMLElement)) return;
+
+  const nextEnabled = !statusEl.classList.contains('on');
+  itemEl.style.transform = 'scale(.97)';
+  window.setTimeout(() => {
+    itemEl.style.transform = '';
+  }, 110);
+
+  statusEl.classList.toggle('on', nextEnabled);
+  statusEl.classList.toggle('off', !nextEnabled);
+  statusEl.textContent = nextEnabled ? localeMeta.enabled : localeMeta.disabled;
+  itemEl.setAttribute('aria-pressed', String(nextEnabled));
+}
+
+let guiBuildTimer = 0;
+
+function buildGui(elements, tabs, localeMeta, key) {
+  if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
+
   const meta = localeMeta[key] || localeMeta.player;
   const items = Array.isArray(tabs[key]) ? tabs[key] : [];
-  if (!gwBodyEl || !gwSecEl || !gwItemsEl) return;
+  const scrollEl = elements.gwBodyEl.querySelector('.gw-scroll');
 
-  const scrollEl = gwBodyEl.querySelector('.gw-scroll');
-  gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
-  gwBodyEl.classList.replace('fin', 'fout');
+  elements.gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
+  elements.gwBodyEl.classList.replace('fin', 'fout');
 
-  window.setTimeout(() => {
-    gwSecEl.textContent = meta.title;
-    gwItemsEl.innerHTML = '';
+  window.clearTimeout(guiBuildTimer);
+  guiBuildTimer = window.setTimeout(() => {
+    elements.gwSecEl.textContent = meta.title;
+    elements.gwItemsEl.textContent = '';
+
     items.forEach((item) => {
-      const el = document.createElement('div');
-      el.className = 'gw-item';
-      el.onclick = () => toggleGw(el);
-      el.innerHTML = `
+      const itemEl = document.createElement('button');
+      itemEl.type = 'button';
+      itemEl.className = 'gw-item';
+      itemEl.setAttribute('aria-pressed', String(Boolean(item.enabled)));
+      itemEl.innerHTML = `
         <div class="gw-av"><span class="material-icons">${meta.icon}</span></div>
         <div class="gw-info">
           <div class="gw-name">${escapeHtml(item.name)}</div>
@@ -259,34 +319,50 @@ function buildGui(key) {
         </div>
         <div class="gw-dots"><span class="material-icons">more_vert</span></div>
       `;
-      gwItemsEl.appendChild(el);
+      itemEl.addEventListener('click', () => toggleGwItem(itemEl, localeMeta));
+      elements.gwItemsEl.appendChild(itemEl);
     });
 
-    if (scrollEl) scrollEl.scrollTop = 0;
-    gwBodyEl.style.transition = 'opacity .22s ease, transform .22s ease';
-    gwBodyEl.classList.replace('fout', 'fin');
+    if (scrollEl instanceof HTMLElement) {
+      scrollEl.scrollTop = 0;
+    }
+
+    elements.gwBodyEl.style.transition = 'opacity .22s ease, transform .22s ease';
+    elements.gwBodyEl.classList.replace('fout', 'fin');
   }, 170);
 }
 
-function toggleGw(el) {
-  const statusEl = el.querySelector('.gw-status');
-  if (!statusEl) return;
-  el.style.transform = 'scale(.97)';
-  window.setTimeout(() => { el.style.transform = ''; }, 110);
-  if (statusEl.classList.contains('on')) {
-    statusEl.classList.replace('on', 'off');
-    statusEl.textContent = localeMeta.disabled;
-  } else {
-    statusEl.classList.replace('off', 'on');
-    statusEl.textContent = localeMeta.enabled;
+function renderGwTabs(elements, tabKeys, localeMeta, onSelect) {
+  if (!elements.gwTabsEl) return;
+
+  if (!tabKeys.length) {
+    elements.gwTabsEl.textContent = '';
+    return;
   }
+
+  elements.gwTabsEl.innerHTML = tabKeys.map((key, index) => `
+    <button type="button" class="${index === 0 ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>
+  `).join('');
+
+  elements.gwTabsEl.onclick = (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-tab]') : null;
+    if (!(target instanceof HTMLElement)) return;
+
+    const nextKey = target.dataset.tab || tabKeys[0];
+    elements.gwTabsEl.querySelectorAll('[data-tab]').forEach((item) => {
+      item.classList.toggle('active', item === target);
+    });
+    onSelect(nextKey);
+  };
 }
 
-function renderModuleList() {
-  if (!modGridEl) return;
-  modGridEl.innerHTML = tabKeys.map((key) => {
+function renderModuleList(elements, tabKeys, tabs, localeMeta) {
+  if (!elements.modGridEl) return;
+
+  elements.modGridEl.innerHTML = tabKeys.map((key) => {
     const meta = localeMeta[key] || localeMeta.player;
     const items = Array.isArray(tabs[key]) ? tabs[key] : [];
+
     return `
       <div class="mod-group reveal">
         <div class="mod-head"><span class="material-icons">${meta.icon}</span><span class="mod-head-name">${meta.title}</span><span class="mod-head-ct">${items.length}</span></div>
@@ -300,36 +376,106 @@ function renderModuleList() {
   }).join('');
 }
 
-renderGwTabs();
-buildGui(tabKeys[0] || 'player');
-renderModuleList();
-
-const compareSlider = document.getElementById('compareSlider');
-const compareAfterWrap = document.getElementById('compareAfterWrap');
-const compareDivider = document.getElementById('compareDivider');
-const compareHandle = document.getElementById('compareHandle');
-
-function updateCompare(value) {
-  const v = Math.max(0, Math.min(100, Number(value)));
-  if (compareAfterWrap) compareAfterWrap.style.width = `${v}%`;
-  if (compareDivider) compareDivider.style.left = `${v}%`;
-  if (compareHandle) compareHandle.style.left = `${v}%`;
+function updateCompare(elements, value) {
+  const percentage = Math.max(0, Math.min(100, Number(value)));
+  if (elements.compareAfterWrap) elements.compareAfterWrap.style.width = `${percentage}%`;
+  if (elements.compareDivider) elements.compareDivider.style.left = `${percentage}%`;
+  if (elements.compareHandle) elements.compareHandle.style.left = `${percentage}%`;
 }
 
-if (compareSlider) {
-  compareSlider.addEventListener('input', (e) => updateCompare(e.target.value));
-  updateCompare(compareSlider.value);
-}
+function initCompareSlider(elements) {
+  if (!(elements.compareSlider instanceof HTMLInputElement)) return;
 
-const obs = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (!entry.isIntersecting) return;
-    window.setTimeout(() => entry.target.classList.add('on'), parseInt(entry.target.dataset.d || '0', 10) || 0);
-    obs.unobserve(entry.target);
+  elements.compareSlider.addEventListener('input', (event) => {
+    if (!(event.target instanceof HTMLInputElement)) return;
+    updateCompare(elements, event.target.value);
   });
-}, { threshold: .08, rootMargin: '0px 0px -28px 0px' });
+  updateCompare(elements, elements.compareSlider.value);
+}
 
-document.querySelectorAll('.reveal').forEach((el, index) => {
-  el.dataset.d = String((index % 4) * 90);
-  obs.observe(el);
-});
+function initCompareMedia(elements, compareCopy) {
+  const items = [
+    elements.compareBeforeImage,
+    elements.compareAfterImage,
+  ].filter((item) => item instanceof HTMLImageElement);
+
+  if (!items.length) return;
+
+  const updateState = () => {
+    const readyCount = items.filter((item) => item.dataset.loaded === 'true').length;
+    const shouldShowHint = readyCount < items.length;
+    if (elements.compareSlot) {
+      elements.compareSlot.hidden = !shouldShowHint;
+      elements.compareSlot.textContent = compareCopy.hint;
+    }
+  };
+
+  items.forEach((image) => {
+    const markLoaded = () => {
+      image.dataset.loaded = 'true';
+      image.hidden = false;
+      updateState();
+    };
+
+    const markMissing = () => {
+      image.dataset.loaded = 'false';
+      image.hidden = true;
+      updateState();
+    };
+
+    image.addEventListener('load', markLoaded, { once: true });
+    image.addEventListener('error', markMissing, { once: true });
+
+    if (image.complete && image.naturalWidth > 0) {
+      markLoaded();
+      return;
+    }
+    if (image.complete) {
+      markMissing();
+    }
+  });
+}
+
+function applyRevealDelays() {
+  document.querySelectorAll('.reveal').forEach((element, index) => {
+    if (!(element instanceof HTMLElement)) return;
+    element.style.setProperty('--reveal-delay', `${(index % 4) * 90}ms`);
+  });
+}
+
+function boot() {
+  const siteData = getEffectiveSiteData();
+  if (applyGlobalRouteRedirect(siteData)) return;
+
+  const localeController = createLocaleController();
+  const localeMeta = getLocaleMeta(localeController.locale);
+  const shareMeta = getShareMeta(localeController.locale);
+  const compareCopy = getCompareCopy(localeController.locale);
+  const routeProduct = getRouteProduct(siteData.products);
+  const tabs = routeProduct?.routeModules || {};
+  const tabKeys = getTabKeys(localeMeta, tabs);
+  const elements = getElements();
+
+  localeController.mountLanguageSwitcher();
+  initSharedThemeToggle();
+  initAdminRouteAccess({ adminHref: getAdminHref() });
+  initSmoothRouteTransitions();
+
+  initActionButtons(elements, routeProduct);
+  initShareDock(elements, siteData, shareMeta);
+  renderGwTabs(elements, tabKeys, localeMeta, (key) => buildGui(elements, tabs, localeMeta, key));
+  if (tabKeys.length) {
+    buildGui(elements, tabs, localeMeta, tabKeys[0]);
+  }
+  renderModuleList(elements, tabKeys, tabs, localeMeta);
+  initCompareSlider(elements);
+  initCompareMedia(elements, compareCopy);
+  applyRevealDelays();
+  initReveal();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot, { once: true });
+} else {
+  boot();
+}

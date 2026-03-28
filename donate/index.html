@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Aleph Studio — Redirecting…</title>
+    <meta name="robots" content="noindex">
+    <script>
+        (function () {
+            'use strict';
+
+            var supported = { ru: '/ru/donate/', en: '/en/donate/', ua: '/ua/donate/' };
+            var fallback = '/ru/donate/';
+
+            function detect() {
+                var raw = (navigator.languages || [navigator.language || ''])
+                    .map(function (l) { return l.split('-')[0].toLowerCase(); });
+
+                for (var i = 0; i < raw.length; i++) {
+                    if (raw[i] === 'uk' || raw[i] === 'ua') return supported.ua;
+                    if (supported[raw[i]]) return supported[raw[i]];
+                }
+                return fallback;
+            }
+
+            location.replace(detect() + (location.search || '') + (location.hash || ''));
+        })();
+    </script>
+    <noscript>
+        <meta http-equiv="refresh" content="0; url=/ru/donate/">
+    </noscript>
+    <style>
+        body {
+            background: #080606;
+            color: #5a4a44;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        p { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; }
+        a { color: #8b1a2a; }
+    </style>
+</head>
+<body>
+    <p>Redirecting… <a href="/ru/donate/">RU</a> · <a href="/en/donate/">EN</a> · <a href="/ua/donate/">UA</a></p>
+</body>
+</html>

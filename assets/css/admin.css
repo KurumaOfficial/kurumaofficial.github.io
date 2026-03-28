@@ -200,6 +200,10 @@
 .dash-btn.dash-sm { padding: 5px 12px; font-size: 9px; }
 .dash-btn:disabled { opacity: 0.35; cursor: not-allowed; }
 
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
 /* ── Chip ──────────────────────────────────────────────────── */
 .dash-chip {
   font-family: 'JetBrains Mono', monospace;
@@ -670,6 +674,13 @@
   line-height: 1.6;
 }
 
+.dash-section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* ── Sync actions ──────────────────────────────────────────── */
 .dash-sync-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .dash-sync-wrap { display: flex; flex-direction: column; gap: 2px; }
@@ -936,6 +947,41 @@
   height: 36px;
 }
 
+.dash-inline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dash-inline-editor {
+  padding: 16px;
+  border: 1px solid rgba(139,26,42,0.1);
+  background: rgba(255,255,255,0.015);
+}
+
+.dash-inline-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.dash-inline-editor-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5A4A44;
+}
+
+.dash-inline-editor-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
 /* ── Hidden inputs ─────────────────────────────────────────── */
 .hidden-file-input { display: none; }
 
@@ -1107,4 +1153,5 @@
   .dash-fg .dash-c3, .dash-fg .dash-c4 { grid-column: span 6; }
   .dash-fg .dash-c9 { grid-column: span 12; }
   .dash-editor-footer { flex-direction: column; align-items: flex-start; }
+  .dash-inline-editor-head { flex-direction: column; align-items: flex-start; }
 }
