@@ -5,6 +5,11 @@ import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js';
 
 const THEME_STORAGE_KEY = 'aleph-theme';
 const ROUTE_TRANSITION_MS = 210;
+const ROUTE_ENTER_MS = 320;
+const SHARED_MOTION_STYLE_ID = 'aleph-shared-motion';
+
+let navigationLocked = false;
+let routeEnterTimer = 0;
 
 function isEditableTarget() {
     const tag = document.activeElement?.tagName?.toLowerCase();
@@ -48,12 +53,75 @@ function getStoredSiteData() {
     }
 }
 
+function ensureSharedMotionStyles() {
+    if (document.getElementById(SHARED_MOTION_STYLE_ID)) return;
+
+    const style = document.createElement('style');
+    style.id = SHARED_MOTION_STYLE_ID;
+    style.textContent = `
+@media (prefers-reduced-motion: no-preference) {
+  body.route-transitions {
+    animation: aleph-route-enter ${ROUTE_ENTER_MS}ms cubic-bezier(.22, 1, .36, 1) both;
+  }
+
+  body.route-leaving,
+  body.page-leaving {
+    opacity: .64 !important;
+    transform: translateY(10px) !important;
+    pointer-events: none !important;
+    transition: opacity .22s ease, transform .22s ease;
+  }
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+}
+
+@keyframes aleph-route-enter {
+  from {
+    opacity: .74;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}`;
+
+    document.head.appendChild(style);
+}
+
+function clearTransientPageState() {
+    if (!document.body) return;
+    document.body.classList.remove('route-leaving', 'page-leaving');
+    document.body.classList.add('route-ready');
+}
+
+function replayRouteEnterAnimation() {
+    if (!document.body) return;
+
+    ensureSharedMotionStyles();
+    window.clearTimeout(routeEnterTimer);
+    document.body.classList.remove('route-transitions');
+    void document.body.offsetWidth;
+    document.body.classList.add('route-transitions', 'route-ready');
+
+    routeEnterTimer = window.setTimeout(() => {
+        document.body?.classList.remove('route-transitions');
+    }, ROUTE_ENTER_MS + 40);
+}
+
 function performRouteNavigation(nextHref, { replace = false } = {}) {
     const targetUrl = new URL(nextHref, window.location.href);
     const currentUrl = new URL(window.location.href);
-    if (targetUrl.href === currentUrl.href) return;
+    if (targetUrl.href === currentUrl.href || navigationLocked) return;
 
-    document.body.classList.add('route-leaving');
+    navigationLocked = true;
+    document.body?.classList.add('route-leaving');
+
     window.setTimeout(() => {
         if (replace) {
             window.location.replace(targetUrl.toString());
@@ -61,6 +129,12 @@ function performRouteNavigation(nextHref, { replace = false } = {}) {
         }
         window.location.assign(targetUrl.toString());
     }, ROUTE_TRANSITION_MS);
+}
+
+function updateThemeColorMeta(theme) {
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if (!themeMeta) return;
+    themeMeta.setAttribute('content', theme === 'dark' ? '#080606' : '#f5f0ee');
 }
 
 export function initSharedThemeToggle() {
@@ -73,6 +147,7 @@ export function initSharedThemeToggle() {
     function applyTheme(theme) {
         root.setAttribute('data-theme', theme);
         ico.textContent = theme === 'dark' ? 'light_mode' : 'dark_mode';
+        updateThemeColorMeta(theme);
         try {
             window.localStorage.setItem(THEME_STORAGE_KEY, theme);
         } catch {
@@ -87,7 +162,11 @@ export function initSharedThemeToggle() {
         saved = null;
     }
 
-    if (saved === 'light' || saved === 'dark') applyTheme(saved);
+    if (saved === 'light' || saved === 'dark') {
+        applyTheme(saved);
+    } else {
+        updateThemeColorMeta(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    }
 
     btn.addEventListener('click', () => {
         applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
@@ -183,12 +262,26 @@ export function initAdminRouteAccess({ adminHref }) {
 }
 
 export function initSmoothRouteTransitions() {
-    if (document.body.dataset.routeTransitionsReady === 'true') return;
+    if (!document.body) return;
 
+    ensureSharedMotionStyles();
+
+    if (document.body.dataset.routeTransitionsReady === 'true') return;
     document.body.dataset.routeTransitionsReady = 'true';
-    document.body.classList.add('route-transitions');
-    window.requestAnimationFrame(() => {
-        document.body.classList.add('route-ready');
+
+    clearTransientPageState();
+    replayRouteEnterAnimation();
+
+    window.addEventListener('pageshow', (event) => {
+        navigationLocked = false;
+        clearTransientPageState();
+        if (event.persisted) {
+            replayRouteEnterAnimation();
+        }
+    });
+
+    window.addEventListener('pagehide', () => {
+        navigationLocked = false;
     });
 
     document.addEventListener('click', (event) => {
@@ -196,6 +289,7 @@ export function initSmoothRouteTransitions() {
         if (!(target instanceof HTMLAnchorElement)) return;
         if (target.target && target.target !== '_self') return;
         if (target.hasAttribute('download')) return;
+        if (target.hasAttribute('data-no-route-transition')) return;
         if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
         const href = target.getAttribute('href');

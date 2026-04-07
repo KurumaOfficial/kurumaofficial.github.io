@@ -17,9 +17,7 @@
     <span class="logo-text">Aleph Studio</span>
   </a>
   <div class="nav-links" role="list">
-    <a class="nav__link" href="../../#products" role="listitem">Продукты</a>
-    <a class="nav__link" href="../../#manifesto" role="listitem">Принцип</a>
-    <a class="nav__link" href="../../#team" role="listitem">Команда</a>
+    <a class="nav__link" href="./donate/" role="listitem" data-donate-link>Поддержать</a>
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeBtn">
@@ -115,7 +113,7 @@
         </div>
 
         <div class="hero-actions">
-          <a class="hero-install-btn" id="installBtn" href="../../donate/">СКАЧАТЬ</a>
+          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar" download>СКАЧАТЬ</a>
           <a class="hero-source-btn" id="sourceBtn" title="Открыть исходный код" aria-label="Открыть исходный код" href="https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy" target="_blank" rel="noopener noreferrer"><span class="material-icons" aria-hidden="true">code</span></a>
           <div class="hero-share-dock" id="shareDock">
             <div class="hero-share-bg" aria-hidden="true"></div>
@@ -163,7 +161,7 @@
     <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">code</span></div>
       <h3>Open Source</h3>
-      <p>Проект распространяется по лицензии MIT — это обеспечивает прозрачность разработки и свободный доступ к коду. Мы приветствуем контрибьюторов, форки и стороние проекты при сохранении лицензии MIT и авторского права.</p>
+      <p>Проект распространяется с открытым исходным кодом по лицензии GPL. Код доступен для изучения, доработки и форков при сохранении лицензии и авторства.</p>
     </div>
     <div class="feat-card w2">
     <div class="feat-ico"><span class="material-icons">public</span></div>
@@ -173,7 +171,7 @@
       <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">workspace_premium</span></div>
         <h3>Поддержка</h3>
-        <p>Если у вас есть желание помочь в развитии мода и поддержать нашу команду то вы можете сделать это <a href="/donate/">здесь</a></p>
+        <p>Если вы хотите помочь в развитии мода и поддержать нашу команду, сделать это можно <a href="./donate/" data-donate-link>на странице поддержки</a>.</p>
       </div>
     
     <div class="feat-card">
@@ -183,8 +181,8 @@
     </div>
     <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">bolt</span></div>
-      <h3>Версия Fabric</h3>
-      <p>Авто спринт, авто инструмент, координаты, таймер.</p>
+      <h3>Fabric API</h3>
+      <p>Для корректной работы мода нужен актуальный Fabric Loader и Fabric API под Minecraft 1.21.8.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">report_problem</span></div>
@@ -200,7 +198,7 @@
       <div class="eyebrow">До / После</div>
       <h2 class="s-title">Сравнение<br>визуала</h2>
     </div>
-    <p class="s-desc">Сравнение использует реальные файлы. Положите изображения в <code>assets/images/products/strange-visuals/</code> под именами <code>before.webp</code> и <code>after.webp</code>.</p>
+    <p class="s-desc">Наглядная разница игры с нашим модом и без него. Также на изображениях не применялась дополнительная обработка, которую используют некоторые.</p>
   </div>
 
   <div class="compare-card reveal">
@@ -233,9 +231,7 @@
         aria-label="Сравнение до и после"
       >
 
-      <div class="compare-slot" id="compareSlot">
-        Положите before.webp и after.webp в assets/images/products/strange-visuals/
-      </div>
+      <div class="compare-slot" id="compareSlot">Наглядная разница игры с нашим модом и без него. Также на изображениях не применялась дополнительная обработка, которую используют некоторые.</div>
     </div>
   </div>
 </div>
@@ -247,14 +243,14 @@
       <div class="eyebrow">Интерфейс</div>
       <h2 class="s-title">Чистый GUI<br><em>в двух темах</em></h2>
       <p class="s-desc" style="max-width:360px">
-        Glassmorphism-дизайн с плавными переходами.
-        Нажми кнопку в шапке — GUI обновится вместе со страницей.
+        Аккуратный интерфейс мода без лишнего шума, который остаётся читаемым и в светлой, и в тёмной теме.
+        Переключение в шапке сразу показывает, как GUI выглядит в игре.
       </p>
       <div class="preview-tags">
-        <span class="tag">Glassmorphism</span>
-        <span class="tag">Light &amp; Dark</span>
-        <span class="tag">Анимации</span>
-        <span class="tag">Интерактивный</span>
+        <span class="tag">Минимализм</span>
+        <span class="tag">Vanilla style</span>
+        <span class="tag">Плавная смена</span>
+        <span class="tag">Быстрый доступ</span>
       </div>
     </div>
 
@@ -279,7 +275,7 @@
         <div class="gw-tabs" id="gwTabs">
           <button type="button" class="active" data-tab="player">На игроке</button>
           <button type="button" data-tab="world">В мире</button>
-          <button type="button" data-tab="utils">Версия Fabric</button>
+          <button type="button" data-tab="utils">Утилиты</button>
           <button type="button" data-tab="other">Остальное</button>
           <button type="button" data-tab="interface">Интерфейс</button>
           <button type="button" data-tab="themes">Темы</button>
