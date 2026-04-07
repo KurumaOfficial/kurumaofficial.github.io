@@ -19,6 +19,7 @@ import {
     resolveRouteRelativePath,
 } from './config.js';
 import { MESSAGES } from './messages.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js';
 
 // ── Private helpers ─────────────────────────────────────────
 
@@ -249,19 +250,15 @@ export function createLocaleController() {
             if (!btn) return;
             const nextHref = btn.dataset.href;
             if (nextHref) {
-                document.body.classList.add('route-leaving');
-                window.setTimeout(() => {
-                    window.location.assign(nextHref);
-                }, 170);
+                close();
+                navigateWithRouteTransition(nextHref);
                 return;
             }
             const next = normalizeLocale(btn.dataset.locale ?? '');
             const search = window.location.search || '';
             const hash = window.location.hash || '';
-            document.body.classList.add('route-leaving');
-            window.setTimeout(() => {
-                window.location.assign(`${getLocalePath(next)}${search}${hash}`);
-            }, 170);
+            close();
+            navigateWithRouteTransition(`${getLocalePath(next)}${search}${hash}`);
         });
 
         /* Click outside */
