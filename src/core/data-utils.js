@@ -236,87 +236,9 @@ function normalizeSocials(raw) {
 }
 
 /**
- * @typedef {Object} SupportButton
- * @property {string} id
- * @property {string} label
- * @property {string} title
- * @property {string} note
- * @property {string} url
- * @property {number} sortOrder
- */
-
-/**
- * @typedef {Object} Supporter
- * @property {string} id
- * @property {string} name
- * @property {number} amountUsd
- * @property {string} avatarUrl
- * @property {number} sortOrder
- */
-
-/**
- * @typedef {Object} SupportPage
- * @property {number} minimumAmountUsd
- * @property {SupportButton[]} buttons
- * @property {Supporter[]} supporters
- */
-
-/**
- * @param {unknown} raw
- * @param {number} index
- * @returns {SupportButton}
- */
-function normalizeSupportButton(raw, index = 0) {
-    const src = /** @type {Record<string, unknown>} */ (raw || {});
-    const title = cleanText(src.title, `Support ${index + 1}`);
-    return {
-        id: cleanText(src.id, '') ? slugify(/** @type {string} */ (src.id)) : slugify(title),
-        label: cleanText(src.label, 'Поддержать'),
-        title,
-        note: cleanText(src.note, ''),
-        url: cleanText(src.url, ''),
-        sortOrder: toNumber(src.sortOrder, index + 1),
-    };
-}
-
-/**
- * @param {unknown} raw
- * @param {number} index
- * @returns {Supporter}
- */
-function normalizeSupporter(raw, index = 0) {
-    const src = /** @type {Record<string, unknown>} */ (raw || {});
-    const name = cleanText(src.name, `Supporter ${index + 1}`);
-    return {
-        id: cleanText(src.id, '') ? slugify(/** @type {string} */ (src.id)) : slugify(name),
-        name,
-        amountUsd: toNumber(src.amountUsd, 0),
-        avatarUrl: cleanText(src.avatarUrl, ''),
-        sortOrder: toNumber(src.sortOrder, index + 1),
-    };
-}
-
-/**
- * @param {unknown} raw
- * @returns {SupportPage}
- */
-function normalizeSupportPage(raw) {
-    const src = /** @type {Record<string, unknown>} */ (raw || {});
-    const rawButtons = Array.isArray(src.buttons) ? src.buttons : [];
-    const rawSupporters = Array.isArray(src.supporters) ? src.supporters : [];
-
-    return {
-        minimumAmountUsd: Math.max(0, toNumber(src.minimumAmountUsd, 2)),
-        buttons: rawButtons.map((button, index) => normalizeSupportButton(button, index)),
-        supporters: rawSupporters.map((supporter, index) => normalizeSupporter(supporter, index)),
-    };
-}
-
-/**
  * @typedef {Object} SiteData
  * @property {Product[]}    products
  * @property {TeamMember[]} team
- * @property {SupportPage}  supportPage
  * @property {SocialsData}  socials
  */
 
@@ -333,7 +255,6 @@ export function normalizeData(data = {}) {
     return {
         products: rawProducts.map((p, i) => normalizeProduct(p, i)),
         team: rawTeam.map((m, i) => normalizeTeamMember(m, i)),
-        supportPage: normalizeSupportPage(data.supportPage),
         socials: normalizeSocials(data.socials),
     };
 }
