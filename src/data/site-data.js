@@ -30,53 +30,155 @@ export const DEFAULT_SITE_DATA = {
             "downloadUrl": "./assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar",
             "detailUrl": "products/strange-visuals/",
             "note": "Файл мода доступен по кнопке ниже.",
-            "autoRouteRedirect": false,
+            "autoRouteRedirect": true,
             "routeModules": {
                 "player": [
-                    { "name": "Боксы", "enabled": true },
-                    { "name": "Джампики", "enabled": true },
-                    { "name": "Китайская шляпа", "enabled": true },
-                    { "name": "Таргет рендер", "enabled": true },
-                    { "name": "Хит бабл", "enabled": false }
+                    {
+                        "name": "Боксы",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Джампики",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Китайская шляпа",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Таргет рендер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Хит бабл",
+                        "enabled": false
+                    }
                 ],
                 "world": [
-                    { "name": "Чамсы", "enabled": true },
-                    { "name": "Трейсеры", "enabled": false },
-                    { "name": "Снаряды", "enabled": true },
-                    { "name": "Частицы", "enabled": true },
-                    { "name": "Блок оверлей", "enabled": false },
-                    { "name": "Дроп рендер", "enabled": true },
-                    { "name": "Скелетон", "enabled": false }
+                    {
+                        "name": "Чамсы",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Трейсеры",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Снаряды",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Частицы",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Блок оверлей",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Дроп рендер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Скелетон",
+                        "enabled": false
+                    }
                 ],
                 "utils": [
-                    { "name": "Авто спринт", "enabled": true },
-                    { "name": "Авто тул", "enabled": false },
-                    { "name": "Фуллбрайт", "enabled": true },
-                    { "name": "Ноу оверлей", "enabled": true },
-                    { "name": "Координаты", "enabled": true },
-                    { "name": "Таймер", "enabled": false }
+                    {
+                        "name": "Авто спринт",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Авто тул",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Фуллбрайт",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Ноу оверлей",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Координаты",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Таймер",
+                        "enabled": false
+                    }
                 ],
                 "other": [
-                    { "name": "Антибот", "enabled": false },
-                    { "name": "Прокси", "enabled": false },
-                    { "name": "Дебаг мод", "enabled": true },
-                    { "name": "Ник хайдер", "enabled": true }
+                    {
+                        "name": "Антибот",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Прокси",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Дебаг мод",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Ник хайдер",
+                        "enabled": true
+                    }
                 ],
                 "interface": [
-                    { "name": "Массив лист", "enabled": true },
-                    { "name": "Ватермарка", "enabled": true },
-                    { "name": "Кейбинды", "enabled": false },
-                    { "name": "Нотификации", "enabled": true },
-                    { "name": "Хотбар", "enabled": true },
-                    { "name": "Скорборд", "enabled": false },
-                    { "name": "Табулист", "enabled": true },
-                    { "name": "Кроссхейр", "enabled": true }
+                    {
+                        "name": "Массив лист",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Ватермарка",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Кейбинды",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Нотификации",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Хотбар",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Скорборд",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Табулист",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Кроссхейр",
+                        "enabled": true
+                    }
                 ],
                 "themes": [
-                    { "name": "Стандарт", "enabled": true },
-                    { "name": "Минимализм", "enabled": false },
-                    { "name": "Неон", "enabled": false },
-                    { "name": "Ретро", "enabled": false }
+                    {
+                        "name": "Стандарт",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Минимализм",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Неон",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Ретро",
+                        "enabled": false
+                    }
                 ]
             }
         },
@@ -98,7 +200,14 @@ export const DEFAULT_SITE_DATA = {
             "detailUrl": "",
             "note": "Подробности появятся позже.",
             "autoRouteRedirect": false,
-            "routeModules": {}
+            "routeModules": {
+                "player": [],
+                "world": [],
+                "utils": [],
+                "other": [],
+                "interface": [],
+                "themes": []
+            }
         },
         {
             "id": "third-project",
@@ -118,7 +227,14 @@ export const DEFAULT_SITE_DATA = {
             "detailUrl": "",
             "note": "Подробности появятся позже.",
             "autoRouteRedirect": false,
-            "routeModules": {}
+            "routeModules": {
+                "player": [],
+                "world": [],
+                "utils": [],
+                "other": [],
+                "interface": [],
+                "themes": []
+            }
         }
     ],
     "team": [
