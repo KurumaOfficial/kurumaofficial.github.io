@@ -41,7 +41,7 @@ export const DEFAULT_SITE_DATA = {
                 ],
                 "world": [
                     { "name": "Чамсы", "enabled": true },
-                    { "name": "Поддержка", "enabled": false },
+                    { "name": "Трейсеры", "enabled": false },
                     { "name": "Снаряды", "enabled": true },
                     { "name": "Частицы", "enabled": true },
                     { "name": "Блок оверлей", "enabled": false },
