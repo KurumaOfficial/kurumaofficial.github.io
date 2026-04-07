@@ -8,6 +8,7 @@ import {
   initAdminRouteAccess,
   initSharedThemeToggle,
   initSmoothRouteTransitions,
+  navigateWithRouteTransition,
 } from '../core/site-shell.js';
 
 const CATEGORY_ORDER = Object.freeze(['player', 'world', 'utils', 'other', 'interface', 'themes']);
@@ -80,13 +81,13 @@ const ROUTE_SHARE_META = Object.freeze({
 
 const COMPARE_COPY = Object.freeze({
   ru: {
-    hint: 'Положите before.webp и after.webp в assets/images/products/strange-visuals/',
+    hint: 'Наглядная разница игры с нашим модом и без него. Также на изображениях не применялась дополнительная обработка, которую используют некоторые.',
   },
   en: {
-    hint: 'Place before.webp and after.webp into assets/images/products/strange-visuals/',
+    hint: 'A clear look at the game with our mod and without it. The images also do not use the extra processing that some others rely on.',
   },
   ua: {
-    hint: 'Покладіть before.webp і after.webp в assets/images/products/strange-visuals/',
+    hint: 'Наочна різниця гри з нашим модом і без нього. Також на зображеннях не застосовувалась додаткова обробка, яку використовують деякі інші.',
   },
 });
 
@@ -137,7 +138,7 @@ function resolveRouteAsset(path) {
 }
 
 function getDonateHref() {
-  return new URL('../../donate/', window.location.href).toString();
+  return new URL('donate/', window.location.href).toString();
 }
 
 function getRouteProduct(products) {
@@ -243,22 +244,50 @@ function initShareDock(elements, siteData, shareMeta) {
 function syncDonateLinks(elements) {
   const donateHref = getDonateHref();
 
-  if (elements.installBtn) {
-    elements.installBtn.href = donateHref;
-    elements.installBtn.removeAttribute('download');
-  }
-
   elements.donateLinks.forEach((link) => {
     if (!(link instanceof HTMLAnchorElement)) return;
     link.href = donateHref;
   });
 }
 
+function startDownloadThenRedirect(downloadHref, redirectHref) {
+  if (!downloadHref) {
+    navigateWithRouteTransition(redirectHref);
+    return;
+  }
+
+  const tempLink = document.createElement('a');
+  tempLink.href = downloadHref;
+  tempLink.setAttribute('download', '');
+  tempLink.hidden = true;
+  document.body.appendChild(tempLink);
+  tempLink.click();
+
+  window.requestAnimationFrame(() => {
+    window.setTimeout(() => {
+      tempLink.remove();
+      navigateWithRouteTransition(redirectHref);
+    }, 320);
+  });
+}
+
 function initActionButtons(elements, routeProduct) {
+  const donateHref = getDonateHref();
   syncDonateLinks(elements);
 
-  if (elements.installBtn && !routeProduct?.downloadUrl) {
-    elements.installBtn.removeAttribute('download');
+  if (elements.installBtn) {
+    if (routeProduct?.downloadUrl) {
+      const downloadHref = resolveRouteAsset(routeProduct.downloadUrl);
+      elements.installBtn.href = downloadHref;
+      elements.installBtn.setAttribute('download', '');
+      elements.installBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        startDownloadThenRedirect(downloadHref, donateHref);
+      });
+    } else {
+      elements.installBtn.href = donateHref;
+      elements.installBtn.removeAttribute('download');
+    }
   }
 
   if (!elements.sourceBtn) return;
@@ -398,15 +427,22 @@ function initCompareMedia(elements, compareCopy) {
     elements.compareBeforeImage,
     elements.compareAfterImage,
   ].filter((item) => item instanceof HTMLImageElement);
+  const compareCard = elements.compareSlot instanceof HTMLElement
+    ? elements.compareSlot.closest('.compare-card')
+    : null;
 
   if (!items.length) return;
 
   const updateState = () => {
     const readyCount = items.filter((item) => item.dataset.loaded === 'true').length;
     const shouldShowHint = readyCount < items.length;
+    compareCard?.classList.toggle('compare-card--empty', shouldShowHint);
     if (elements.compareSlot) {
       elements.compareSlot.hidden = !shouldShowHint;
       elements.compareSlot.textContent = compareCopy.hint;
+    }
+    if (elements.compareSlider instanceof HTMLInputElement) {
+      elements.compareSlider.disabled = shouldShowHint;
     }
   };
 

@@ -15,6 +15,7 @@ import {
     toNumber,
 } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml } from '../core/dom.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js';
 import { createGitHubPublisher } from '../github/publisher.js';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
@@ -244,10 +245,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 event.preventDefault();
                 disarmRedirectAccess();
                 sequenceBuffer = [];
-                document.body.classList.add('route-leaving');
-                window.setTimeout(() => {
-                    window.location.assign(adminPageHref);
-                }, 170);
+                navigateWithRouteTransition(adminPageHref);
             });
 
             document.addEventListener('keydown', (event) => {
@@ -1218,7 +1216,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             if (window.history.length > 1) {
                 window.history.back();
             } else {
-                window.location.assign(adminHomeHref);
+                navigateWithRouteTransition(adminHomeHref);
             }
             return true;
         }
