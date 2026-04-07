@@ -8,7 +8,6 @@
  */
 
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
 import { escapeHtml, linkify, $ } from '../core/dom.js';
@@ -39,7 +38,7 @@ export function createRenderer({ localeController }) {
     const teamShowcaseEl = $('teamShowcase');
 
     /** @type {import('../core/data-utils.js').SiteData} */
-    let siteData = localizeSiteData(normalizeData(DEFAULT_SITE_DATA), localeController.locale);
+    let siteData = normalizeData(DEFAULT_SITE_DATA);
 
     /** Shorthand for translations. */
     const t = localeController.t.bind(localeController);
@@ -272,7 +271,7 @@ export function createRenderer({ localeController }) {
      * @param {Record<string, unknown>} [nextData]
      */
     function renderSite(nextData) {
-        siteData = localizeSiteData(normalizeData(nextData ?? siteData), localeController.locale);
+        siteData = normalizeData(nextData ?? siteData);
         renderSocialLinks(featuredSocialEl);
         renderSocialLinks(footerSocialEl);
         renderFeatured();
