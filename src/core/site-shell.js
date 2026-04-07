@@ -6,7 +6,6 @@ import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js';
 const THEME_STORAGE_KEY = 'aleph-theme';
 const ROUTE_TRANSITION_MS = 210;
 const ROUTE_ENTER_MS = 320;
-const THEME_VIEW_TRANSITION_MS = 620;
 const SHARED_MOTION_STYLE_ID = 'aleph-shared-motion';
 
 let navigationLocked = false;
@@ -42,10 +41,6 @@ function buildSiteHref(relativePath = '', pathname = window.location.pathname) {
 
 function normalizeComparablePath(pathname) {
     return getNormalizedPathname(pathname).replace(/index\.html\/?$/i, '');
-}
-
-function prefersReducedMotion() {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
 
 function getStoredSiteData() {
@@ -142,55 +137,7 @@ function updateThemeColorMeta(theme) {
     themeMeta.setAttribute('content', theme === 'dark' ? '#080606' : '#f5f0ee');
 }
 
-function performThemeChange(nextTheme, applyTheme, origin) {
-    const root = document.documentElement;
-    const useViewTransition = !prefersReducedMotion()
-        && typeof document.startViewTransition === 'function'
-        && typeof root.animate === 'function';
-
-    if (!useViewTransition) {
-        applyTheme(nextTheme);
-        return;
-    }
-
-    const x = origin?.x ?? window.innerWidth / 2;
-    const y = origin?.y ?? window.innerHeight / 2;
-    const endRadius = Math.hypot(
-        Math.max(x, window.innerWidth - x),
-        Math.max(y, window.innerHeight - y),
-    );
-
-    root.style.setProperty('--theme-transition-x', `${x}px`);
-    root.style.setProperty('--theme-transition-y', `${y}px`);
-
-    const transition = document.startViewTransition(() => {
-        applyTheme(nextTheme);
-    });
-
-    transition.ready
-        .then(() => {
-            root.animate(
-                {
-                    clipPath: [
-                        `circle(0px at ${x}px ${y}px)`,
-                        `circle(${endRadius}px at ${x}px ${y}px)`,
-                    ],
-                },
-                {
-                    duration: THEME_VIEW_TRANSITION_MS,
-                    easing: 'cubic-bezier(.22, 1, .36, 1)',
-                    pseudoElement: '::view-transition-new(root)',
-                },
-            );
-        })
-        .catch(() => {
-            /* ignore animation failures and keep the new theme */
-        });
-}
-
 export function initSharedThemeToggle() {
-    ensureSharedMotionStyles();
-
     const btn = /** @type {HTMLButtonElement | null} */ (document.getElementById('themeBtn'));
     const ico = document.getElementById('themeIco');
     if (!btn || !ico) return;
@@ -221,16 +168,8 @@ export function initSharedThemeToggle() {
         updateThemeColorMeta(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
     }
 
-    btn.addEventListener('click', (event) => {
-        const rect = btn.getBoundingClientRect();
-        const nextTheme = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-        performThemeChange(
-            nextTheme,
-            applyTheme,
-            event instanceof MouseEvent
-                ? { x: event.clientX, y: event.clientY }
-                : { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 },
-        );
+    btn.addEventListener('click', () => {
+        applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     });
 }
 
