@@ -107,20 +107,20 @@ const PRODUCT_OVERRIDES = Object.freeze({
                     { name: 'Частинки', enabled: true },
                     { name: 'Блок оверлей', enabled: false },
                     { name: 'Дроп рендер', enabled: true },
-                    { name: 'Скелетон', enabled: false },
+                    { name: 'Скелет', enabled: false },
                 ]),
                 utils: Object.freeze([
                     { name: 'Авто спринт', enabled: true },
                     { name: 'Авто тул', enabled: false },
-                    { name: 'Фуллбрайт', enabled: true },
-                    { name: 'Ноу оверлей', enabled: true },
+                    { name: 'Повна яскравість', enabled: true },
+                    { name: 'Без оверлею', enabled: true },
                     { name: 'Координати', enabled: true },
                     { name: 'Таймер', enabled: false },
                 ]),
                 other: Object.freeze([
                     { name: 'Антибот', enabled: false },
                     { name: 'Проксі', enabled: false },
-                    { name: 'Дебаг мод', enabled: true },
+                    { name: 'Режим налагодження', enabled: true },
                     { name: 'Нік хайдер', enabled: true },
                 ]),
                 interface: Object.freeze([
@@ -131,7 +131,7 @@ const PRODUCT_OVERRIDES = Object.freeze({
                     { name: 'Хотбар', enabled: true },
                     { name: 'Скорборд', enabled: false },
                     { name: 'Табуліст', enabled: true },
-                    { name: 'Кроссхейр', enabled: true },
+                    { name: 'Приціл', enabled: true },
                 ]),
                 themes: Object.freeze([
                     { name: 'Стандарт', enabled: true },
@@ -278,7 +278,7 @@ export function localizeSiteData(siteData, locale) {
 
     localized.products = localizeProducts(localized.products || [], normalizedLocale);
     localized.team = localizeTeam(localized.team || [], normalizedLocale);
-    localized.supportPage = localizeSupportPage(localized.supportPage || { minimumAmountUsd: 2, buttons: [], supporters: [] }, normalizedLocale);
+    localized.supportPage = localizeSupportPage(localized.supportPage || { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] }, normalizedLocale);
 
     return localized;
 }

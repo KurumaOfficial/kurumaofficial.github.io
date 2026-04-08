@@ -126,6 +126,101 @@ export function normalizeRouteModules(raw) {
 }
 
 /**
+ * @typedef {{
+ *   id: string;
+ *   label: string;
+ *   title: string;
+ *   note: string;
+ *   url: string;
+ *   sortOrder: number;
+ * }} SupportButton
+ */
+
+/**
+ * @typedef {{
+ *   id: string;
+ *   name: string;
+ *   avatarUrl: string;
+ *   amountUsd: number;
+ *   sortOrder: number;
+ * }} Supporter
+ */
+
+/**
+ * @typedef {{
+ *   minimumAmountUsd: number;
+ *   roleName: string;
+ *   buttons: SupportButton[];
+ *   supporters: Supporter[];
+ * }} SupportPage
+ */
+
+/**
+ * @param {unknown} value
+ * @returns {number}
+ */
+function clampCurrency(value) {
+    const num = Number(value);
+    if (!Number.isFinite(num)) return 0;
+    return Math.max(0, Math.round(num * 100) / 100);
+}
+
+/**
+ * @param {Record<string, unknown>} raw
+ * @param {number} index
+ * @returns {SupportButton}
+ */
+export function normalizeSupportButton(raw = {}, index = 0) {
+    const title = cleanText(raw.title, `Способ ${index + 1}`);
+    return {
+        id: cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(title),
+        label: cleanText(raw.label, 'Поддержать'),
+        title,
+        note: cleanText(raw.note, ''),
+        url: cleanText(raw.url, ''),
+        sortOrder: toNumber(raw.sortOrder, index + 1),
+    };
+}
+
+/**
+ * @param {Record<string, unknown>} raw
+ * @param {number} index
+ * @returns {Supporter}
+ */
+export function normalizeSupporter(raw = {}, index = 0) {
+    const name = cleanText(raw.name, `Supporter ${String(index + 1).padStart(2, '0')}`);
+    const legacyAmount = raw.amountUsd ?? raw.amount ?? raw.value ?? 0;
+    return {
+        id: cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(name),
+        name,
+        avatarUrl: cleanText(raw.avatarUrl || raw.avatar, ''),
+        amountUsd: clampCurrency(legacyAmount),
+        sortOrder: toNumber(raw.sortOrder, index + 1),
+    };
+}
+
+/**
+ * @param {unknown} raw
+ * @returns {SupportPage}
+ */
+export function normalizeSupportPage(raw) {
+    const src = /** @type {Record<string, unknown>} */ (raw || {});
+    const buttons = Array.isArray(src.buttons)
+        ? src.buttons
+        : (Array.isArray(src.methods) ? src.methods : []);
+    const supporters = Array.isArray(src.supporters)
+        ? src.supporters
+        : (Array.isArray(src.donors) ? src.donors : []);
+
+    return {
+        minimumAmountUsd: Math.max(0, toNumber(src.minimumAmountUsd ?? src.minimumUsd, 2)),
+        roleName: cleanText(src.roleName ?? src.role ?? src.premiumRole, '@Premium'),
+        buttons: buttons.map((item, index) => normalizeSupportButton(/** @type {Record<string, unknown>} */ (item), index)),
+        supporters: supporters.map((item, index) => normalizeSupporter(/** @type {Record<string, unknown>} */ (item), index)),
+    };
+}
+
+/**
  * @typedef {Object} Product
  * @property {string}   id
  * @property {string}   title
@@ -239,6 +334,7 @@ function normalizeSocials(raw) {
  * @typedef {Object} SiteData
  * @property {Product[]}    products
  * @property {TeamMember[]} team
+ * @property {SupportPage}  supportPage
  * @property {SocialsData}  socials
  */
 
@@ -255,6 +351,7 @@ export function normalizeData(data = {}) {
     return {
         products: rawProducts.map((p, i) => normalizeProduct(p, i)),
         team: rawTeam.map((m, i) => normalizeTeamMember(m, i)),
+        supportPage: normalizeSupportPage(data.supportPage),
         socials: normalizeSocials(data.socials),
     };
 }

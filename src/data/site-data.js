@@ -157,6 +157,7 @@ export const DEFAULT_SITE_DATA = {
     ],
     "supportPage": {
         "minimumAmountUsd": 2,
+        "roleName": "@Premium",
         "buttons": [
             {
                 "id": "support-fanpay",
