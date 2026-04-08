@@ -189,7 +189,7 @@ export function normalizeSupportButton(raw = {}, index = 0) {
  */
 export function normalizeSupporter(raw = {}, index = 0) {
     const name = cleanText(raw.name, `Supporter ${String(index + 1).padStart(2, '0')}`);
-    const legacyAmount = raw.amountUsd ?? raw.amount ?? raw.value ?? 0;
+    const legacyAmount = raw.amountUsd ?? raw.amount ?? raw.value ?? 2;
     return {
         id: cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(name),
         name,
@@ -347,11 +347,16 @@ function normalizeSocials(raw) {
 export function normalizeData(data = {}) {
     const rawProducts = Array.isArray(data.products) && data.products.length ? data.products : [];
     const rawTeam = Array.isArray(data.team) ? data.team : [];
+    const rawSupportPage = data.supportPage || {
+        minimumAmountUsd: data.minimumAmountUsd,
+        buttons: data.supportButtons || data.paymentButtons,
+        supporters: data.supporters,
+    };
 
     return {
         products: rawProducts.map((p, i) => normalizeProduct(p, i)),
         team: rawTeam.map((m, i) => normalizeTeamMember(m, i)),
-        supportPage: normalizeSupportPage(data.supportPage),
+        supportPage: normalizeSupportPage(rawSupportPage),
         socials: normalizeSocials(data.socials),
     };
 }

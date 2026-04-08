@@ -101,7 +101,7 @@ export function createRenderer({ localeController }) {
             const href = siteData.socials?.[key] || '';
             const icon = SOCIAL_SVG[key] || '';
             if (!href) {
-                return `<a class="social-link" href="#" aria-disabled="true" tabindex="-1" aria-label="${escapeHtml(label)}">${icon}</a>`;
+                return `<a class="social-link" aria-disabled="true" tabindex="-1" aria-label="${escapeHtml(label)}">${icon}</a>`;
             }
             return `<a class="social-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(label)}">${icon}</a>`;
         }).join('');
@@ -129,9 +129,9 @@ export function createRenderer({ localeController }) {
             if (product.detailUrl) {
                 /* detailUrl is locale-relative, resolve against current directory */
                 const href = './' + product.detailUrl.replace(/^\.\//, '');
-                                const cardAttrs = product.autoRouteRedirect
-                                        ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
-                                        : '';
+                const cardAttrs = product.autoRouteRedirect
+                    ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
+                    : '';
                 return `
 <article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}"${cardAttrs}>
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>

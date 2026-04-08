@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strange Visuals — Підтримати</title>
+<script>window.__ALEPH_LOCALE__ = 'ua';</script>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/support/donate.css">
+</head>
+<body>
+
+<nav class="nav" role="navigation" aria-label="Основна навігація">
+  <a class="nav-logo" href="../" aria-label="Aleph Studio — на головну">
+    <span class="logo-sq" aria-hidden="true"></span>
+    <span class="logo-text">Aleph Studio</span>
+  </a>
+  <div class="nav-links" role="list">
+    <a class="nav__link" href="../#products" role="listitem">Продукти</a>
+    <a class="nav__link" href="../#manifesto" role="listitem">Принцип</a>
+    <a class="nav__link" href="../#team" role="listitem">Команда</a>
+    <a class="nav__link is-active" href="./" role="listitem">Підтримати</a>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">
+      <span class="material-icons" id="themeIco">light_mode</span>
+    </button>
+
+    <div id="localeSwitcher" class="locale-switcher">
+      <button
+        id="localeSwitcherTrigger"
+        class="locale-switcher__trigger"
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-label="Вибір мови"
+      >
+        <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel">UA</span>
+        <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+          <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        </svg>
+      </button>
+      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="listbox" aria-label="Змінити мову" hidden></div>
+    </div>
+  </div>
+</nav>
+
+<main class="donate-page">
+  <section class="donate-hero reveal">
+    <a class="donate-back" href="../products/strange-visuals/">
+      <span class="material-icons" aria-hidden="true">arrow_back</span>
+      <span id="donateBackLabel">Назад до Strange Visuals</span>
+    </a>
+
+    <div class="donate-crown">
+      <span class="material-icons">workspace_premium</span>
+    </div>
+
+    <div class="donate-eyebrow" id="donateEyebrow">Підтримати проєкт</div>
+    <h1 class="donate-title" id="donateTitle">Підтримка<br><em>проєкту</em></h1>
+    <p class="donate-desc" id="donateDesc"></p>
+  </section>
+
+  <section class="donate-section reveal">
+    <div class="section-head">
+      <div>
+        <h2 id="paymentsTitle">Способи підтримки</h2>
+        <p id="paymentsDesc">Посилання та підписи задаються через адмін-панель. Можна додати будь-яку кількість кнопок.</p>
+      </div>
+    </div>
+    <div class="pay-grid" id="supportButtonsGrid"></div>
+  </section>
+
+  <section class="donate-section reveal" id="topSupportersSection">
+    <div class="section-head">
+      <div>
+        <h2 id="topSupportersTitle">Загальний топ 3</h2>
+        <p id="topSupportersDesc">Що більша сума, то сильніше золотисте сяйво картки.</p>
+      </div>
+    </div>
+    <div class="top-grid" id="topSupportersGrid"></div>
+  </section>
+
+  <section class="donate-section reveal">
+    <div class="section-head">
+      <h2 id="supportersTitle">Підтримали нас</h2>
+      <span class="count-chip" id="supporterCount">0</span>
+    </div>
+    <div class="supporters-grid" id="supportersGrid"></div>
+  </section>
+</main>
+
+<script type="module" src="../../src/support/donate.js"></script>
+</body>
+</html>
