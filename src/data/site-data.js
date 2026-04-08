@@ -11,7 +11,7 @@ export const DEFAULT_SITE_DATA = {
         {
             "id": "strange-visuals",
             "title": "Strange Visuals",
-            "version": "1.1.0",
+            "version": "1.5.1",
             "tag": "Активно",
             "flag": "release",
             "status": "активно",
@@ -277,44 +277,22 @@ export const DEFAULT_SITE_DATA = {
         "buttons": [
             {
                 "id": "support-fanpay",
-                "label": "Поддержать",
+                "label": "Оплата картой",
                 "title": "FanPay",
                 "note": "Visa / Mastercard / СБП",
-                "url": "https://funpay.com/lots/offer?id=66282874",
-                "sortOrder": 2
+                "url": "",
+                "sortOrder": 1
             },
             {
                 "id": "support-donationalerts",
                 "label": "Donation Alerts",
-                "title": "Donation Alerts",
-                "note": "Visa / Mastercard / МИР / СБП / SberPay / ЮMoney / QIWI / WebMoney / PayPal / Apple Pay / Google Pay / Крипта / Мобильные платежи",
-                "url": "https://www.donationalerts.com/r/kuruma_official",
-                "sortOrder": 1
+                "title": "Donate",
+                "note": "Быстрый донат со стримов",
+                "url": "",
+                "sortOrder": 2
             }
         ],
-        "supporters": [
-            {
-                "id": "supporter-1775687891992",
-                "name": "Новый поддержавший",
-                "avatarUrl": "",
-                "amountUsd": 0,
-                "sortOrder": 1
-            },
-            {
-                "id": "supporter-1775687892184",
-                "name": "Новый поддержавший",
-                "avatarUrl": "",
-                "amountUsd": 0,
-                "sortOrder": 2
-            },
-            {
-                "id": "supporter-1775687892356",
-                "name": "Новый поддержавший",
-                "avatarUrl": "",
-                "amountUsd": 0,
-                "sortOrder": 3
-            }
-        ]
+        "supporters": []
     },
     "socials": {
         "youtube": "https://www.youtube.com/@KurumaBestWaify",
