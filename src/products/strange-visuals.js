@@ -1,6 +1,7 @@
 import { initReveal } from '../components/reveal.js';
 import { createLocaleController } from '../i18n/controller.js';
 import { escapeHtml } from '../core/dom.js';
+import { localizeSiteData } from '../data/localized-site-data.js';
 import {
   applyGlobalRouteRedirect,
   getAdminHref,
@@ -101,6 +102,7 @@ function getElements() {
     shareYoutubeBtn: document.getElementById('shareYoutubeBtn'),
     installBtn: document.getElementById('installBtn'),
     sourceBtn: document.getElementById('sourceBtn'),
+    heroProductVersion: document.getElementById('heroProductVersion'),
     gwTabsEl: document.getElementById('gwTabs'),
     gwSecEl: document.getElementById('gwSec'),
     gwBodyEl: document.getElementById('gwBody'),
@@ -239,6 +241,12 @@ function initShareDock(elements, siteData, shareMeta) {
     if (event.key !== 'Escape') return;
     setShareDockOpen(elements, false, shareMeta);
   });
+}
+
+function bindRouteProductMeta(elements, routeProduct) {
+  if (elements.heroProductVersion && routeProduct?.version) {
+    elements.heroProductVersion.textContent = routeProduct.version;
+  }
 }
 
 function syncDonateLinks(elements) {
@@ -480,10 +488,10 @@ function applyRevealDelays() {
 }
 
 function boot() {
-  const siteData = getEffectiveSiteData();
+  const localeController = createLocaleController();
+  const siteData = localizeSiteData(getEffectiveSiteData(), localeController.locale);
   if (applyGlobalRouteRedirect(siteData)) return;
 
-  const localeController = createLocaleController();
   const localeMeta = getLocaleMeta(localeController.locale);
   const shareMeta = getShareMeta(localeController.locale);
   const compareCopy = getCompareCopy(localeController.locale);
@@ -497,6 +505,7 @@ function boot() {
   initAdminRouteAccess({ adminHref: getAdminHref() });
   initSmoothRouteTransitions();
 
+  bindRouteProductMeta(elements, routeProduct);
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
   renderGwTabs(elements, tabKeys, localeMeta, (key) => buildGui(elements, tabs, localeMeta, key));

@@ -146,7 +146,7 @@ function createEmptyState(text) {
     return createElement('div', { className: 'empty-state' }, text);
 }
 
-function buildIntro(container, copy, minimumAmountUsd, discordUrl) {
+function buildIntro(container, copy, minimumAmountUsd, roleName, discordUrl) {
     if (!container) return;
     container.textContent = '';
 
@@ -154,7 +154,7 @@ function buildIntro(container, copy, minimumAmountUsd, discordUrl) {
         document.createTextNode(copy.introLead),
         createElement('strong', { textContent: `${formatUsd(minimumAmountUsd)} ` }),
         document.createTextNode(copy.introMiddle),
-        createElement('strong', { textContent: '@Premium ' }),
+        createElement('strong', { textContent: `${roleName || '@Premium'} ` }),
         document.createTextNode(copy.introAfterRole),
     );
 
@@ -322,7 +322,7 @@ function boot() {
     const copy = getCopy(locale);
     const siteData = localizeSiteData(getEffectiveSiteData(), locale);
     const elements = getElements();
-    const supportPage = siteData.supportPage || { minimumAmountUsd: 2, buttons: [], supporters: [] };
+    const supportPage = siteData.supportPage || { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] };
 
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
@@ -330,7 +330,7 @@ function boot() {
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
-    buildIntro(elements.donateDesc, copy, Number(supportPage.minimumAmountUsd || 2), resolveButtonUrl(siteData.socials?.discord || ''));
+    buildIntro(elements.donateDesc, copy, Number(supportPage.minimumAmountUsd || 2), supportPage.roleName || '@Premium', resolveButtonUrl(siteData.socials?.discord || ''));
     renderPaymentButtons(elements.supportButtonsGrid, supportPage.buttons, copy, locale);
     renderSupporters(elements, supportPage.supporters, copy, locale);
     initReveal();

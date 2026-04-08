@@ -213,7 +213,7 @@ body::before {
 /* ── §5 Navigation ─────────────────────────────────────────── */
 
 .nav {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -569,6 +569,7 @@ body::before {
 section {
     padding: var(--section-block) var(--page-gutter);
     position: relative;
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
 }
 
 .section-label {

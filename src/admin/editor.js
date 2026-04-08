@@ -7,6 +7,8 @@ import {
     normalizeData,
     normalizeProduct,
     normalizeRouteModules,
+    normalizeSupportButton,
+    normalizeSupporter,
     normalizeTeamMember,
     ROUTE_MODULE_KEYS,
     toNumber,
@@ -26,16 +28,19 @@ const ADMIN_VIEW_COPY = Object.freeze({
     ru: {
         home: { title: 'Главная', subtitle: 'Центр управления черновиком, публикацией и быстрыми переходами по админке.' },
         products: { title: 'Продукты', subtitle: 'Управление карточками, ссылками, порядком и публикацией релизов.' },
+        support: { title: 'Поддержка', subtitle: 'Управление страницей donate, способами оплаты и карточками поддержавших.' },
         misc: { title: 'Прочее', subtitle: 'Команда, социальные ссылки и дополнительные настройки витрины.' },
     },
     en: {
         home: { title: 'Home', subtitle: 'Control draft state, publication and quick admin navigation.' },
         products: { title: 'Products', subtitle: 'Manage cards, links, order and publication state for releases.' },
+        support: { title: 'Support', subtitle: 'Manage the donate route, support buttons and supporter cards.' },
         misc: { title: 'Misc', subtitle: 'Team, social links and additional showcase settings.' },
     },
     ua: {
         home: { title: 'Головна', subtitle: 'Центр керування чернеткою, публікацією та швидкими переходами в адмінці.' },
         products: { title: 'Продукти', subtitle: 'Керування картками, посиланнями, порядком та публікацією релізів.' },
+        support: { title: 'Підтримка', subtitle: 'Керування donate-сторінкою, способами підтримки та картками тих, хто підтримав.' },
         misc: { title: 'Інше', subtitle: 'Команда, соціальні посилання та додаткові налаштування вітрини.' },
     },
 });
@@ -138,9 +143,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const editorAccessTriggerEl = document.getElementById('editorAccessTrigger') || document.getElementById('logoLink');
     const editorAdminTitleEl = document.getElementById('editorAdminTitle');
     const editorAdminSubtitleEl = document.getElementById('editorAdminSubtitle');
-    const productsToolbarEl = document.getElementById('productsToolbar');
     const homeViewEl = document.getElementById('homeView');
     const productsViewEl = document.getElementById('productsView');
+    const supportViewEl = document.getElementById('supportView');
     const miscViewEl = document.getElementById('miscView');
     const homeDraftSummaryEl = document.getElementById('homeDraftSummary');
     const homeProductsCountEl = document.getElementById('homeProductsCount');
@@ -149,6 +154,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const homeSocialCountEl = document.getElementById('homeSocialCount');
     const homeUploadsCountEl = document.getElementById('homeUploadsCount');
     const editorProductGridEl = document.getElementById('editorProductGrid');
+    const editorEmptyStateEl = document.getElementById('editorEmptyState');
     const editorPanelEl = document.getElementById('editor');
     const editorTitleEl = document.getElementById('editorTitle');
     const editorSearchEl = document.getElementById('editorSearchInput');
@@ -157,6 +163,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const addProductBtnEl = document.getElementById('addProductBtn');
     const addTeamMemberBtnEl = document.getElementById('addTeamMemberBtn');
     const draftStateChipEl = document.getElementById('draftStateChip');
+    const draftStateTextEl = document.getElementById('draftStateText');
     const applyDraftBtnEl = document.getElementById('applyDraftBtn');
     const discardDraftBtnEl = document.getElementById('discardDraftBtn');
     const homeApplyDraftBtnEl = document.getElementById('homeApplyDraftBtn');
@@ -185,6 +192,16 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const routeModuleCategoryEl = document.getElementById('route-module-category');
     const routeModuleListEl = document.getElementById('routeModuleList');
     const addRouteModuleBtnEl = document.getElementById('addRouteModuleBtn');
+    const supportMinAmountEl = document.getElementById('supportMinAmount');
+    const supportRoleNameEl = document.getElementById('supportRoleName');
+    const supportButtonsListEl = document.getElementById('supportButtonsList');
+    const addSupportButtonBtnEl = document.getElementById('addSupportButtonBtn');
+    const supportersAdminListEl = document.getElementById('supportersAdminList');
+    const addSupporterBtnEl = document.getElementById('addSupporterBtn');
+    const supportSummaryMinAmountEl = document.getElementById('supportSummaryMinAmount');
+    const supportSummaryRoleNameEl = document.getElementById('supportSummaryRoleName');
+    const supportButtonsCountEl = document.getElementById('supportButtonsCount');
+    const supportSupportersCountEl = document.getElementById('supportSupportersCount');
     const socialYoutubeEl = document.getElementById('socialYoutube');
     const socialDiscordEl = document.getElementById('socialDiscord');
     const socialTelegramEl = document.getElementById('socialTelegram');
@@ -271,6 +288,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     let editorAccessTimer = null;
     const pendingProductUploads = new Map();
 
+    if (editorEmptyStateEl) {
+        editorEmptyStateEl.textContent = locale === 'en'
+            ? 'Select a product on the left to open its editing workspace.'
+            : locale === 'ua'
+                ? 'Вибери продукт ліворуч, щоб відкрити його робочу область редагування.'
+                : 'Выбери продукт слева, чтобы открыть его рабочую область редактирования.';
+    }
+
     function emitToast(message, kind = 'info') {
         if (typeof showToast === 'function') showToast(message, kind);
     }
@@ -304,74 +329,85 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const hasPreviewDiff = hasUnappliedDraftChanges();
         const hasSavedDiff = hasUnsavedDraftChanges();
         const uploadCount = pendingProductUploads.size;
-        let toneClass = 'is-clean';
-        let badge = locale === 'en' ? 'Clean' : locale === 'ua' ? 'Без змін' : 'Без изменений';
-        let lead = locale === 'en'
-            ? 'Draft is in sync with the current site state. You can close the panel or continue editing.'
-            : locale === 'ua'
-                ? 'Чернетка синхронізована з поточним станом сайту. Можна закривати панель або продовжувати редагування.'
-                : 'Черновик синхронизирован с текущей версией сайта. Можно закрывать панель или переходить к новым правкам.';
 
-        if (hasPreviewDiff) {
-            toneClass = 'is-action';
-            badge = locale === 'en' ? 'Apply needed' : locale === 'ua' ? 'Потрібно застосувати' : 'Нужно применить';
-            lead = locale === 'en'
-                ? 'Some edits are still only in the form state. Apply the draft to preview the final result on this page.'
-                : locale === 'ua'
-                    ? 'Є зміни, які ще не застосовані до preview сторінки. Застосуй чернетку, щоб побачити фінальний результат.'
-                    : 'Есть изменения в формах, которые ещё не применены к preview страницы. Нажми «Применить черновик», чтобы увидеть итог на этой вкладке.';
-        } else if (hasSavedDiff) {
-            toneClass = uploadCount ? 'is-ready' : 'is-warning';
-            badge = uploadCount
-                ? (locale === 'en' ? 'Ready to publish' : locale === 'ua' ? 'Готово до публікації' : 'Готов к публикации')
-                : (locale === 'en' ? 'Save needed' : locale === 'ua' ? 'Потрібно зберегти' : 'Нужно сохранить');
-            lead = uploadCount
-                ? (locale === 'en'
-                    ? 'Draft is prepared and selected files are queued for GitHub upload. You can publish changes for everyone.'
+        const rows = [
+            {
+                dotClass: hasPreviewDiff ? 'is-warn' : 'is-ok',
+                label: locale === 'en'
+                    ? (hasPreviewDiff ? 'Preview is behind the form state' : 'Preview is synced with the draft')
                     : locale === 'ua'
-                        ? 'Чернетка підготовлена, а вибрані файли вже стоять у черзі на GitHub upload. Можна публікувати зміни для всіх.'
-                        : 'Черновик уже собран, а выбранные файлы ждут загрузки в GitHub. Теперь можно публиковать изменения для всех.')
-                : (locale === 'en'
-                    ? 'Preview is already updated, but changes are not yet saved locally or published to GitHub.'
+                        ? (hasPreviewDiff ? 'Preview відстає від форми' : 'Preview синхронізований із чернеткою')
+                        : (hasPreviewDiff ? 'Preview отстаёт от формы' : 'Preview синхронизирован с черновиком'),
+                tagClass: hasPreviewDiff ? 'is-warn' : 'is-success',
+                tag: hasPreviewDiff ? 'APPLY' : 'OK',
+            },
+            {
+                dotClass: hasSavedDiff ? 'is-warn' : 'is-ok',
+                label: locale === 'en'
+                    ? (hasSavedDiff ? 'There are local changes not saved yet' : 'Local state is already fixed')
                     : locale === 'ua'
-                        ? 'Preview вже оновлено, але зміни ще не збережені локально або не опубліковані у GitHub.'
-                        : 'Черновик уже применён к preview, но ещё не сохранён локально или не опубликован для всех.');
-        }
-
-        const details = [
-            hasPreviewDiff
-                ? (locale === 'en' ? 'Preview is behind the form state.' : locale === 'ua' ? 'Preview відстає від форми.' : 'Preview отстаёт от формы.')
-                : (locale === 'en' ? 'Preview is synced with the form state.' : locale === 'ua' ? 'Preview синхронізований із формами.' : 'Preview синхронизирован с формами.'),
-            hasSavedDiff
-                ? (locale === 'en' ? 'There are changes not yet saved.' : locale === 'ua' ? 'Є зміни, які ще не закріплені збереженням.' : 'Есть изменения, которые ещё не закреплены сохранением.')
-                : (locale === 'en' ? 'No unsaved changes.' : locale === 'ua' ? 'Нових незбережених змін немає.' : 'Новых несохранённых изменений нет.'),
-            uploadCount
-                ? (locale === 'en' ? `GitHub uploads queued: ${uploadCount}.` : locale === 'ua' ? `У черзі GitHub upload: ${uploadCount}.` : `В очереди GitHub upload: ${uploadCount}.`)
-                : (locale === 'en' ? 'No GitHub uploads queued.' : locale === 'ua' ? 'Немає нових файлів у черзі GitHub upload.' : 'Новых файлов в очереди GitHub upload нет.'),
+                        ? (hasSavedDiff ? 'Є локальні зміни, які ще не збережені' : 'Локальний стан уже зафіксований')
+                        : (hasSavedDiff ? 'Есть локальные изменения, которые ещё не сохранены' : 'Локальное состояние уже зафиксировано'),
+                tagClass: hasSavedDiff ? 'is-warn' : 'is-success',
+                tag: hasSavedDiff ? 'SAVE' : 'SYNC',
+            },
+            {
+                dotClass: hasSavedDiff || uploadCount ? 'is-warn' : 'is-ok',
+                label: locale === 'en'
+                    ? (hasSavedDiff || uploadCount ? 'GitHub publication is pending' : 'GitHub publication is not required right now')
+                    : locale === 'ua'
+                        ? (hasSavedDiff || uploadCount ? 'Публікація в GitHub очікує запуску' : 'Публікація в GitHub зараз не потрібна')
+                        : (hasSavedDiff || uploadCount ? 'Публикация в GitHub ожидает запуска' : 'Публикация в GitHub сейчас не требуется'),
+                tagClass: hasSavedDiff || uploadCount ? 'is-warn' : 'is-muted',
+                tag: hasSavedDiff || uploadCount ? 'PUSH' : 'IDLE',
+            },
+            {
+                dotClass: uploadCount ? 'is-warn' : 'is-ok',
+                label: locale === 'en'
+                    ? 'Files queued for upload'
+                    : locale === 'ua'
+                        ? 'Файли в черзі на завантаження'
+                        : 'Файлы в очереди на загрузку',
+                tagClass: uploadCount ? 'is-warn' : 'is-muted',
+                tag: uploadCount
+                    ? (locale === 'en' ? `${uploadCount} files` : locale === 'ua' ? `${uploadCount} файлів` : `${uploadCount} файлов`)
+                    : '0',
+            },
         ];
 
-        homeDraftSummaryEl.innerHTML = `
-            <div class="dash-home-status ${toneClass}">
-                <div class="dash-home-status-badge">${badge}</div>
-                <h3>${lead}</h3>
-                <div class="dash-home-status-list">
-                    ${details.map((item) => `<div>${item}</div>`).join('')}
-                </div>
+        homeDraftSummaryEl.innerHTML = rows.map((row) => `
+            <div class="dash-status-row">
+                <span class="dash-status-dot ${row.dotClass}"></span>
+                <span class="dash-status-label">${row.label}</span>
+                <span class="dash-status-tag ${row.tagClass}">${row.tag}</span>
             </div>
-        `;
+        `).join('');
     }
 
     function syncDraftControls() {
         const hasPreviewDiff = hasUnappliedDraftChanges();
         const hasSavedDiff = hasUnsavedDraftChanges();
+        const hasUploads = hasStagedUploads();
 
         if (draftStateChipEl) {
-            if (hasSavedDiff) {
-                draftStateChipEl.innerHTML = `<strong>${locale === 'en' ? 'Draft' : locale === 'ua' ? 'Чернетка' : 'Черновик'}:</strong> ${hasPreviewDiff
-                    ? (locale === 'en' ? 'pending apply' : locale === 'ua' ? 'очікує застосування' : 'ожидает применения')
-                    : (locale === 'en' ? 'ready to save' : locale === 'ua' ? 'готова до збереження' : 'готов к сохранению')}`;
+            let stateClass = 'is-clean';
+            let stateLabel = locale === 'en' ? 'No changes' : locale === 'ua' ? 'Без змін' : 'Без изменений';
+
+            if (hasPreviewDiff) {
+                stateClass = 'is-dirty';
+                stateLabel = locale === 'en' ? 'Apply required' : locale === 'ua' ? 'Потрібно застосувати' : 'Нужен apply';
+            } else if (hasSavedDiff || hasUploads) {
+                stateClass = 'is-ready';
+                stateLabel = hasUploads
+                    ? (locale === 'en' ? 'Ready to publish' : locale === 'ua' ? 'Готово до публікації' : 'Готов к публикации')
+                    : (locale === 'en' ? 'Ready to save' : locale === 'ua' ? 'Готово до збереження' : 'Готов к сохранению');
+            }
+
+            draftStateChipEl.className = `dash-draft-chip ${stateClass}`;
+            if (draftStateTextEl) {
+                draftStateTextEl.textContent = stateLabel;
             } else {
-                draftStateChipEl.innerHTML = `<strong>${locale === 'en' ? 'Draft' : locale === 'ua' ? 'Чернетка' : 'Черновик'}:</strong> ${locale === 'en' ? 'no changes' : locale === 'ua' ? 'без змін' : 'без изменений'}`;
+                draftStateChipEl.textContent = stateLabel;
             }
         }
 
@@ -596,6 +632,16 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderProductUploadMeta();
     }
 
+    function syncProductEditorState() {
+        const hasSelectedProduct = editorSelectedIndex >= 0 && Boolean(editorData.products[editorSelectedIndex]);
+        if (editorPanelEl) editorPanelEl.classList.toggle('open', hasSelectedProduct);
+        if (editorPanelEl) editorPanelEl.setAttribute('aria-hidden', hasSelectedProduct ? 'false' : 'true');
+        if (editorEmptyStateEl) {
+            editorEmptyStateEl.hidden = hasSelectedProduct;
+            editorEmptyStateEl.setAttribute('aria-hidden', hasSelectedProduct ? 'true' : 'false');
+        }
+    }
+
     function getRouteModuleLabel(key) {
         const labels = ROUTE_MODULE_LABELS[locale] || ROUTE_MODULE_LABELS.ru;
         return labels[key] || key;
@@ -672,19 +718,192 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderHomeDashboard();
     }
 
+    function ensureSupportDraft() {
+        if (!editorData.supportPage || typeof editorData.supportPage !== 'object') {
+            editorData.supportPage = { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] };
+        }
+
+        if (!Array.isArray(editorData.supportPage.buttons)) editorData.supportPage.buttons = [];
+        if (!Array.isArray(editorData.supportPage.supporters)) editorData.supportPage.supporters = [];
+        if (!editorData.supportPage.roleName) editorData.supportPage.roleName = '@Premium';
+        if (!Number.isFinite(Number(editorData.supportPage.minimumAmountUsd))) editorData.supportPage.minimumAmountUsd = 2;
+
+        return editorData.supportPage;
+    }
+
+    function formatSupportUsd(value) {
+        const amount = Number(value) || 0;
+        if (Number.isInteger(amount)) return `$${amount}`;
+        return `$${amount.toFixed(2).replace(/0+$/, '').replace(/\.$/, '')}`;
+    }
+
+    function renderSupportSummary() {
+        const supportPage = ensureSupportDraft();
+        if (supportSummaryMinAmountEl) supportSummaryMinAmountEl.textContent = formatSupportUsd(supportPage.minimumAmountUsd ?? 0);
+        if (supportSummaryRoleNameEl) supportSummaryRoleNameEl.textContent = supportPage.roleName || '@Premium';
+        if (supportButtonsCountEl) supportButtonsCountEl.textContent = String(supportPage.buttons.length);
+        if (supportSupportersCountEl) supportSupportersCountEl.textContent = String(supportPage.supporters.length);
+    }
+
+    function createEmptySupportButton() {
+        const supportPage = ensureSupportDraft();
+        const index = supportPage.buttons.length;
+        return normalizeSupportButton({
+            id: `support-${Date.now()}`,
+            label: locale === 'en' ? 'Support' : locale === 'ua' ? 'Підтримати' : 'Поддержать',
+            title: locale === 'en' ? `Method ${index + 1}` : locale === 'ua' ? `Спосіб ${index + 1}` : `Способ ${index + 1}`,
+            note: '',
+            url: '',
+            sortOrder: index + 1,
+        }, index);
+    }
+
+    function createEmptySupporter() {
+        const supportPage = ensureSupportDraft();
+        const index = supportPage.supporters.length;
+        return normalizeSupporter({
+            id: `supporter-${Date.now()}`,
+            name: locale === 'en' ? 'New supporter' : locale === 'ua' ? 'Новий підтримувач' : 'Новый поддержавший',
+            avatarUrl: '',
+            amountUsd: 0,
+            sortOrder: index + 1,
+        }, index);
+    }
+
+    function renderSupporterAvatar(supporter) {
+        const initials = escapeHtml(getTeamInitials(supporter.name));
+        if (supporter.avatarUrl) {
+            return `<div class="dash-supporter-avatar"><img src="${escapeHtml(supporter.avatarUrl)}" alt="${escapeHtml(supporter.name)}"></div>`;
+        }
+        return `<div class="dash-supporter-avatar">${initials}</div>`;
+    }
+
+    function renderSupportButtonsEditor() {
+        if (!supportButtonsListEl) return;
+        const supportPage = ensureSupportDraft();
+        renderSupportSummary();
+
+        if (!supportPage.buttons.length) {
+            supportButtonsListEl.innerHTML = `<div class="dash-support-empty">${locale === 'en' ? 'No support methods yet. Add at least one button for the donate route.' : locale === 'ua' ? 'Поки немає способів підтримки. Додай хоча б одну кнопку для donate-сторінки.' : 'Пока нет способов поддержки. Добавь хотя бы одну кнопку для donate-страницы.'}</div>`;
+            return;
+        }
+
+        supportButtonsListEl.innerHTML = supportPage.buttons.map((button, index) => `
+            <article class="dash-inline-form" data-support-button-row="${index}">
+                <div class="dash-inline-form-head">
+                    <span class="dash-inline-pill">${escapeHtml(button.id)}</span>
+                    <span class="dash-inline-form-title">${escapeHtml(button.label || button.title || (locale === 'en' ? `Method ${index + 1}` : locale === 'ua' ? `Спосіб ${index + 1}` : `Способ ${index + 1}`))}</span>
+                    <button type="button" class="dash-btn-icon dash-support-remove" data-remove-support-button="${index}" aria-label="Удалить способ поддержки">
+                        <span class="material-icons">delete</span>
+                    </button>
+                </div>
+                <div class="dash-inline-form-grid">
+                    <div class="dash-field"><label>ID</label><input type="text" value="${escapeHtml(button.id)}" data-support-button-field="id" data-index="${index}"></div>
+                    <div class="dash-field"><label>Label</label><input type="text" value="${escapeHtml(button.label)}" data-support-button-field="label" data-index="${index}"></div>
+                    <div class="dash-field"><label>Title</label><input type="text" value="${escapeHtml(button.title)}" data-support-button-field="title" data-index="${index}"></div>
+                    <div class="dash-field"><label>Note</label><input type="text" value="${escapeHtml(button.note)}" data-support-button-field="note" data-index="${index}"></div>
+                    <div class="dash-field"><label>URL</label><input type="url" value="${escapeHtml(button.url)}" data-support-button-field="url" data-index="${index}" placeholder="https://..."></div>
+                    <div class="dash-field"><label>Порядок</label><input type="number" value="${escapeHtml(String(button.sortOrder))}" data-support-button-field="sortOrder" data-index="${index}"></div>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    function renderSupportersEditor() {
+        if (!supportersAdminListEl) return;
+        const supportPage = ensureSupportDraft();
+        renderSupportSummary();
+
+        if (!supportPage.supporters.length) {
+            supportersAdminListEl.innerHTML = `<div class="dash-support-empty">${locale === 'en' ? 'No supporters yet. Add cards to build the public list and top-3 block.' : locale === 'ua' ? 'Поки немає карток підтримувачів. Додай записи, щоб зібрати публічний список і топ-3.' : 'Пока нет карточек поддержавших. Добавь записи, чтобы собрать публичный список и топ-3.'}</div>`;
+            return;
+        }
+
+        supportersAdminListEl.innerHTML = supportPage.supporters.map((supporter, index) => `
+            <article class="dash-inline-form" data-supporter-row="${index}">
+                <div class="dash-inline-form-head">
+                    <div class="dash-supporter-preview">
+                        ${renderSupporterAvatar(supporter)}
+                        <span class="dash-supporter-name">${escapeHtml(supporter.name || (locale === 'en' ? 'New supporter' : locale === 'ua' ? 'Новий підтримувач' : 'Новый поддержавший'))}</span>
+                        <span class="dash-supporter-amount">${escapeHtml(formatSupportUsd(supporter.amountUsd))}</span>
+                    </div>
+                    <button type="button" class="dash-btn-icon dash-support-remove" data-remove-supporter="${index}" aria-label="Удалить карточку поддержавшего">
+                        <span class="material-icons">delete</span>
+                    </button>
+                </div>
+                <div class="dash-inline-form-grid">
+                    <div class="dash-field"><label>ID</label><input type="text" value="${escapeHtml(supporter.id)}" data-supporter-field="id" data-index="${index}"></div>
+                    <div class="dash-field"><label>Имя</label><input type="text" value="${escapeHtml(supporter.name)}" data-supporter-field="name" data-index="${index}"></div>
+                    <div class="dash-field"><label>Avatar URL</label><input type="url" value="${escapeHtml(supporter.avatarUrl)}" data-supporter-field="avatarUrl" data-index="${index}" placeholder="https://..."></div>
+                    <div class="dash-field"><label>USD</label><input type="number" min="0" step="0.01" value="${escapeHtml(String(supporter.amountUsd))}" data-supporter-field="amountUsd" data-index="${index}"></div>
+                    <div class="dash-field"><label>Порядок</label><input type="number" value="${escapeHtml(String(supporter.sortOrder))}" data-supporter-field="sortOrder" data-index="${index}"></div>
+                </div>
+            </article>
+        `).join('');
+    }
+
+    function fillSupportForm() {
+        const supportPage = ensureSupportDraft();
+        if (supportMinAmountEl) supportMinAmountEl.value = String(supportPage.minimumAmountUsd ?? 2);
+        if (supportRoleNameEl) supportRoleNameEl.value = supportPage.roleName || '@Premium';
+        renderSupportSummary();
+        renderSupportButtonsEditor();
+        renderSupportersEditor();
+    }
+
+    function syncSupportMetaDraft() {
+        const supportPage = ensureSupportDraft();
+        supportPage.minimumAmountUsd = Math.max(0, Number(supportMinAmountEl?.value || supportPage.minimumAmountUsd || 0));
+        supportPage.roleName = String(supportRoleNameEl?.value || '@Premium').trim() || '@Premium';
+        renderSupportSummary();
+        syncDraftControls();
+    }
+
+    function updateSupportButtonField(index, field, value) {
+        const supportPage = ensureSupportDraft();
+        const button = supportPage.buttons[index];
+        if (!button) return;
+
+        if (field === 'sortOrder') {
+            button.sortOrder = toNumber(value, index + 1);
+        } else {
+            button[field] = String(value || '').trim();
+        }
+
+        syncDraftControls();
+    }
+
+    function updateSupporterField(index, field, value) {
+        const supportPage = ensureSupportDraft();
+        const supporter = supportPage.supporters[index];
+        if (!supporter) return;
+
+        if (field === 'amountUsd') {
+            supporter.amountUsd = Math.max(0, Number(value || 0));
+        } else if (field === 'sortOrder') {
+            supporter.sortOrder = toNumber(value, index + 1);
+        } else {
+            supporter[field] = String(value || '').trim();
+        }
+
+        syncDraftControls();
+    }
+
     function renderAdminView() {
         const viewCopy = copy[editorActiveView] || copy.home;
         editorAdminTitleEl.textContent = viewCopy.title;
         editorAdminSubtitleEl.textContent = viewCopy.subtitle;
-        if (productsToolbarEl) productsToolbarEl.hidden = editorActiveView !== 'products';
         if (homeViewEl) homeViewEl.classList.toggle('active', editorActiveView === 'home');
         if (productsViewEl) productsViewEl.classList.toggle('active', editorActiveView === 'products');
+        if (supportViewEl) supportViewEl.classList.toggle('active', editorActiveView === 'support');
         if (miscViewEl) miscViewEl.classList.toggle('active', editorActiveView === 'misc');
         if (addProductBtnEl) addProductBtnEl.hidden = editorActiveView !== 'products';
         if (addTeamMemberBtnEl) addTeamMemberBtnEl.hidden = editorActiveView !== 'misc';
+        if (editorActiveView === 'support') fillSupportForm();
         document.querySelectorAll('[data-admin-view]').forEach((link) => {
             link.classList.toggle('active', link.dataset.adminView === editorActiveView);
         });
+        syncProductEditorState();
         renderHomeDashboard();
     }
 
@@ -766,15 +985,27 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const member = editorData.team[index];
         if (teamEditorTitleEl) teamEditorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${member.name}`;
         fillTeamForm(member);
-        if (teamEditorEl) teamEditorEl.hidden = false;
-        if (teamEditorEmptyEl) teamEditorEmptyEl.hidden = true;
+        if (teamEditorEl) {
+            teamEditorEl.hidden = false;
+            teamEditorEl.setAttribute('aria-hidden', 'false');
+        }
+        if (teamEditorEmptyEl) {
+            teamEditorEmptyEl.hidden = true;
+            teamEditorEmptyEl.setAttribute('aria-hidden', 'true');
+        }
         renderTeamGrid();
     }
 
     function closeTeamEditor(renderGrid = true) {
         teamSelectedIndex = -1;
-        if (teamEditorEl) teamEditorEl.hidden = true;
-        if (teamEditorEmptyEl) teamEditorEmptyEl.hidden = false;
+        if (teamEditorEl) {
+            teamEditorEl.hidden = true;
+            teamEditorEl.setAttribute('aria-hidden', 'true');
+        }
+        if (teamEditorEmptyEl) {
+            teamEditorEmptyEl.hidden = false;
+            teamEditorEmptyEl.setAttribute('aria-hidden', 'false');
+        }
         if (teamEditorTitleEl) teamEditorTitleEl.textContent = locale === 'en' ? 'Editing member' : locale === 'ua' ? 'Редагування учасника' : 'Редактирование участника';
         clearTeamForm();
         if (renderGrid) renderTeamGrid();
@@ -928,6 +1159,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         editorProductGridEl.innerHTML = entries.map(({ product, index }) => {
             const toneClass = product.tone === 'green' ? 'tone-green' : 'tone-red';
+            const metaParts = [
+                product.id || 'product',
+                product.version ? `v${product.version}` : '',
+                product.featured
+                    ? (locale === 'en' ? 'Showcase' : locale === 'ua' ? 'Вітрина' : 'Витрина')
+                    : '',
+            ].filter(Boolean);
+
             return `
                 <article class="dash-product-card ${toneClass} ${index === editorSelectedIndex ? 'selected' : ''}" data-select-product="${index}" tabindex="0" role="button" aria-pressed="${index === editorSelectedIndex ? 'true' : 'false'}">
                     <div class="dash-product-cover">
@@ -935,10 +1174,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                         ${renderEditorStageBadge(product.flag)}
                     </div>
                     <div class="dash-product-info">
+                        <div class="dash-product-kicker">${escapeHtml(metaParts.join(' · '))}</div>
                         <h3>${escapeHtml(product.title)}</h3>
                         <p>${escapeHtml(getEditorCardSummary(product))}</p>
                     </div>
                     <div class="dash-product-actions">
+                        <span class="dash-product-order">#${escapeHtml(String(toNumber(product.sortOrder, index + 1)))}</span>
                         <button type="button" class="dash-btn dash-sm" data-move-up="${index}">↑</button>
                         <button type="button" class="dash-btn dash-sm" data-move-down="${index}">↓</button>
                     </div>
@@ -954,15 +1195,15 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const product = editorData.products[index];
         if (editorTitleEl) editorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${product.title}`;
         fillEditorForm(product);
-        editorPanelEl.classList.add('open');
+        syncProductEditorState();
         renderEditorGrid();
     }
 
     function closeProductEditor(renderGrid = true) {
         editorSelectedIndex = -1;
-        editorPanelEl.classList.remove('open');
         if (editorTitleEl) editorTitleEl.textContent = locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование';
         clearEditorForm();
+        syncProductEditorState();
         if (renderGrid) renderEditorGrid();
     }
 
@@ -993,6 +1234,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (editorSearchEl) editorSearchEl.value = '';
         closeProductEditor(false);
         closeTeamEditor(false);
+        fillSupportForm();
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
@@ -1013,6 +1255,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (editorSearchEl) editorSearchEl.value = '';
         closeProductEditor(false);
         closeTeamEditor(false);
+        fillSupportForm();
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
@@ -1220,6 +1463,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (editorSearchEl) editorSearchEl.value = '';
         closeProductEditor(false);
         closeTeamEditor(false);
+        fillSupportForm();
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
@@ -1251,6 +1495,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     function refreshAdminAfterSave() {
+        fillSupportForm();
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
@@ -1268,7 +1513,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             stored
                 ? (hadUploads
                     ? (locale === 'en' ? 'Saved locally. Re-select files before publishing them to GitHub.' : locale === 'ua' ? 'Збережено локально. Перед публікацією в GitHub вибери файли ще раз.' : 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.')
-                    : (locale === 'en' ? 'Saved locally. Changes are now visible in this browser.' : locale === 'ua' ? 'Збережено локально. Зміни вже видно в цьому браузері.' : 'Локально сохранено. На этом браузере изменения уже видны.'))
+                    : (locale === 'en' ? 'Saved locally. Changes are now visible in this browser and in preview tabs opened from Home.' : locale === 'ua' ? 'Збережено локально. Зміни вже видно в цьому браузері та у preview-вкладках з Головної.' : 'Локально сохранено. Изменения уже видны в этом браузере и в preview-вкладках с Главной.'))
                 : (locale === 'en' ? 'Changes were applied but localStorage is unavailable in this browser.' : locale === 'ua' ? 'Зміни застосовані, але localStorage недоступний у цьому браузері.' : 'Изменения применены, но localStorage недоступен в этом браузере.'),
             stored && !hadUploads ? 'success' : 'info',
         );
@@ -1306,7 +1551,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     document.addEventListener('click', (event) => {
-        if (event.target instanceof Element && event.target.matches('[data-close-editor]')) {
+        const closeTrigger = event.target instanceof Element
+            ? event.target.closest('[data-close-editor]')
+            : null;
+        if (closeTrigger) {
             closeEditor();
         }
     });
@@ -1401,6 +1649,65 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         syncDraftControls();
     });
 
+    [supportMinAmountEl, supportRoleNameEl].filter(Boolean).forEach((field) => {
+        field.addEventListener('input', syncSupportMetaDraft);
+        field.addEventListener('change', syncSupportMetaDraft);
+    });
+
+    addSupportButtonBtnEl?.addEventListener('click', () => {
+        const supportPage = ensureSupportDraft();
+        supportPage.buttons.push(createEmptySupportButton());
+        renderSupportButtonsEditor();
+        syncDraftControls();
+    });
+
+    addSupporterBtnEl?.addEventListener('click', () => {
+        const supportPage = ensureSupportDraft();
+        supportPage.supporters.push(createEmptySupporter());
+        renderSupportersEditor();
+        syncDraftControls();
+    });
+
+    supportButtonsListEl?.addEventListener('input', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+        const field = target.dataset.supportButtonField;
+        const index = Number(target.dataset.index);
+        if (!field || Number.isNaN(index)) return;
+        updateSupportButtonField(index, field, target.value);
+    });
+
+    supportButtonsListEl?.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('[data-remove-support-button]') : null;
+        if (!target) return;
+        const index = Number(target.getAttribute('data-remove-support-button'));
+        if (Number.isNaN(index)) return;
+        const supportPage = ensureSupportDraft();
+        supportPage.buttons.splice(index, 1);
+        renderSupportButtonsEditor();
+        syncDraftControls();
+    });
+
+    supportersAdminListEl?.addEventListener('input', (event) => {
+        const target = event.target instanceof HTMLInputElement ? event.target : null;
+        if (!target) return;
+        const field = target.dataset.supporterField;
+        const index = Number(target.dataset.index);
+        if (!field || Number.isNaN(index)) return;
+        updateSupporterField(index, field, target.value);
+    });
+
+    supportersAdminListEl?.addEventListener('click', (event) => {
+        const target = event.target instanceof Element ? event.target.closest('[data-remove-supporter]') : null;
+        if (!target) return;
+        const index = Number(target.getAttribute('data-remove-supporter'));
+        if (Number.isNaN(index)) return;
+        const supportPage = ensureSupportDraft();
+        supportPage.supporters.splice(index, 1);
+        renderSupportersEditor();
+        syncDraftControls();
+    });
+
     routeModuleListEl?.addEventListener('input', (event) => {
         const target = event.target instanceof HTMLInputElement ? event.target : null;
         if (!target) return;
@@ -1452,15 +1759,23 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
     });
 
-    document.querySelectorAll('[data-admin-switch]').forEach((button) => {
-        button.addEventListener('click', () => setAdminView(button.dataset.adminSwitch));
-    });
-
     clearLocalBtnEl?.addEventListener('click', () => {
+        if (!window.confirm(locale === 'en'
+            ? 'Clear the local draft and return this browser to the embedded site version?'
+            : locale === 'ua'
+                ? 'Очистити локальну чернетку та повернути цей браузер до вбудованої версії сайту?'
+                : 'Очистить локальный черновик и вернуть этот браузер к встроенной версии сайта?')) {
+            return;
+        }
+
         const cleared = storageRemove(LOCAL_DATA_KEY);
+        if (cleared) {
+            savedSiteData = normalizeData(DEFAULT_SITE_DATA);
+            resetEditorDraftToSaved();
+        }
         emitToast(
             cleared
-                ? (locale === 'en' ? 'Local draft cleared. Reload to restore the embedded site version.' : locale === 'ua' ? 'Локальну чернетку очищено. Після оновлення сторінки підтягнеться вбудована версія сайту.' : 'Локальный черновик очищен. После обновления страницы подтянется встроенная версия сайта.')
+                ? (locale === 'en' ? 'Local draft cleared. The embedded site version is active again in this browser.' : locale === 'ua' ? 'Локальну чернетку очищено. У цьому браузері знову активна вбудована версія сайту.' : 'Локальный черновик очищен. В этом браузере снова активна встроенная версия сайта.')
                 : (locale === 'en' ? 'Could not clear localStorage in this browser.' : locale === 'ua' ? 'Не вдалося очистити localStorage у цьому браузері.' : 'Не удалось очистить localStorage в этом браузере.'),
             cleared ? 'success' : 'error',
         );
@@ -1570,6 +1885,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         await initializeData();
         closeProductEditor(false);
         closeTeamEditor(false);
+        fillSupportForm();
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
