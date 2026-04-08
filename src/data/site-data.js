@@ -277,22 +277,44 @@ export const DEFAULT_SITE_DATA = {
         "buttons": [
             {
                 "id": "support-fanpay",
-                "label": "Оплата картой",
+                "label": "Поддержать",
                 "title": "FanPay",
                 "note": "Visa / Mastercard / СБП",
-                "url": "",
-                "sortOrder": 1
+                "url": "https://funpay.com/lots/offer?id=66282874",
+                "sortOrder": 2
             },
             {
                 "id": "support-donationalerts",
                 "label": "Donation Alerts",
-                "title": "Donate",
-                "note": "Быстрый донат со стримов",
-                "url": "",
-                "sortOrder": 2
+                "title": "Donation Alerts",
+                "note": "Visa / Mastercard / МИР / СБП / SberPay / ЮMoney / QIWI / WebMoney / PayPal / Apple Pay / Google Pay / Крипта / Мобильные платежи",
+                "url": "https://www.donationalerts.com/r/kuruma_official",
+                "sortOrder": 1
             }
         ],
-        "supporters": []
+        "supporters": [
+            {
+                "id": "supporter-1775687891992",
+                "name": "Новый поддержавший",
+                "avatarUrl": "",
+                "amountUsd": 0,
+                "sortOrder": 1
+            },
+            {
+                "id": "supporter-1775687892184",
+                "name": "Новый поддержавший",
+                "avatarUrl": "",
+                "amountUsd": 0,
+                "sortOrder": 2
+            },
+            {
+                "id": "supporter-1775687892356",
+                "name": "Новый поддержавший",
+                "avatarUrl": "",
+                "amountUsd": 0,
+                "sortOrder": 3
+            }
+        ]
     },
     "socials": {
         "youtube": "https://www.youtube.com/@KurumaBestWaify",
