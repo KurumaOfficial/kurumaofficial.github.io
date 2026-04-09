@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Strange Visuals — Minecraft Visual Mod</title>
 <script>window.__ALEPH_LOCALE__ = 'en';</script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
@@ -142,51 +142,51 @@
 <div class="wrap" id="features">
   <div class="feat-head reveal">
     <div>
-      <div class="eyebrow">Features</div>
+        <div class="eyebrow">Information</div>
       <h2 class="s-title">Everything you should know<br>about the mod</h2>
     </div>
     <p class="s-desc">Strange Visuals focuses on visual enhancements that don't violate server rules.</p>
   </div>
   <div class="feat-grid reveal">
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">crop_square</span></div>
-      <h3>Boxes &amp; Hitboxes</h3>
-      <p>Hitbox visualisation for players and mobs. Customisable colour and style.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">near_me</span></div>
-      <h3>Tracers</h3>
-      <p>Pointer lines to players, drops and mobs in the visible zone.</p>
+        <div class="feat-ico"><span class="material-icons">file_download</span></div>
+        <h3>Installation</h3>
+        <p>Install Minecraft Fabric 1.21.8 in your launcher. Download <a href="https://modrinth.com/mod/fabric-api" target="_blank" rel="noopener noreferrer">Fabric API</a> and place the file into the mods folder. After that, download our mod and place it into the mods folder as well. Done, you can launch it.</p>
+      </div>
+      <div class="feat-card">
+        <div class="feat-ico"><span class="material-icons">layers</span></div>
+        <h3>Compatibility</h3>
+        <p>The mod is compatible with other Fabric mods and works well in modpacks. We recommend using it together with optimization mods and other client-side add-ons.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">code</span></div>
       <h3>Open Source</h3>
-      <p>The project ships with open GPL source code. You can inspect it, improve it and build on top of it while keeping the licence and attribution intact.</p>
+        <p>The project is distributed with open GPL source code. You can study it, improve it and fork it while keeping the licence and attribution intact.</p>
     </div>
     <div class="feat-card w2">
       <div class="feat-ico"><span class="material-icons">public</span></div>
       <h3>Multiserver support</h3>
-      <p>The mod can be used on servers with different rules. A flexible feature-hiding system automatically disables functionality that is not allowed on a particular server.</p>
+        <p>The mod can be used on servers with different rules. A flexible system for hiding individual features automatically disables whatever is not allowed on a specific server.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">layers</span></div>
-      <h3>Compatibility</h3>
-      <p>The mod is compatible with other Fabric mods and suitable for modpacks. We recommend using it alongside optimization mods and other client addons.</p>
+        <div class="feat-ico"><span class="material-icons">workspace_premium</span></div>
+        <h3>Support</h3>
+        <p>If you want to help the development of the mod and support our team, you can do it on the <a href="./donate/" data-donate-link>support page</a>.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">update</span></div>
       <h3>Minecraft Version</h3>
-      <p>The mod is developed and maintained for Minecraft 1.21.8 and may be updated to newer versions in the future.</p>
+        <p>The mod is developed and maintained for version 1.21.8 and may move to a newer version in the future.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">extension</span></div>
+        <div class="feat-ico"><span class="material-icons">bolt</span></div>
       <h3>Fabric API</h3>
-      <p>The mod requires the current Fabric Loader and Fabric API build for Minecraft 1.21.8.</p>
+        <p>The mod requires the current Fabric Loader and Fabric API build for Minecraft 1.21.8.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">support_agent</span></div>
-      <h3>Support</h3>
-      <p>If you want to help the development of the mod and support our team, you can do it on the <a href="./donate/" data-donate-link>support page</a>.</p>
+        <div class="feat-ico"><span class="material-icons">report_problem</span></div>
+        <h3>Problems</h3>
+        <p>If you have launch issues or found a bug, you can report it on our <a id="supportDiscordLink" data-social="discord">Discord</a> server.</p>
     </div>
   </div>
 </div>
@@ -302,52 +302,52 @@
   <div class="mod-grid" id="modGrid">
 
     <div class="mod-group reveal">
-      <div class="mod-head"><span class="material-icons">person</span><span class="mod-head-name">On Player</span><span class="mod-head-ct">5</span></div>
+      <div class="mod-head"><span class="material-icons">person</span><span class="mod-head-name">Player</span><span class="mod-head-ct">5</span></div>
       <div class="mod-items">
-        <div class="mod-item"><span class="mod-item-name">Боксы</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Джампики</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Китайская шляпа</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Таргет рендер</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Хит бабл</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Boxes</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Jump Circles</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Chinese Hat</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Target Render</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Hit Bubble</span><span class="mod-badge off">OFF</span></div>
       </div>
     </div>
 
     <div class="mod-group reveal">
       <div class="mod-head"><span class="material-icons">public</span><span class="mod-head-name">World</span><span class="mod-head-ct">7</span></div>
       <div class="mod-items">
-        <div class="mod-item"><span class="mod-item-name">Чамсы</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Трейсеры</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Снаряды</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Частицы</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Блок оверлей</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Дроп рендер</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Скелетон</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Chams</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Tracers</span><span class="mod-badge off">OFF</span></div>
+        <div class="mod-item"><span class="mod-item-name">Projectiles</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Particles</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Block Overlay</span><span class="mod-badge off">OFF</span></div>
+        <div class="mod-item"><span class="mod-item-name">Drop Render</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Skeleton</span><span class="mod-badge off">OFF</span></div>
       </div>
     </div>
 
     <div class="mod-group reveal">
       <div class="mod-head"><span class="material-icons">build</span><span class="mod-head-name">Utilities</span><span class="mod-head-ct">6</span></div>
       <div class="mod-items">
-        <div class="mod-item"><span class="mod-item-name">Авто спринт</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Авто тул</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Фуллбрайт</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Ноу оверлей</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Координаты</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Таймер</span><span class="mod-badge off">ВЫКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Auto Sprint</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Auto Tool</span><span class="mod-badge off">OFF</span></div>
+        <div class="mod-item"><span class="mod-item-name">Fullbright</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">No Overlay</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Coordinates</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Timer</span><span class="mod-badge off">OFF</span></div>
       </div>
     </div>
 
     <div class="mod-group reveal">
       <div class="mod-head"><span class="material-icons">dashboard</span><span class="mod-head-name">Interface</span><span class="mod-head-ct">8</span></div>
       <div class="mod-items">
-        <div class="mod-item"><span class="mod-item-name">Массив лист</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Ватермарка</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Кейбинды</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Нотификации</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Хотбар</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Скорборд</span><span class="mod-badge off">ВЫКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Табулист</span><span class="mod-badge on">ВКЛ</span></div>
-        <div class="mod-item"><span class="mod-item-name">Кроссхейр</span><span class="mod-badge on">ВКЛ</span></div>
+        <div class="mod-item"><span class="mod-item-name">Array List</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Watermark</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Keybinds</span><span class="mod-badge off">OFF</span></div>
+        <div class="mod-item"><span class="mod-item-name">Notifications</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Hotbar</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Scoreboard</span><span class="mod-badge off">OFF</span></div>
+        <div class="mod-item"><span class="mod-item-name">Tab List</span><span class="mod-badge on">ON</span></div>
+        <div class="mod-item"><span class="mod-item-name">Crosshair</span><span class="mod-badge on">ON</span></div>
       </div>
     </div>
 

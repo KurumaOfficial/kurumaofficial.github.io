@@ -28,7 +28,6 @@ const COPY = Object.freeze({
         supportersTitle: 'Поддержали нас',
         supportersEmpty: 'Пока никто не поддержал проект. Когда появятся первые донаты, карточки покажутся здесь.',
         buttonsEmpty: 'Скоро здесь появятся доступные способы поддержки.',
-        disabledButtonNote: 'Ссылка ещё не задана',
     },
     en: {
         metaTitle: 'Strange Visuals — Support',
@@ -39,15 +38,14 @@ const COPY = Object.freeze({
         introMiddle: 'you get the ',
         introAfterRole: 'role on our ',
         discordLabel: 'Discord server',
-        introTail: ' and your profile will appear on the site — simply include your Discord login when you donate or buy support.',
+        introTail: ' and your profile will appear on the site — just specify your Discord login when donating or buying support.',
         paymentsTitle: 'Support methods',
-        paymentsDesc: 'Choose the most convenient way to support the project and the team.',
-        topTitle: 'Top 3 supporters',
-        topDesc: 'The higher the amount, the stronger the golden glow.',
-        supportersTitle: 'Supporters',
+        paymentsDesc: 'Choose a convenient way to support the project and the team.',
+        topTitle: 'Overall top 3',
+        topDesc: 'The higher the amount, the stronger the golden glow of the card.',
+        supportersTitle: 'Supported us',
         supportersEmpty: 'Nobody has supported the project yet. Cards will appear here once the first donations are added.',
         buttonsEmpty: 'Available support methods will appear here soon.',
-        disabledButtonNote: 'Link is not configured yet',
     },
     ua: {
         metaTitle: 'Strange Visuals — Підтримати',
@@ -66,7 +64,6 @@ const COPY = Object.freeze({
         supportersTitle: 'Підтримали нас',
         supportersEmpty: 'Поки ніхто не підтримав проєкт. Картки зʼявляться тут після перших донатів.',
         buttonsEmpty: 'Незабаром тут зʼявляться доступні способи підтримки.',
-        disabledButtonNote: 'Посилання ще не задано',
     },
 });
 
@@ -174,30 +171,26 @@ function buildIntro(container, copy, minimumAmountUsd, roleName, discordUrl) {
     container.append(document.createTextNode(copy.introTail));
 }
 
-function createPaymentCard(button, fallbackNote) {
+function createPaymentCard(button) {
     const href = resolveButtonUrl(button.url);
-    const isDisabled = !href;
-    const tag = isDisabled ? 'button' : 'a';
+    if (!href) return null;
+
+    const tag = 'a';
     const attrs = {
-        className: isDisabled ? 'pay-btn pay-btn-disabled' : 'pay-btn',
+        className: 'pay-btn',
     };
 
-    if (isDisabled) {
-        attrs.type = 'button';
-        attrs.disabled = 'disabled';
-    } else {
-        attrs.href = href;
-        if (/^(?:https?:)?\/\//i.test(href)) {
-            attrs.target = '_blank';
-            attrs.rel = 'noopener noreferrer';
-        }
+    attrs.href = href;
+    if (/^(?:https?:)?\/\//i.test(href)) {
+        attrs.target = '_blank';
+        attrs.rel = 'noopener noreferrer';
     }
 
     const card = createElement(tag, attrs);
     card.append(
         createElement('span', { className: 'pay-btn-label', textContent: button.label || 'Support' }),
         createElement('span', { className: 'pay-btn-name', textContent: button.title || 'Support' }),
-        createElement('span', { className: 'pay-btn-note', textContent: button.note || fallbackNote }),
+        createElement('span', { className: 'pay-btn-note', textContent: button.note || '' }),
         createElement(
             'span',
             { className: 'pay-btn-arrow' },
@@ -211,14 +204,15 @@ function renderPaymentButtons(container, buttons, copy, locale) {
     if (!container) return;
     container.textContent = '';
 
-    const sorted = sortButtons(buttons, locale);
+    const sorted = sortButtons(buttons, locale).filter((button) => Boolean(resolveButtonUrl(button.url)));
     if (!sorted.length) {
         container.append(createEmptyState(copy.buttonsEmpty));
         return;
     }
 
     sorted.forEach((button) => {
-        container.append(createPaymentCard(button, copy.disabledButtonNote));
+        const card = createPaymentCard(button);
+        if (card) container.append(card);
     });
 }
 

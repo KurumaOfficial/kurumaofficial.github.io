@@ -57,6 +57,10 @@
     --page-gutter:    64px;
     --section-block:  120px;
     --nav-height:     80px;
+    --safe-top:       env(safe-area-inset-top, 0px);
+    --safe-right:     env(safe-area-inset-right, 0px);
+    --safe-bottom:    env(safe-area-inset-bottom, 0px);
+    --safe-left:      env(safe-area-inset-left, 0px);
 
     /* Transitions */
     --ease-default:   cubic-bezier(0.4, 0, 0.2, 1);
@@ -116,6 +120,8 @@ body {
     font-family: var(--font-body);
     font-size: 18px;
     line-height: 1.7;
+    min-height: 100svh;
+    min-height: 100dvh;
     overflow-x: hidden;
     transition:
         background 0.4s ease,
@@ -221,7 +227,10 @@ body::before {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 28px var(--page-gutter);
+    padding-top: calc(28px + var(--safe-top));
+    padding-right: calc(var(--page-gutter) + var(--safe-right));
+    padding-bottom: 28px;
+    padding-left: calc(var(--page-gutter) + var(--safe-left));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     background: rgba(8, 6, 6, 0.75);
@@ -332,11 +341,15 @@ body::before {
 
 .hero {
     min-height: 100vh;
+    min-height: 100svh;
     min-height: 100dvh;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding: 0 var(--page-gutter) var(--space-20);
+    padding-top: calc(var(--nav-height) + var(--safe-top));
+    padding-right: calc(var(--page-gutter) + var(--safe-right));
+    padding-bottom: calc(var(--space-20) + var(--safe-bottom));
+    padding-left: calc(var(--page-gutter) + var(--safe-left));
     position: relative;
     overflow: hidden;
 }
@@ -1496,7 +1509,10 @@ footer {
     .nav-links { display: none; }
 
     .hero {
-        padding: 0 var(--page-gutter) 60px;
+        padding-top: calc(var(--nav-height) + var(--safe-top));
+        padding-right: calc(var(--page-gutter) + var(--safe-right));
+        padding-bottom: calc(60px + var(--safe-bottom));
+        padding-left: calc(var(--page-gutter) + var(--safe-left));
     }
 
     .hero-bg-sq { display: none; }
@@ -1524,10 +1540,18 @@ footer {
         --section-block: 60px;
     }
 
-    .nav { padding: 14px var(--page-gutter); }
+    .nav {
+        padding-top: calc(14px + var(--safe-top));
+        padding-right: calc(var(--page-gutter) + var(--safe-right));
+        padding-bottom: 14px;
+        padding-left: calc(var(--page-gutter) + var(--safe-left));
+    }
 
     .hero {
-        padding: 0 var(--page-gutter) var(--space-12);
+        padding-top: calc(var(--nav-height) + var(--safe-top));
+        padding-right: calc(var(--page-gutter) + var(--safe-right));
+        padding-bottom: calc(var(--space-12) + var(--safe-bottom));
+        padding-left: calc(var(--page-gutter) + var(--safe-left));
     }
 
     .hero-title {
@@ -1558,5 +1582,20 @@ footer {
     footer .footer-copy {
         margin-top: var(--space-6);
         padding-top: var(--space-4);
+    }
+}
+
+@media (max-width: 420px) {
+    .logo-text {
+        display: none;
+    }
+
+    .nav-right {
+        gap: var(--space-2);
+    }
+
+    .locale-switcher__trigger {
+        min-height: 36px;
+        padding: 6px 10px 6px 8px;
     }
 }

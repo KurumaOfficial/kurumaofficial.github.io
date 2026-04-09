@@ -92,6 +92,42 @@ const COMPARE_COPY = Object.freeze({
   },
 });
 
+const GUI_PREVIEW_COPY = Object.freeze({
+  ru: {
+    free: 'БЕСПЛАТНО',
+    languageLabel: 'Язык GUI',
+  },
+  en: {
+    free: 'FREE',
+    languageLabel: 'GUI language',
+  },
+  ua: {
+    free: 'БЕЗКОШТОВНО',
+    languageLabel: 'Мова GUI',
+  },
+});
+
+const GUI_PREVIEW_LANGUAGE_OPTIONS = Object.freeze({
+  ru: Object.freeze(['ru', 'en']),
+  en: Object.freeze(['en', 'ru']),
+  ua: Object.freeze(['ua', 'en']),
+});
+
+const GUI_PREVIEW_LANGUAGE_LABELS = Object.freeze({
+  ru: Object.freeze({ ru: 'Русский', en: 'English', ua: 'Українська' }),
+  en: Object.freeze({ ru: 'Russian', en: 'English', ua: 'Ukrainian' }),
+  ua: Object.freeze({ ru: 'Російська', en: 'English', ua: 'Українська' }),
+});
+
+const GUI_PREVIEW_THEMES = Object.freeze([
+  Object.freeze({ key: 'white', labels: Object.freeze({ ru: 'Белая', en: 'White', ua: 'Біла' }) }),
+  Object.freeze({ key: 'black', labels: Object.freeze({ ru: 'Черная', en: 'Black', ua: 'Чорна' }) }),
+  Object.freeze({ key: 'frost-white', labels: Object.freeze({ ru: 'Прозрачная белая', en: 'Transparent White', ua: 'Прозора біла' }) }),
+  Object.freeze({ key: 'frost-black', labels: Object.freeze({ ru: 'Прозрачная черная', en: 'Transparent Black', ua: 'Прозора чорна' }) }),
+  Object.freeze({ key: 'pink', labels: Object.freeze({ ru: 'Розовая', en: 'Pink', ua: 'Рожева' }) }),
+  Object.freeze({ key: 'violet', labels: Object.freeze({ ru: 'Фиолетовая', en: 'Violet', ua: 'Фіолетова' }) }),
+]);
+
 function getElements() {
   return {
     shareBtn: document.getElementById('shareBtn'),
@@ -117,6 +153,9 @@ function getElements() {
     compareSlot: document.getElementById('compareSlot'),
     supportDiscordLink: document.getElementById('supportDiscordLink'),
     donateLinks: [...document.querySelectorAll('[data-donate-link]')],
+    guiWidgetEl: document.querySelector('.gui-w'),
+    gwTitleEl: document.querySelector('.gw-title'),
+    gwSubEl: document.querySelector('.gw-sub'),
   };
 }
 
@@ -130,6 +169,43 @@ function getShareMeta(locale) {
 
 function getCompareCopy(locale) {
   return COMPARE_COPY[locale] || COMPARE_COPY.ru;
+}
+
+function getGuiPreviewCopy(locale) {
+  return GUI_PREVIEW_COPY[locale] || GUI_PREVIEW_COPY.ru;
+}
+
+function getGuiPreviewLanguageOptions(locale) {
+  return GUI_PREVIEW_LANGUAGE_OPTIONS[locale] || GUI_PREVIEW_LANGUAGE_OPTIONS.ru;
+}
+
+function getGuiPreviewLanguageLabels(locale) {
+  return GUI_PREVIEW_LANGUAGE_LABELS[locale] || GUI_PREVIEW_LANGUAGE_LABELS.ru;
+}
+
+function getGuiPreviewThemeLabel(locale, themeKey) {
+  const theme = GUI_PREVIEW_THEMES.find((item) => item.key === themeKey);
+  return theme?.labels?.[locale] || theme?.labels?.ru || themeKey;
+}
+
+function setGuiPreviewTheme(elements, themeKey) {
+  if (!(elements.guiWidgetEl instanceof HTMLElement)) return;
+  elements.guiWidgetEl.removeAttribute('data-gui-preview-theme');
+}
+
+function buildGuiPreviewContext(siteData, locale) {
+  const localizedSiteData = localizeSiteData(siteData, locale);
+  const routeProduct = getRouteProduct(localizedSiteData.products);
+  const localeMeta = getLocaleMeta(locale);
+  const tabs = routeProduct?.routeModules || {};
+
+  return {
+    locale,
+    localeMeta,
+    tabs,
+    tabKeys: getTabKeys(localeMeta, tabs),
+    copy: getGuiPreviewCopy(locale),
+  };
 }
 
 function resolveRouteAsset(path) {
@@ -328,7 +404,7 @@ function toggleGwItem(itemEl, localeMeta) {
 
 let guiBuildTimer = 0;
 
-function buildGui(elements, tabs, localeMeta, key) {
+function buildGuiList(elements, tabs, localeMeta, key) {
   if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
 
   const meta = localeMeta[key] || localeMeta.player;
@@ -341,6 +417,9 @@ function buildGui(elements, tabs, localeMeta, key) {
   window.clearTimeout(guiBuildTimer);
   guiBuildTimer = window.setTimeout(() => {
     elements.gwSecEl.textContent = meta.title;
+    elements.gwBodyEl.dataset.mode = 'list';
+    elements.gwItemsEl.className = 'gw-items';
+    elements.gwItemsEl.onclick = null;
     elements.gwItemsEl.textContent = '';
 
     items.forEach((item) => {
@@ -369,7 +448,80 @@ function buildGui(elements, tabs, localeMeta, key) {
   }, 170);
 }
 
-function renderGwTabs(elements, tabKeys, localeMeta, onSelect) {
+function buildGuiThemePanel(elements, previewContext, previewState, onThemeChange, onLocaleChange) {
+  if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
+
+  const scrollEl = elements.gwBodyEl.querySelector('.gw-scroll');
+  const languageLabels = getGuiPreviewLanguageLabels(previewContext.locale);
+
+  elements.gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
+  elements.gwBodyEl.classList.replace('fin', 'fout');
+
+  window.clearTimeout(guiBuildTimer);
+  guiBuildTimer = window.setTimeout(() => {
+    elements.gwSecEl.textContent = previewContext.localeMeta.themes.title;
+    elements.gwBodyEl.dataset.mode = 'themes';
+    elements.gwItemsEl.className = 'gw-items gw-items--themes';
+    elements.gwItemsEl.innerHTML = `
+      <div class="gw-theme-panel">
+        <div class="gw-theme-grid">
+          ${GUI_PREVIEW_THEMES.map((theme) => `
+            <button
+              type="button"
+              class="gw-theme-card ${previewState.themeKey === theme.key ? 'is-active' : ''}"
+              data-gui-theme="${theme.key}"
+              aria-pressed="${String(previewState.themeKey === theme.key)}"
+            >
+              <span class="gw-theme-preview" data-preview-theme="${theme.key}"></span>
+              <span class="gw-theme-card-title">${escapeHtml(getGuiPreviewThemeLabel(previewContext.locale, theme.key))}</span>
+            </button>
+          `).join('')}
+        </div>
+
+        <div class="gw-locale-row">
+          <span class="gw-locale-label">${escapeHtml(previewContext.copy.languageLabel)}</span>
+          <div class="gw-locale-actions">
+            ${previewState.languageOptions.map((locale) => `
+              <button
+                type="button"
+                class="gw-locale-btn ${previewState.locale === locale ? 'is-active' : ''}"
+                data-gui-locale="${locale}"
+                aria-pressed="${String(previewState.locale === locale)}"
+              >${escapeHtml(languageLabels[locale] || locale.toUpperCase())}</button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+    `;
+
+    elements.gwItemsEl.querySelectorAll('[data-gui-theme]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const nextThemeKey = button.dataset.guiTheme || previewState.themeKey;
+        if (nextThemeKey === previewState.themeKey) return;
+        onThemeChange(nextThemeKey);
+      });
+    });
+
+    elements.gwItemsEl.querySelectorAll('[data-gui-locale]').forEach((button) => {
+      button.addEventListener('click', () => {
+        if (!(button instanceof HTMLButtonElement)) return;
+        const nextLocale = button.dataset.guiLocale || previewState.locale;
+        if (nextLocale === previewState.locale) return;
+        onLocaleChange(nextLocale);
+      });
+    });
+
+    if (scrollEl instanceof HTMLElement) {
+      scrollEl.scrollTop = 0;
+    }
+
+    elements.gwBodyEl.style.transition = 'opacity .22s ease, transform .22s ease';
+    elements.gwBodyEl.classList.replace('fout', 'fin');
+  }, 170);
+}
+
+function renderGwTabs(elements, tabKeys, localeMeta, activeKey, onSelect) {
   if (!elements.gwTabsEl) return;
 
   if (!tabKeys.length) {
@@ -378,7 +530,7 @@ function renderGwTabs(elements, tabKeys, localeMeta, onSelect) {
   }
 
   elements.gwTabsEl.innerHTML = tabKeys.map((key, index) => `
-    <button type="button" class="${index === 0 ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>
+    <button type="button" class="${key === activeKey || (!activeKey && index === 0) ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>
   `).join('');
 
   elements.gwTabsEl.onclick = (event) => {
@@ -391,6 +543,45 @@ function renderGwTabs(elements, tabKeys, localeMeta, onSelect) {
     });
     onSelect(nextKey);
   };
+}
+
+function renderGuiPreview(elements, previewContexts, previewState) {
+  const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
+  if (!previewContext) return;
+
+  if (!previewContext.tabKeys.includes(previewState.tab)) {
+    previewState.tab = previewContext.tabKeys[0] || 'themes';
+  }
+
+  if (elements.gwSubEl) {
+    elements.gwSubEl.textContent = previewContext.copy.free;
+  }
+
+  setGuiPreviewTheme(elements, previewState.themeKey);
+
+  renderGwTabs(elements, previewContext.tabKeys, previewContext.localeMeta, previewState.tab, (nextKey) => {
+    previewState.tab = nextKey;
+    renderGuiPreview(elements, previewContexts, previewState);
+  });
+
+  if (previewState.tab === 'themes') {
+    buildGuiThemePanel(
+      elements,
+      previewContext,
+      previewState,
+      (nextThemeKey) => {
+        previewState.themeKey = nextThemeKey;
+        renderGuiPreview(elements, previewContexts, previewState);
+      },
+      (nextLocale) => {
+        previewState.locale = nextLocale;
+        renderGuiPreview(elements, previewContexts, previewState);
+      },
+    );
+    return;
+  }
+
+  buildGuiList(elements, previewContext.tabs, previewContext.localeMeta, previewState.tab);
 }
 
 function renderModuleList(elements, tabKeys, tabs, localeMeta) {
@@ -489,7 +680,8 @@ function applyRevealDelays() {
 
 function boot() {
   const localeController = createLocaleController();
-  const siteData = localizeSiteData(getEffectiveSiteData(), localeController.locale);
+  const rawSiteData = getEffectiveSiteData();
+  const siteData = localizeSiteData(rawSiteData, localeController.locale);
   if (applyGlobalRouteRedirect(siteData)) return;
 
   const localeMeta = getLocaleMeta(localeController.locale);
@@ -499,6 +691,17 @@ function boot() {
   const tabs = routeProduct?.routeModules || {};
   const tabKeys = getTabKeys(localeMeta, tabs);
   const elements = getElements();
+  const previewContexts = Object.freeze({
+    ru: buildGuiPreviewContext(rawSiteData, 'ru'),
+    en: buildGuiPreviewContext(rawSiteData, 'en'),
+    ua: buildGuiPreviewContext(rawSiteData, 'ua'),
+  });
+  const previewState = {
+    locale: getGuiPreviewLanguageOptions(localeController.locale)[0] || localeController.locale,
+    languageOptions: getGuiPreviewLanguageOptions(localeController.locale),
+    themeKey: 'black',
+    tab: tabKeys[0] || 'player',
+  };
 
   localeController.mountLanguageSwitcher();
   initSharedThemeToggle();
@@ -508,10 +711,7 @@ function boot() {
   bindRouteProductMeta(elements, routeProduct);
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
-  renderGwTabs(elements, tabKeys, localeMeta, (key) => buildGui(elements, tabs, localeMeta, key));
-  if (tabKeys.length) {
-    buildGui(elements, tabs, localeMeta, tabKeys[0]);
-  }
+  renderGuiPreview(elements, previewContexts, previewState);
   renderModuleList(elements, tabKeys, tabs, localeMeta);
   initCompareSlider(elements);
   initCompareMedia(elements, compareCopy);
