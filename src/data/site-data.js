@@ -7,15 +7,24 @@
 
 /*__ALEPH_SITE_DATA_START__*/
 export const DEFAULT_SITE_DATA = {
-                "label": "Поддержать",
+    "products": [
+        {
+            "id": "strange-visuals",
+            "title": "Strange Visuals",
+            "version": "1.5.1",
+            "tag": "Активно",
+            "flag": "release",
+            "status": "активно",
             "featured": true,
             "featuredOrder": 1,
-                "url": "https://funpay.com/lots/offer?id=66282874",
-                "sortOrder": 2
+            "sortOrder": 1,
+            "tone": "green",
+            "summary": "Форк визуального мода для Minecraft Fabric 1.21.8. Доступен для прямой установки, а исходный код открыт в публичном репозитории.",
             "instructions": [
                 "Установите Minecraft Fabric 1.21.8 в вашем лаунчере.",
                 "Скачайте Fabric API: https://modrinth.com/mod/fabric-api и закиньте файл в папку mods.",
                 "После этого скачайте наш мод и тоже закиньте его в папку mods.",
+                "Готово — можно запускать."
             ],
             "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
             "downloadUrl": "./assets/files/strange-visuals.jar",
@@ -73,13 +82,6 @@ export const DEFAULT_SITE_DATA = {
                     {
                         "name": "Скелетон",
                         "enabled": false
-                "id": "supporter-1100031016506232833",
-                "name": "GARAKIL",
-                "avatarUrl": "https://cdn.discordapp.com/avatars/1100031016506232833/b44dd5c3e9b813f7613082259b987306.png?size=1024",
-                "amountUsd": 2,
-                "sortOrder": 8
-            },
-            {
                     }
                 ],
                 "utils": [
