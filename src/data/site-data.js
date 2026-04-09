@@ -38,11 +38,11 @@ export const DEFAULT_SITE_DATA = {
                         "enabled": true
                     },
                     {
-                        "name": "Джампики",
+                        "name": "Китайская шляпа",
                         "enabled": true
                     },
                     {
-                        "name": "Китайская шляпа",
+                        "name": "Круги прыжка",
                         "enabled": true
                     },
                     {
@@ -51,114 +51,166 @@ export const DEFAULT_SITE_DATA = {
                     },
                     {
                         "name": "Хит бабл",
-                        "enabled": false
+                        "enabled": true
+                    },
+                    {
+                        "name": "Частицы игрока",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Шейдерная рука",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Шлейф",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Эффект убийства",
+                        "enabled": true
                     }
                 ],
                 "world": [
                     {
-                        "name": "Чамсы",
+                        "name": "Кубики",
                         "enabled": true
                     },
                     {
-                        "name": "Трейсеры",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Снаряды",
+                        "name": "Обводка блока",
                         "enabled": true
                     },
                     {
-                        "name": "Частицы",
+                        "name": "Призрак",
                         "enabled": true
                     },
                     {
-                        "name": "Блок оверлей",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Дроп рендер",
+                        "name": "Частицы мира",
                         "enabled": true
                     },
                     {
-                        "name": "Скелетон",
-                        "enabled": false
+                        "name": "Эффект прыжка",
+                        "enabled": true
                     }
                 ],
                 "utils": [
                     {
-                        "name": "Авто спринт",
+                        "name": "GPS",
                         "enabled": true
                     },
                     {
-                        "name": "Авто тул",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Фуллбрайт",
+                        "name": "Авто бег",
                         "enabled": true
                     },
                     {
-                        "name": "Ноу оверлей",
+                        "name": "Авто подключение (ST)",
                         "enabled": true
                     },
                     {
-                        "name": "Координаты",
+                        "name": "Авто респавн",
                         "enabled": true
                     },
                     {
-                        "name": "Таймер",
-                        "enabled": false
+                        "name": "Добавить друга",
+                        "enabled": true
+                    },
+                    {
+                        "name": "ПвП хелпер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Прокрутка предметов",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Тейп маус",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Фейк игрок",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Фри лук",
+                        "enabled": true
+                    },
+                    {
+                        "name": "ФТ хелпер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Хит саунд",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Чат хелпер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Шифт тап",
+                        "enabled": true
                     }
                 ],
                 "other": [
                     {
-                        "name": "Антибот",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Прокси",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Дебаг мод",
+                        "name": "Аспект ратион",
                         "enabled": true
                     },
                     {
-                        "name": "Ник хайдер",
+                        "name": "АукХелпер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Без рендера",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Время суток",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Гамма",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Звуки мода",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Кастомный туман",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Оптимизация",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Физика предметов",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Фильтры экрана",
                         "enabled": true
                     }
                 ],
                 "interface": [
                     {
-                        "name": "Массив лист",
+                        "name": "Водяной знак",
                         "enabled": true
                     },
                     {
-                        "name": "Ватермарка",
+                        "name": "Кастомные руки",
                         "enabled": true
                     },
                     {
-                        "name": "Кейбинды",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Нотификации",
+                        "name": "Кастомный прицел",
                         "enabled": true
                     },
                     {
-                        "name": "Хотбар",
+                        "name": "Клик гуи",
                         "enabled": true
                     },
                     {
-                        "name": "Скорборд",
-                        "enabled": false
-                    },
-                    {
-                        "name": "Табулист",
-                        "enabled": true
-                    },
-                    {
-                        "name": "Кроссхейр",
+                        "name": "Плавный интерфейс",
                         "enabled": true
                     }
                 ],
