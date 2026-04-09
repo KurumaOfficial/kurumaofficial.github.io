@@ -2,7 +2,7 @@
 <html lang="ru" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Strange Visuals — Поддержать</title>
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
@@ -48,26 +48,30 @@
 </nav>
 
 <main class="donate-page">
-  <section class="donate-hero reveal">
+  <div class="donate-page-top">
     <a class="donate-back" href="../products/strange-visuals/">
       <span class="material-icons" aria-hidden="true">arrow_back</span>
       <span id="donateBackLabel">Назад к Strange Visuals</span>
     </a>
+  </div>
 
-    <div class="donate-crown">
-      <span class="material-icons">workspace_premium</span>
+  <section class="donate-hero reveal">
+    <div class="donate-hero-body">
+      <div class="donate-crown">
+        <span class="material-icons">workspace_premium</span>
+      </div>
+
+      <div class="donate-eyebrow" id="donateEyebrow">Поддержать проект</div>
+      <h1 class="donate-title" id="donateTitle">Поддержка<br><em>проекта</em></h1>
+      <p class="donate-desc" id="donateDesc"></p>
     </div>
-
-    <div class="donate-eyebrow" id="donateEyebrow">Поддержать проект</div>
-    <h1 class="donate-title" id="donateTitle">Поддержка<br><em>проекта</em></h1>
-    <p class="donate-desc" id="donateDesc"></p>
   </section>
 
   <section class="donate-section reveal">
     <div class="section-head">
       <div>
         <h2 id="paymentsTitle">Способы поддержки</h2>
-        <p id="paymentsDesc">Ссылки и подписи задаются через админ-панель. Можно добавить сколько угодно кнопок.</p>
+        <p id="paymentsDesc">Выберите удобный способ поддержки проекта и команды.</p>
       </div>
     </div>
     <div class="pay-grid" id="supportButtonsGrid"></div>

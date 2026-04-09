@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Strange Visuals — Support</title>
 <script>window.__ALEPH_LOCALE__ = 'en';</script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
@@ -37,19 +37,23 @@
 </nav>
 
 <main class="donate-page">
-  <section class="donate-hero reveal">
+  <div class="donate-page-top">
     <a class="donate-back" href="../">
       <span class="material-icons" aria-hidden="true">arrow_back</span>
       <span id="donateBackLabel">Back to Strange Visuals</span>
     </a>
+  </div>
 
-    <div class="donate-crown">
-      <span class="material-icons">workspace_premium</span>
+  <section class="donate-hero reveal">
+    <div class="donate-hero-body">
+      <div class="donate-crown">
+        <span class="material-icons">workspace_premium</span>
+      </div>
+
+      <div class="donate-eyebrow" id="donateEyebrow">Support the project</div>
+      <h1 class="donate-title" id="donateTitle">Support<br><em>the project</em></h1>
+      <p class="donate-desc" id="donateDesc"></p>
     </div>
-
-    <div class="donate-eyebrow" id="donateEyebrow">Support the project</div>
-    <h1 class="donate-title" id="donateTitle">Support<br><em>the project</em></h1>
-    <p class="donate-desc" id="donateDesc"></p>
   </section>
 
   <section class="donate-section reveal">
@@ -65,8 +69,8 @@
   <section class="donate-section reveal" id="topSupportersSection">
     <div class="section-head">
       <div>
-        <h2 id="topSupportersTitle">Top 3 supporters</h2>
-        <p id="topSupportersDesc">The higher the amount, the stronger the golden glow.</p>
+        <h2 id="topSupportersTitle">Overall top 3</h2>
+        <p id="topSupportersDesc">The higher the amount, the stronger the golden glow of the card.</p>
       </div>
     </div>
     <div class="top-grid" id="topSupportersGrid"></div>
@@ -74,7 +78,7 @@
 
   <section class="donate-section reveal">
     <div class="section-head">
-      <h2 id="supportersTitle">Supporters</h2>
+      <h2 id="supportersTitle">Supported us</h2>
       <span class="count-chip" id="supporterCount">0</span>
     </div>
     <div class="supporters-grid" id="supportersGrid"></div>
