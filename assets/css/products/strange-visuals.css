@@ -992,7 +992,6 @@ body::after {
 .compare-card {
   position:relative;
   width:100%;
-  min-height:560px;
   border:1px solid var(--border);
   border-radius:14px;
   overflow:hidden;
@@ -1003,7 +1002,8 @@ body::after {
 .compare-stage {
   position:relative;
   width:100%;
-  height:560px;
+  aspect-ratio:1919/1054;
+  height:auto;
   background:
     linear-gradient(135deg, var(--surface) 0%, transparent 100%);
 }
@@ -1734,12 +1734,10 @@ footer {
     width:100%;
   }
 
-  .compare-stage,
-  .compare-card {
-    min-height:420px;
+  .compare-stage {
+    aspect-ratio:1919/1054;
     height:auto;
   }
-  .compare-stage { height:420px; }
 }
 
 @media(max-width:768px){
@@ -1839,7 +1837,7 @@ footer {
     gap:10px;
   }
 
-  .compare-stage { height:340px; }
+  .compare-stage { aspect-ratio:1919/1054; height:auto; }
   .compare-slot {
     left:12px;
     right:12px;
