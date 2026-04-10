@@ -188,9 +188,22 @@ function getGuiPreviewThemeLabel(locale, themeKey) {
   return theme?.labels?.[locale] || theme?.labels?.ru || themeKey;
 }
 
+function syncGuiPreviewThemeCards(elements, themeKey) {
+  if (!(elements.gwItemsEl instanceof HTMLElement)) return;
+
+  elements.gwItemsEl.querySelectorAll('[data-gui-theme]').forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) return;
+    const isActive = (button.dataset.guiTheme || '') === themeKey;
+    button.classList.toggle('is-active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+}
+
 function setGuiPreviewTheme(elements, themeKey) {
-  if (!(elements.guiWidgetEl instanceof HTMLElement)) return;
-  elements.guiWidgetEl.removeAttribute('data-gui-preview-theme');
+  if (elements.guiWidgetEl instanceof HTMLElement) {
+    elements.guiWidgetEl.removeAttribute('data-gui-preview-theme');
+  }
+  syncGuiPreviewThemeCards(elements, themeKey);
 }
 
 function buildGuiPreviewContext(siteData, locale) {
@@ -571,7 +584,7 @@ function renderGuiPreview(elements, previewContexts, previewState) {
       previewState,
       (nextThemeKey) => {
         previewState.themeKey = nextThemeKey;
-        renderGuiPreview(elements, previewContexts, previewState);
+        setGuiPreviewTheme(elements, previewState.themeKey);
       },
       (nextLocale) => {
         previewState.locale = nextLocale;

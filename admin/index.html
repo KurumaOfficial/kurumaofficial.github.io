@@ -52,8 +52,6 @@
 
                     <div class="dash-sidebar-footer">
                         <p>Aleph Studio © 2026</p>
-                        <p>Standalone route: /admin/</p>
-                        <p>Esc или кнопка закрытия возвращают назад.</p>
                     </div>
                 </aside>
 
@@ -144,39 +142,10 @@
                                                 <span class="material-icons">delete_sweep</span>
                                                 Очистить local
                                             </button>
-                                            <button id="saveGithubBtn" type="button" class="dash-btn dash-primary">
+                                            <button id="saveGithubBtn" type="button" class="dash-btn dash-blue">
                                                 <span class="material-icons">cloud_upload</span>
-                                                Push в GitHub
+                                                Сохранить Глобально
                                             </button>
-                                        </div>
-                                    </div>
-                                </article>
-
-                                <article class="dash-card">
-                                    <div class="dash-card-head">
-                                        <div class="dash-card-head-icon is-blue"><span class="material-icons">preview</span></div>
-                                        <div class="dash-card-head-copy">
-                                            <div class="dash-card-head-title">Preview</div>
-                                            <div class="dash-card-head-sub">Ссылки на предпросмотр сайта</div>
-                                        </div>
-                                    </div>
-                                    <div class="dash-card-body">
-                                        <div class="dash-preview-links">
-                                            <a class="dash-preview-link" href="../ru/" target="_blank" rel="noopener noreferrer">
-                                                <span class="material-icons">storefront</span>
-                                                <span class="dash-preview-link-label">Витрина</span>
-                                                <span class="dash-preview-link-url">/ru/</span>
-                                            </a>
-                                            <a class="dash-preview-link" href="../ru/products/strange-visuals/" target="_blank" rel="noopener noreferrer">
-                                                <span class="material-icons">visibility</span>
-                                                <span class="dash-preview-link-label">Strange Visuals</span>
-                                                <span class="dash-preview-link-url">/products/strange-visuals</span>
-                                            </a>
-                                            <a class="dash-preview-link" href="../ru/products/strange-visuals/donate/" target="_blank" rel="noopener noreferrer">
-                                                <span class="material-icons">favorite</span>
-                                                <span class="dash-preview-link-label">Donate</span>
-                                                <span class="dash-preview-link-url">/donate</span>
-                                            </a>
                                         </div>
                                     </div>
                                 </article>
@@ -185,17 +154,14 @@
                                     <div class="dash-card-head">
                                         <div class="dash-card-head-icon is-gold"><span class="material-icons">lock</span></div>
                                         <div class="dash-card-head-copy">
-                                            <div class="dash-card-head-title">GitHub Token</div>
-                                            <div class="dash-card-head-sub">Для публикации через GitHub Contents API</div>
+                                            <div class="dash-card-head-title">Пароль</div>
                                         </div>
                                     </div>
                                     <div class="dash-card-body">
                                         <div class="dash-field">
-                                            <label for="githubToken">Personal Access Token</label>
-                                            <input id="githubToken" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+                                            <label for="githubToken">Пароль</label>
+                                            <input id="githubToken" type="password" placeholder="Введите пароль">
                                         </div>
-                                        <p id="githubSyncTarget" class="dash-inline-note"></p>
-                                        <p class="dash-help">Токен нужен только в момент публикации и очищается после успешного push.</p>
                                     </div>
                                 </article>
 
@@ -223,7 +189,7 @@
                                             </div>
                                             <div class="dash-step">
                                                 <div class="dash-step-number">4</div>
-                                                <div class="dash-step-text">Когда всё готово, вставь GitHub token и сделай <strong>Push в GitHub</strong>.</div>
+                                                <div class="dash-step-text">Когда всё готово, вставь пароль и нажми <strong>Сохранить Глобально</strong>.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -369,7 +335,6 @@
                                         </div>
 
                                         <div class="dash-editor-footer">
-                                            <span class="note">Изменения копятся в черновике, пока ты их не применишь или не сохранишь.</span>
                                             <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">
                                                 <span class="material-icons">delete</span>
                                                 Удалить
@@ -417,9 +382,6 @@
                                         <div class="dash-field">
                                             <label for="supportRoleName">Название роли</label>
                                             <input id="supportRoleName" type="text" placeholder="@Premium">
-                                        </div>
-                                        <div class="dash-support-settings-note">
-                                            Эти поля управляют базовым донат-порогом и названием Discord-роли, которую получает поддержавший.
                                         </div>
                                     </div>
                                 </div>
