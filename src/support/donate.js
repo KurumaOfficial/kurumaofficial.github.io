@@ -877,10 +877,23 @@ function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru' } =
             background: rgba(201,168,76,${backgroundAlpha.toFixed(4)});
         `;
     } else {
+        borderAlpha = 0.12;
+        boxShadow = [
+            '0 0 8px rgba(201,168,76,0.05)',
+            '0 0 16px rgba(201,168,76,0.03)',
+            '0 0 24px rgba(201,168,76,0.02)',
+            'inset 0 0 6px rgba(242,210,130,0)',
+        ].join(',');
         ringWidth = 1;
         ringAlpha = 0.15;
-        ringGlow = 'none';
-        card.style.cssText = '--g-alpha: 0;';
+        ringGlow = '0 0 4px rgba(201,168,76,0)';
+        backgroundAlpha = 0;
+        card.style.cssText = `
+            --g-alpha: 0.150;
+            border-color: rgba(201,168,76,${borderAlpha.toFixed(3)});
+            box-shadow: ${boxShadow};
+            background: rgba(201,168,76,${backgroundAlpha.toFixed(4)});
+        `;
     }
 
     const effectCanvas = !prefersReducedMotion() && ((tier.kind === 'gold' && tier.goldCount) || tier.kind === 'platinum')

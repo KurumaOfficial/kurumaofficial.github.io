@@ -922,6 +922,7 @@ button {
   overflow:hidden;
   isolation:isolate;
   --g-alpha:0;
+  transition:background .15s,transform .12s,box-shadow .2s,border-color .15s,opacity .2s;
 }
 
 .card-donor::before {
