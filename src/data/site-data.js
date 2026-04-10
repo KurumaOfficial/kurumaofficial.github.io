@@ -261,14 +261,6 @@ export const DEFAULT_SITE_DATA = {
             "avatarUrl": "",
             "description": "Держит проект в порядке, понимает общую картину и закрывает самые сложные задачи. Техлид.",
             "sortOrder": 3
-        },
-        {
-            "id": "team-member-04",
-            "name": "El LetRak",
-            "role": "Мл. Разработчик",
-            "avatarUrl": "",
-            "description": "Помогает с багами, поддержкой и мелкими правками. Следит за проблемами, разбирает ошибки.",
-            "sortOrder": 4
         }
     ],
     "supportPage": {
