@@ -1041,7 +1041,7 @@ body::after {
 .compare-after-wrap {
   position:absolute;
   inset:0;
-  clip-path:inset(0 50% 0 0);
+  clip-path:inset(0 0 0 50%);
 }
 
 .compare-after {
