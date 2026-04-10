@@ -1663,7 +1663,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     addSupporterBtnEl?.addEventListener('click', () => {
         const supportPage = ensureSupportDraft();
-        supportPage.supporters.push(createEmptySupporter());
+        supportPage.supporters.unshift(createEmptySupporter());
         renderSupportersEditor();
         syncDraftControls();
     });

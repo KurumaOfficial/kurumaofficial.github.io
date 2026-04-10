@@ -482,6 +482,19 @@ button {
   box-shadow: 0 4px 14px rgba(192,57,43,0.3);
 }
 
+.dash-btn.dash-blue {
+  background: var(--blue);
+  color: #fff;
+  border-color: transparent;
+}
+
+.dash-btn.dash-blue:hover {
+  background: #5f7cb6;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(95,124,182,0.32);
+}
+
 .dash-btn.dash-danger {
   background: var(--red-dim);
   color: var(--red);
@@ -1345,6 +1358,10 @@ button {
   flex-wrap: wrap;
 }
 
+.dash-editor-footer > .dash-btn {
+  margin-left: auto;
+}
+
 .dash-editor-footer .btns {
   margin-left: auto;
   display: flex;
@@ -2087,6 +2104,20 @@ button {
   background: var(--color-ruby-light);
   border-color: var(--color-ruby-light);
   box-shadow: 0 12px 24px rgba(139, 26, 42, 0.22);
+}
+
+.dash-btn.dash-blue {
+  background: var(--color-info);
+  border-color: var(--color-info);
+  color: #fff;
+  font-family: var(--font-display);
+  letter-spacing: 0.16em;
+}
+
+.dash-btn.dash-blue:hover {
+  background: #5f7cb6;
+  border-color: #5f7cb6;
+  box-shadow: 0 12px 24px rgba(95, 124, 182, 0.22);
 }
 
 .dash-btn.dash-danger {

@@ -297,7 +297,7 @@ export const DEFAULT_SITE_DATA = {
                     "id": "supporter-567713040351494174",
                     "name": "ᴡᴇʟᴡᴇʀ_ɢᴀɴ",
                     "avatarUrl": "https://cdn.discordapp.com/avatars/567713040351494174/35df3dbca620b7f1dfbad1b84f97998b.png?size=1024",
-                    "amountUsd": 2,
+                    "amountUsd": 100,
                     "sortOrder": 1
                 },
                 {
