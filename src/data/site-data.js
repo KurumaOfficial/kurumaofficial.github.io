@@ -261,14 +261,27 @@ export const DEFAULT_SITE_DATA = {
             "avatarUrl": "",
             "description": "Держит проект в порядке, понимает общую картину и закрывает самые сложные задачи. Техлид.",
             "sortOrder": 3
-        },
+        }
+    ],
+    "supportPage": {
+        "minimumAmountUsd": 2,
+        "roleName": "@Premium",
+        "buttons": [
             {
-                "id": "team-member-04",
-                "name": "El LetRak",
-                "role": "Мл. Разработчик",
-                "avatarUrl": "",
-                "description": "Помогает с багами, поддержкой и мелкими правками. Следит за проблемами, разбирает ошибки.",
-                "sortOrder": 4
+                "id": "support-fanpay",
+                "label": "Поддержать",
+                "title": "FanPay",
+                "note": "Visa / Mastercard / СБП",
+                "url": "https://funpay.com/lots/offer?id=66282874",
+                "sortOrder": 2
+            },
+            {
+                "id": "support-donationalerts",
+                "label": "Donation Alerts",
+                "title": "Donation Alerts",
+                "note": "Visa / Mastercard / МИР / СБП / SberPay / ЮMoney / QIWI / WebMoney / PayPal / Apple Pay / Google Pay / Крипта / Мобильные платежи",
+                "url": "https://www.donationalerts.com/r/kuruma_official",
+                "sortOrder": 1
             }
         ],
         "supportPage": {
