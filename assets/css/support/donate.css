@@ -516,7 +516,7 @@ button {
 
 .pay-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
 .top-grid { grid-template-columns:repeat(3, minmax(0,1fr)); }
-.supporters-grid { grid-template-columns:repeat(auto-fill, minmax(150px,1fr)); }
+.supporters-grid { grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); }
 
 .pay-btn,
 .support-card,
