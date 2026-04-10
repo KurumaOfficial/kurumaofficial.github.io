@@ -1041,7 +1041,7 @@ body::after {
 .compare-after-wrap {
   position:absolute;
   inset:0;
-  clip-path:inset(0 0 0 50%);
+  clip-path:inset(0 50% 0 0);
 }
 
 .compare-after {
@@ -1072,8 +1072,8 @@ body::after {
   backdrop-filter:blur(8px);
 }
 
-.compare-label.before { left:16px; }
-.compare-label.after  { right:16px; }
+.compare-label.before { right:16px; }
+.compare-label.after  { left:16px; }
 
 .compare-divider {
   position:absolute;

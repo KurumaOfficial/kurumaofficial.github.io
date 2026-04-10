@@ -619,7 +619,7 @@ function renderModuleList(elements, tabKeys, tabs, localeMeta) {
 
 function updateCompare(elements, value) {
   const percentage = Math.max(0, Math.min(100, Number(value)));
-  if (elements.compareAfterWrap) elements.compareAfterWrap.style.clipPath = `inset(0 0 0 ${percentage}%)`;
+  if (elements.compareAfterWrap) elements.compareAfterWrap.style.clipPath = `inset(0 ${100 - percentage}% 0 0)`;
   if (elements.compareDivider) elements.compareDivider.style.left = `${percentage}%`;
   if (elements.compareHandle) elements.compareHandle.style.left = `${percentage}%`;
 }
