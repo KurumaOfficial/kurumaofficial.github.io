@@ -284,28 +284,7 @@ export const DEFAULT_SITE_DATA = {
                 "sortOrder": 1
             }
         ],
-        "supportPage": {
-            "minimumAmountUsd": 2,
-            "roleName": "@Premium",
-            "buttons": [
-                {
-                    "id": "support-fanpay",
-                    "label": "Поддержать",
-                    "title": "FanPay",
-                    "note": "Visa / Mastercard / СБП",
-                    "url": "https://funpay.com/lots/offer?id=66282874",
-                    "sortOrder": 2
-                },
-                {
-                    "id": "support-donationalerts",
-                    "label": "Donation Alerts",
-                    "title": "Donation Alerts",
-                    "note": "Visa / Mastercard / МИР / СБП / SberPay / ЮMoney / QIWI / WebMoney / PayPal / Apple Pay / Google Pay / Крипта / Мобильные платежи",
-                    "url": "https://www.donationalerts.com/r/kuruma_official",
-                    "sortOrder": 1
-                }
-            ],
-            "supporters": [
+        "supporters": [
                 {
                     "id": "supporter-567713040351494174",
                     "name": "ᴡᴇʟᴡᴇʀ_ɢᴀɴ",
@@ -545,11 +524,11 @@ export const DEFAULT_SITE_DATA = {
                     "sortOrder": 34
                 }
             ]
-        },
-        "socials": {
-            "youtube": "https://www.youtube.com/@KurumaBestWaify",
-            "discord": "https://discord.gg/3YxB2R6eqQ",
-            "telegram": "https://t.me/AlephStudio_Official"
-        }
-    };
-    /*__ALEPH_SITE_DATA_END__*/
+    },
+    "socials": {
+        "youtube": "https://www.youtube.com/@KurumaBestWaify",
+        "discord": "https://discord.gg/3YxB2R6eqQ",
+        "telegram": "https://t.me/AlephStudio_Official"
+    }
+};
+/*__ALEPH_SITE_DATA_END__*/
