@@ -1,13 +1,24 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Strange Visuals — Minecraft Visual Mod</title>
-<script>window.__ALEPH_LOCALE__ = 'en';</script>
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark">
+<meta name="author" content="WeTTeA">
+<meta name="description" content="Strange Visuals — a visual mod for Minecraft 1.21.8 by Aleph Studio. Free and open source.">
+<link rel="icon" href="../../../favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
+<script>window.__ALEPH_LOCALE__ = 'en';</script>
+<script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body>
 
@@ -17,10 +28,10 @@
     <span class="logo-text">Aleph Studio</span>
   </a>
   <div class="nav-links" role="list">
-    <a class="nav__link" href="./donate/" role="listitem" data-donate-link>Support</a>
+    <a class="nav__link" href="../../donate/" role="listitem" data-donate-link>Support</a>
   </div>
   <div class="nav-right">
-    <button class="theme-btn" id="themeBtn">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme">
       <span class="material-icons" id="themeIco">light_mode</span>
     </button>
 
@@ -44,6 +55,7 @@
   </div>
 </nav>
 
+<main>
 <section class="hero-store">
   <div class="hero-left-fog"></div>
   <div class="hero-left-shade"></div>
@@ -113,7 +125,7 @@
         </div>
 
         <div class="hero-actions">
-          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar" download>DOWNLOAD</a>
+          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals.jar" download>DOWNLOAD</a>
           <a class="hero-source-btn" id="sourceBtn" title="Open source code" aria-label="Open source code" href="https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy" target="_blank" rel="noopener noreferrer"><span class="material-icons" aria-hidden="true">code</span></a>
           <div class="hero-share-dock" id="shareDock">
             <div class="hero-share-bg" aria-hidden="true"></div>
@@ -171,7 +183,7 @@
     <div class="feat-card">
         <div class="feat-ico"><span class="material-icons">workspace_premium</span></div>
         <h3>Support</h3>
-        <p>If you want to help the development of the mod and support our team, you can do it on the <a href="./donate/" data-donate-link>support page</a>.</p>
+        <p>If you want to help the development of the mod and support our team, you can do it on the <a href="../../donate/" data-donate-link>support page</a>.</p>
     </div>
     <div class="feat-card">
       <div class="feat-ico"><span class="material-icons">update</span></div>
@@ -186,12 +198,12 @@
     <div class="feat-card">
         <div class="feat-ico"><span class="material-icons">report_problem</span></div>
         <h3>Problems</h3>
-        <p>If you have launch issues or found a bug, you can report it on our <a id="supportDiscordLink" data-social="discord">Discord</a> server.</p>
+        <p>If you have launch issues or found a bug, you can report it on our <a id="supportDiscordLink" href="https://discord.gg/3YxB2R6eqQ" target="_blank" rel="noopener noreferrer">Discord</a> server.</p>
     </div>
   </div>
 </div>
 
-<div class="wrap" id="compare" style="padding-top:20px">
+<div class="wrap" id="compare">
   <div class="compare-section-head reveal">
     <div>
       <div class="eyebrow">Before / After</div>
@@ -235,13 +247,13 @@
   </div>
 </div>
 
-<div class="wrap" id="preview" style="padding-top:20px">
+<div class="wrap" id="preview">
   <div class="preview-row">
 
     <div class="reveal">
       <div class="eyebrow">Interface</div>
       <h2 class="s-title">Clean GUI<br><em>in two themes</em></h2>
-      <p class="s-desc" style="max-width:360px">
+      <p class="s-desc">
         A clean in-game interface with no visual clutter, readable in both light and dark themes.
         Switching the theme in the header instantly shows how the GUI looks in-game.
       </p>
@@ -293,7 +305,7 @@
   </div>
 </div>
 
-<div class="wrap" id="modules" style="padding-top:20px">
+<div class="wrap" id="modules">
   <div class="reveal">
     <div class="eyebrow">Module list</div>
     <h2 class="s-title">All features</h2>
@@ -353,6 +365,7 @@
 
   </div>
 </div>
+</main>
 
 <footer>
   <div class="footer-logo">

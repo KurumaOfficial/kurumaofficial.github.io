@@ -229,7 +229,7 @@ function resolveRouteAsset(path) {
 }
 
 function getDonateHref() {
-  return new URL('donate/', window.location.href).toString();
+  return new URL('../../donate/', window.location.href).toString();
 }
 
 function getRouteProduct(products) {

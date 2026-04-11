@@ -11,7 +11,7 @@ export const DEFAULT_SITE_DATA = {
         {
             "id": "strange-visuals",
             "title": "Strange Visuals",
-            "version": "1.5.1",
+            "version": "1.1.0",
             "tag": "Активно",
             "flag": "release",
             "status": "активно",
@@ -276,9 +276,9 @@ export const DEFAULT_SITE_DATA = {
         "roleName": "@Premium",
         "buttons": [
             {
-                "id": "support-fanpay",
+                "id": "support-funpay",
                 "label": "Поддержать",
-                "title": "FanPay",
+                "title": "FunPay",
                 "note": "Visa / Mastercard / СБП",
                 "url": "https://funpay.com/lots/offer?id=66282874",
                 "sortOrder": 2

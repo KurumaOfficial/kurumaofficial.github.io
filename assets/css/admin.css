@@ -1762,7 +1762,7 @@ button {
   transition: opacity 0.25s ease, transform 0.25s ease;
 }
 
-.toast.show {
+.toast[aria-hidden="false"] {
   opacity: 1;
   transform: translateX(0) scale(1);
 }
@@ -1844,6 +1844,23 @@ button {
 .theme-btn .material-icons {
   font-size: 16px;
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN-SYSTEM REFINEMENT LAYER
+   ─────────────────────────────────────────────────────────────
+   This section intentionally re-declares selectors from above.
+   It applies the final design language:
+     • border-radius: 0  (sharp corners)
+     • color-mix()       (translucent backgrounds / borders)
+     • shadow-elevated   (deeper shadows)
+     • font-display / font-mono variables
+     • safe-area insets  (viewport-fit=cover)
+
+   The cascade ensures these values win over the base layer.
+   Do NOT remove — merge into base rules only during a planned
+   design-system consolidation pass.
+   ═══════════════════════════════════════════════════════════════ */
 
 .dash-layout {
   background:
@@ -2819,5 +2836,17 @@ button {
 
   .dash-editor-footer .btns {
     margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .toast {
+    transform: none;
   }
 }
