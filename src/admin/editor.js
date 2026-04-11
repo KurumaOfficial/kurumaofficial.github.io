@@ -100,7 +100,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastJsonImportFailed: 'Не удалось импортировать JSON.',
         toastFileTooLarge: 'GitHub Contents API не принимает файлы больше 100 MB.',
         toastFileQueued: 'Файл добавлен в очередь GitHub sync.',
-        toastFileRemoved: 'Файл убран из очереди GitHub sync.'
+        toastFileRemoved: 'Файл убран из очереди GitHub sync.',
         toastGithubSaved: 'Сохранено для всех. Данные и файлы отправлены в GitHub, сайт обновится после публикации GitHub Pages.',
         toastGithubFailed: 'Не удалось сохранить в GitHub.',
         toastSavedLocalWithFiles: 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.',
@@ -167,7 +167,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastJsonImportFailed: 'Could not import JSON.',
         toastFileTooLarge: 'GitHub Contents API does not accept files larger than 100 MB.',
         toastFileQueued: 'File added to GitHub upload queue.',
-        toastFileRemoved: 'File removed from the GitHub queue.'
+        toastFileRemoved: 'File removed from the GitHub queue.',
         toastGithubSaved: 'Saved for everyone. Content and files were pushed to GitHub.',
         toastGithubFailed: 'Could not save to GitHub.',
         toastSavedLocalWithFiles: 'Saved locally. Re-select files before publishing them to GitHub.',
@@ -234,7 +234,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastJsonImportFailed: 'Не вдалося імпортувати JSON.',
         toastFileTooLarge: 'GitHub Contents API не приймає файли більше 100 MB.',
         toastFileQueued: 'Файл додано до черги GitHub sync.',
-        toastFileRemoved: 'Файл прибрано з черги GitHub sync.'
+        toastFileRemoved: 'Файл прибрано з черги GitHub sync.',
         toastGithubSaved: 'Збережено для всіх. Дані та файли відправлено в GitHub.',
         toastGithubFailed: 'Не вдалося зберегти в GitHub.',
         toastSavedLocalWithFiles: 'Збережено локально. Перед публікацією в GitHub вибери файли ще раз.',
