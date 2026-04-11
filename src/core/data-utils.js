@@ -93,7 +93,7 @@ export const ROUTE_MODULE_KEYS = /** @type {const} */ (['player', 'world', 'util
  * @param {string} [fallback]
  * @returns {RouteModuleItem}
  */
-function normalizeRouteModuleItem(raw, fallback = 'Новая функция') {
+function normalizeRouteModuleItem(raw, fallback = 'New function') {
     const src = /** @type {Record<string, unknown>} */ (raw || {});
     return {
         name: cleanText(src.name, fallback),
@@ -119,7 +119,7 @@ export function normalizeRouteModules(raw) {
 
     ROUTE_MODULE_KEYS.forEach((key) => {
         const items = Array.isArray(src[key]) ? src[key] : [];
-        result[key] = items.map((item, index) => normalizeRouteModuleItem(item, `Функция ${index + 1}`));
+        result[key] = items.map((item, index) => normalizeRouteModuleItem(item, `Function ${index + 1}`));
     });
 
     return result;
@@ -171,10 +171,10 @@ function clampCurrency(value) {
  * @returns {SupportButton}
  */
 export function normalizeSupportButton(raw = {}, index = 0) {
-    const title = cleanText(raw.title, `Способ ${index + 1}`);
+    const title = cleanText(raw.title, `Method ${index + 1}`);
     return {
         id: cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(title),
-        label: cleanText(raw.label, 'Поддержать'),
+        label: cleanText(raw.label, 'Support'),
         title,
         note: cleanText(raw.note, ''),
         url: cleanText(raw.url, ''),
@@ -249,7 +249,7 @@ export function normalizeSupportPage(raw) {
  * @returns {Product}
  */
 export function normalizeProduct(raw = {}, index = 0) {
-    const title = cleanText(raw.title, 'Новый продукт');
+    const title = cleanText(raw.title, 'New product');
     const id = cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(title);
 
     /** @type {string[]} */
@@ -269,7 +269,7 @@ export function normalizeProduct(raw = {}, index = 0) {
         version: cleanText(raw.version, 'x'),
         tag: cleanText(raw.tag, `product ${String(index + 1).padStart(2, '0')}`),
         flag: VALID_FLAGS.includes(/** @type {any} */ (raw.flag)) ? /** @type {string} */ (raw.flag) : '',
-        status: cleanText(raw.status, 'позже'),
+        status: cleanText(raw.status, 'later'),
         featured: Boolean(raw.featured),
         featuredOrder: toNumber(raw.featuredOrder, index + 1),
         sortOrder: toNumber(raw.sortOrder, index + 1),
@@ -302,11 +302,11 @@ export function normalizeProduct(raw = {}, index = 0) {
  * @returns {TeamMember}
  */
 export function normalizeTeamMember(raw = {}, index = 0) {
-    const name = cleanText(raw.name, `Участник ${String(index + 1).padStart(2, '0')}`);
+    const name = cleanText(raw.name, `Member ${String(index + 1).padStart(2, '0')}`);
     return {
         id: slugify(cleanText(raw.id, name)),
         name,
-        role: cleanText(raw.role, 'Роль'),
+        role: cleanText(raw.role, 'Role'),
         avatarUrl: cleanText(raw.avatarUrl, ''),
         description: cleanText(raw.description, ''),
         sortOrder: toNumber(raw.sortOrder, index + 1),

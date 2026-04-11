@@ -81,7 +81,7 @@ function injectEmbeddedSiteData(content, data, format) {
     }
 
     if (!DATA_MARKERS.pattern.test(content)) {
-        throw new Error('В целевом файле не найден блок данных сайта.');
+        throw new Error('Site data block not found in the target file.');
     }
 
     return content.replace(DATA_MARKERS.pattern, buildEmbeddedSiteDataBlock(data, format));
@@ -91,10 +91,10 @@ function describeGitHubTokenAccessError(status, errorText, config) {
     const text = String(errorText || '');
     if (status === 403 && /Resource not accessible by personal access token/i.test(text)) {
         return [
-            `Токен не имеет доступа к ${config.owner}/${config.repo}.`,
-            `Для fine-grained token укажи Resource owner = ${config.owner},`,
+            `Token does not have access to ${config.owner}/${config.repo}.`,
+            `For a fine-grained token set Resource owner = ${config.owner},`,
             `Repository access = ${config.repo}, Permissions -> Contents: Read and write.`,
-            'Для classic token нужен scope repo.',
+            'For a classic token the repo scope is required.',
         ].join(' ');
     }
     return null;
@@ -136,7 +136,7 @@ async function fetchGitHubFileEntry(config, headers, repoPath) {
     const errorText = await response.text();
     const accessHint = describeGitHubTokenAccessError(response.status, errorText, config);
     if (accessHint) throw new Error(accessHint);
-    throw new Error(`Не удалось прочитать целевой файл: ${errorText}`);
+    throw new Error(`Could not read target file: ${errorText}`);
 }
 
 async function upsertGitHubRepoFile(config, token, repoPath, bytes, message) {
@@ -160,7 +160,7 @@ async function upsertGitHubRepoFile(config, token, repoPath, bytes, message) {
         const errorText = await putResponse.text();
         const accessHint = describeGitHubTokenAccessError(putResponse.status, errorText, config);
         if (accessHint) throw new Error(accessHint);
-        throw new Error(`GitHub не принял обновление: ${errorText}`);
+        throw new Error(`GitHub rejected the update: ${errorText}`);
     }
 
     return putResponse.json();
@@ -173,7 +173,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
     function renderGitHubSyncTarget() {
         const config = resolveGitHubConfig();
         if (githubSyncTargetEl) {
-            githubSyncTargetEl.textContent = `Публикация: ${config.owner}/${config.repo} -> ${config.branch}:${config.path}`;
+            githubSyncTargetEl.textContent = `Publish target: ${config.owner}/${config.repo} -> ${config.branch}:${config.path}`;
         }
         return config;
     }
@@ -207,10 +207,10 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
         const token = githubTokenEl?.value.trim() || '';
 
         if (!config.owner || !config.repo || !config.branch || !config.path) {
-            throw new Error('Не удалось определить репозиторий GitHub для публикации.');
+            throw new Error('Could not determine the GitHub repository for publishing.');
         }
         if (!token) {
-            throw new Error('Для сохранения в GitHub нужен token.');
+            throw new Error('A GitHub token is required to save.');
         }
 
         const normalizedPath = config.path.replace(/\\/g, '/');
@@ -220,7 +220,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
         const { entry } = await fetchGitHubFileEntry(config, headers, normalizedPath);
 
         if (!entry && format !== 'json') {
-            throw new Error('Целевой файл данных не найден в репозитории.');
+            throw new Error('Target data file not found in the repository.');
         }
 
         const nextContentText = format === 'json'
