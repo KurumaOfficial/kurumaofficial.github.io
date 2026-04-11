@@ -24,7 +24,7 @@ const COPY = Object.freeze({
         paymentsTitle: 'Способы поддержки',
         paymentsDesc: 'Выберите удобный способ поддержки проекта и команды.',
         topTitle: 'Общий топ 3',
-        topDesc: '',
+        topDesc: 'Чем больше сумма, тем ярче золотое свечение карточки.',
         supportersTitle: 'Поддержали нас',
         supportersEmpty: 'Пока никто не поддержал проект. Когда появятся первые донаты, карточки покажутся здесь.',
         buttonsEmpty: 'Скоро здесь появятся доступные способы поддержки.',
@@ -42,7 +42,7 @@ const COPY = Object.freeze({
         paymentsTitle: 'Support methods',
         paymentsDesc: 'Choose a convenient way to support the project and the team.',
         topTitle: 'Overall top 3',
-        topDesc: '',
+        topDesc: 'The higher the amount, the stronger the golden glow of the card.',
         supportersTitle: 'Supported us',
         supportersEmpty: 'Nobody has supported the project yet. Cards will appear here once the first donations are added.',
         buttonsEmpty: 'Available support methods will appear here soon.',
@@ -60,7 +60,7 @@ const COPY = Object.freeze({
         paymentsTitle: 'Способи підтримки',
         paymentsDesc: 'Оберіть зручний спосіб підтримати проєкт і команду.',
         topTitle: 'Загальний топ 3',
-        topDesc: '',
+        topDesc: 'Що більша сума, то сильніше золотаве сяйво картки.',
         supportersTitle: 'Підтримали нас',
         supportersEmpty: 'Поки ніхто не підтримав проєкт. Картки зʼявляться тут після перших донатів.',
         buttonsEmpty: 'Незабаром тут зʼявляться доступні способи підтримки.',
@@ -828,7 +828,8 @@ function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru' } =
     const tier = getDonorStyle(amount, locale);
     const hue = hueFromName(supporter.name || supporter.id || 'supporter');
     const card = createElement('article', {
-        className: `card-donor${tier.kind === 'platinum' ? ' is-platinum' : ''}`,
+        className: `card-donor${tier.kind === 'platinum' ? ' is-platinum' : ''}${top ? ' is-top' : ''}`,
+        ...(rank > 0 ? { 'data-rank': String(rank) } : {}),
     });
 
     let borderAlpha;
@@ -909,8 +910,9 @@ function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru' } =
         card.append(tierMark);
     }
 
-    void rank;
-    void top;
+    if (rank > 0) {
+        card.append(createElement('div', { className: 'donor-rank', 'aria-hidden': 'true' }, `#${rank}`));
+    }
 
     const avatar = createAvatar(supporter, tier, hue);
     avatar.append(

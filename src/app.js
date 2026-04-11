@@ -8,11 +8,16 @@
  */
 
 import { createLocaleController } from './i18n/controller.js';
-import { createEditorController }   from './admin/editor.js';
 import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
-import { applyGlobalRouteRedirect, initSharedThemeToggle, initSmoothRouteTransitions } from './core/site-shell.js';
+import {
+    applyGlobalRouteRedirect,
+    getAdminHref,
+    initAdminRouteAccess,
+    initSharedThemeToggle,
+    initSmoothRouteTransitions,
+} from './core/site-shell.js';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -42,12 +47,22 @@ function boot() {
     const renderer = createRenderer({ localeController: lc });
     renderer.renderSite();
 
-    /* 5.1 — Hidden admin panel for site owner --------------------- */
-    const editor = createEditorController({
-        renderSite: renderer.renderSite,
-        showToast,
-        locale: lc.locale,
-    });
+    /* 5.1 — Admin: lazy-load editor on admin page, otherwise just
+             wire up the secret key-sequence redirect. --------------- */
+    const isAdminPage = document.body?.dataset.adminPage === 'true';
+
+    if (isAdminPage) {
+        import('./admin/editor.js').then(({ createEditorController }) => {
+            const editor = createEditorController({
+                renderSite: renderer.renderSite,
+                showToast,
+                locale: lc.locale,
+            });
+            void editor.initialize();
+        });
+    } else {
+        initAdminRouteAccess({ adminHref: getAdminHref() });
+    }
 
     /* 6 — Activate scroll-reveal ----------------------------------- */
     initReveal();
@@ -60,9 +75,6 @@ function boot() {
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
-
-    /* 9 — Finalise admin state (loads local draft if present) ------ */
-    void editor.initialize();
 }
 
 /* ------------------------------------------------------------------ */

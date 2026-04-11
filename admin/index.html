@@ -13,10 +13,25 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="../assets/css/admin.css">
-    <script>window.__ALEPH_LOCALE__ = 'ru';</script>
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+    <script>
+    window.__ALEPH_LOCALE__ = (function () {
+        var supported = ['ru', 'en', 'ua'];
+        var raw = (navigator.languages || [navigator.language || ''])
+            .map(function (l) { return l.split('-')[0].toLowerCase(); });
+        for (var i = 0; i < raw.length; i++) {
+            if (raw[i] === 'uk') return 'ua';
+            if (supported.indexOf(raw[i]) !== -1) return raw[i];
+        }
+        return 'ru';
+    })();
+    </script>
     <script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
-<body data-admin-page="true" data-admin-home="../ru/">
+<body data-admin-page="true">
     <div id="editorOverlay" class="editor-overlay" aria-hidden="true">
         <div class="editor-backdrop" data-close-editor></div>
         <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
