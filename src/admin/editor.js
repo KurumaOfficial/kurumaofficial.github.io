@@ -1,5 +1,5 @@
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS } from '../core/constants.js';
+import { LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import {
     deepClone,
     formatBytes,
@@ -19,9 +19,9 @@ import { createGitHubPublisher } from '../github/publisher.js';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
 const ROUTE_MODULE_LABELS = Object.freeze({
-    ru: { player: 'На игроке', world: 'В мире', utils: 'Утилиты', other: 'Остальное', interface: 'Интерфейс', themes: 'Темы' },
+    ru: { player: 'Player (На игроке)', world: 'World (В мире)', utils: 'Utilities (Утилиты)', other: 'Other (Остальное)', interface: 'Interface (Интерфейс)', themes: 'Themes (Темы)' },
     en: { player: 'Player', world: 'World', utils: 'Utilities', other: 'Other', interface: 'Interface', themes: 'Themes' },
-    ua: { player: 'На гравці', world: 'У світі', utils: 'Утиліти', other: 'Інше', interface: 'Інтерфейс', themes: 'Теми' },
+    ua: { player: 'Player (На гравці)', world: 'World (У світі)', utils: 'Utilities (Утиліти)', other: 'Other (Інше)', interface: 'Interface (Інтерфейс)', themes: 'Themes (Теми)' },
 });
 
 const ADMIN_VIEW_COPY = Object.freeze({
@@ -30,26 +30,236 @@ const ADMIN_VIEW_COPY = Object.freeze({
         products: { title: 'Продукты', subtitle: 'Управление карточками, ссылками, порядком и публикацией релизов.' },
         support: { title: 'Поддержка', subtitle: 'Управление страницей donate, способами оплаты и карточками поддержавших.' },
         misc: { title: 'Прочее', subtitle: 'Команда, социальные ссылки и дополнительные настройки витрины.' },
+        nav: { section: 'Навигация', ariaLabel: 'Разделы админки', brandLabel: 'Открыть витрину Aleph Studio' },
+        header: { json: 'JSON', import: 'Импорт', discard: 'Откатить', apply: 'Применить', closeLabel: 'Закрыть', themeLabel: 'Переключить тему' },
     },
     en: {
         home: { title: 'Home', subtitle: 'Control draft state, publication and quick admin navigation.' },
         products: { title: 'Products', subtitle: 'Manage cards, links, order and publication state for releases.' },
         support: { title: 'Support', subtitle: 'Manage the donate route, support buttons and supporter cards.' },
         misc: { title: 'Misc', subtitle: 'Team, social links and additional showcase settings.' },
+        nav: { section: 'Navigation', ariaLabel: 'Admin sections', brandLabel: 'Open Aleph Studio showcase' },
+        header: { json: 'JSON', import: 'Import', discard: 'Discard', apply: 'Apply', closeLabel: 'Close', themeLabel: 'Toggle theme' },
     },
     ua: {
         home: { title: 'Головна', subtitle: 'Центр керування чернеткою, публікацією та швидкими переходами в адмінці.' },
         products: { title: 'Продукти', subtitle: 'Керування картками, посиланнями, порядком та публікацією релізів.' },
         support: { title: 'Підтримка', subtitle: 'Керування donate-сторінкою, способами підтримки та картками тих, хто підтримав.' },
         misc: { title: 'Інше', subtitle: 'Команда, соціальні посилання та додаткові налаштування вітрини.' },
+        nav: { section: 'Навігація', ariaLabel: 'Розділи адмінки', brandLabel: 'Відкрити вітрину Aleph Studio' },
+        header: { json: 'JSON', import: 'Імпорт', discard: 'Відкотити', apply: 'Застосувати', closeLabel: 'Закрити', themeLabel: 'Перемкнути тему' },
     },
 });
 
-const SOCIAL_ICON_MAP = Object.freeze({
-    youtube: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.101.38.172.883.22 1.402l.01.104.022.26.008.104c.065.914.073 1.77.074 1.957v.075c-.001.194-.01 1.108-.082 2.06l-.008.105-.009.104c-.05.572-.124 1.14-.235 1.558a2.01 2.01 0 0 1-1.415 1.42c-1.16.312-5.569.334-6.18.335h-.142c-.309 0-1.587-.006-2.927-.052l-.17-.006-.087-.004-.171-.007-.171-.007c-1.11-.049-2.167-.128-2.654-.26a2.01 2.01 0 0 1-1.415-1.419c-.111-.417-.185-.986-.235-1.558L.09 9.82l-.008-.104A31 31 0 0 1 0 7.68v-.123c.002-.215.01-.958.064-1.778l.007-.103.003-.052.008-.104.022-.26.01-.104c.048-.519.119-1.023.22-1.402a2.01 2.01 0 0 1 1.415-1.42c.487-.13 1.544-.21 2.654-.26l.17-.007.172-.006.086-.003.171-.007A100 100 0 0 1 7.858 2zM6.4 5.209v4.818l4.157-2.408z"/></svg>',
-    discord: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.545 2.907a13.2 13.2 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.2 12.2 0 0 0-3.658 0 8 8 0 0 0-.412-.833.05.05 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.04.04 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032q.003.022.021.037a13.3 13.3 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019q.463-.63.818-1.329a.05.05 0 0 0-.01-.059l-.018-.011a9 9 0 0 1-1.248-.595.05.05 0 0 1-.02-.066l.015-.019q.127-.095.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.05.05 0 0 1 .053.007q.121.1.248.195a.05.05 0 0 1-.004.085 8 8 0 0 1-1.249.594.05.05 0 0 0-.03.03.05.05 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.2 13.2 0 0 0 4.001-2.02.05.05 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.03.03 0 0 0-.02-.019m-8.198 7.307c-.789 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612m5.316 0c-.788 0-1.438-.724-1.438-1.612s.637-1.613 1.438-1.613c.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612"/></svg>',
-    telegram: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.287 5.906q-1.168.486-4.666 2.01-.567.225-.595.442c-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.243.294q.39.01.868-.32 3.269-2.206 3.374-2.23c.05-.012.12-.026.166.016s.042.12.037.141c-.03.129-1.227 1.241-1.846 1.817-.193.18-.33.307-.358.336a8 8 0 0 1-.188.186c-.38.366-.664.64.015 1.088.327.216.589.393.85.571.284.194.568.387.936.629q.14.092.27.187c.331.236.63.448.997.414.214-.02.435-.22.547-.82.265-1.417.786-4.486.906-5.751a1.4 1.4 0 0 0-.013-.315.34.34 0 0 0-.114-.217.53.53 0 0 0-.31-.093c-.3.005-.763.166-2.984 1.09"/></svg>',
+const ADMIN_MESSAGES = Object.freeze({
+    ru: {
+        editing: 'Редактирование',
+        editingMember: 'Редактирование участника',
+        noDescription: 'Нет описания',
+        draft: 'Черновик',
+        showcase: 'Витрина',
+        enabled: 'Включено',
+        draftClean: 'Без изменений',
+        draftDirty: 'Нужен apply',
+        draftReadyPublish: 'Готов к публикации',
+        draftReadySave: 'Готов к сохранению',
+        filesCount: '{0} файлов',
+        prepared: 'Подготовлено',
+        fileNoProduct: 'Выбери товар, чтобы привязать файл к его кнопке download.',
+        fileNone: 'Файл не выбран. Можно оставить ручную ссылку выше.',
+        selectProduct: 'Выбери продукт слева, чтобы открыть его рабочую область редактирования.',
+        searchEmpty: 'По вашему запросу ничего не найдено.',
+        noTeamCards: 'Пока нет карточек команды. Нажми «+ Участник» и собери блок «Наша команда». ',
+        noSupportMethods: 'Пока нет способов поддержки. Добавь хотя бы одну кнопку для donate-страницы.',
+        noSupporters: 'Пока нет карточек поддержавших. Добавь записи, чтобы собрать публичный список и топ-3.',
+        selectRouteProduct: 'Выбери продукт, чтобы редактировать route-модули.',
+        noRouteModules: 'В этой категории пока нет функций.',
+        newProduct: 'Новый продукт',
+        statusLater: 'позже',
+        newMember: 'Новый участник',
+        roleDefault: 'Роль',
+        newSupporter: 'Новый поддержавший',
+        supportLabel: 'Поддержать',
+        methodN: 'Способ {0}',
+        newFunction: 'Новая функция',
+        dashPreviewBehind: 'Preview отстаёт от формы',
+        dashPreviewSynced: 'Preview синхронизирован с черновиком',
+        dashLocalUnsaved: 'Есть локальные изменения, которые ещё не сохранены',
+        dashLocalFixed: 'Локальное состояние уже зафиксировано',
+        dashGithubPending: 'Публикация в GitHub ожидает запуска',
+        dashGithubNotRequired: 'Публикация в GitHub сейчас не требуется',
+        dashFilesQueued: 'Файлы в очереди на загрузку',
+        toastProductAdded: 'Новый продукт добавлен.',
+        toastProductRemoved: 'Товар удалён из редактора.',
+        toastTeamAdded: 'Новый участник добавлен.',
+        toastTeamRemoved: 'Участник удалён.',
+        toastDraftApplied: 'Черновик применён к странице.',
+        toastDraftDiscarded: 'Черновик отменён.',
+        toastJsonImported: 'JSON импортирован в редактор.',
+        toastJsonExported: 'JSON выгружен.',
+        toastJsonImportFailed: 'Не удалось импортировать JSON.',
+        toastFileTooLarge: 'GitHub Contents API не принимает файлы больше 100 MB.',
+        toastFileQueued: 'Файл добавлен в очередь GitHub sync.',
+        toastFileRemoved: 'Файл убран из очереди GitHub sync.'
+        toastGithubSaved: 'Сохранено для всех. Данные и файлы отправлены в GitHub, сайт обновится после публикации GitHub Pages.',
+        toastGithubFailed: 'Не удалось сохранить в GitHub.',
+        toastSavedLocalWithFiles: 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.',
+        toastSavedLocal: 'Локально сохранено. Изменения уже видны в этом браузере и в preview-вкладках с Главной.',
+        toastSavedNoStorage: 'Изменения применены, но localStorage недоступен в этом браузере.',
+        toastLocalCleared: 'Локальный черновик очищен. В этом браузере снова активна встроенная версия сайта.',
+        toastLocalClearFailed: 'Не удалось очистить localStorage в этом браузере.',
+        promptSelectFirst: 'Сначала выбери товар, потом прикрепляй файл.',
+        confirmDeleteProduct: 'Удалить товар?',
+        confirmDeleteTeamMember: 'Удалить участника команды?',
+        confirmDiscard: 'Отменить все неприменённые изменения и вернуться к сохранённой версии?',
+        confirmCloseUnsaved: 'Есть несохранённые изменения. Закрыть панель и потерять их?',
+        confirmClearLocal: 'Очистить локальный черновик и вернуть этот браузер к встроенной версии сайта?',
+        labelName: 'Имя',
+        labelSortOrder: 'Порядок',
+        ariaRemoveSupportMethod: 'Удалить способ поддержки',
+        ariaRemoveSupporter: 'Удалить карточку поддержавшего',
+    },
+    en: {
+        editing: 'Editing',
+        editingMember: 'Editing member',
+        noDescription: 'No description',
+        draft: 'Draft',
+        showcase: 'Showcase',
+        enabled: 'Enabled',
+        draftClean: 'No changes',
+        draftDirty: 'Apply required',
+        draftReadyPublish: 'Ready to publish',
+        draftReadySave: 'Ready to save',
+        filesCount: '{0} files',
+        prepared: 'Prepared',
+        fileNoProduct: 'Select a product to attach a file to its download button.',
+        fileNone: 'No file selected. You can keep a manual link above.',
+        selectProduct: 'Select a product on the left to open its editing workspace.',
+        searchEmpty: 'Nothing matches your search.',
+        noTeamCards: 'No team cards yet. Add a member to build the team section.',
+        noSupportMethods: 'No support methods yet. Add at least one button for the donate route.',
+        noSupporters: 'No supporters yet. Add cards to build the public list and top-3 block.',
+        selectRouteProduct: 'Select a product to edit route modules.',
+        noRouteModules: 'No functions in this category yet.',
+        newProduct: 'New product',
+        statusLater: 'later',
+        newMember: 'New member',
+        roleDefault: 'Role',
+        newSupporter: 'New supporter',
+        supportLabel: 'Support',
+        methodN: 'Method {0}',
+        newFunction: 'New function',
+        dashPreviewBehind: 'Preview is behind the form state',
+        dashPreviewSynced: 'Preview is synced with the draft',
+        dashLocalUnsaved: 'There are local changes not saved yet',
+        dashLocalFixed: 'Local state is already fixed',
+        dashGithubPending: 'GitHub publication is pending',
+        dashGithubNotRequired: 'GitHub publication is not required right now',
+        dashFilesQueued: 'Files queued for upload',
+        toastProductAdded: 'Product added.',
+        toastProductRemoved: 'Product removed.',
+        toastTeamAdded: 'Team member added.',
+        toastTeamRemoved: 'Team member removed.',
+        toastDraftApplied: 'Draft applied to the page.',
+        toastDraftDiscarded: 'Draft discarded.',
+        toastJsonImported: 'JSON imported into the editor.',
+        toastJsonExported: 'JSON exported.',
+        toastJsonImportFailed: 'Could not import JSON.',
+        toastFileTooLarge: 'GitHub Contents API does not accept files larger than 100 MB.',
+        toastFileQueued: 'File added to GitHub upload queue.',
+        toastFileRemoved: 'File removed from the GitHub queue.'
+        toastGithubSaved: 'Saved for everyone. Content and files were pushed to GitHub.',
+        toastGithubFailed: 'Could not save to GitHub.',
+        toastSavedLocalWithFiles: 'Saved locally. Re-select files before publishing them to GitHub.',
+        toastSavedLocal: 'Saved locally. Changes are now visible in this browser and in preview tabs opened from Home.',
+        toastSavedNoStorage: 'Changes were applied but localStorage is unavailable in this browser.',
+        toastLocalCleared: 'Local draft cleared. The embedded site version is active again in this browser.',
+        toastLocalClearFailed: 'Could not clear localStorage in this browser.',
+        promptSelectFirst: 'Select a product first, then attach a file.',
+        confirmDeleteProduct: 'Delete this product?',
+        confirmDeleteTeamMember: 'Delete this team member?',
+        confirmDiscard: 'Discard all unsaved changes and return to the saved version?',
+        confirmCloseUnsaved: 'There are unsaved changes. Close the panel and lose them?',
+        confirmClearLocal: 'Clear the local draft and return this browser to the embedded site version?',
+        labelName: 'Name',
+        labelSortOrder: 'Sort order',
+        ariaRemoveSupportMethod: 'Remove support method',
+        ariaRemoveSupporter: 'Remove supporter card',
+    },
+    ua: {
+        editing: 'Редагування',
+        editingMember: 'Редагування учасника',
+        noDescription: 'Немає опису',
+        draft: 'Чернетка',
+        showcase: 'Вітрина',
+        enabled: 'Увімкнено',
+        draftClean: 'Без змін',
+        draftDirty: 'Потрібно застосувати',
+        draftReadyPublish: 'Готово до публікації',
+        draftReadySave: 'Готово до збереження',
+        filesCount: '{0} файлів',
+        prepared: 'Підготовлено',
+        fileNoProduct: 'Вибери продукт, щоб прив\u2019язати файл до його кнопки download.',
+        fileNone: 'Файл не вибрано. Можна залишити ручне посилання вище.',
+        selectProduct: 'Вибери продукт ліворуч, щоб відкрити його робочу область редагування.',
+        searchEmpty: 'За запитом нічого не знайдено.',
+        noTeamCards: 'Поки немає карток команди. Додай учасника, щоб зібрати блок команди.',
+        noSupportMethods: 'Поки немає способів підтримки. Додай хоча б одну кнопку для donate-сторінки.',
+        noSupporters: 'Поки немає карток підтримувачів. Додай записи, щоб зібрати публічний список і топ-3.',
+        selectRouteProduct: 'Оберіть продукт, щоб редагувати route-модулі.',
+        noRouteModules: 'У цій категорії ще немає функцій.',
+        newProduct: 'Новий продукт',
+        statusLater: 'пізніше',
+        newMember: 'Новий учасник',
+        roleDefault: 'Роль',
+        newSupporter: 'Новий підтримувач',
+        supportLabel: 'Підтримати',
+        methodN: 'Спосіб {0}',
+        newFunction: 'Нова функція',
+        dashPreviewBehind: 'Preview відстає від форми',
+        dashPreviewSynced: 'Preview синхронізований із чернеткою',
+        dashLocalUnsaved: 'Є локальні зміни, які ще не збережені',
+        dashLocalFixed: 'Локальний стан уже зафіксований',
+        dashGithubPending: 'Публікація в GitHub очікує запуску',
+        dashGithubNotRequired: 'Публікація в GitHub зараз не потрібна',
+        dashFilesQueued: 'Файли в черзі на завантаження',
+        toastProductAdded: 'Продукт додано.',
+        toastProductRemoved: 'Продукт видалено.',
+        toastTeamAdded: 'Учасника додано.',
+        toastTeamRemoved: 'Учасника видалено.',
+        toastDraftApplied: 'Чернетку застосовано до сторінки.',
+        toastDraftDiscarded: 'Чернетку скасовано.',
+        toastJsonImported: 'JSON імпортовано в редактор.',
+        toastJsonExported: 'JSON експортовано.',
+        toastJsonImportFailed: 'Не вдалося імпортувати JSON.',
+        toastFileTooLarge: 'GitHub Contents API не приймає файли більше 100 MB.',
+        toastFileQueued: 'Файл додано до черги GitHub sync.',
+        toastFileRemoved: 'Файл прибрано з черги GitHub sync.'
+        toastGithubSaved: 'Збережено для всіх. Дані та файли відправлено в GitHub.',
+        toastGithubFailed: 'Не вдалося зберегти в GitHub.',
+        toastSavedLocalWithFiles: 'Збережено локально. Перед публікацією в GitHub вибери файли ще раз.',
+        toastSavedLocal: 'Збережено локально. Зміни вже видно в цьому браузері та у preview-вкладках з Головної.',
+        toastSavedNoStorage: 'Зміни застосовані, але localStorage недоступний у цьому браузері.',
+        toastLocalCleared: 'Локальну чернетку очищено. У цьому браузері знову активна вбудована версія сайту.',
+        toastLocalClearFailed: 'Не вдалося очистити localStorage у цьому браузері.',
+        promptSelectFirst: 'Спочатку вибери продукт, а потім прикріплюй файл.',
+        confirmDeleteProduct: 'Видалити цей продукт?',
+        confirmDeleteTeamMember: 'Видалити цього учасника команди?',
+        confirmDiscard: 'Скасувати всі незбережені зміни й повернутися до збереженої версії?',
+        confirmCloseUnsaved: 'Є незбережені зміни. Закрити панель і втратити їх?',
+        confirmClearLocal: 'Очистити локальну чернетку та повернути цей браузер до вбудованої версії сайту?',
+        labelName: 'Ім\'я',
+        labelSortOrder: 'Порядок',
+        ariaRemoveSupportMethod: 'Видалити спосіб підтримки',
+        ariaRemoveSupporter: 'Видалити картку підтримувача',
+    },
 });
+
+/** Look up an admin UI message by key, with optional `{0}`, `{1}` placeholders. */
+function getMsg(locale, key, ...args) {
+    const text = (ADMIN_MESSAGES[locale] || ADMIN_MESSAGES.ru)[key] || ADMIN_MESSAGES.ru[key] || key;
+    return args.length ? text.replace(/\{(\d+)}/g, (_, i) => args[+i] ?? '') : text;
+}
 
 function storageGet(key) {
     try {
@@ -126,7 +336,7 @@ function renderTeamAvatar(member, className) {
 }
 
 function renderSocialIcon(kind) {
-    return SOCIAL_ICON_MAP[kind] || SOCIAL_ICON_MAP.telegram;
+    return SOCIAL_ICON_SVG[kind] || SOCIAL_ICON_SVG.telegram;
 }
 
 function getAdminCopy(locale) {
@@ -135,9 +345,10 @@ function getAdminCopy(locale) {
 
 export function createEditorController({ renderSite, showToast, locale = 'ru' }) {
     const copy = getAdminCopy(locale);
+    const msg = (key, ...args) => getMsg(locale, key, ...args);
     const isStandaloneAdminPage = document.body.dataset.adminPage === 'true';
     const adminPageHref = new URL('../admin/', window.location.href).toString();
-    const adminHomeHref = document.body.dataset.adminHome || '../ru/';
+    const adminHomeHref = `../${locale}/`;
 
     const editorOverlayEl = document.getElementById('editorOverlay');
     const editorAccessTriggerEl = document.getElementById('editorAccessTrigger') || document.getElementById('logoLink');
@@ -226,50 +437,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const saveGithubBtnEl = document.getElementById('saveGithubBtn');
 
     if (!editorOverlayEl || !editorAdminTitleEl || !editorAdminSubtitleEl || !editorProductGridEl || !editorPanelEl) {
-        if (editorAccessTriggerEl && !isStandaloneAdminPage) {
-            let sequenceBuffer = [];
-            let editorAccessArmed = false;
-            let editorAccessTimer = null;
-
-            function disarmRedirectAccess() {
-                editorAccessArmed = false;
-                if (editorAccessTimer) {
-                    window.clearTimeout(editorAccessTimer);
-                    editorAccessTimer = null;
-                }
-            }
-
-            function armRedirectAccess() {
-                editorAccessArmed = true;
-                if (editorAccessTimer) window.clearTimeout(editorAccessTimer);
-                editorAccessTimer = window.setTimeout(() => {
-                    disarmRedirectAccess();
-                }, 12000);
-            }
-
-            editorAccessTriggerEl.addEventListener('click', (event) => {
-                if (!editorAccessArmed) return;
-                event.preventDefault();
-                disarmRedirectAccess();
-                sequenceBuffer = [];
-                navigateWithRouteTransition(adminPageHref);
-            });
-
-            document.addEventListener('keydown', (event) => {
-                const tag = document.activeElement?.tagName?.toLowerCase();
-                if (tag === 'input' || tag === 'textarea' || tag === 'select') return;
-
-                sequenceBuffer.push(event.key);
-                if (sequenceBuffer.length > SECRET_SEQUENCE.length) sequenceBuffer.shift();
-
-                const matches = SECRET_SEQUENCE.every((key, index) => sequenceBuffer[index] === key);
-                if (!matches) return;
-
-                sequenceBuffer = [];
-                armRedirectAccess();
-            });
-        }
-
         return {
             async initialize() {},
         };
@@ -289,12 +456,55 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const pendingProductUploads = new Map();
 
     if (editorEmptyStateEl) {
-        editorEmptyStateEl.textContent = locale === 'en'
-            ? 'Select a product on the left to open its editing workspace.'
-            : locale === 'ua'
-                ? 'Вибери продукт ліворуч, щоб відкрити його робочу область редагування.'
-                : 'Выбери продукт слева, чтобы открыть его рабочую область редактирования.';
+        editorEmptyStateEl.textContent = msg('selectProduct');
     }
+
+    /* ── Apply locale to static admin HTML elements ────────── */
+    (function applyAdminStaticCopy() {
+        document.documentElement.lang = locale === 'ua' ? 'uk' : locale;
+
+        /* Sidebar nav labels — reuse view titles from ADMIN_VIEW_COPY */
+        document.querySelectorAll('[data-admin-view]').forEach((link) => {
+            const view = link.dataset.adminView;
+            const label = link.querySelector('.dash-nav-label');
+            if (label && copy[view]) label.textContent = copy[view].title;
+        });
+
+        /* Nav section heading & aria */
+        const navSection = document.querySelector('.dash-nav-section');
+        if (navSection) navSection.textContent = copy.nav.section;
+        const navEl = document.querySelector('.dash-nav');
+        if (navEl) navEl.setAttribute('aria-label', copy.nav.ariaLabel);
+
+        /* Brand link locale */
+        const brandLink = document.querySelector('.dash-brand');
+        if (brandLink?.tagName === 'A') {
+            brandLink.href = adminHomeHref;
+            brandLink.setAttribute('aria-label', copy.nav.brandLabel);
+        }
+
+        /* Header action buttons */
+        const btnTextMap = {
+            exportJsonBtn:  copy.header.json,
+            importJsonBtn:  copy.header.import,
+            discardDraftBtn: copy.header.discard,
+            applyDraftBtn:  copy.header.apply,
+        };
+        for (const [id, text] of Object.entries(btnTextMap)) {
+            const btn = document.getElementById(id);
+            if (!btn) continue;
+            const textNode = [...btn.childNodes].filter((n) => n.nodeType === 3 && n.textContent.trim()).pop();
+            if (textNode) textNode.textContent = ` ${text} `;
+        }
+
+        /* Close button aria */
+        const closeBtn = document.querySelector('[data-close-editor]');
+        if (closeBtn) closeBtn.setAttribute('aria-label', copy.header.closeLabel);
+
+        /* Theme toggle aria */
+        const themeBtn = document.getElementById('themeBtn');
+        if (themeBtn) themeBtn.setAttribute('aria-label', copy.header.themeLabel);
+    })();
 
     function emitToast(message, kind = 'info') {
         if (typeof showToast === 'function') showToast(message, kind);
@@ -333,45 +543,27 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const rows = [
             {
                 dotClass: hasPreviewDiff ? 'is-warn' : 'is-ok',
-                label: locale === 'en'
-                    ? (hasPreviewDiff ? 'Preview is behind the form state' : 'Preview is synced with the draft')
-                    : locale === 'ua'
-                        ? (hasPreviewDiff ? 'Preview відстає від форми' : 'Preview синхронізований із чернеткою')
-                        : (hasPreviewDiff ? 'Preview отстаёт от формы' : 'Preview синхронизирован с черновиком'),
+                label: hasPreviewDiff ? msg('dashPreviewBehind') : msg('dashPreviewSynced'),
                 tagClass: hasPreviewDiff ? 'is-warn' : 'is-success',
                 tag: hasPreviewDiff ? 'APPLY' : 'OK',
             },
             {
                 dotClass: hasSavedDiff ? 'is-warn' : 'is-ok',
-                label: locale === 'en'
-                    ? (hasSavedDiff ? 'There are local changes not saved yet' : 'Local state is already fixed')
-                    : locale === 'ua'
-                        ? (hasSavedDiff ? 'Є локальні зміни, які ще не збережені' : 'Локальний стан уже зафіксований')
-                        : (hasSavedDiff ? 'Есть локальные изменения, которые ещё не сохранены' : 'Локальное состояние уже зафиксировано'),
+                label: hasSavedDiff ? msg('dashLocalUnsaved') : msg('dashLocalFixed'),
                 tagClass: hasSavedDiff ? 'is-warn' : 'is-success',
                 tag: hasSavedDiff ? 'SAVE' : 'SYNC',
             },
             {
                 dotClass: hasSavedDiff || uploadCount ? 'is-warn' : 'is-ok',
-                label: locale === 'en'
-                    ? (hasSavedDiff || uploadCount ? 'GitHub publication is pending' : 'GitHub publication is not required right now')
-                    : locale === 'ua'
-                        ? (hasSavedDiff || uploadCount ? 'Публікація в GitHub очікує запуску' : 'Публікація в GitHub зараз не потрібна')
-                        : (hasSavedDiff || uploadCount ? 'Публикация в GitHub ожидает запуска' : 'Публикация в GitHub сейчас не требуется'),
+                label: (hasSavedDiff || uploadCount) ? msg('dashGithubPending') : msg('dashGithubNotRequired'),
                 tagClass: hasSavedDiff || uploadCount ? 'is-warn' : 'is-muted',
                 tag: hasSavedDiff || uploadCount ? 'PUSH' : 'IDLE',
             },
             {
                 dotClass: uploadCount ? 'is-warn' : 'is-ok',
-                label: locale === 'en'
-                    ? 'Files queued for upload'
-                    : locale === 'ua'
-                        ? 'Файли в черзі на завантаження'
-                        : 'Файлы в очереди на загрузку',
+                label: msg('dashFilesQueued'),
                 tagClass: uploadCount ? 'is-warn' : 'is-muted',
-                tag: uploadCount
-                    ? (locale === 'en' ? `${uploadCount} files` : locale === 'ua' ? `${uploadCount} файлів` : `${uploadCount} файлов`)
-                    : '0',
+                tag: uploadCount ? msg('filesCount', uploadCount) : '0',
             },
         ];
 
@@ -391,16 +583,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         if (draftStateChipEl) {
             let stateClass = 'is-clean';
-            let stateLabel = locale === 'en' ? 'No changes' : locale === 'ua' ? 'Без змін' : 'Без изменений';
+            let stateLabel = msg('draftClean');
 
             if (hasPreviewDiff) {
                 stateClass = 'is-dirty';
-                stateLabel = locale === 'en' ? 'Apply required' : locale === 'ua' ? 'Потрібно застосувати' : 'Нужен apply';
+                stateLabel = msg('draftDirty');
             } else if (hasSavedDiff || hasUploads) {
                 stateClass = 'is-ready';
-                stateLabel = hasUploads
-                    ? (locale === 'en' ? 'Ready to publish' : locale === 'ua' ? 'Готово до публікації' : 'Готов к публикации')
-                    : (locale === 'en' ? 'Ready to save' : locale === 'ua' ? 'Готово до збереження' : 'Готов к сохранению');
+                stateLabel = hasUploads ? msg('draftReadyPublish') : msg('draftReadySave');
             }
 
             draftStateChipEl.className = `dash-draft-chip ${stateClass}`;
@@ -464,11 +654,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!editorFieldDownloadFileMetaEl) return;
 
         if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
-            editorFieldDownloadFileMetaEl.textContent = locale === 'en'
-                ? 'Select a product to attach a file to its download button.'
-                : locale === 'ua'
-                    ? 'Вибери продукт, щоб прив’язати файл до його кнопки download.'
-                    : 'Выбери товар, чтобы привязать файл к его кнопке download.';
+            editorFieldDownloadFileMetaEl.textContent = msg('fileNoProduct');
             if (clearDownloadFileBtnEl) clearDownloadFileBtnEl.hidden = true;
             if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
             return;
@@ -477,17 +663,13 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const product = editorData.products[editorSelectedIndex];
         const upload = getPendingProductUpload(product.id);
         if (!upload) {
-            editorFieldDownloadFileMetaEl.textContent = locale === 'en'
-                ? 'No file selected. You can keep a manual link above.'
-                : locale === 'ua'
-                    ? 'Файл не вибрано. Можна залишити ручне посилання вище.'
-                    : 'Файл не выбран. Можно оставить ручную ссылку выше.';
+            editorFieldDownloadFileMetaEl.textContent = msg('fileNone');
             if (clearDownloadFileBtnEl) clearDownloadFileBtnEl.hidden = true;
             if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
             return;
         }
 
-        editorFieldDownloadFileMetaEl.textContent = `${locale === 'en' ? 'Prepared' : locale === 'ua' ? 'Підготовлено' : 'Подготовлено'}: ${upload.originalName} (${formatBytes(upload.file.size)}) -> ./${upload.relativePath}`;
+        editorFieldDownloadFileMetaEl.textContent = `${msg('prepared')}: ${upload.originalName} (${formatBytes(upload.file.size)}) -> ./${upload.relativePath}`;
         if (clearDownloadFileBtnEl) clearDownloadFileBtnEl.hidden = false;
     }
 
@@ -543,7 +725,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function stageProductDownloadFile(file) {
         if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
-            emitToast(locale === 'en' ? 'Select a product first, then attach a file.' : locale === 'ua' ? 'Спочатку вибери продукт, а потім прикріплюй файл.' : 'Сначала выбери товар, потом прикрепляй файл.', 'error');
+            emitToast(msg('promptSelectFirst'), 'error');
             if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
             return;
         }
@@ -554,7 +736,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
 
         if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
-            emitToast('GitHub Contents API не принимает файлы больше 100 MB.', 'error');
+            emitToast(msg('toastFileTooLarge'), 'error');
             if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
             return;
         }
@@ -568,7 +750,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderProductUploadMeta();
         renderEditorGrid();
         syncDraftControls();
-        emitToast(locale === 'en' ? 'File added to GitHub upload queue.' : locale === 'ua' ? 'Файл додано до черги GitHub sync.' : 'Файл добавлен в очередь GitHub sync.', 'success');
+        emitToast(msg('toastFileQueued'), 'success');
     }
 
     function getProductInitials(name) {
@@ -583,7 +765,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function getEditorCardSummary(product) {
         const source = String(product.summary || product.note || '').replace(/\s+/g, ' ').trim();
-        if (!source) return locale === 'en' ? 'No description' : locale === 'ua' ? 'Немає опису' : 'Нет описания';
+        if (!source) return msg('noDescription');
         return source.length > 120 ? `${source.slice(0, 117).trimEnd()}...` : source;
     }
 
@@ -605,7 +787,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function renderEditorStageBadge(flag) {
         const meta = getFlagMeta(flag);
-        if (!meta) return `<span class="dash-badge">${locale === 'en' ? 'Draft' : locale === 'ua' ? 'Чернетка' : 'Черновик'}</span>`;
+        if (!meta) return `<span class="dash-badge">${msg('draft')}</span>`;
         return `<span class="dash-badge ${flag}">${meta.label}</span>`;
     }
 
@@ -664,14 +846,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         const routeModules = ensureSelectedProductRouteModules();
         if (!routeModules) {
-            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${locale === 'en' ? 'Select a product to edit route modules.' : locale === 'ua' ? 'Оберіть продукт, щоб редагувати route-модулі.' : 'Выбери продукт, чтобы редактировать route-модули.'}</div>`;
+            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${msg('selectRouteProduct')}</div>`;
             return;
         }
 
         const activeKey = getSelectedRouteModuleKey();
         const items = routeModules[activeKey] || [];
         if (!items.length) {
-            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${locale === 'en' ? 'No functions in this category yet.' : locale === 'ua' ? 'У цій категорії ще немає функцій.' : 'В этой категории пока нет функций.'}</div>`;
+            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${msg('noRouteModules')}</div>`;
             return;
         }
 
@@ -680,7 +862,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 <input type="text" value="${escapeHtml(item.name)}" data-route-module-name="${index}" aria-label="${escapeHtml(getRouteModuleLabel(activeKey))}">
                 <label class="dash-route-toggle">
                     <input type="checkbox" data-route-module-enabled="${index}" ${item.enabled ? 'checked' : ''}>
-                    <span>${locale === 'en' ? 'Enabled' : locale === 'ua' ? 'Увімкнено' : 'Включено'}</span>
+                    <span>${msg('enabled')}</span>
                 </label>
                 <button type="button" class="dash-btn dash-sm dash-route-remove" data-route-module-remove="${index}">✕</button>
             </div>
@@ -750,8 +932,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const index = supportPage.buttons.length;
         return normalizeSupportButton({
             id: `support-${Date.now()}`,
-            label: locale === 'en' ? 'Support' : locale === 'ua' ? 'Підтримати' : 'Поддержать',
-            title: locale === 'en' ? `Method ${index + 1}` : locale === 'ua' ? `Спосіб ${index + 1}` : `Способ ${index + 1}`,
+            label: msg('supportLabel'),
+            title: msg('methodN', index + 1),
             note: '',
             url: '',
             sortOrder: index + 1,
@@ -763,7 +945,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const index = supportPage.supporters.length;
         return normalizeSupporter({
             id: `supporter-${Date.now()}`,
-            name: locale === 'en' ? 'New supporter' : locale === 'ua' ? 'Новий підтримувач' : 'Новый поддержавший',
+            name: msg('newSupporter'),
             avatarUrl: '',
             amountUsd: 0,
             sortOrder: index + 1,
@@ -784,7 +966,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderSupportSummary();
 
         if (!supportPage.buttons.length) {
-            supportButtonsListEl.innerHTML = `<div class="dash-support-empty">${locale === 'en' ? 'No support methods yet. Add at least one button for the donate route.' : locale === 'ua' ? 'Поки немає способів підтримки. Додай хоча б одну кнопку для donate-сторінки.' : 'Пока нет способов поддержки. Добавь хотя бы одну кнопку для donate-страницы.'}</div>`;
+            supportButtonsListEl.innerHTML = `<div class="dash-support-empty">${msg('noSupportMethods')}</div>`;
             return;
         }
 
@@ -792,8 +974,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             <article class="dash-inline-form" data-support-button-row="${index}">
                 <div class="dash-inline-form-head">
                     <span class="dash-inline-pill">${escapeHtml(button.id)}</span>
-                    <span class="dash-inline-form-title">${escapeHtml(button.label || button.title || (locale === 'en' ? `Method ${index + 1}` : locale === 'ua' ? `Спосіб ${index + 1}` : `Способ ${index + 1}`))}</span>
-                    <button type="button" class="dash-btn-icon dash-support-remove" data-remove-support-button="${index}" aria-label="Удалить способ поддержки">
+                    <span class="dash-inline-form-title">${escapeHtml(button.label || button.title || msg('methodN', index + 1))}</span>
+                    <button type="button" class="dash-btn-icon dash-support-remove" data-remove-support-button="${index}" aria-label="${msg('ariaRemoveSupportMethod')}">
                         <span class="material-icons">delete</span>
                     </button>
                 </div>
@@ -803,7 +985,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                     <div class="dash-field"><label>Title</label><input type="text" value="${escapeHtml(button.title)}" data-support-button-field="title" data-index="${index}"></div>
                     <div class="dash-field"><label>Note</label><input type="text" value="${escapeHtml(button.note)}" data-support-button-field="note" data-index="${index}"></div>
                     <div class="dash-field"><label>URL</label><input type="url" value="${escapeHtml(button.url)}" data-support-button-field="url" data-index="${index}" placeholder="https://..."></div>
-                    <div class="dash-field"><label>Порядок</label><input type="number" value="${escapeHtml(String(button.sortOrder))}" data-support-button-field="sortOrder" data-index="${index}"></div>
+                    <div class="dash-field"><label>${msg('labelSortOrder')}</label><input type="number" value="${escapeHtml(String(button.sortOrder))}" data-support-button-field="sortOrder" data-index="${index}"></div>
                 </div>
             </article>
         `).join('');
@@ -815,7 +997,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderSupportSummary();
 
         if (!supportPage.supporters.length) {
-            supportersAdminListEl.innerHTML = `<div class="dash-support-empty">${locale === 'en' ? 'No supporters yet. Add cards to build the public list and top-3 block.' : locale === 'ua' ? 'Поки немає карток підтримувачів. Додай записи, щоб зібрати публічний список і топ-3.' : 'Пока нет карточек поддержавших. Добавь записи, чтобы собрать публичный список и топ-3.'}</div>`;
+            supportersAdminListEl.innerHTML = `<div class="dash-support-empty">${msg('noSupporters')}</div>`;
             return;
         }
 
@@ -824,19 +1006,19 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 <div class="dash-inline-form-head">
                     <div class="dash-supporter-preview">
                         ${renderSupporterAvatar(supporter)}
-                        <span class="dash-supporter-name">${escapeHtml(supporter.name || (locale === 'en' ? 'New supporter' : locale === 'ua' ? 'Новий підтримувач' : 'Новый поддержавший'))}</span>
+                        <span class="dash-supporter-name">${escapeHtml(supporter.name || msg('newSupporter'))}</span>
                         <span class="dash-supporter-amount">${escapeHtml(formatSupportUsd(supporter.amountUsd))}</span>
                     </div>
-                    <button type="button" class="dash-btn-icon dash-support-remove" data-remove-supporter="${index}" aria-label="Удалить карточку поддержавшего">
+                    <button type="button" class="dash-btn-icon dash-support-remove" data-remove-supporter="${index}" aria-label="${msg('ariaRemoveSupporter')}">
                         <span class="material-icons">delete</span>
                     </button>
                 </div>
                 <div class="dash-inline-form-grid">
                     <div class="dash-field"><label>ID</label><input type="text" value="${escapeHtml(supporter.id)}" data-supporter-field="id" data-index="${index}"></div>
-                    <div class="dash-field"><label>Имя</label><input type="text" value="${escapeHtml(supporter.name)}" data-supporter-field="name" data-index="${index}"></div>
+                    <div class="dash-field"><label>${msg('labelName')}</label><input type="text" value="${escapeHtml(supporter.name)}" data-supporter-field="name" data-index="${index}"></div>
                     <div class="dash-field"><label>Avatar URL</label><input type="url" value="${escapeHtml(supporter.avatarUrl)}" data-supporter-field="avatarUrl" data-index="${index}" placeholder="https://..."></div>
                     <div class="dash-field"><label>USD</label><input type="number" min="0" step="0.01" value="${escapeHtml(String(supporter.amountUsd))}" data-supporter-field="amountUsd" data-index="${index}"></div>
-                    <div class="dash-field"><label>Порядок</label><input type="number" value="${escapeHtml(String(supporter.sortOrder))}" data-supporter-field="sortOrder" data-index="${index}"></div>
+                    <div class="dash-field"><label>${msg('labelSortOrder')}</label><input type="number" value="${escapeHtml(String(supporter.sortOrder))}" data-supporter-field="sortOrder" data-index="${index}"></div>
                 </div>
             </article>
         `).join('');
@@ -929,7 +1111,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function getTeamCardSummary(member) {
         const source = String(member.description || '').replace(/\s+/g, ' ').trim();
-        if (!source) return locale === 'en' ? 'No description' : locale === 'ua' ? 'Немає опису' : 'Нет описания';
+        if (!source) return msg('noDescription');
         return source.length > 100 ? `${source.slice(0, 97).trimEnd()}...` : source;
     }
 
@@ -955,7 +1137,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!teamGridEl) return;
 
         if (!entries.length) {
-            teamGridEl.innerHTML = `<div class="dash-empty-state">${locale === 'en' ? 'No team cards yet. Add a member to build the team section.' : locale === 'ua' ? 'Поки немає карток команди. Додай учасника, щоб зібрати блок команди.' : 'Пока нет карточек команды. Нажми «+ Участник» и собери блок «Наша команда». '}</div>`;
+            teamGridEl.innerHTML = `<div class="dash-empty-state">${msg('noTeamCards')}</div>`;
             renderHomeDashboard();
             return;
         }
@@ -983,7 +1165,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!editorData.team[index]) return;
         teamSelectedIndex = index;
         const member = editorData.team[index];
-        if (teamEditorTitleEl) teamEditorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${member.name}`;
+        if (teamEditorTitleEl) teamEditorTitleEl.textContent = `${msg('editing')} — ${member.name}`;
         fillTeamForm(member);
         if (teamEditorEl) {
             teamEditorEl.hidden = false;
@@ -1006,7 +1188,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             teamEditorEmptyEl.hidden = false;
             teamEditorEmptyEl.setAttribute('aria-hidden', 'false');
         }
-        if (teamEditorTitleEl) teamEditorTitleEl.textContent = locale === 'en' ? 'Editing member' : locale === 'ua' ? 'Редагування учасника' : 'Редактирование участника';
+        if (teamEditorTitleEl) teamEditorTitleEl.textContent = msg('editingMember');
         clearTeamForm();
         if (renderGrid) renderTeamGrid();
     }
@@ -1015,8 +1197,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const count = editorData.team.length + 1;
         return normalizeTeamMember({
             id: `team-member-${Date.now()}`,
-            name: locale === 'en' ? 'New member' : locale === 'ua' ? 'Новий учасник' : 'Новый участник',
-            role: locale === 'en' ? 'Role' : locale === 'ua' ? 'Роль' : 'Роль',
+            name: msg('newMember'),
+            role: msg('roleDefault'),
             avatarUrl: '',
             description: '',
             sortOrder: count,
@@ -1043,7 +1225,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!syncSelectedTeamMemberFromForm()) return false;
         const member = editorData.team[teamSelectedIndex];
         if (member && teamEditorTitleEl) {
-            teamEditorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${member.name}`;
+            teamEditorTitleEl.textContent = `${msg('editing')} — ${member.name}`;
         }
         if (refreshGrid) renderTeamGrid();
         return true;
@@ -1053,7 +1235,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!syncSelectedTeamMemberFromForm()) return false;
         const member = editorData.team[teamSelectedIndex];
         if (member && teamEditorTitleEl) {
-            teamEditorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${member.name}`;
+            teamEditorTitleEl.textContent = `${msg('editing')} — ${member.name}`;
         }
         if (refreshGrid) renderTeamGrid();
         return true;
@@ -1087,26 +1269,26 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorData.team.push(createEmptyTeamMember());
         openTeamEditor(editorData.team.length - 1);
         syncDraftControls();
-        emitToast(locale === 'en' ? 'Team member added.' : locale === 'ua' ? 'Учасника додано.' : 'Новый участник добавлен.', 'success');
+        emitToast(msg('toastTeamAdded'), 'success');
     }
 
     function deleteTeamMember() {
         if (teamSelectedIndex < 0 || !editorData.team[teamSelectedIndex]) return;
-        if (!window.confirm(locale === 'en' ? 'Delete this team member?' : locale === 'ua' ? 'Видалити цього учасника команди?' : 'Удалить участника команды?')) return;
+        if (!window.confirm(msg('confirmDeleteTeamMember'))) return;
 
         editorData.team.splice(teamSelectedIndex, 1);
         if (!editorData.team.length) {
             closeTeamEditor(false);
             renderTeamGrid();
             syncDraftControls();
-            emitToast(locale === 'en' ? 'Team member removed.' : locale === 'ua' ? 'Учасника видалено.' : 'Участник удалён.', 'success');
+            emitToast(msg('toastTeamRemoved'), 'success');
             return;
         }
 
         const nextIndex = Math.min(teamSelectedIndex, editorData.team.length - 1);
         openTeamEditor(nextIndex);
         syncDraftControls();
-        emitToast(locale === 'en' ? 'Team member removed.' : locale === 'ua' ? 'Учасника видалено.' : 'Участник удалён.', 'success');
+        emitToast(msg('toastTeamRemoved'), 'success');
     }
 
     function syncEditorTabs() {
@@ -1152,7 +1334,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         const entries = getEditorEntries();
         if (!entries.length) {
-            editorProductGridEl.innerHTML = `<div class="dash-empty-state">${locale === 'en' ? 'Nothing matches your search.' : locale === 'ua' ? 'За запитом нічого не знайдено.' : 'По вашему запросу ничего не найдено.'}</div>`;
+            editorProductGridEl.innerHTML = `<div class="dash-empty-state">${msg('searchEmpty')}</div>`;
             renderHomeDashboard();
             return;
         }
@@ -1163,7 +1345,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 product.id || 'product',
                 product.version ? `v${product.version}` : '',
                 product.featured
-                    ? (locale === 'en' ? 'Showcase' : locale === 'ua' ? 'Вітрина' : 'Витрина')
+                    ? msg('showcase')
                     : '',
             ].filter(Boolean);
 
@@ -1193,7 +1375,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!editorData.products[index]) return;
         editorSelectedIndex = index;
         const product = editorData.products[index];
-        if (editorTitleEl) editorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${product.title}`;
+        if (editorTitleEl) editorTitleEl.textContent = `${msg('editing')} — ${product.title}`;
         fillEditorForm(product);
         syncProductEditorState();
         renderEditorGrid();
@@ -1201,7 +1383,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function closeProductEditor(renderGrid = true) {
         editorSelectedIndex = -1;
-        if (editorTitleEl) editorTitleEl.textContent = locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование';
+        if (editorTitleEl) editorTitleEl.textContent = msg('editing');
         clearEditorForm();
         syncProductEditorState();
         if (renderGrid) renderEditorGrid();
@@ -1270,11 +1452,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function closeEditor({ force = false } = {}) {
         if (!force && hasUnsavedDraftChanges()) {
-            const ok = window.confirm(locale === 'en'
-                ? 'There are unsaved changes. Close the panel and lose them?'
-                : locale === 'ua'
-                    ? 'Є незбережені зміни. Закрити панель і втратити їх?'
-                    : 'Есть несохранённые изменения. Закрыть панель и потерять их?');
+            const ok = window.confirm(msg('confirmCloseUnsaved'));
             if (!ok) return false;
             resetEditorDraftToSaved();
         }
@@ -1298,11 +1476,11 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const count = editorData.products.length + 1;
         return normalizeProduct({
             id: `new-product-${Date.now()}`,
-            title: locale === 'en' ? 'New product' : locale === 'ua' ? 'Новий продукт' : 'Новый продукт',
+            title: msg('newProduct'),
             version: 'x',
             tag: `product ${String(count).padStart(2, '0')}`,
             flag: '',
-            status: locale === 'en' ? 'later' : locale === 'ua' ? 'пізніше' : 'позже',
+            status: msg('statusLater'),
             featured: false,
             featuredOrder: count,
             sortOrder: count,
@@ -1369,7 +1547,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!syncSelectedProductFromForm()) return false;
         const product = editorData.products[editorSelectedIndex];
         if (product && editorTitleEl) {
-            editorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${product.title}`;
+            editorTitleEl.textContent = `${msg('editing')} — ${product.title}`;
         }
         if (refreshGrid) renderEditorGrid();
         return true;
@@ -1388,7 +1566,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!syncSelectedProductFromForm()) return false;
         const product = editorData.products[editorSelectedIndex];
         if (product && editorTitleEl) {
-            editorTitleEl.textContent = `${locale === 'en' ? 'Editing' : locale === 'ua' ? 'Редагування' : 'Редактирование'} — ${product.title}`;
+            editorTitleEl.textContent = `${msg('editing')} — ${product.title}`;
         }
         if (refreshGrid) renderEditorGrid();
         return true;
@@ -1422,12 +1600,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorData.products.push(createEmptyProduct());
         openProductEditor(editorData.products.length - 1);
         syncDraftControls();
-        emitToast(locale === 'en' ? 'Product added.' : locale === 'ua' ? 'Продукт додано.' : 'Новый продукт добавлен.', 'success');
+        emitToast(msg('toastProductAdded'), 'success');
     }
 
     function deleteProduct() {
         if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return;
-        if (!window.confirm(locale === 'en' ? 'Delete this product?' : locale === 'ua' ? 'Видалити цей продукт?' : 'Удалить товар?')) return;
+        if (!window.confirm(msg('confirmDeleteProduct'))) return;
 
         pendingProductUploads.delete(editorData.products[editorSelectedIndex].id);
         editorData.products.splice(editorSelectedIndex, 1);
@@ -1436,7 +1614,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const nextIndex = Math.min(editorSelectedIndex, editorData.products.length - 1);
         openProductEditor(nextIndex);
         syncDraftControls();
-        emitToast(locale === 'en' ? 'Product removed.' : locale === 'ua' ? 'Продукт видалено.' : 'Товар удалён из редактора.', 'success');
+        emitToast(msg('toastProductRemoved'), 'success');
     }
 
     function exportEditorJson() {
@@ -1470,7 +1648,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderAdminView();
         renderProductUploadMeta();
         syncDraftControls();
-        emitToast(locale === 'en' ? 'JSON imported into the editor.' : locale === 'ua' ? 'JSON імпортовано в редактор.' : 'JSON импортирован в редактор.', 'success');
+        emitToast(msg('toastJsonImported'), 'success');
     }
 
     function saveEditorDataLocally() {
@@ -1484,14 +1662,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function handleApplyDraft() {
         commitAllEditorState();
         applyEditorDataToPreview();
-        emitToast(locale === 'en' ? 'Draft applied to the page.' : locale === 'ua' ? 'Чернетку застосовано до сторінки.' : 'Черновик применён к странице.', 'success');
+        emitToast(msg('toastDraftApplied'), 'success');
     }
 
     function handleDiscardDraft() {
         if (!hasUnsavedDraftChanges()) return;
-        if (!window.confirm(locale === 'en' ? 'Discard all unsaved changes and return to the saved version?' : locale === 'ua' ? 'Скасувати всі незбережені зміни й повернутися до збереженої версії?' : 'Отменить все неприменённые изменения и вернуться к сохранённой версии?')) return;
+        if (!window.confirm(msg('confirmDiscard'))) return;
         resetEditorDraftToSaved();
-        emitToast(locale === 'en' ? 'Draft discarded.' : locale === 'ua' ? 'Чернетку скасовано.' : 'Черновик отменён.', 'info');
+        emitToast(msg('toastDraftDiscarded'), 'info');
     }
 
     function refreshAdminAfterSave() {
@@ -1511,10 +1689,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         refreshAdminAfterSave();
         emitToast(
             stored
-                ? (hadUploads
-                    ? (locale === 'en' ? 'Saved locally. Re-select files before publishing them to GitHub.' : locale === 'ua' ? 'Збережено локально. Перед публікацією в GitHub вибери файли ще раз.' : 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.')
-                    : (locale === 'en' ? 'Saved locally. Changes are now visible in this browser and in preview tabs opened from Home.' : locale === 'ua' ? 'Збережено локально. Зміни вже видно в цьому браузері та у preview-вкладках з Головної.' : 'Локально сохранено. Изменения уже видны в этом браузере и в preview-вкладках с Главной.'))
-                : (locale === 'en' ? 'Changes were applied but localStorage is unavailable in this browser.' : locale === 'ua' ? 'Зміни застосовані, але localStorage недоступний у цьому браузері.' : 'Изменения применены, но localStorage недоступен в этом браузере.'),
+                ? (hadUploads ? msg('toastSavedLocalWithFiles') : msg('toastSavedLocal'))
+                : msg('toastSavedNoStorage'),
             stored && !hadUploads ? 'success' : 'info',
         );
     }
@@ -1537,16 +1713,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             if (githubTokenEl) githubTokenEl.value = '';
             refreshAdminAfterSave();
             emitToast(
-                locale === 'en'
-                    ? 'Saved for everyone. Content and files were pushed to GitHub.'
-                    : locale === 'ua'
-                        ? 'Збережено для всіх. Дані та файли відправлено в GitHub.'
-                        : 'Сохранено для всех. Данные и файлы отправлены в GitHub, сайт обновится после публикации GitHub Pages.',
+                msg('toastGithubSaved'),
                 'success',
             );
         } catch (error) {
             syncDraftControls();
-            emitToast(error?.message || (locale === 'en' ? 'Could not save to GitHub.' : locale === 'ua' ? 'Не вдалося зберегти в GitHub.' : 'Не удалось сохранить в GitHub.'), 'error');
+            emitToast(error?.message || msg('toastGithubFailed'), 'error');
         }
     }
 
@@ -1610,13 +1782,13 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     clearDownloadFileBtnEl?.addEventListener('click', () => {
         clearStagedProductDownloadFile();
-        emitToast(locale === 'en' ? 'File removed from the GitHub queue.' : locale === 'ua' ? 'Файл прибрано з черги GitHub sync.' : 'Файл убран из очереди GitHub sync.', 'info');
+        emitToast(msg('toastFileRemoved'), 'info');
     });
 
     exportJsonBtnEl?.addEventListener('click', () => {
         commitAllEditorState();
         exportEditorJson();
-        emitToast(locale === 'en' ? 'JSON exported.' : locale === 'ua' ? 'JSON експортовано.' : 'JSON выгружен.', 'success');
+        emitToast(msg('toastJsonExported'), 'success');
     });
 
     importJsonBtnEl?.addEventListener('click', () => importJsonInputEl?.click());
@@ -1628,7 +1800,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         try {
             await importEditorJson(file);
         } catch {
-            emitToast(locale === 'en' ? 'Could not import JSON.' : locale === 'ua' ? 'Не вдалося імпортувати JSON.' : 'Не удалось импортировать JSON.', 'error');
+            emitToast(msg('toastJsonImportFailed'), 'error');
         }
         input.value = '';
     });
@@ -1642,7 +1814,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!routeModules) return;
         const activeKey = getSelectedRouteModuleKey();
         routeModules[activeKey].push({
-            name: locale === 'en' ? 'New function' : locale === 'ua' ? 'Нова функція' : 'Новая функция',
+            name: msg('newFunction'),
             enabled: true,
         });
         renderRouteModuleEditor();
@@ -1760,11 +1932,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     });
 
     clearLocalBtnEl?.addEventListener('click', () => {
-        if (!window.confirm(locale === 'en'
-            ? 'Clear the local draft and return this browser to the embedded site version?'
-            : locale === 'ua'
-                ? 'Очистити локальну чернетку та повернути цей браузер до вбудованої версії сайту?'
-                : 'Очистить локальный черновик и вернуть этот браузер к встроенной версии сайта?')) {
+        if (!window.confirm(msg('confirmClearLocal'))) {
             return;
         }
 
@@ -1774,9 +1942,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             resetEditorDraftToSaved();
         }
         emitToast(
-            cleared
-                ? (locale === 'en' ? 'Local draft cleared. The embedded site version is active again in this browser.' : locale === 'ua' ? 'Локальну чернетку очищено. У цьому браузері знову активна вбудована версія сайту.' : 'Локальный черновик очищен. В этом браузере снова активна встроенная версия сайта.')
-                : (locale === 'en' ? 'Could not clear localStorage in this browser.' : locale === 'ua' ? 'Не вдалося очистити localStorage у цьому браузері.' : 'Не удалось очистить localStorage в этом браузере.'),
+            cleared ? msg('toastLocalCleared') : msg('toastLocalClearFailed'),
             cleared ? 'success' : 'error',
         );
     });
