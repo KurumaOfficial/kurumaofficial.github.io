@@ -2432,6 +2432,10 @@ button {
   cursor: pointer;
 }
 
+[data-theme="light"] .dash-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b6760'/%3E%3C/svg%3E");
+}
+
 .dash-inline-note {
   font-size: 10px;
   letter-spacing: 0.08em;

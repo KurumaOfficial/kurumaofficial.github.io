@@ -132,7 +132,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-* {
+*:not(svg *):not(canvas) {
     transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
 }
 
@@ -948,21 +948,23 @@ section {
 
 /* ── §14 Route Transitions ────────────────────────────────── */
 
-body.route-transitions {
-    animation: route-enter 320ms ease both;
+@media (prefers-reduced-motion: no-preference) {
+    body.route-transitions {
+        animation: aleph-route-enter 320ms ease both;
+    }
+
+    body.route-leaving,
+    body.page-leaving {
+        opacity: 0.64;
+        transform: translateY(10px);
+        pointer-events: none;
+        transition: opacity 0.22s ease, transform 0.22s ease;
+    }
 }
 
 body.route-ready {
     opacity: 1;
     transform: translateY(0);
-}
-
-body.route-leaving,
-body.page-leaving {
-    opacity: 0.64;
-    transform: translateY(10px);
-    pointer-events: none;
-    transition: opacity 0.22s ease, transform 0.22s ease;
 }
 
 /* ── §15 Team ─────────────────────────────────────────────── */
@@ -1447,7 +1449,7 @@ footer {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes route-enter {
+@keyframes aleph-route-enter {
     from { opacity: 0.72; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
 }

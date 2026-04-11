@@ -49,7 +49,7 @@ export function initReveal(watchRoots = []) {
         if (root) mutationObs.observe(root, { childList: true, subtree: true });
     }
     /* Also watch body for top-level additions. */
-    mutationObs.observe(document.body, { childList: true, subtree: false });
+    mutationObs.observe(document.body, { childList: true, subtree: true });
 
     function destroy() {
         observer.disconnect();
