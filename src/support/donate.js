@@ -871,6 +871,8 @@ function spawnGoldFX(canvas, amount, tier) {
         cancelAnimationFrame(frameId);
         observer.disconnect();
         unsubscribeResize();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = canvas.height = 0;
     };
 }
 
@@ -1082,6 +1084,8 @@ function spawnPlatinumFX(canvas, amount, tier) {
         cancelAnimationFrame(frameId);
         observer.disconnect();
         unsubscribeResize();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = canvas.height = 0;
     };
 }
 

@@ -592,6 +592,16 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     let _draftStateCache = null;
     let _draftStateCacheRaf = 0;
+    let _syncDraftRaf = 0;
+
+    function scheduleSyncDraftControls() {
+        if (!_syncDraftRaf) {
+            _syncDraftRaf = requestAnimationFrame(() => {
+                _syncDraftRaf = 0;
+                syncDraftControls();
+            });
+        }
+    }
 
     function invalidateDraftState() {
         _draftStateCache = null;
@@ -1392,7 +1402,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             description: teamFieldBioEl?.value,
             sortOrder: toNumber(teamFieldOrderEl?.value, current.sortOrder || teamSelectedIndex + 1),
         }, teamSelectedIndex);
-        syncDraftControls();
+        scheduleSyncDraftControls();
         return true;
     }
 
@@ -1731,7 +1741,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
 
         renderProductUploadMeta();
-        syncDraftControls();
+        scheduleSyncDraftControls();
         return true;
     }
 
@@ -1970,19 +1980,23 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorFieldTagEl,
         editorFieldVersionEl,
         editorFieldOrderEl,
-        editorFieldStageEl,
-        editorFieldToneEl,
-        editorFieldStatusEl,
         editorFieldDescEl,
         editorFieldInstructionsEl,
         editorFieldNoteEl,
-        editorFieldShowcaseEl,
         editorFieldShowcaseOrderEl,
         editorFieldDownloadEl,
         editorFieldSourceEl,
-        editorFieldAutoRouteRedirectEl,
     ].filter(Boolean).forEach((field) => {
         field.addEventListener('input', handleProductFieldMutation);
+    });
+
+    [
+        editorFieldStageEl,
+        editorFieldToneEl,
+        editorFieldStatusEl,
+        editorFieldShowcaseEl,
+        editorFieldAutoRouteRedirectEl,
+    ].filter(Boolean).forEach((field) => {
         field.addEventListener('change', handleProductFieldMutation);
     });
 
@@ -1990,7 +2004,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         .filter(Boolean)
         .forEach((field) => {
             field.addEventListener('input', handleTeamFieldMutation);
-            field.addEventListener('change', handleTeamFieldMutation);
         });
 
     editorFieldDownloadFileEl?.addEventListener('change', (event) => {

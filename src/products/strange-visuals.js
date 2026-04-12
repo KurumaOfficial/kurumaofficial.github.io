@@ -600,15 +600,32 @@ function bindGuiTabs(elements, previewContexts, previewState) {
   if (!(elements.gwTabsEl instanceof HTMLElement) || elements.gwTabsEl.dataset.gwTabsBound === '1') return;
   elements.gwTabsEl.dataset.gwTabsBound = '1';
 
+  const activateTab = (nextKey) => {
+    if (!nextKey || nextKey === previewState.tab) return;
+    previewState.tab = nextKey;
+    renderGuiPreview(elements, previewContexts, previewState);
+    const activeBtn = elements.gwTabsEl.querySelector(`[data-tab="${nextKey}"]`);
+    if (activeBtn instanceof HTMLElement) activeBtn.focus();
+  };
+
   elements.gwTabsEl.addEventListener('click', (event) => {
     const target = event.target instanceof Element ? event.target.closest('[data-tab]') : null;
     if (!(target instanceof HTMLElement) || !elements.gwTabsEl.contains(target)) return;
+    activateTab(target.dataset.tab || previewState.tab);
+  });
 
-    const nextKey = target.dataset.tab || previewState.tab;
-    if (!nextKey || nextKey === previewState.tab) return;
-
-    previewState.tab = nextKey;
-    renderGuiPreview(elements, previewContexts, previewState);
+  elements.gwTabsEl.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') return;
+    const tabs = Array.from(elements.gwTabsEl.querySelectorAll('[data-tab]'));
+    if (!tabs.length) return;
+    event.preventDefault();
+    const current = tabs.findIndex((btn) => btn.dataset.tab === previewState.tab);
+    let next;
+    if (event.key === 'ArrowRight') next = (current + 1) % tabs.length;
+    else if (event.key === 'ArrowLeft') next = (current - 1 + tabs.length) % tabs.length;
+    else if (event.key === 'Home') next = 0;
+    else next = tabs.length - 1;
+    activateTab(tabs[next]?.dataset.tab);
   });
 }
 
@@ -718,9 +735,11 @@ function renderGwTabs(elements, tabKeys, localeMeta, activeKey) {
     return;
   }
 
-  elements.gwTabsEl.innerHTML = tabKeys.map((key, index) => `
-    <button type="button" class="${key === activeKey || (!activeKey && index === 0) ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>
-  `).join('');
+  elements.gwTabsEl.setAttribute('role', 'tablist');
+  elements.gwTabsEl.innerHTML = tabKeys.map((key, index) => {
+    const isActive = key === activeKey || (!activeKey && index === 0);
+    return `<button type="button" role="tab" aria-selected="${isActive}" class="${isActive ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>`;
+  }).join('');
 }
 
 function renderGuiPreview(elements, previewContexts, previewState) {

@@ -1322,7 +1322,7 @@ html[data-theme-switching="true"] .gui-w {
 }
 
 /* ─── MODULES ─── */
-.mod-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:44px; }
+.mod-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:44px; content-visibility:auto; contain-intrinsic-size:auto 800px; }
 
 .mod-group { border:1px solid var(--border); border-radius:13px; overflow:hidden; }
 
