@@ -209,5 +209,5 @@ export function cleanUrl(value) {
     const bareUrl = normalizeBareWebUrl(text);
     if (bareUrl) return bareUrl;
     if (GENERIC_SCHEME_RE.test(text) || text.startsWith('#')) return '';
-    return 'https://' + text.replace(/^\/+/, '');
+    return '';
 }
