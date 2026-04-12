@@ -600,6 +600,12 @@ button {
   transform:translateY(-2px);
 }
 
+.pay-btn:focus-visible {
+  outline:none;
+  border-color:var(--gold-border);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
 .pay-btn-label {
   font-family:'JetBrains Mono',monospace;
   font-size:10px;

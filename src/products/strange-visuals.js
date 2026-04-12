@@ -336,6 +336,20 @@ function setShareDockOpen(elements, isOpen, shareMeta) {
   elements.shareDock.classList.toggle('open', isOpen);
   elements.shareBtn.setAttribute('aria-expanded', String(isOpen));
   elements.shareBtn.setAttribute('aria-label', isOpen ? shareMeta.closeLabel : shareMeta.openLabel);
+
+  if (elements.shareMenu instanceof HTMLElement) {
+    elements.shareMenu.setAttribute('aria-hidden', String(!isOpen));
+  }
+
+  [elements.shareTelegramBtn, elements.shareDiscordBtn, elements.shareYoutubeBtn].forEach((link) => {
+    if (!(link instanceof HTMLAnchorElement) || link.hidden) return;
+    link.tabIndex = isOpen ? 0 : -1;
+    link.setAttribute('aria-hidden', String(!isOpen));
+  });
+
+  if (!isOpen && elements.shareMenu instanceof HTMLElement && elements.shareMenu.contains(document.activeElement)) {
+    elements.shareBtn.focus();
+  }
 }
 
 function syncSupportDiscordLink(elements, siteData) {
@@ -372,6 +386,8 @@ function initShareDock(elements, siteData, shareMeta) {
     if (!href) {
       el.hidden = true;
       el.removeAttribute('href');
+      el.tabIndex = -1;
+      el.setAttribute('aria-hidden', 'true');
       return;
     }
 

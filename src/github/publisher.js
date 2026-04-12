@@ -112,12 +112,49 @@ function buildGitHubContentsApiUrl(config, repoPath) {
         .join('/')}`;
 }
 
+function buildGitHubRepoApiUrl(config, suffix) {
+    return `https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}${suffix}`;
+}
+
+function buildGitHubRefPath(branch) {
+    return `heads/${String(branch || '')
+        .split('/')
+        .map(encodeURIComponent)
+        .join('/')}`;
+}
+
 function buildGitHubHeaders(token) {
     return {
         Accept: 'application/vnd.github+json',
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',
     };
+}
+
+async function readGitHubError(response) {
+    const fallbackText = await response.text();
+    if (!fallbackText) return '';
+
+    try {
+        const parsed = JSON.parse(fallbackText);
+        return parsed?.message || fallbackText;
+    } catch {
+        return fallbackText;
+    }
+}
+
+async function githubRequestJson(url, options, config, fallbackMessage) {
+    const response = await fetch(url, options);
+    if (response.ok) {
+        if (response.status === 204) return null;
+        return response.json();
+    }
+
+    const errorText = await readGitHubError(response);
+    const accessHint = describeGitHubTokenAccessError(response.status, errorText, config);
+    if (accessHint) throw new Error(accessHint);
+
+    throw new Error(errorText ? `${fallbackMessage}: ${errorText}` : fallbackMessage);
 }
 
 async function fetchGitHubFileEntry(config, headers, repoPath) {
@@ -144,31 +181,135 @@ async function fetchGitHubFileEntry(config, headers, repoPath) {
     throw new Error(`Could not read target file: ${errorText}`);
 }
 
-async function upsertGitHubRepoFile(config, token, repoPath, bytes, message) {
-    const headers = buildGitHubHeaders(token);
-    const { apiUrl, entry } = await fetchGitHubFileEntry(config, headers, repoPath);
-    const payload = {
-        message,
-        content: uint8ToBase64(bytes),
-        branch: config.branch,
-    };
-
-    if (entry?.sha) payload.sha = entry.sha;
-
-    const putResponse = await fetch(apiUrl, {
-        method: 'PUT',
-        headers,
-        body: JSON.stringify(payload),
-    });
-
-    if (!putResponse.ok) {
-        const errorText = await putResponse.text();
-        const accessHint = describeGitHubTokenAccessError(putResponse.status, errorText, config);
-        if (accessHint) throw new Error(accessHint);
-        throw new Error(`GitHub rejected the update: ${errorText}`);
+function buildPublishCommitMessage(uploadCount) {
+    if (uploadCount > 0) {
+        return `Update Aleph Studio site content (${uploadCount} asset${uploadCount === 1 ? '' : 's'})`;
     }
 
-    return putResponse.json();
+    return 'Update Aleph Studio site content';
+}
+
+function applyPendingUploadsToData(data, uploads) {
+    const normalized = normalizeData(data);
+    const files = [];
+
+    for (const product of normalized.products) {
+        const upload = uploads.get(product.id);
+        if (!upload) continue;
+
+        const repoPath = buildRepoAssetPath(upload.relativePath);
+        product.downloadUrl = `./${upload.relativePath}`;
+        files.push({
+            path: repoPath,
+            file: upload.file,
+        });
+    }
+
+    return {
+        normalized,
+        files,
+    };
+}
+
+async function fetchBranchCommitState(config, headers) {
+    const refPath = buildGitHubRefPath(config.branch);
+    const refUrl = buildGitHubRepoApiUrl(config, `/git/ref/${refPath}`);
+    const refData = await githubRequestJson(refUrl, { headers }, config, 'Could not read target branch reference');
+    const commitSha = refData?.object?.sha;
+
+    if (!commitSha) {
+        throw new Error('Target branch does not have a readable commit SHA.');
+    }
+
+    const commitUrl = buildGitHubRepoApiUrl(config, `/git/commits/${encodeURIComponent(commitSha)}`);
+    const commitData = await githubRequestJson(commitUrl, { headers }, config, 'Could not read target branch commit');
+    const treeSha = commitData?.tree?.sha;
+
+    if (!treeSha) {
+        throw new Error('Target branch commit does not have a readable tree SHA.');
+    }
+
+    return {
+        commitSha,
+        treeSha,
+        refPath,
+    };
+}
+
+async function createGitHubBlob(config, headers, bytes) {
+    const blobUrl = buildGitHubRepoApiUrl(config, '/git/blobs');
+    const blob = await githubRequestJson(blobUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+            content: uint8ToBase64(bytes),
+            encoding: 'base64',
+        }),
+    }, config, 'Could not create GitHub blob');
+
+    if (!blob?.sha) {
+        throw new Error('GitHub blob response did not include a SHA.');
+    }
+
+    return blob.sha;
+}
+
+async function commitRepoFilesAtomically(config, token, files, message) {
+    const headers = buildGitHubHeaders(token);
+    const { commitSha, treeSha, refPath } = await fetchBranchCommitState(config, headers);
+    const treeEntries = [];
+
+    for (const file of files) {
+        const bytes = file.bytes instanceof Uint8Array
+            ? file.bytes
+            : new Uint8Array(await file.file.arrayBuffer());
+        const blobSha = await createGitHubBlob(config, headers, bytes);
+        treeEntries.push({
+            path: file.path,
+            mode: '100644',
+            type: 'blob',
+            sha: blobSha,
+        });
+    }
+
+    const treeUrl = buildGitHubRepoApiUrl(config, '/git/trees');
+    const treeData = await githubRequestJson(treeUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+            base_tree: treeSha,
+            tree: treeEntries,
+        }),
+    }, config, 'Could not create GitHub tree');
+
+    if (!treeData?.sha) {
+        throw new Error('GitHub tree response did not include a SHA.');
+    }
+
+    const commitUrl = buildGitHubRepoApiUrl(config, '/git/commits');
+    const commitData = await githubRequestJson(commitUrl, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+            message,
+            tree: treeData.sha,
+            parents: [commitSha],
+        }),
+    }, config, 'Could not create GitHub commit');
+
+    if (!commitData?.sha) {
+        throw new Error('GitHub commit response did not include a SHA.');
+    }
+
+    const updateRefUrl = buildGitHubRepoApiUrl(config, `/git/refs/${refPath}`);
+    await githubRequestJson(updateRefUrl, {
+        method: 'PATCH',
+        headers,
+        body: JSON.stringify({
+            sha: commitData.sha,
+            force: false,
+        }),
+    }, config, 'Could not update the publish branch');
 }
 
 export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, renderProductUploadMeta, syncDraftControls, getMessage = (_key, fallback = '') => fallback }) {
@@ -181,30 +322,6 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
             githubSyncTargetEl.textContent = `Publish target: ${config.owner}/${config.repo} -> ${config.branch}:${config.path}`;
         }
         return config;
-    }
-
-    async function uploadPendingProductFiles(config, token, data) {
-        const uploads = getPendingUploads();
-        if (!uploads.size) return normalizeData(data);
-
-        const normalized = normalizeData(data);
-        for (const product of normalized.products) {
-            const upload = uploads.get(product.id);
-            if (!upload) continue;
-
-            const bytes = new Uint8Array(await upload.file.arrayBuffer());
-            const repoPath = buildRepoAssetPath(upload.relativePath);
-            await upsertGitHubRepoFile(
-                config,
-                token,
-                repoPath,
-                bytes,
-                `Upload ${upload.originalName} for ${product.title}`,
-            );
-            product.downloadUrl = `./${upload.relativePath}`;
-        }
-
-        return normalized;
     }
 
     async function saveToGitHub(data) {
@@ -221,8 +338,9 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
         const normalizedPath = config.path.replace(/\\/g, '/');
         const format = getContentFormat(normalizedPath);
         const headers = buildGitHubHeaders(token);
-        const normalizedWithUploads = await uploadPendingProductFiles(config, token, data);
         const { entry } = await fetchGitHubFileEntry(config, headers, normalizedPath);
+        const uploads = getPendingUploads();
+        const { normalized: normalizedWithUploads, files: uploadFiles } = applyPendingUploadsToData(data, uploads);
 
         if (!entry && format !== 'json') {
             throw new Error('Target data file not found in the repository.');
@@ -236,12 +354,19 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
             ? injectEmbeddedSiteData('', normalizedWithUploads, format)
             : injectEmbeddedSiteData(base64ToText(entry.content), normalizedWithUploads, format);
 
-        await upsertGitHubRepoFile(
+        const filesToCommit = [
+            {
+                path: normalizedPath,
+                bytes: new TextEncoder().encode(nextContentText),
+            },
+            ...uploadFiles,
+        ];
+
+        await commitRepoFilesAtomically(
             config,
             token,
-            normalizedPath,
-            new TextEncoder().encode(nextContentText),
-            'Update Aleph Studio site content',
+            filesToCommit,
+            buildPublishCommitMessage(uploadFiles.length),
         );
 
         clearPendingUploads();

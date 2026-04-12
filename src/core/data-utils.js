@@ -15,6 +15,14 @@ import { FLAG_META } from './constants.js';
  * @returns {T}
  */
 export function deepClone(value) {
+    if (typeof structuredClone === 'function') {
+        try {
+            return structuredClone(value);
+        } catch {
+            /* fall through to JSON-safe clone */
+        }
+    }
+
     return JSON.parse(JSON.stringify(value));
 }
 
@@ -49,14 +57,14 @@ export function cleanText(value, fallback) {
 export function slugify(value, fallback = 'item') {
     const primary = String(value || '')
         .toLowerCase()
-        .replace(/[^a-z0-9а-яёії]+/gi, '-')
+        .replace(/[^a-z0-9а-яґєёії]+/gi, '-')
         .replace(/^-+|-+$/g, '');
 
     if (primary) return primary;
 
     const secondary = String(fallback || 'item')
         .toLowerCase()
-        .replace(/[^a-z0-9а-яёії]+/gi, '-')
+        .replace(/[^a-z0-9а-яґєёії]+/gi, '-')
         .replace(/^-+|-+$/g, '');
 
     return secondary || 'item';

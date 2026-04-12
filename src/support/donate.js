@@ -1,5 +1,5 @@
 import { initReveal } from '../components/reveal.js';
-import { $, cleanUrl, createElement, sanitizeHref } from '../core/dom.js';
+import { $, cleanUrl, createElement, optimizeDiscordAvatarUrl, sanitizeHref } from '../core/dom.js';
 import { createInlineIcon } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { resolveRouteRelativePath } from '../i18n/config.js';
@@ -159,6 +159,33 @@ function getCopy(locale, routeContext) {
     };
 }
 
+function stripHtmlTags(value) {
+    return String(value || '').replace(/<[^>]*>/g, '').trim();
+}
+
+function renderDonateTitle(element, titleHtml) {
+    if (!(element instanceof HTMLElement)) return;
+
+    const match = String(titleHtml || '').trim().match(/^([\s\S]*?)<br\s*\/?>\s*<em>([\s\S]*?)<\/em>\s*$/i);
+    element.textContent = '';
+
+    if (!match) {
+        element.textContent = stripHtmlTags(titleHtml);
+        return;
+    }
+
+    const lead = stripHtmlTags(match[1]);
+    const accentText = stripHtmlTags(match[2]);
+    if (lead) {
+        element.append(document.createTextNode(lead));
+    }
+    element.append(document.createElement('br'));
+
+    const accent = document.createElement('em');
+    accent.textContent = accentText;
+    element.append(accent);
+}
+
 const TIER_COPY = Object.freeze({
     ru: {
         premium: 'Premium',
@@ -182,6 +209,8 @@ const TIER_COPY = Object.freeze({
         platinum: 'Темна Платина',
     },
 });
+
+const SUPPORTER_AVATAR_DISCORD_SIZE = 256;
 
 function getElements() {
     return {
@@ -212,6 +241,12 @@ function resolveAsset(path) {
     if (resolved.startsWith('#')) return resolved;
 
     return new URL(resolved, window.location.href).toString();
+}
+
+function optimizeSupportAvatarSrc(path) {
+    const resolved = resolveAsset(path);
+    if (!resolved) return '';
+    return optimizeDiscordAvatarUrl(resolved, SUPPORTER_AVATAR_DISCORD_SIZE) || resolved;
 }
 
 function resolveButtonUrl(path) {
@@ -475,20 +510,23 @@ function getDonorStyle(amount, locale) {
     };
 }
 
-function drawGlowSparkle(context, x, y, radius, alpha, palette = 'gold') {
+function drawGlowSparkle(context, x, y, radius, alpha, palette = 'gold', cachedGradient = null) {
     context.save();
     context.translate(x, y);
     context.globalAlpha = alpha;
 
-    const gradient = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
-    if (palette === 'platinum') {
-        gradient.addColorStop(0, 'rgba(228,242,255,0.98)');
-        gradient.addColorStop(0.25, 'rgba(172,214,255,0.52)');
-        gradient.addColorStop(1, 'rgba(120,170,255,0)');
-    } else {
-        gradient.addColorStop(0, 'rgba(255,248,220,0.95)');
-        gradient.addColorStop(0.35, 'rgba(255,224,140,0.55)');
-        gradient.addColorStop(1, 'rgba(255,224,140,0)');
+    let gradient = cachedGradient;
+    if (!gradient) {
+        gradient = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
+        if (palette === 'platinum') {
+            gradient.addColorStop(0, 'rgba(228,242,255,0.98)');
+            gradient.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+            gradient.addColorStop(1, 'rgba(120,170,255,0)');
+        } else {
+            gradient.addColorStop(0, 'rgba(255,248,220,0.95)');
+            gradient.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+            gradient.addColorStop(1, 'rgba(255,224,140,0)');
+        }
     }
     context.fillStyle = gradient;
     context.beginPath();
@@ -605,14 +643,22 @@ function spawnGoldFX(canvas, amount, tier) {
         ingot._bevelGrad.addColorStop(1, 'rgba(65,35,0,0.16)');
     });
 
-    const sparkles = Array.from({ length: tier.sparkCount }, () => ({
-        x: Math.random() * size.width,
-        y: Math.random() * size.height,
-        radius: 0.8 + Math.random() * 1.7,
-        pulse: Math.random() * Math.PI * 2,
-        speed: 0.02 + Math.random() * 0.04,
-        alpha: 0.05 + Math.random() * 0.1,
-    }));
+    const sparkles = Array.from({ length: tier.sparkCount }, () => {
+        const radius = 0.8 + Math.random() * 1.7;
+        const grad = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
+        grad.addColorStop(0, 'rgba(255,248,220,0.95)');
+        grad.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+        grad.addColorStop(1, 'rgba(255,224,140,0)');
+        return {
+            x: Math.random() * size.width,
+            y: Math.random() * size.height,
+            radius,
+            pulse: Math.random() * Math.PI * 2,
+            speed: 0.02 + Math.random() * 0.04,
+            alpha: 0.05 + Math.random() * 0.1,
+            _grad: grad,
+        };
+    });
 
     let cachedAura = null;
     let cachedRingGrad = null;
@@ -712,15 +758,18 @@ function spawnGoldFX(canvas, amount, tier) {
         context.fill();
 
         const shineX = Math.sin(ingot.shine) * (ingot.width * 0.55);
-        const sweep = context.createLinearGradient(shineX - ingot.width * 0.45, -hh, shineX + ingot.width * 0.15, hh);
-        sweep.addColorStop(0, 'rgba(255,255,255,0)');
-        sweep.addColorStop(0.46, 'rgba(255,250,230,0)');
-        sweep.addColorStop(0.52, 'rgba(255,250,230,0.26)');
-        sweep.addColorStop(0.6, 'rgba(255,240,190,0)');
-        sweep.addColorStop(1, 'rgba(255,255,255,0)');
-        roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
-        context.fillStyle = sweep;
-        context.fill();
+        const shineAlpha = 1 - Math.abs(shineX) / (ingot.width * 0.55 + ingot.width * 0.45);
+        if (shineAlpha > 0.05) {
+            const sweep = context.createLinearGradient(shineX - ingot.width * 0.45, -hh, shineX + ingot.width * 0.15, hh);
+            sweep.addColorStop(0, 'rgba(255,255,255,0)');
+            sweep.addColorStop(0.46, 'rgba(255,250,230,0)');
+            sweep.addColorStop(0.52, `rgba(255,250,230,${(0.26 * shineAlpha).toFixed(3)})`);
+            sweep.addColorStop(0.6, 'rgba(255,240,190,0)');
+            sweep.addColorStop(1, 'rgba(255,255,255,0)');
+            roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
+            context.fillStyle = sweep;
+            context.fill();
+        }
 
         context.strokeStyle = 'rgba(95,60,10,0.35)';
         context.lineWidth = 0.9;
@@ -757,7 +806,7 @@ function spawnGoldFX(canvas, amount, tier) {
         sparkles.forEach((sparkle) => {
             sparkle.pulse += sparkle.speed;
             const alpha = sparkle.alpha * (0.55 + (Math.sin(sparkle.pulse) + 1) * 0.45);
-            drawGlowSparkle(context, sparkle.x, sparkle.y, sparkle.radius, alpha);
+            drawGlowSparkle(context, sparkle.x, sparkle.y, sparkle.radius, alpha, 'gold', sparkle._grad);
         });
 
         ingots.forEach((ingot) => {
@@ -825,24 +874,42 @@ function spawnPlatinumFX(canvas, amount, tier) {
     let angle = 0;
     let size = resize();
 
-    const stars = Array.from({ length: tier.starCount }, () => ({
-        x: Math.random() * size.width,
-        y: Math.random() * size.height,
-        radius: 0.5 + Math.random() * 1.8,
-        pulse: Math.random() * Math.PI * 2,
-        speed: 0.015 + Math.random() * 0.035,
-        alpha: 0.05 + Math.random() * 0.18,
-    }));
+    const stars = Array.from({ length: tier.starCount }, () => {
+        const radius = 0.5 + Math.random() * 1.8;
+        const grad = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
+        grad.addColorStop(0, 'rgba(228,242,255,0.98)');
+        grad.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+        grad.addColorStop(1, 'rgba(120,170,255,0)');
+        return {
+            x: Math.random() * size.width,
+            y: Math.random() * size.height,
+            radius,
+            pulse: Math.random() * Math.PI * 2,
+            speed: 0.015 + Math.random() * 0.035,
+            alpha: 0.05 + Math.random() * 0.18,
+            _grad: grad,
+        };
+    });
 
-    const comets = Array.from({ length: tier.cometCount }, (_, index) => ({
-        x: Math.random() * size.width - 80,
-        y: Math.random() * size.height - size.height * 0.35,
-        velocityX: 1.4 + Math.random() * 1.9 + index * 0.03,
-        velocityY: 0.75 + Math.random() * 1.2,
-        length: 18 + Math.random() * 38,
-        width: 1 + Math.random() * 1.7,
-        alpha: 0.14 + Math.random() * 0.24,
-    }));
+    const comets = Array.from({ length: tier.cometCount }, (_, index) => {
+        const width = 1 + Math.random() * 1.7;
+        const sparkRadius = 0.8 + width * 0.5;
+        const grad = context.createRadialGradient(0, 0, 0, 0, 0, sparkRadius * 3.8);
+        grad.addColorStop(0, 'rgba(228,242,255,0.98)');
+        grad.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+        grad.addColorStop(1, 'rgba(120,170,255,0)');
+        return {
+            x: Math.random() * size.width - 80,
+            y: Math.random() * size.height - size.height * 0.35,
+            velocityX: 1.4 + Math.random() * 1.9 + index * 0.03,
+            velocityY: 0.75 + Math.random() * 1.2,
+            length: 18 + Math.random() * 38,
+            width,
+            alpha: 0.14 + Math.random() * 0.24,
+            _sparkRadius: sparkRadius,
+            _grad: grad,
+        };
+    });
 
     let cachedGlow = null;
     let cachedSheen = null;
@@ -890,7 +957,7 @@ function spawnPlatinumFX(canvas, amount, tier) {
         context.lineTo(comet.x, comet.y);
         context.stroke();
 
-        drawGlowSparkle(context, comet.x, comet.y, 0.8 + comet.width * 0.5, comet.alpha * 0.85, 'platinum');
+        drawGlowSparkle(context, comet.x, comet.y, comet._sparkRadius, comet.alpha * 0.85, 'platinum', comet._grad);
         context.restore();
     };
 
@@ -949,7 +1016,7 @@ function spawnPlatinumFX(canvas, amount, tier) {
         stars.forEach((star) => {
             star.pulse += star.speed;
             const alpha = star.alpha * (0.45 + (Math.sin(star.pulse) + 1) * 0.55);
-            drawGlowSparkle(context, star.x, star.y, star.radius, alpha, 'platinum');
+            drawGlowSparkle(context, star.x, star.y, star.radius, alpha, 'platinum', star._grad);
         });
 
         comets.forEach((comet) => {
@@ -1013,15 +1080,17 @@ function destroySupportEffects(container) {
 }
 
 function createAvatar(supporter, tier, fallbackHue) {
-    const avatar = createElement('div', { className: 'donor-avatar' });
-    const src = resolveAsset(supporter.avatarUrl || '');
+    const avatar = createElement('div', { className: 'donor-avatar', 'aria-hidden': 'true' });
+    const src = optimizeSupportAvatarSrc(supporter.avatarUrl || '');
 
     if (src) {
         avatar.append(createElement('img', {
             src,
-            alt: supporter.name || 'Supporter avatar',
+            alt: '',
             loading: 'lazy',
             decoding: 'async',
+            width: 52,
+            height: 52,
         }));
     } else {
         const fallback = createElement('div', { className: 'donor-avatar-default' });
@@ -1224,7 +1293,7 @@ function applyStaticCopy(elements, copy) {
     }
     if (elements.donateBackLabel) elements.donateBackLabel.textContent = copy.backLabel;
     if (elements.donateEyebrow) elements.donateEyebrow.textContent = copy.eyebrow;
-    if (elements.donateTitle) elements.donateTitle.innerHTML = copy.titleHtml;
+    if (elements.donateTitle) renderDonateTitle(elements.donateTitle, copy.titleHtml);
     if (elements.paymentsTitle) elements.paymentsTitle.textContent = copy.paymentsTitle;
     if (elements.paymentsDesc) elements.paymentsDesc.textContent = copy.paymentsDesc;
     if (elements.topSupportersTitle) elements.topSupportersTitle.textContent = copy.topTitle;

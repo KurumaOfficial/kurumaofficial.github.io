@@ -14,11 +14,12 @@ import {
     ROUTE_MODULE_KEYS,
     toNumber,
 } from '../core/data-utils.js';
-import { cleanUrl, escapeHtml } from '../core/dom.js';
+import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js';
 import { createGitHubPublisher } from '../github/publisher.js';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
+const PREVIEW_DISCORD_IMAGE_SIZE = 256;
 const ROUTE_MODULE_LABELS = Object.freeze({
     ru: { player: 'Player (На игроке)', world: 'World (В мире)', utils: 'Utilities (Утилиты)', other: 'Other (Остальное)', interface: 'Interface (Интерфейс)', themes: 'Themes (Темы)' },
     en: { player: 'Player', world: 'World', utils: 'Utilities', other: 'Other', interface: 'Interface', themes: 'Themes' },
@@ -121,6 +122,9 @@ const ADMIN_MESSAGES = Object.freeze({
         labelSortOrder: 'Порядок',
         ariaRemoveSupportMethod: 'Удалить способ поддержки',
         ariaRemoveSupporter: 'Удалить карточку поддержавшего',
+        ariaRouteModuleName: 'Название функции: {0} #{1}',
+        ariaRouteModuleEnabled: 'Состояние функции: {0} #{1}',
+        ariaRemoveRouteModule: 'Удалить функцию: {0} #{1}',
     },
     en: {
         editing: 'Editing',
@@ -190,6 +194,9 @@ const ADMIN_MESSAGES = Object.freeze({
         labelSortOrder: 'Sort order',
         ariaRemoveSupportMethod: 'Remove support method',
         ariaRemoveSupporter: 'Remove supporter card',
+        ariaRouteModuleName: 'Function name: {0} #{1}',
+        ariaRouteModuleEnabled: 'Function state: {0} #{1}',
+        ariaRemoveRouteModule: 'Remove function: {0} #{1}',
     },
     ua: {
         editing: 'Редагування',
@@ -259,6 +266,9 @@ const ADMIN_MESSAGES = Object.freeze({
         labelSortOrder: 'Порядок',
         ariaRemoveSupportMethod: 'Видалити спосіб підтримки',
         ariaRemoveSupporter: 'Видалити картку підтримувача',
+        ariaRouteModuleName: 'Назва функції: {0} #{1}',
+        ariaRouteModuleEnabled: 'Стан функції: {0} #{1}',
+        ariaRemoveRouteModule: 'Видалити функцію: {0} #{1}',
     },
 });
 
@@ -319,6 +329,43 @@ function buildProductUploadRelativePath(product, fileName) {
     return `assets/files/${safeId}${versionPart}-${baseName}${extension}`.replace(/--+/g, '-');
 }
 
+function isValidListIndex(list, index) {
+    return Array.isArray(list) && Number.isInteger(index) && index >= 0 && index < list.length;
+}
+
+function removeIndexedItem(list, index) {
+    if (!isValidListIndex(list, index)) return false;
+    list.splice(index, 1);
+    return true;
+}
+
+function clampDiscordPreviewImageSize(urlText) {
+    return optimizeDiscordAvatarUrl(urlText, PREVIEW_DISCORD_IMAGE_SIZE);
+}
+
+function resolvePreviewImageUrl(value) {
+    const text = String(value || '').trim();
+    if (!text) return '';
+
+    const externalUrl = cleanUrl(text);
+    if (externalUrl) {
+        return clampDiscordPreviewImageSize(externalUrl);
+    }
+
+    if (text.startsWith('#') || /^[a-z][a-z0-9+.-]*:/i.test(text)) {
+        return '';
+    }
+
+    const siteBaseUrl = new URL('../', window.location.href);
+    const normalizedPath = text.replace(/^\.\//, '');
+
+    try {
+        return clampDiscordPreviewImageSize(new URL(normalizedPath, siteBaseUrl).toString());
+    } catch {
+        return '';
+    }
+}
+
 function normalizeSocials(raw, fallback = DEFAULT_SITE_DATA.socials) {
     return {
         youtube: cleanUrl(raw?.youtube || fallback?.youtube || ''),
@@ -338,10 +385,11 @@ function getTeamInitials(name) {
 }
 
 function renderTeamAvatar(member, className) {
-    if (member.avatarUrl) {
-        return `<div class="${className}"><img src="${escapeHtml(member.avatarUrl)}" alt="${escapeHtml(member.name)}"></div>`;
+    const avatarSrc = resolvePreviewImageUrl(member.avatarUrl);
+    if (avatarSrc) {
+        return `<div class="${className}" aria-hidden="true"><img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" width="44" height="44"></div>`;
     }
-    return `<div class="${className}">${escapeHtml(getTeamInitials(member.name))}</div>`;
+    return `<div class="${className}" aria-hidden="true">${escapeHtml(getTeamInitials(member.name))}</div>`;
 }
 
 function renderSocialIcon(kind) {
@@ -465,6 +513,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const pendingProductUploads = new Map();
     const adminViewLinks = Array.from(document.querySelectorAll('[data-admin-view]'));
     let editorGridRenderFrame = 0;
+    let teamGridRenderFrame = 0;
 
     if (editorEmptyStateEl) {
         editorEmptyStateEl.textContent = msg('selectProduct');
@@ -529,12 +578,28 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
     }
 
+    function scheduleTeamGridRender() {
+        if (teamGridRenderFrame) return;
+        teamGridRenderFrame = window.requestAnimationFrame(() => {
+            teamGridRenderFrame = 0;
+            renderTeamGrid();
+        });
+    }
+
     function hasStagedUploads() {
         return pendingProductUploads.size > 0;
     }
 
     let _draftStateCache = null;
     let _draftStateCacheRaf = 0;
+
+    function invalidateDraftState() {
+        _draftStateCache = null;
+        if (_draftStateCacheRaf) {
+            cancelAnimationFrame(_draftStateCacheRaf);
+            _draftStateCacheRaf = 0;
+        }
+    }
 
     function computeDraftState() {
         if (_draftStateCache) return _draftStateCache;
@@ -609,13 +674,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         homeDraftSummaryEl.innerHTML = rows.map((row) => `
             <div class="dash-status-row">
                 <span class="dash-status-dot ${row.dotClass}"></span>
-                <span class="dash-status-label">${row.label}</span>
-                <span class="dash-status-tag ${row.tagClass}">${row.tag}</span>
+                <span class="dash-status-label">${escapeHtml(row.label)}</span>
+                <span class="dash-status-tag ${row.tagClass}">${escapeHtml(row.tag)}</span>
             </div>
         `).join('');
     }
 
     function syncDraftControls() {
+        invalidateDraftState();
         const draftState = computeDraftState();
         const { hasPreviewDiff, hasSavedDiff } = draftState;
         const hasUploads = hasStagedUploads();
@@ -908,25 +974,25 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         const routeModules = ensureSelectedProductRouteModules();
         if (!routeModules) {
-            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${msg('selectRouteProduct')}</div>`;
+            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${escapeHtml(msg('selectRouteProduct'))}</div>`;
             return;
         }
 
         const activeKey = getSelectedRouteModuleKey();
         const items = routeModules[activeKey] || [];
         if (!items.length) {
-            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${msg('noRouteModules')}</div>`;
+            routeModuleListEl.innerHTML = `<div class="dash-route-empty">${escapeHtml(msg('noRouteModules'))}</div>`;
             return;
         }
 
         routeModuleListEl.innerHTML = items.map((item, index) => `
             <div class="dash-route-row" data-route-module-row="${index}">
-                <input type="text" value="${escapeHtml(item.name)}" data-route-module-name="${index}" aria-label="${escapeHtml(getRouteModuleLabel(activeKey))}">
+                <input type="text" value="${escapeHtml(item.name)}" data-route-module-name="${index}" aria-label="${escapeHtml(msg('ariaRouteModuleName', getRouteModuleLabel(activeKey), index + 1))}">
                 <label class="dash-route-toggle">
-                    <input type="checkbox" data-route-module-enabled="${index}" ${item.enabled ? 'checked' : ''}>
-                    <span>${msg('enabled')}</span>
+                    <input type="checkbox" data-route-module-enabled="${index}" aria-label="${escapeHtml(msg('ariaRouteModuleEnabled', getRouteModuleLabel(activeKey), index + 1))}" ${item.enabled ? 'checked' : ''}>
+                    <span>${escapeHtml(msg('enabled'))}</span>
                 </label>
-                <button type="button" class="dash-btn dash-sm dash-route-remove" data-route-module-remove="${index}">✕</button>
+                <button type="button" class="dash-btn dash-sm dash-route-remove" data-route-module-remove="${index}" aria-label="${escapeHtml(msg('ariaRemoveRouteModule', getRouteModuleLabel(activeKey), index + 1))}">✕</button>
             </div>
         `).join('');
     }
@@ -955,9 +1021,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             const href = socials[key] || '';
             const disabled = !href;
             const attrs = disabled
-                ? 'href="#" aria-disabled="true" tabindex="-1"'
+                ? 'aria-disabled="true" tabindex="-1"'
                 : `href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"`;
-            return `<a class="social-link ${disabled ? 'is-disabled' : ''}" ${attrs} aria-label="${label}">${renderSocialIcon(key)}</a>`;
+            return `<a class="social-link ${disabled ? 'is-disabled' : ''}" ${attrs} aria-label="${escapeHtml(label)}">${renderSocialIcon(key)}</a>`;
         }).join('');
         renderHomeDashboard();
     }
@@ -1016,10 +1082,11 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function renderSupporterAvatar(supporter) {
         const initials = escapeHtml(getTeamInitials(supporter.name));
-        if (supporter.avatarUrl) {
-            return `<div class="dash-supporter-avatar"><img src="${escapeHtml(supporter.avatarUrl)}" alt="${escapeHtml(supporter.name)}"></div>`;
+        const avatarSrc = resolvePreviewImageUrl(supporter.avatarUrl);
+        if (avatarSrc) {
+            return `<div class="dash-supporter-avatar" aria-hidden="true"><img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" width="28" height="28"></div>`;
         }
-        return `<div class="dash-supporter-avatar">${initials}</div>`;
+        return `<div class="dash-supporter-avatar" aria-hidden="true">${initials}</div>`;
     }
 
     function renderSupportButtonsEditor() {
@@ -1086,6 +1153,47 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         `).join('');
     }
 
+    function syncSupportButtonRowPreview(index) {
+        if (!supportButtonsListEl) return;
+        const row = supportButtonsListEl.querySelector(`[data-support-button-row="${index}"]`);
+        if (!(row instanceof HTMLElement)) return;
+
+        const supportPage = ensureSupportDraft();
+        const button = supportPage.buttons[index];
+        if (!button) return;
+
+        const pillEl = row.querySelector('.dash-inline-pill');
+        const titleEl = row.querySelector('.dash-inline-form-title');
+        if (pillEl instanceof HTMLElement) pillEl.textContent = button.id;
+        if (titleEl instanceof HTMLElement) {
+            titleEl.textContent = button.label || button.title || msg('methodN', index + 1);
+        }
+    }
+
+    function syncSupporterRowPreview(index) {
+        if (!supportersAdminListEl) return;
+        const row = supportersAdminListEl.querySelector(`[data-supporter-row="${index}"]`);
+        if (!(row instanceof HTMLElement)) return;
+
+        const supportPage = ensureSupportDraft();
+        const supporter = supportPage.supporters[index];
+        if (!supporter) return;
+
+        const avatarEl = row.querySelector('.dash-supporter-avatar');
+        const nameEl = row.querySelector('.dash-supporter-name');
+        const amountEl = row.querySelector('.dash-supporter-amount');
+
+        if (avatarEl instanceof HTMLElement) {
+            avatarEl.outerHTML = renderSupporterAvatar(supporter);
+        }
+        if (nameEl instanceof HTMLElement) {
+            nameEl.textContent = supporter.name || msg('newSupporter');
+        }
+        if (amountEl instanceof HTMLElement) {
+            amountEl.textContent = formatSupportUsd(supporter.amountUsd);
+        }
+    }
+
     function fillSupportForm() {
         const supportPage = ensureSupportDraft();
         if (supportMinAmountEl) supportMinAmountEl.value = String(supportPage.minimumAmountUsd ?? 2);
@@ -1115,6 +1223,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             button[field] = String(value || '').trim();
         }
 
+        syncSupportButtonRowPreview(index);
         syncDraftControls();
     }
 
@@ -1124,13 +1233,15 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!supporter) return;
 
         if (field === 'amountUsd') {
-            supporter.amountUsd = Math.max(0, Number(value || 0));
+            const parsedAmount = Number(value);
+            supporter.amountUsd = Number.isFinite(parsedAmount) ? Math.max(0, parsedAmount) : (supporter.amountUsd || 0);
         } else if (field === 'sortOrder') {
             supporter.sortOrder = toNumber(value, index + 1);
         } else {
             supporter[field] = String(value || '').trim();
         }
 
+        syncSupporterRowPreview(index);
         syncDraftControls();
     }
 
@@ -1195,6 +1306,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     function renderTeamGrid() {
+        if (teamGridRenderFrame) {
+            cancelAnimationFrame(teamGridRenderFrame);
+            teamGridRenderFrame = 0;
+        }
         if (teamMemberCountEl) teamMemberCountEl.textContent = String(editorData.team.length);
         const entries = getTeamEntries();
         if (!teamGridEl) return;
@@ -1390,6 +1505,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     function renderEditorGrid() {
+        if (editorGridRenderFrame) {
+            cancelAnimationFrame(editorGridRenderFrame);
+            editorGridRenderFrame = 0;
+        }
         if (editorTotalCountEl) editorTotalCountEl.textContent = String(editorData.products.length);
         if (editorShowcaseCountEl) editorShowcaseCountEl.textContent = String(editorData.products.filter((item) => item.featured).length);
 
@@ -1705,8 +1824,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     async function importEditorJson(file) {
         const text = await file.text();
         const parsed = JSON.parse(text);
+        const normalized = normalizeData(parsed);
         pendingProductUploads.clear();
-        editorData = normalizeData(parsed);
+        editorData = normalized;
         editorSelectedIndex = -1;
         teamSelectedIndex = -1;
         editorActiveTab = 'tab-main';
@@ -1834,6 +1954,16 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     homeApplyDraftBtnEl?.addEventListener('click', handleApplyDraft);
     homeDiscardDraftBtnEl?.addEventListener('click', handleDiscardDraft);
 
+    const handleProductFieldMutation = () => {
+        if (!syncProductDraftFromInputs(false)) return;
+        scheduleEditorGridRender();
+    };
+
+    const handleTeamFieldMutation = () => {
+        if (!syncTeamDraftFromInputs(false)) return;
+        scheduleTeamGridRender();
+    };
+
     [
         editorFieldNameEl,
         editorFieldSlugEl,
@@ -1852,15 +1982,15 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorFieldSourceEl,
         editorFieldAutoRouteRedirectEl,
     ].filter(Boolean).forEach((field) => {
-        field.addEventListener('input', () => syncProductDraftFromInputs());
-        field.addEventListener('change', () => syncProductDraftFromInputs());
+        field.addEventListener('input', handleProductFieldMutation);
+        field.addEventListener('change', handleProductFieldMutation);
     });
 
     [teamFieldNameEl, teamFieldRoleEl, teamFieldAvatarEl, teamFieldOrderEl, teamFieldBioEl]
         .filter(Boolean)
         .forEach((field) => {
-            field.addEventListener('input', () => syncTeamDraftFromInputs());
-            field.addEventListener('change', () => syncTeamDraftFromInputs());
+            field.addEventListener('input', handleTeamFieldMutation);
+            field.addEventListener('change', handleTeamFieldMutation);
         });
 
     editorFieldDownloadFileEl?.addEventListener('change', (event) => {
@@ -1942,9 +2072,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const target = event.target instanceof Element ? event.target.closest('[data-remove-support-button]') : null;
         if (!target) return;
         const index = Number(target.getAttribute('data-remove-support-button'));
-        if (Number.isNaN(index)) return;
         const supportPage = ensureSupportDraft();
-        supportPage.buttons.splice(index, 1);
+        if (!removeIndexedItem(supportPage.buttons, index)) return;
         renderSupportButtonsEditor();
         syncDraftControls();
     });
@@ -1962,9 +2091,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const target = event.target instanceof Element ? event.target.closest('[data-remove-supporter]') : null;
         if (!target) return;
         const index = Number(target.getAttribute('data-remove-supporter'));
-        if (Number.isNaN(index)) return;
         const supportPage = ensureSupportDraft();
-        supportPage.supporters.splice(index, 1);
+        if (!removeIndexedItem(supportPage.supporters, index)) return;
         renderSupportersEditor();
         syncDraftControls();
     });
@@ -1976,11 +2104,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const routeModules = ensureSelectedProductRouteModules();
         if (!routeModules) return;
         const activeKey = getSelectedRouteModuleKey();
+        const activeItems = routeModules[activeKey];
 
         if (target.hasAttribute('data-route-module-name')) {
             const index = Number(target.getAttribute('data-route-module-name'));
-            if (!routeModules[activeKey][index]) return;
-            routeModules[activeKey][index].name = target.value;
+            if (!isValidListIndex(activeItems, index)) return;
+            activeItems[index].name = target.value;
             syncDraftControls();
         }
     });
@@ -1992,11 +2121,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const routeModules = ensureSelectedProductRouteModules();
         if (!routeModules) return;
         const activeKey = getSelectedRouteModuleKey();
+        const activeItems = routeModules[activeKey];
 
         if (target.hasAttribute('data-route-module-enabled')) {
             const index = Number(target.getAttribute('data-route-module-enabled'));
-            if (!routeModules[activeKey][index]) return;
-            routeModules[activeKey][index].enabled = target.checked;
+            if (!isValidListIndex(activeItems, index)) return;
+            activeItems[index].enabled = target.checked;
             syncDraftControls();
         }
     });
@@ -2008,7 +2138,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!routeModules) return;
         const activeKey = getSelectedRouteModuleKey();
         const index = Number(target.getAttribute('data-route-module-remove'));
-        routeModules[activeKey].splice(index, 1);
+        if (!removeIndexedItem(routeModules[activeKey], index)) return;
         renderRouteModuleEditor();
         syncDraftControls();
     });
@@ -2119,6 +2249,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     window.addEventListener('beforeunload', (event) => {
         if (editorOverlayEl.classList.contains('open') && hasUnsavedDraftChanges()) {
             event.preventDefault();
+            event.returnValue = '';
         }
     });
 

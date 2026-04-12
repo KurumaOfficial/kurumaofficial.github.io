@@ -1316,6 +1316,7 @@ html[data-theme-switching="true"] *:not(svg *):not(canvas)::after { transition:b
   border:1px solid var(--gui-bdr);
   box-shadow:var(--shadow);
   animation:guiFloat 5.5s ease-in-out infinite;
+  will-change:transform;
 }
 
 @keyframes guiFloat {
@@ -1524,6 +1525,11 @@ html[data-theme-switching="true"] *:not(svg *):not(canvas)::after { transition:b
 
 .gw-theme-card:hover {
   background:var(--gui-item-h);
+}
+
+.gw-theme-card:focus-visible {
+  outline:none;
+  box-shadow:0 0 0 2px var(--accent);
 }
 
 .gw-theme-card:active {
@@ -1781,6 +1787,11 @@ footer {
   .hero-info {
     animation: none;
     transform: none;
+  }
+
+  .gui-w {
+    animation: none;
+    will-change: auto;
   }
 }
 
