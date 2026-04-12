@@ -1131,6 +1131,11 @@ button {
   accent-color: var(--red);
 }
 
+.dash-inline-check:has(input[type="checkbox"]:focus-visible) {
+  outline: 2px solid var(--color-ruby);
+  outline-offset: 2px;
+}
+
 .dash-products-layout {
   display: grid;
   grid-template-columns: 320px minmax(0, 1fr);
@@ -1945,6 +1950,8 @@ button {
   box-shadow: var(--shadow-elevated);
   color: var(--color-text-heading);
   font-size: 12px;
+  line-height: 1.5;
+  word-break: break-word;
   opacity: 0;
   transform: translateX(20px) scale(0.96);
   pointer-events: none;
@@ -1954,6 +1961,7 @@ button {
 .toast[aria-hidden="false"] {
   opacity: 1;
   transform: translateX(0) scale(1);
+  pointer-events: auto;
 }
 
 .toast[data-kind="success"] {

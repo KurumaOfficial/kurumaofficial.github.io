@@ -105,6 +105,18 @@ function clearTransientPageState() {
     document.body.classList.add('route-ready');
 }
 
+function clearRouteEnterState() {
+    window.clearTimeout(routeEnterTimer);
+    routeEnterTimer = 0;
+    document.body?.classList.remove('route-transitions');
+}
+
+function clearThemeSwitchState() {
+    window.clearTimeout(themeSwitchTimer);
+    themeSwitchTimer = 0;
+    document.documentElement.removeAttribute(THEME_SWITCH_ATTR);
+}
+
 function unlockNavigation() {
     navigationLocked = false;
     window.clearTimeout(navigationRecoveryTimer);
@@ -115,13 +127,14 @@ function replayRouteEnterAnimation() {
     if (!document.body) return;
 
     ensureSharedMotionStyles();
-    window.clearTimeout(routeEnterTimer);
+    clearRouteEnterState();
     document.body.classList.remove('route-transitions');
     void document.body.offsetWidth;
     document.body.classList.add('route-transitions', 'route-ready');
 
     routeEnterTimer = window.setTimeout(() => {
         document.body?.classList.remove('route-transitions');
+        routeEnterTimer = 0;
     }, ROUTE_ENTER_MS + 40);
 }
 
@@ -182,10 +195,11 @@ export function initSharedThemeToggle() {
             root.setAttribute(THEME_SWITCH_ATTR, 'true');
             window.clearTimeout(themeSwitchTimer);
             themeSwitchTimer = window.setTimeout(() => {
+                themeSwitchTimer = 0;
                 root.removeAttribute(THEME_SWITCH_ATTR);
             }, THEME_TRANSITION_MS + 40);
         } else {
-            root.removeAttribute(THEME_SWITCH_ATTR);
+            clearThemeSwitchState();
         }
 
         root.setAttribute('data-theme', nextTheme);
@@ -373,6 +387,8 @@ export function initSmoothRouteTransitions() {
     });
 
     window.addEventListener('pagehide', () => {
+        clearThemeSwitchState();
+        clearRouteEnterState();
         unlockNavigation();
     });
 

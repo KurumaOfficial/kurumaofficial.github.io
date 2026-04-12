@@ -11,7 +11,7 @@ import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
-import { cleanUrl, escapeHtml, linkify, $ } from '../core/dom.js';
+import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js';
 
 // ── Factory ─────────────────────────────────────────────────
@@ -240,13 +240,13 @@ export function createRenderer({ localeController }) {
         const cardHtml = (m) => {
             const initials = String(m.name || '').split(/\s+/).filter(Boolean)
                 .map((w) => w[0]).join('').toUpperCase().slice(0, 2) || '?';
-            const avatarSrc = localeController.resolveSitePath(m.avatarUrl || '');
+            const avatarSrc = optimizeDiscordAvatarUrl(localeController.resolveSitePath(m.avatarUrl || ''));
             const avatar = avatarSrc
-                ? `<img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(m.name || t('team.avatarFallback', 'Team member avatar'))}" loading="lazy" decoding="async">`
+                ? `<img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" width="44" height="44">`
                 : escapeHtml(initials);
             return `
 <div class="team-card">
-  <div class="team-avatar">${avatar}</div>
+  <div class="team-avatar" aria-hidden="true">${avatar}</div>
   <div class="team-name">${escapeHtml(m.name)}</div>
   <div class="team-role">${escapeHtml(m.role)}</div>
   ${m.description ? `<p class="team-bio">${linkify(m.description)}</p>` : ''}

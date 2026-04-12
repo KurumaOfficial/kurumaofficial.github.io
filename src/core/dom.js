@@ -211,3 +211,34 @@ export function cleanUrl(value) {
     if (GENERIC_SCHEME_RE.test(text) || text.startsWith('#')) return '';
     return '';
 }
+
+/**
+ * Clamp oversized Discord CDN avatar URLs to a smaller `size=` value.
+ * Relative URLs are resolved against the current document first.
+ * Returns an absolute URL string or an empty string when the input is invalid.
+ * @param {unknown} value
+ * @param {number} [maxSize=256]
+ * @returns {string}
+ */
+export function optimizeDiscordAvatarUrl(value, maxSize = 256) {
+    const text = String(value ?? '').trim();
+    if (!text) return '';
+
+    try {
+        const url = new URL(text, window.location.href);
+        const hostname = url.hostname.toLowerCase();
+        const isDiscordAvatar = (hostname === 'cdn.discordapp.com' || hostname === 'media.discordapp.net')
+            && /\/avatars\//i.test(url.pathname);
+
+        if (!isDiscordAvatar) return url.toString();
+
+        const size = Number(url.searchParams.get('size'));
+        if (!Number.isFinite(size) || size > maxSize) {
+            url.searchParams.set('size', String(maxSize));
+        }
+
+        return url.toString();
+    } catch {
+        return '';
+    }
+}
