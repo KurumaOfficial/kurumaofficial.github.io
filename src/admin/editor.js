@@ -452,6 +452,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const editorFieldShowcaseEl = document.getElementById('f-showcase');
     const editorFieldShowcaseOrderEl = document.getElementById('f-showcase-order');
     const editorFieldDownloadEl = document.getElementById('f-download');
+    const editorFieldDownloadNameEl = document.getElementById('f-download-name');
     const editorFieldDownloadFileEl = document.getElementById('f-download-file');
     const editorFieldDownloadFileMetaEl = document.getElementById('f-download-file-meta');
     const clearDownloadFileBtnEl = document.getElementById('clearDownloadFileBtn');
@@ -1520,6 +1521,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (editorFieldShowcaseEl) editorFieldShowcaseEl.checked = product.featured;
         if (editorFieldShowcaseOrderEl) editorFieldShowcaseOrderEl.value = product.featuredOrder;
         if (editorFieldDownloadEl) editorFieldDownloadEl.value = product.downloadUrl;
+        if (editorFieldDownloadNameEl) editorFieldDownloadNameEl.value = product.downloadName || '';
         if (editorFieldSourceEl) editorFieldSourceEl.value = product.sourceUrl;
         if (editorFieldAutoRouteRedirectEl) editorFieldAutoRouteRedirectEl.checked = Boolean(product.autoRouteRedirect);
         if (routeModuleCategoryEl && !routeModuleCategoryEl.value) routeModuleCategoryEl.value = 'player';
@@ -1724,6 +1726,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             featured: Boolean(editorFieldShowcaseEl?.checked),
             featuredOrder: toNumber(editorFieldShowcaseOrderEl?.value, current.featuredOrder || editorSelectedIndex + 1),
             downloadUrl: editorFieldDownloadEl?.value,
+            downloadName: editorFieldDownloadNameEl?.value,
             sourceUrl: editorFieldSourceEl?.value,
             detailUrl: current.detailUrl,
             autoRouteRedirect: Boolean(editorFieldAutoRouteRedirectEl?.checked),
@@ -1999,6 +2002,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorFieldNoteEl,
         editorFieldShowcaseOrderEl,
         editorFieldDownloadEl,
+        editorFieldDownloadNameEl,
         editorFieldSourceEl,
     ].filter(Boolean).forEach((field) => {
         field.addEventListener('input', handleProductFieldMutation);

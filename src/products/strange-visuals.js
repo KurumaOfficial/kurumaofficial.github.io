@@ -520,7 +520,7 @@ function initActionButtons(elements, routeProduct) {
       const downloadHref = resolveRouteAsset(routeProduct.downloadUrl);
       if (downloadHref) {
         elements.installBtn.href = downloadHref;
-        elements.installBtn.setAttribute('download', '');
+        elements.installBtn.setAttribute('download', routeProduct.downloadName || '');
         elements.installBtn.addEventListener('click', (event) => {
           event.preventDefault();
           startDownloadThenRedirect(downloadHref, donateHref);
