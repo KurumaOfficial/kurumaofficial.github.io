@@ -123,8 +123,6 @@ export function createElement(tag, attrs = {}, ...children) {
             el.className = value;
         } else if (key === 'textContent') {
             el.textContent = value;
-        } else if (key === 'innerHTML') {
-            el.innerHTML = value;
         } else {
             el.setAttribute(key, value);
         }

@@ -138,20 +138,14 @@ function replayRouteEnterAnimation() {
     }, ROUTE_ENTER_MS + 40);
 }
 
-function performRouteNavigation(nextHref, { replace = false } = {}) {
+function performRouteNavigation(nextHref, { replace = false, instant = false } = {}) {
     const targetUrl = new URL(nextHref, window.location.href);
     const currentUrl = new URL(window.location.href);
     if (targetUrl.href === currentUrl.href || navigationLocked) return;
 
     navigationLocked = true;
-    window.clearTimeout(navigationRecoveryTimer);
-    navigationRecoveryTimer = window.setTimeout(() => {
-        unlockNavigation();
-        clearTransientPageState();
-    }, ROUTE_TRANSITION_MS + 2000);
-    document.body?.classList.add('route-leaving');
 
-    window.setTimeout(() => {
+    const doNavigate = () => {
         try {
             if (replace) {
                 window.location.replace(targetUrl.toString());
@@ -163,7 +157,21 @@ function performRouteNavigation(nextHref, { replace = false } = {}) {
             unlockNavigation();
             clearTransientPageState();
         }
-    }, ROUTE_TRANSITION_MS);
+    };
+
+    if (instant) {
+        doNavigate();
+        return;
+    }
+
+    window.clearTimeout(navigationRecoveryTimer);
+    navigationRecoveryTimer = window.setTimeout(() => {
+        unlockNavigation();
+        clearTransientPageState();
+    }, ROUTE_TRANSITION_MS + 2000);
+    document.body?.classList.add('route-leaving');
+
+    window.setTimeout(doNavigate, ROUTE_TRANSITION_MS);
 }
 
 function updateThemeColorMeta(theme) {
@@ -308,7 +316,7 @@ export function applyGlobalRouteRedirect(siteData = getStoredSiteData()) {
     const currentPath = normalizeComparablePath(pathname);
     if (targetPath === currentPath) return false;
 
-    performRouteNavigation(targetHref, { replace: true });
+    performRouteNavigation(targetHref, { replace: true, instant: true });
     return true;
 }
 
