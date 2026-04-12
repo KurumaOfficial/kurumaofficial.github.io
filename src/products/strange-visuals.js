@@ -186,14 +186,22 @@ function getElements() {
   };
 }
 
-function hydrateHeroActionIcons(elements) {
-  if (!(elements.shareBtn instanceof HTMLElement)) return;
-
-  const shareIcon = elements.shareBtn.querySelector('.hero-share-toggle-icon--share');
-  if (shareIcon instanceof HTMLElement) {
-    setInlineIcon(shareIcon, 'link', { className: 'hero-share-toggle-icon hero-share-toggle-icon--share ui-icon' });
-    shareIcon.setAttribute('aria-hidden', 'true');
+function syncRouteIcons(elements) {
+  const sourceIcon = elements.sourceBtn?.querySelector('.ui-icon');
+  if (sourceIcon instanceof HTMLElement) {
+    setInlineIcon(sourceIcon, 'code_wide', { className: 'ui-icon' });
   }
+
+  const shareIcon = elements.shareBtn?.querySelector('.hero-share-toggle-icon--share');
+  if (shareIcon instanceof HTMLElement) {
+    setInlineIcon(shareIcon, 'share', { className: 'hero-share-toggle-icon hero-share-toggle-icon--share ui-icon' });
+  }
+
+  document.querySelectorAll('.feat-card--open-source .feat-ico .ui-icon').forEach((icon) => {
+    if (icon instanceof HTMLElement) {
+      setInlineIcon(icon, 'code_wide', { className: 'ui-icon' });
+    }
+  });
 }
 
 function getLocaleMeta(locale) {
@@ -867,7 +875,7 @@ function boot() {
     tab: tabKeys[0] || 'player',
   };
 
-  hydrateHeroActionIcons(elements);
+  syncRouteIcons(elements);
   localeController.mountLanguageSwitcher();
   initSharedThemeToggle();
   initAdminRouteAccess({ adminHref: getAdminHref() });

@@ -919,42 +919,41 @@ html[data-theme-switching="true"] .gui-w {
 
 .hero-share-toggle-icon {
   position:absolute;
-  inset:0;
-  width:auto;
-  height:auto;
+  top:50%;
+  left:50%;
+  width:20px;
+  height:20px;
   display:flex;
   align-items:center;
   justify-content:center;
+  transform:translate(-50%, -50%);
   transition:opacity .22s ease, transform .32s cubic-bezier(.22, 1, .36, 1);
 }
 
 .hero-share-toggle-icon svg {
-  width:21px;
-  height:21px;
+  width:20px;
+  height:20px;
   display:block;
 }
 
 .hero-share-toggle-icon--share svg {
   width:20px;
   height:20px;
-  margin-left:0;
-  margin-top:0;
-  transform:none;
 }
 
 .hero-share-toggle-icon--close {
   opacity:0;
-  transform:rotate(-90deg) scale(.72);
+  transform:translate(-50%, -50%) rotate(-90deg) scale(.72);
 }
 
 .hero-share-dock.open .hero-share-toggle-icon--share {
   opacity:0;
-  transform:rotate(90deg) scale(.72);
+  transform:translate(-50%, -50%) rotate(90deg) scale(.72);
 }
 
 .hero-share-dock.open .hero-share-toggle-icon--close {
   opacity:1;
-  transform:rotate(0deg) scale(1);
+  transform:translate(-50%, -50%) rotate(0deg) scale(1);
 }
 
 .hero-share-link {
