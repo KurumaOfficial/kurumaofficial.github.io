@@ -128,9 +128,7 @@ body {
     overflow-x: hidden;
     transition:
         background 0.4s ease,
-        color 0.4s ease,
-        opacity 0.24s ease,
-        transform 0.24s ease;
+        color 0.4s ease;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -968,10 +966,6 @@ section {
 /* ── §14 Route Transitions ────────────────────────────────── */
 
 @media (prefers-reduced-motion: no-preference) {
-    body.route-transitions {
-        animation: aleph-route-enter 320ms ease both;
-    }
-
     body.route-leaving,
     body.page-leaving {
         opacity: 0.64;
@@ -1071,6 +1065,11 @@ body.route-ready {
     animation: marquee 28s linear infinite;
 }
 
+.team-marquee-wrap:hover .team-marquee-track,
+.team-marquee-wrap:focus-within .team-marquee-track {
+    animation-play-state: paused;
+}
+
 .team-marquee-track .team-card {
     flex-shrink: 0;
     width: 220px;
@@ -1127,7 +1126,7 @@ footer {
     padding: var(--page-gutter);
     border-top: 1px solid var(--border-accent);
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1fr 1fr;
     gap: var(--space-10);
     align-items: start;
 }
@@ -1468,11 +1467,6 @@ footer {
     to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes aleph-route-enter {
-    from { opacity: 0.72; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
 @keyframes sq-breathe {
     0%, 100% { transform: translateY(-50%) scale(1);    opacity: 0.5; }
     50%      { transform: translateY(-50%) scale(1.02); opacity: 1; }
@@ -1522,7 +1516,9 @@ footer {
     .marquee-wrap,
     .hero-bg-sq,
     .toast,
-    .skip-link { display: none; }
+    .skip-link,
+    .locale-switcher,
+    .theme-btn { display: none; }
 
     body {
         background: #fff;

@@ -120,10 +120,10 @@ export function createRenderer({ localeController }) {
             const href = localeController.resolveSitePath(product.downloadUrl);
             const isLocal = href && !/^(?:https?:)?\/\//i.test(href);
             if (href) {
-                return `<a href="${escapeHtml(href)}" class="btn-download"${isLocal ? ' download' : ''}>${escapeHtml(t('products.download', 'Скачать'))}</a>`;
+                return `<a href="${escapeHtml(href)}" class="btn-download"${isLocal ? ' download' : ''}>${escapeHtml(t('products.download'))}</a>`;
             }
         }
-        return `<button class="btn-disabled" type="button" disabled>${escapeHtml(t('products.soon', 'Скоро'))}</button>`;
+        return `<button class="btn-disabled" type="button" disabled>${escapeHtml(t('products.soon'))}</button>`;
     }
 
     // ── Social links ────────────────────────────────────────
@@ -161,7 +161,7 @@ export function createRenderer({ localeController }) {
             /* Card with detail page link */
             if (product.detailUrl) {
                 /* detailUrl is locale-relative, resolve against current directory */
-                const href = './' + product.detailUrl.replace(/^\.\//, '');
+                const href = product.detailUrl.replace(/^\.?\//, './');
                 const cardAttrs = product.autoRouteRedirect
                     ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
                     : '';

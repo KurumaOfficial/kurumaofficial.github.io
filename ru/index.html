@@ -1,88 +1,76 @@
 <!doctype html>
 <html lang="ru" dir="ltr" data-theme="dark">
 <head>
-    <!-- ─── Encoding & Viewport ────────────────────────────── -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <!-- ─── Primary Meta ───────────────────────────────────── -->
     <title>Aleph Studio</title>
     <meta name="description" content="Aleph Studio — моды, игры, DLC и небольшие цифровые релизы с открытым исходным кодом, понятной установкой и быстрым доступом к актуальной версии.">
     <meta name="theme-color" content="#080606">
     <meta name="color-scheme" content="dark light">
     <meta name="author" content="WeTTeA">
 
-    <!-- ─── Open Graph ─────────────────────────────────────── -->
-    <meta property="og:type"        content="website">
-    <meta property="og:title"       content="Aleph Studio">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Aleph Studio">
     <meta property="og:description" content="Моды, игры, DLC — открытый исходный код, понятная установка, быстрый доступ.">
-    <meta property="og:locale"      content="ru_RU">
-    <meta property="og:site_name"   content="Aleph Studio">
-    <meta property="og:image"       content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
-    <meta property="og:image:type"  content="image/webp">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="Aleph Studio">
+    <meta property="og:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+    <meta property="og:image:type" content="image/webp">
     <meta property="og:image:width" content="1919">
     <meta property="og:image:height" content="1054">
-    <meta property="og:image:alt"   content="Превью Aleph Studio">
+    <meta property="og:image:alt" content="Превью Aleph Studio">
 
-    <!-- ─── Twitter Card ───────────────────────────────────── -->
-    <meta name="twitter:card"  content="summary_large_image">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Aleph Studio">
     <meta name="twitter:description" content="Моды, игры, DLC — открытый исходный код, понятная установка, быстрый доступ.">
     <meta name="twitter:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
     <meta name="twitter:image:alt" content="Превью Aleph Studio">
 
+    <link rel="canonical" href="https://www.aleph.icu/ru/">
+    <link rel="alternate" hreflang="ru" href="https://www.aleph.icu/ru/">
+    <link rel="alternate" hreflang="en" href="https://www.aleph.icu/en/">
+    <link rel="alternate" hreflang="uk" href="https://www.aleph.icu/ua/">
+    <link rel="alternate" hreflang="x-default" href="https://www.aleph.icu/ru/">
+
     <script>window.__ALEPH_LOCALE__ = 'ru';</script>
     <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 
-    <!-- ─── Favicons ───────────────────────────────────────── -->
     <link rel="icon" href="../favicon.ico" sizes="48x48">
     <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
     <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 
-    <!-- ─── Fonts (swap = no FOIT) ─────────────────────────── -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,700;1,400&family=JetBrains+Mono:wght@400&family=Unbounded:wght@200;400;700&display=swap">
 
-    <!-- ─── Stylesheet ─────────────────────────────────────── -->
     <link rel="stylesheet" href="../assets/css/main.css">
 
-    <!-- ─── Icons & Theme bootstrap ────────────────────────── -->
 </head>
 <body>
 
-    <!-- ─ Skip-to-content (a11y) ───────────────────────────── -->
     <a id="skipLink" class="skip-link" href="#main">
         Перейти к основному содержимому
     </a>
 
-    <!-- ═══════════════════════════════════════════════════════
-         § NAVIGATION
-         ═══════════════════════════════════════════════════════ -->
-    <nav class="nav" role="navigation" aria-label="Основная навигация">
-
-        <!-- Logo ────────────────────────────────────────────── -->
+    <nav class="nav" aria-label="Основная навигация">
         <a id="logoLink" class="nav-logo" href="#" aria-label="Aleph Studio — наверх">
             <span class="logo-sq" aria-hidden="true"></span>
             <span class="logo-text">Aleph Studio</span>
         </a>
 
-        <!-- Desktop links ───────────────────────────────────── -->
-        <div class="nav-links" role="list">
-            <a id="navLinkProducts"  class="nav__link" href="#products"  role="listitem">Продукты</a>
-            <a id="navLinkManifesto" class="nav__link" href="#manifesto" role="listitem">Принцип</a>
-            <a id="navLinkTeam"      class="nav__link" href="#team"      role="listitem">Команда</a>
+        <div class="nav-links">
+            <a id="navLinkProducts" class="nav__link" href="#products">Продукты</a>
+            <a id="navLinkManifesto" class="nav__link" href="#manifesto">Принцип</a>
+            <a id="navLinkTeam" class="nav__link" href="#team">Команда</a>
         </div>
 
-        <!-- Right group ─────────────────────────────────────── -->
         <div class="nav-right">
-            <!-- Theme toggle ────────────────────────────────── -->
             <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
                 <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
             </button>
 
-            <!-- Locale switcher ─────────────────────────────── -->
             <div id="localeSwitcher" class="locale-switcher">
                 <button
                     id="localeSwitcherTrigger"
@@ -108,22 +96,12 @@
             </div>
         </div>
 
-        <!-- Mobile toggle (CSS-only via :checked) ───────────── -->
         <input id="nav-toggle" class="visually-hidden" type="checkbox" aria-label="Открыть меню">
     </nav>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § MAIN CONTENT
-         ═══════════════════════════════════════════════════════ -->
     <main id="main">
 
-    <!-- ═══════════════════════════════════════════════════════
-         § HERO
-         ═══════════════════════════════════════════════════════ -->
     <section class="hero" aria-labelledby="heroTitle">
-
-        <!-- Decorative background square -->
         <div class="hero-bg-sq" aria-hidden="true"></div>
 
         <span class="hero-tag" aria-hidden="true">Разработка игр</span>
@@ -135,18 +113,12 @@
 
         <div class="hero-actions">
             <a id="heroCta1" class="btn-primary" href="#products">Смотреть продукты</a>
-            <a id="heroCta2" class="btn-ghost"   href="#manifesto">Наш принцип</a>
+            <a id="heroCta2" class="btn-ghost" href="#manifesto">Наш принцип</a>
         </div>
     </section>
 
-
-    <!-- Social links (below hero) ──────────────────────────── -->
     <div class="social-hub" id="featuredSocialLinks" aria-label="Социальные сети"></div>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § MARQUEE
-         ═══════════════════════════════════════════════════════ -->
     <div class="marquee-wrap" aria-hidden="true">
         <div class="marquee-track">
             <span class="marquee-item">Открытый код</span>
@@ -164,10 +136,6 @@
         </div>
     </div>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § APPROACH / PRINCIPLE
-         ═══════════════════════════════════════════════════════ -->
     <section class="reveal" aria-labelledby="approachTitle">
         <div class="principle">
             <div class="principle-visual" aria-hidden="true">
@@ -187,34 +155,18 @@
         </div>
     </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § PRODUCTS (Featured)
-         ═══════════════════════════════════════════════════════ -->
     <section id="products" class="reveal" aria-labelledby="productsTitle">
         <span class="section-label">Релизы</span>
         <h2 id="productsTitle" class="section-title">Главные релизы</h2>
-        <div id="featured-products" class="products-grid" role="list">
-            <!-- JS: rendered by renderer.js -->
-        </div>
+        <div id="featured-products" class="products-grid" role="list"></div>
     </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § CATALOG (Archive)
-         ═══════════════════════════════════════════════════════ -->
     <section class="reveal" aria-labelledby="catalogTitle">
         <h3 id="catalogTitle" class="section-title">Остальные продукты и будущие релизы</h3>
         <p id="catalogDesc">Сроки и даты являются предварительными.</p>
-        <div id="archive-products" class="catalog-grid" role="list">
-            <!-- JS: rendered by renderer.js -->
-        </div>
+        <div id="archive-products" class="catalog-grid" role="list"></div>
     </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § MANIFESTO
-         ═══════════════════════════════════════════════════════ -->
     <section id="manifesto" class="manifesto reveal" aria-labelledby="manifestoHeading">
         <div class="manifesto-inner">
             <span class="section-label">Манифест</span>
@@ -243,27 +195,17 @@
         </div>
     </section>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § TEAM
-         ═══════════════════════════════════════════════════════ -->
     <section id="team" class="reveal" aria-labelledby="teamTitle">
         <span class="section-label">Команда</span>
         <h2 id="teamTitle" class="section-title">Люди за проектом</h2>
         <p id="teamIntro">
             Участники, которые ведут разработку, поддерживают релизы и держат в порядке публичную часть проекта.
         </p>
-        <div id="teamShowcase" class="team-grid">
-            <!-- JS: rendered by renderer.js -->
-        </div>
+        <div id="teamShowcase" class="team-grid"></div>
     </section>
 
     </main>
 
-
-    <!-- ═══════════════════════════════════════════════════════
-         § FOOTER
-         ═══════════════════════════════════════════════════════ -->
     <footer role="contentinfo">
         <div class="footer-brand">
             <div class="footer-logo" aria-hidden="true">
@@ -293,12 +235,8 @@
         <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · Дочерний проект WeTTeA · Лицензия GPL</p>
     </footer>
 
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-        <!-- ─ Toast (a11y live region) ─────────────────────────── -->
-        <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
-
-
-    <!-- ─ Application ──────────────────────────────────────── -->
     <script type="module" src="../src/app.js"></script>
 </body>
 </html>
