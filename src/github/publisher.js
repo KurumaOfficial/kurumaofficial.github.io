@@ -35,9 +35,14 @@ function uint8ToBase64(bytes) {
 
 function base64ToText(base64) {
     const cleaned = String(base64 || '').replace(/\s+/g, '');
-    const binary = atob(cleaned);
-    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-    return new TextDecoder().decode(bytes);
+    if (!cleaned) return '';
+    try {
+        const binary = atob(cleaned);
+        const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+        return new TextDecoder().decode(bytes);
+    } catch {
+        throw new Error('Failed to decode base64 content from GitHub.');
+    }
 }
 
 function getContentFormat(filePath) {
@@ -223,9 +228,13 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
             throw new Error('Target data file not found in the repository.');
         }
 
+        if (format !== 'json' && !entry?.content) {
+            throw new Error('Target data file exists but has no content (file may exceed GitHub API size limit).');
+        }
+
         const nextContentText = format === 'json'
             ? injectEmbeddedSiteData('', normalizedWithUploads, format)
-            : injectEmbeddedSiteData(base64ToText(entry?.content || ''), normalizedWithUploads, format);
+            : injectEmbeddedSiteData(base64ToText(entry.content), normalizedWithUploads, format);
 
         await upsertGitHubRepoFile(
             config,

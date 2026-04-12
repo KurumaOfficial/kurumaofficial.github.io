@@ -243,8 +243,10 @@ function formatUsd(value) {
     return `$${fixed}`;
 }
 
+const _reducedMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+
 function prefersReducedMotion() {
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return _reducedMotionQuery?.matches === true;
 }
 
 const viewportResizeSubscribers = new Set();
@@ -312,6 +314,7 @@ function lerp(start, end, progress) {
 }
 
 function mapRange(value, inputMin, inputMax, outputMin, outputMax) {
+    if (inputMax === inputMin) return outputMin;
     const progress = clamp((value - inputMin) / (inputMax - inputMin), 0, 1);
     return lerp(outputMin, outputMax, progress);
 }
@@ -557,6 +560,51 @@ function spawnGoldFX(canvas, amount, tier) {
     });
     ingots.sort((left, right) => left.depth - right.depth);
 
+    ingots.forEach((ingot) => {
+        const hw = ingot.width / 2;
+        const hh = ingot.height / 2;
+        const d3 = ingot.height * 0.52;
+        const sk = d3 * 0.72;
+        ingot._hw = hw;
+        ingot._hh = hh;
+        ingot._d3 = d3;
+        ingot._sk = sk;
+        ingot._r = Math.max(2, Math.min(ingot.width, ingot.height) * 0.23);
+
+        ingot._halo = context.createRadialGradient(0, 0, 0, 0, 0, ingot.width * 1.8);
+        ingot._halo.addColorStop(0, 'rgba(255,220,120,0.16)');
+        ingot._halo.addColorStop(0.5, 'rgba(201,168,76,0.07)');
+        ingot._halo.addColorStop(1, 'rgba(201,168,76,0)');
+
+        ingot._shadow = context.createRadialGradient(0, 0, 0, 0, 0, ingot.width * 0.95);
+        ingot._shadow.addColorStop(0, 'rgba(0,0,0,0.22)');
+        ingot._shadow.addColorStop(1, 'rgba(0,0,0,0)');
+
+        ingot._topGrad = context.createLinearGradient(-hw, -hh - d3, hw + sk, -hh);
+        ingot._topGrad.addColorStop(0, '#fff3ba');
+        ingot._topGrad.addColorStop(0.22, '#f6de92');
+        ingot._topGrad.addColorStop(0.58, '#ddb75c');
+        ingot._topGrad.addColorStop(1, '#af7f2b');
+
+        ingot._sideGrad = context.createLinearGradient(hw, -hh, hw + sk, hh);
+        ingot._sideGrad.addColorStop(0, '#d6a946');
+        ingot._sideGrad.addColorStop(0.45, '#b07d28');
+        ingot._sideGrad.addColorStop(1, '#7e591f');
+
+        ingot._frontGrad = context.createLinearGradient(-hw, -hh, hw, hh);
+        ingot._frontGrad.addColorStop(0, '#f6df8e');
+        ingot._frontGrad.addColorStop(0.18, '#ebca6f');
+        ingot._frontGrad.addColorStop(0.52, '#ca9b3f');
+        ingot._frontGrad.addColorStop(0.82, '#a77524');
+        ingot._frontGrad.addColorStop(1, '#8b601e');
+
+        ingot._bevelGrad = context.createLinearGradient(-hw, -hh, hw, hh);
+        ingot._bevelGrad.addColorStop(0, 'rgba(255,247,210,0.28)');
+        ingot._bevelGrad.addColorStop(0.25, 'rgba(255,230,155,0.14)');
+        ingot._bevelGrad.addColorStop(0.7, 'rgba(140,90,15,0.05)');
+        ingot._bevelGrad.addColorStop(1, 'rgba(65,35,0,0.16)');
+    });
+
     const sparkles = Array.from({ length: tier.sparkCount }, () => ({
         x: Math.random() * size.width,
         y: Math.random() * size.height,
@@ -566,32 +614,46 @@ function spawnGoldFX(canvas, amount, tier) {
         alpha: 0.05 + Math.random() * 0.1,
     }));
 
+    let cachedAura = null;
+    let cachedRingGrad = null;
+    let ringRadius = 0;
+
+    const rebuildSizeGradients = () => {
+        cachedAura = context.createRadialGradient(size.width * 0.5, size.height * 0.18, 0, size.width * 0.5, size.height * 0.18, size.height);
+        cachedAura.addColorStop(0, `rgba(255,220,120,${tier.aura})`);
+        cachedAura.addColorStop(1, 'rgba(255,220,120,0)');
+
+        if (tier.ring) {
+            ringRadius = Math.min(size.width, size.height) * 0.32;
+            cachedRingGrad = context.createLinearGradient(-ringRadius, -ringRadius, ringRadius, ringRadius);
+            cachedRingGrad.addColorStop(0, 'rgba(255,245,200,0.7)');
+            cachedRingGrad.addColorStop(0.5, 'rgba(210,170,80,0.24)');
+            cachedRingGrad.addColorStop(1, 'rgba(255,240,190,0.62)');
+        }
+    };
+
+    rebuildSizeGradients();
+
     const drawRing = () => {
         if (!tier.ring) return;
 
         const centerX = size.width / 2;
         const centerY = size.height / 2 + 8;
-        const radius = Math.min(size.width, size.height) * 0.32;
 
         context.save();
         context.translate(centerX, centerY);
         context.rotate(angle * 0.25);
         context.globalAlpha = 0.12 + tier.glow * 0.14;
 
-        const ringGradient = context.createLinearGradient(-radius, -radius, radius, radius);
-        ringGradient.addColorStop(0, 'rgba(255,245,200,0.7)');
-        ringGradient.addColorStop(0.5, 'rgba(210,170,80,0.24)');
-        ringGradient.addColorStop(1, 'rgba(255,240,190,0.62)');
-
-        context.strokeStyle = ringGradient;
+        context.strokeStyle = cachedRingGrad;
         context.lineWidth = 1.2;
         context.beginPath();
-        context.arc(0, 0, radius, 0, Math.PI * 2);
+        context.arc(0, 0, ringRadius, 0, Math.PI * 2);
         context.stroke();
 
         for (let index = 0; index < 6; index += 1) {
             const sparkleAngle = angle + (Math.PI * 2 / 6) * index;
-            drawGlowSparkle(context, Math.cos(sparkleAngle) * radius, Math.sin(sparkleAngle) * radius, 0.9, 0.12 + tier.glow * 0.08);
+            drawGlowSparkle(context, Math.cos(sparkleAngle) * ringRadius, Math.sin(sparkleAngle) * ringRadius, 0.9, 0.12 + tier.glow * 0.08);
         }
 
         context.restore();
@@ -603,97 +665,70 @@ function spawnGoldFX(canvas, amount, tier) {
         context.rotate(ingot.rotation);
         context.globalAlpha = ingot.alpha;
 
-        const halfWidth = ingot.width / 2;
-        const halfHeight = ingot.height / 2;
-        const depth = ingot.height * 0.52;
-        const skew = depth * 0.72;
-        const radius = Math.max(2, Math.min(ingot.width, ingot.height) * 0.23);
+        const hw = ingot._hw;
+        const hh = ingot._hh;
+        const d3 = ingot._d3;
+        const sk = ingot._sk;
+        const r = ingot._r;
 
-        const halo = context.createRadialGradient(0, 0, 0, 0, 0, ingot.width * 1.8);
-        halo.addColorStop(0, 'rgba(255,220,120,0.16)');
-        halo.addColorStop(0.5, 'rgba(201,168,76,0.07)');
-        halo.addColorStop(1, 'rgba(201,168,76,0)');
-        context.fillStyle = halo;
+        context.fillStyle = ingot._halo;
         context.beginPath();
         context.arc(0, 0, ingot.width * 1.8, 0, Math.PI * 2);
         context.fill();
 
         context.save();
-        context.translate(depth * 0.35, depth * 0.75);
+        context.translate(d3 * 0.35, d3 * 0.75);
         context.scale(1.15, 0.7);
-        const shadow = context.createRadialGradient(0, 0, 0, 0, 0, ingot.width * 0.95);
-        shadow.addColorStop(0, 'rgba(0,0,0,0.22)');
-        shadow.addColorStop(1, 'rgba(0,0,0,0)');
-        context.fillStyle = shadow;
+        context.fillStyle = ingot._shadow;
         context.beginPath();
         context.arc(0, 0, ingot.width * 0.95, 0, Math.PI * 2);
         context.fill();
         context.restore();
 
         context.beginPath();
-        context.moveTo(-halfWidth, -halfHeight);
-        context.lineTo(halfWidth, -halfHeight);
-        context.lineTo(halfWidth + skew, -halfHeight - depth);
-        context.lineTo(-halfWidth + skew, -halfHeight - depth);
+        context.moveTo(-hw, -hh);
+        context.lineTo(hw, -hh);
+        context.lineTo(hw + sk, -hh - d3);
+        context.lineTo(-hw + sk, -hh - d3);
         context.closePath();
-        const topGradient = context.createLinearGradient(-halfWidth, -halfHeight - depth, halfWidth + skew, -halfHeight);
-        topGradient.addColorStop(0, '#fff3ba');
-        topGradient.addColorStop(0.22, '#f6de92');
-        topGradient.addColorStop(0.58, '#ddb75c');
-        topGradient.addColorStop(1, '#af7f2b');
-        context.fillStyle = topGradient;
+        context.fillStyle = ingot._topGrad;
         context.fill();
 
         context.beginPath();
-        context.moveTo(halfWidth, -halfHeight);
-        context.lineTo(halfWidth + skew, -halfHeight - depth);
-        context.lineTo(halfWidth + skew, halfHeight - depth);
-        context.lineTo(halfWidth, halfHeight);
+        context.moveTo(hw, -hh);
+        context.lineTo(hw + sk, -hh - d3);
+        context.lineTo(hw + sk, hh - d3);
+        context.lineTo(hw, hh);
         context.closePath();
-        const sideGradient = context.createLinearGradient(halfWidth, -halfHeight, halfWidth + skew, halfHeight);
-        sideGradient.addColorStop(0, '#d6a946');
-        sideGradient.addColorStop(0.45, '#b07d28');
-        sideGradient.addColorStop(1, '#7e591f');
-        context.fillStyle = sideGradient;
+        context.fillStyle = ingot._sideGrad;
         context.fill();
 
-        roundedRect(context, -halfWidth, -halfHeight, ingot.width, ingot.height, radius);
-        const frontGradient = context.createLinearGradient(-halfWidth, -halfHeight, halfWidth, halfHeight);
-        frontGradient.addColorStop(0, '#f6df8e');
-        frontGradient.addColorStop(0.18, '#ebca6f');
-        frontGradient.addColorStop(0.52, '#ca9b3f');
-        frontGradient.addColorStop(0.82, '#a77524');
-        frontGradient.addColorStop(1, '#8b601e');
-        context.fillStyle = frontGradient;
+        roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
+        context.fillStyle = ingot._frontGrad;
         context.fill();
 
-        roundedRect(context, -halfWidth + 1.2, -halfHeight + 1.2, ingot.width - 2.4, ingot.height - 2.4, Math.max(1.5, radius * 0.7));
-        const bevelGradient = context.createLinearGradient(-halfWidth, -halfHeight, halfWidth, halfHeight);
-        bevelGradient.addColorStop(0, 'rgba(255,247,210,0.28)');
-        bevelGradient.addColorStop(0.25, 'rgba(255,230,155,0.14)');
-        bevelGradient.addColorStop(0.7, 'rgba(140,90,15,0.05)');
-        bevelGradient.addColorStop(1, 'rgba(65,35,0,0.16)');
-        context.fillStyle = bevelGradient;
+        roundedRect(context, -hw + 1.2, -hh + 1.2, ingot.width - 2.4, ingot.height - 2.4, Math.max(1.5, r * 0.7));
+        context.fillStyle = ingot._bevelGrad;
         context.fill();
 
         const shineX = Math.sin(ingot.shine) * (ingot.width * 0.55);
-        const sweep = context.createLinearGradient(shineX - ingot.width * 0.45, -halfHeight, shineX + ingot.width * 0.15, halfHeight);
+        const sweep = context.createLinearGradient(shineX - ingot.width * 0.45, -hh, shineX + ingot.width * 0.15, hh);
         sweep.addColorStop(0, 'rgba(255,255,255,0)');
         sweep.addColorStop(0.46, 'rgba(255,250,230,0)');
         sweep.addColorStop(0.52, 'rgba(255,250,230,0.26)');
         sweep.addColorStop(0.6, 'rgba(255,240,190,0)');
         sweep.addColorStop(1, 'rgba(255,255,255,0)');
-        roundedRect(context, -halfWidth, -halfHeight, ingot.width, ingot.height, radius);
+        roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
         context.fillStyle = sweep;
         context.fill();
 
         context.strokeStyle = 'rgba(95,60,10,0.35)';
         context.lineWidth = 0.9;
-        roundedRect(context, -halfWidth, -halfHeight, ingot.width, ingot.height, radius);
+        roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
         context.stroke();
 
         if (Math.sin(ingot.shine * 1.2) > 0.92) {
-            drawGlowSparkle(context, halfWidth * 0.12, -halfHeight * 0.25, 0.9 + ingot.depth * 0.8, 0.22);
+            drawGlowSparkle(context, hw * 0.12, -hh * 0.25, 0.9 + ingot.depth * 0.8, 0.22);
         }
 
         context.restore();
@@ -705,10 +740,7 @@ function spawnGoldFX(canvas, amount, tier) {
         angle += 0.012;
         context.clearRect(0, 0, size.width, size.height);
 
-        const aura = context.createRadialGradient(size.width * 0.5, size.height * 0.18, 0, size.width * 0.5, size.height * 0.18, size.height);
-        aura.addColorStop(0, `rgba(255,220,120,${tier.aura})`);
-        aura.addColorStop(1, 'rgba(255,220,120,0)');
-        context.fillStyle = aura;
+        context.fillStyle = cachedAura;
         context.fillRect(0, 0, size.width, size.height);
 
         drawRing();
@@ -740,6 +772,7 @@ function spawnGoldFX(canvas, amount, tier) {
 
     const handleResize = () => {
         size = resize();
+        rebuildSizeGradients();
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -802,6 +835,32 @@ function spawnPlatinumFX(canvas, amount, tier) {
         alpha: 0.14 + Math.random() * 0.24,
     }));
 
+    let cachedGlow = null;
+    let cachedSheen = null;
+    let cachedPlatRingGrad = null;
+    let platRingRadius = 0;
+
+    const rebuildSizeGradients = () => {
+        cachedGlow = context.createRadialGradient(size.width * 0.5, size.height * 0.15, 0, size.width * 0.5, size.height * 0.15, size.height);
+        cachedGlow.addColorStop(0, 'rgba(120,170,255,0.16)');
+        cachedGlow.addColorStop(0.55, 'rgba(60,90,150,0.09)');
+        cachedGlow.addColorStop(1, 'rgba(40,60,120,0)');
+
+        cachedSheen = context.createLinearGradient(0, 0, size.width, size.height);
+        cachedSheen.addColorStop(0, 'rgba(20,30,50,0.18)');
+        cachedSheen.addColorStop(0.5, 'rgba(10,16,28,0.05)');
+        cachedSheen.addColorStop(1, 'rgba(70,110,190,0.08)');
+
+        platRingRadius = Math.min(size.width, size.height) * 0.34;
+        cachedPlatRingGrad = context.createLinearGradient(-platRingRadius, -platRingRadius, platRingRadius, platRingRadius);
+        cachedPlatRingGrad.addColorStop(0, 'rgba(230,242,255,0.82)');
+        cachedPlatRingGrad.addColorStop(0.26, 'rgba(145,190,255,0.55)');
+        cachedPlatRingGrad.addColorStop(0.7, 'rgba(96,145,235,0.18)');
+        cachedPlatRingGrad.addColorStop(1, 'rgba(220,240,255,0.74)');
+    };
+
+    rebuildSizeGradients();
+
     const drawComet = (comet) => {
         context.save();
         context.globalAlpha = comet.alpha;
@@ -829,34 +888,27 @@ function spawnPlatinumFX(canvas, amount, tier) {
     const drawRing = () => {
         const centerX = size.width / 2;
         const centerY = size.height / 2 + 4;
-        const radius = Math.min(size.width, size.height) * 0.34;
 
         context.save();
         context.translate(centerX, centerY);
         context.rotate(angle * 0.18);
         context.globalAlpha = 0.22;
 
-        const ringGradient = context.createLinearGradient(-radius, -radius, radius, radius);
-        ringGradient.addColorStop(0, 'rgba(230,242,255,0.82)');
-        ringGradient.addColorStop(0.26, 'rgba(145,190,255,0.55)');
-        ringGradient.addColorStop(0.7, 'rgba(96,145,235,0.18)');
-        ringGradient.addColorStop(1, 'rgba(220,240,255,0.74)');
-
-        context.strokeStyle = ringGradient;
+        context.strokeStyle = cachedPlatRingGrad;
         context.lineWidth = 1.35;
         context.beginPath();
-        context.arc(0, 0, radius, 0, Math.PI * 2);
+        context.arc(0, 0, platRingRadius, 0, Math.PI * 2);
         context.stroke();
 
         context.beginPath();
-        context.arc(0, 0, radius * 0.78, 0, Math.PI * 2);
+        context.arc(0, 0, platRingRadius * 0.78, 0, Math.PI * 2);
         context.strokeStyle = 'rgba(130,180,255,0.11)';
         context.lineWidth = 0.8;
         context.stroke();
 
         for (let index = 0; index < 8; index += 1) {
             const sparkleAngle = angle * 1.3 + (Math.PI * 2 / 8) * index;
-            drawGlowSparkle(context, Math.cos(sparkleAngle) * radius, Math.sin(sparkleAngle) * radius, 0.85, 0.18, 'platinum');
+            drawGlowSparkle(context, Math.cos(sparkleAngle) * platRingRadius, Math.sin(sparkleAngle) * platRingRadius, 0.85, 0.18, 'platinum');
         }
 
         context.restore();
@@ -868,18 +920,10 @@ function spawnPlatinumFX(canvas, amount, tier) {
         angle += 0.012;
         context.clearRect(0, 0, size.width, size.height);
 
-        const glow = context.createRadialGradient(size.width * 0.5, size.height * 0.15, 0, size.width * 0.5, size.height * 0.15, size.height);
-        glow.addColorStop(0, 'rgba(120,170,255,0.16)');
-        glow.addColorStop(0.55, 'rgba(60,90,150,0.09)');
-        glow.addColorStop(1, 'rgba(40,60,120,0)');
-        context.fillStyle = glow;
+        context.fillStyle = cachedGlow;
         context.fillRect(0, 0, size.width, size.height);
 
-        const sheen = context.createLinearGradient(0, 0, size.width, size.height);
-        sheen.addColorStop(0, 'rgba(20,30,50,0.18)');
-        sheen.addColorStop(0.5, 'rgba(10,16,28,0.05)');
-        sheen.addColorStop(1, 'rgba(70,110,190,0.08)');
-        context.fillStyle = sheen;
+        context.fillStyle = cachedSheen;
         context.fillRect(0, 0, size.width, size.height);
 
         drawRing();
@@ -907,6 +951,7 @@ function spawnPlatinumFX(canvas, amount, tier) {
 
     const handleResize = () => {
         size = resize();
+        rebuildSizeGradients();
     };
 
     const observer = new IntersectionObserver((entries) => {

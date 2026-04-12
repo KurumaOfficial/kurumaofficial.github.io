@@ -531,21 +531,42 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         return pendingProductUploads.size > 0;
     }
 
+    let _draftStateCache = null;
+    let _draftStateCacheRaf = 0;
+
+    function computeDraftState() {
+        if (_draftStateCache) return _draftStateCache;
+        const editorSerialized = serializeData(editorData);
+        const siteSerialized = serializeData(siteData);
+        const savedSerialized = serializeData(savedSiteData);
+        _draftStateCache = {
+            hasPreviewDiff: editorSerialized !== siteSerialized,
+            hasSavedDiff: hasStagedUploads()
+                || editorSerialized !== savedSerialized
+                || siteSerialized !== savedSerialized,
+        };
+        if (!_draftStateCacheRaf) {
+            _draftStateCacheRaf = requestAnimationFrame(() => {
+                _draftStateCache = null;
+                _draftStateCacheRaf = 0;
+            });
+        }
+        return _draftStateCache;
+    }
+
     function hasUnappliedDraftChanges() {
-        return serializeData(editorData) !== serializeData(siteData);
+        return computeDraftState().hasPreviewDiff;
     }
 
     function hasUnsavedDraftChanges() {
-        return hasStagedUploads()
-            || serializeData(editorData) !== serializeData(savedSiteData)
-            || serializeData(siteData) !== serializeData(savedSiteData);
+        return computeDraftState().hasSavedDiff;
     }
 
     function countEnabledSocials() {
         return Object.values(editorData.socials || {}).filter(Boolean).length;
     }
 
-    function renderHomeDashboard() {
+    function renderHomeDashboard(draftState) {
         if (homeProductsCountEl) homeProductsCountEl.textContent = String(editorData.products.length);
         if (homeFeaturedCountEl) homeFeaturedCountEl.textContent = String(editorData.products.filter((item) => item.featured).length);
         if (homeTeamCountEl) homeTeamCountEl.textContent = String(editorData.team.length);
@@ -553,8 +574,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (homeUploadsCountEl) homeUploadsCountEl.textContent = String(pendingProductUploads.size);
         if (!homeDraftSummaryEl) return;
 
-        const hasPreviewDiff = hasUnappliedDraftChanges();
-        const hasSavedDiff = hasUnsavedDraftChanges();
+        const { hasPreviewDiff, hasSavedDiff } = draftState || computeDraftState();
         const uploadCount = pendingProductUploads.size;
 
         const rows = [
@@ -594,8 +614,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     function syncDraftControls() {
-        const hasPreviewDiff = hasUnappliedDraftChanges();
-        const hasSavedDiff = hasUnsavedDraftChanges();
+        const draftState = computeDraftState();
+        const { hasPreviewDiff, hasSavedDiff } = draftState;
         const hasUploads = hasStagedUploads();
 
         if (draftStateChipEl) {
@@ -622,7 +642,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (discardDraftBtnEl) discardDraftBtnEl.disabled = !hasSavedDiff;
         if (homeApplyDraftBtnEl) homeApplyDraftBtnEl.disabled = !hasPreviewDiff;
         if (homeDiscardDraftBtnEl) homeDiscardDraftBtnEl.disabled = !hasSavedDiff;
-        renderHomeDashboard();
+        renderHomeDashboard(draftState);
     }
 
     function loadLocalData() {
@@ -1075,7 +1095,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function syncSupportMetaDraft() {
         const supportPage = ensureSupportDraft();
-        supportPage.minimumAmountUsd = Math.max(0, Number(supportMinAmountEl?.value || supportPage.minimumAmountUsd || 0));
+        const parsedAmount = Number(supportMinAmountEl?.value);
+        supportPage.minimumAmountUsd = Number.isFinite(parsedAmount) ? Math.max(0, parsedAmount) : (supportPage.minimumAmountUsd || 0);
         supportPage.roleName = String(supportRoleNameEl?.value || '@Premium').trim() || '@Premium';
         renderSupportSummary();
         syncDraftControls();
@@ -1178,7 +1199,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         if (!entries.length) {
             teamGridEl.innerHTML = `<div class="dash-empty-state">${msg('noTeamCards')}</div>`;
-            renderHomeDashboard();
             return;
         }
 
@@ -1198,7 +1218,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 </div>
             </article>
         `).join('');
-        renderHomeDashboard();
     }
 
     function openTeamEditor(index) {
@@ -1375,7 +1394,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const entries = getEditorEntries();
         if (!entries.length) {
             editorProductGridEl.innerHTML = `<div class="dash-empty-state">${msg('searchEmpty')}</div>`;
-            renderHomeDashboard();
             return;
         }
 
@@ -1408,7 +1426,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 </article>
             `;
         }).join('');
-        renderHomeDashboard();
     }
 
     function openProductEditor(index) {
@@ -1680,7 +1697,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         link.href = url;
         link.download = 'site-content.json';
         link.click();
-        URL.revokeObjectURL(url);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
     async function importEditorJson(file) {
@@ -1732,6 +1749,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         fillSocialInputs();
         renderEditorGrid();
         renderTeamGrid();
+        if (editorSelectedIndex >= 0 && editorData.products[editorSelectedIndex]) {
+            fillEditorForm(editorData.products[editorSelectedIndex]);
+        }
+        if (teamSelectedIndex >= 0 && editorData.team[teamSelectedIndex]) {
+            fillTeamForm(editorData.team[teamSelectedIndex]);
+        }
         renderAdminView();
         renderProductUploadMeta();
         syncDraftControls();
@@ -1759,7 +1782,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     });
     const { renderGitHubSyncTarget, saveToGitHub } = publisher;
 
+    let _savingToGithub = false;
+
     async function handleSaveGithub() {
+        if (_savingToGithub) return;
+        _savingToGithub = true;
+        if (saveGithubBtnEl) saveGithubBtnEl.disabled = true;
         commitAllEditorState();
         try {
             const normalized = applyEditorDataToPreview();
@@ -1775,6 +1803,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         } catch (error) {
             syncDraftControls();
             emitToast(error?.message || msg('toastGithubFailed'), 'error');
+        } finally {
+            _savingToGithub = false;
+            if (saveGithubBtnEl) saveGithubBtnEl.disabled = false;
         }
     }
 
@@ -2082,6 +2113,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     deleteTeamMemberBtnEl?.addEventListener('click', deleteTeamMember);
     saveLocalBtnEl?.addEventListener('click', handleSaveLocal);
     saveGithubBtnEl?.addEventListener('click', () => { void handleSaveGithub(); });
+
+    window.addEventListener('beforeunload', (event) => {
+        if (editorOverlayEl.classList.contains('open') && hasUnsavedDraftChanges()) {
+            event.preventDefault();
+        }
+    });
 
     document.addEventListener('keydown', (event) => {
         if (editorOverlayEl.classList.contains('open')) {

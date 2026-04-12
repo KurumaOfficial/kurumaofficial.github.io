@@ -189,7 +189,7 @@ export function initSharedThemeToggle() {
         }
 
         root.setAttribute('data-theme', nextTheme);
-    setInlineIcon(ico, nextTheme === 'dark' ? 'light_mode' : 'dark_mode', { className: 'theme-icon' });
+        setInlineIcon(ico, nextTheme === 'dark' ? 'light_mode' : 'dark_mode', { className: 'theme-icon' });
         btn.setAttribute('aria-pressed', String(nextTheme === 'light'));
         updateThemeColorMeta(nextTheme);
         updateColorSchemeMeta(nextTheme);
