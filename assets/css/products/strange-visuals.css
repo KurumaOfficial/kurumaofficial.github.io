@@ -542,7 +542,7 @@ html[data-theme-switching="true"] .gui-w {
   position:sticky;
   top:calc(94px + var(--safe-top));
   z-index:10;
-  background:var(--bg);
+  pointer-events:none;
 }
 
 .hero-store-back {
@@ -555,7 +555,8 @@ html[data-theme-switching="true"] .gui-w {
   text-decoration:none;
   border-radius:999px;
   border:1px solid var(--border);
-  background:rgba(0,0,0,0.04);
+  background:var(--bg);
+  pointer-events:auto;
 }
 .hero-store-back:hover { color:var(--text); border-color:var(--border-hi); background:var(--surface); }
 
@@ -572,6 +573,7 @@ html[data-theme-switching="true"] .gui-w {
   display:flex;
   gap:14px;
   align-items:center;
+  pointer-events:auto;
 }
 
 .hero-store-back .ui-icon {
