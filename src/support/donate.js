@@ -641,6 +641,12 @@ function spawnGoldFX(canvas, amount, tier) {
         ingot._bevelGrad.addColorStop(0.25, 'rgba(255,230,155,0.14)');
         ingot._bevelGrad.addColorStop(0.7, 'rgba(140,90,15,0.05)');
         ingot._bevelGrad.addColorStop(1, 'rgba(65,35,0,0.16)');
+
+        ingot._sparkleRadius = 0.9 + ingot.depth * 0.8;
+        ingot._sparkleGrad = context.createRadialGradient(0, 0, 0, 0, 0, ingot._sparkleRadius * 3.8);
+        ingot._sparkleGrad.addColorStop(0, 'rgba(255,248,220,0.95)');
+        ingot._sparkleGrad.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+        ingot._sparkleGrad.addColorStop(1, 'rgba(255,224,140,0)');
     });
 
     const sparkles = Array.from({ length: tier.sparkCount }, () => {
@@ -659,6 +665,11 @@ function spawnGoldFX(canvas, amount, tier) {
             _grad: grad,
         };
     });
+
+    const _ringSparkleGrad = context.createRadialGradient(0, 0, 0, 0, 0, 0.9 * 3.8);
+    _ringSparkleGrad.addColorStop(0, 'rgba(255,248,220,0.95)');
+    _ringSparkleGrad.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+    _ringSparkleGrad.addColorStop(1, 'rgba(255,224,140,0)');
 
     let cachedAura = null;
     let cachedRingGrad = null;
@@ -699,7 +710,7 @@ function spawnGoldFX(canvas, amount, tier) {
 
         for (let index = 0; index < 6; index += 1) {
             const sparkleAngle = angle + (Math.PI * 2 / 6) * index;
-            drawGlowSparkle(context, Math.cos(sparkleAngle) * ringRadius, Math.sin(sparkleAngle) * ringRadius, 0.9, 0.12 + tier.glow * 0.08);
+            drawGlowSparkle(context, Math.cos(sparkleAngle) * ringRadius, Math.sin(sparkleAngle) * ringRadius, 0.9, 0.12 + tier.glow * 0.08, 'gold', _ringSparkleGrad);
         }
 
         context.restore();
@@ -777,7 +788,7 @@ function spawnGoldFX(canvas, amount, tier) {
         context.stroke();
 
         if (Math.sin(ingot.shine * 1.2) > 0.92) {
-            drawGlowSparkle(context, hw * 0.12, -hh * 0.25, 0.9 + ingot.depth * 0.8, 0.22);
+            drawGlowSparkle(context, hw * 0.12, -hh * 0.25, ingot._sparkleRadius, 0.22, 'gold', ingot._sparkleGrad);
         }
 
         context.restore();
@@ -937,6 +948,11 @@ function spawnPlatinumFX(canvas, amount, tier) {
 
     rebuildSizeGradients();
 
+    const _platRingSparkleGrad = context.createRadialGradient(0, 0, 0, 0, 0, 0.85 * 3.8);
+    _platRingSparkleGrad.addColorStop(0, 'rgba(228,242,255,0.98)');
+    _platRingSparkleGrad.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+    _platRingSparkleGrad.addColorStop(1, 'rgba(120,170,255,0)');
+
     const drawComet = (comet) => {
         context.save();
         context.globalAlpha = comet.alpha;
@@ -984,7 +1000,7 @@ function spawnPlatinumFX(canvas, amount, tier) {
 
         for (let index = 0; index < 8; index += 1) {
             const sparkleAngle = angle * 1.3 + (Math.PI * 2 / 8) * index;
-            drawGlowSparkle(context, Math.cos(sparkleAngle) * platRingRadius, Math.sin(sparkleAngle) * platRingRadius, 0.85, 0.18, 'platinum');
+            drawGlowSparkle(context, Math.cos(sparkleAngle) * platRingRadius, Math.sin(sparkleAngle) * platRingRadius, 0.85, 0.18, 'platinum', _platRingSparkleGrad);
         }
 
         context.restore();

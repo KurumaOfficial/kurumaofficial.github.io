@@ -12,6 +12,7 @@ import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
 import {
+    applyGlobalRouteRedirect,
     getAdminHref,
     getEffectiveSiteData,
     initAdminRouteAccess,
@@ -37,6 +38,9 @@ function boot() {
     /* 1 — Build locale controller (auto-detects locale from path) -- */
     const lc = createLocaleController();
     const isAdminPage = document.body?.dataset.adminPage === 'true';
+
+    /* 1.5 — Auto-redirect to product detail route (if configured) - */
+    if (!isAdminPage && applyGlobalRouteRedirect()) return;
 
     if (isAdminPage) {
         document.documentElement.lang = lc.locale === 'ua' ? 'uk' : lc.locale;

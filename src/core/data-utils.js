@@ -231,7 +231,7 @@ export function normalizeRouteModules(raw) {
 function clampCurrency(value) {
     const num = Number(value);
     if (!Number.isFinite(num)) return 0;
-    return Math.max(0, Math.round(num * 100) / 100);
+    return Math.max(0, Math.round((num + Number.EPSILON) * 100) / 100);
 }
 
 /**
