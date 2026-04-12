@@ -4,6 +4,8 @@
  * @module i18n/config
  */
 
+import { normalizeBareWebUrl } from '../core/dom.js';
+
 /** @type {string} */
 export const DEFAULT_LOCALE = 'ru';
 
@@ -34,6 +36,75 @@ export const FLAG_SVG = Object.freeze({
 // ── Helpers ─────────────────────────────────────────────────
 
 /**
+ * Normalize a pathname and expose route metadata.
+ * Supports locale routes nested under an optional site base path.
+ * @param {string} [pathname]
+ */
+function getPathInfo(pathname = window.location.pathname) {
+    const raw = String(pathname || '/')
+        .replace(/\\/g, '/')
+        .replace(/\/+/g, '/');
+
+    let normalized = raw.startsWith('/') ? raw : `/${raw}`;
+    normalized = normalized.replace(/\/index\.html?$/i, '/');
+
+    if (!/\.[a-z0-9]+$/i.test(normalized) && !normalized.endsWith('/')) {
+        normalized += '/';
+    }
+
+    const segments = normalized.split('/').filter(Boolean);
+    const localeIndex = segments.findIndex((segment) => /^(?:ru|en|ua|uk)$/i.test(segment));
+
+    return {
+        normalized,
+        segments,
+        localeIndex,
+        hasTrailingSlash: normalized.endsWith('/'),
+    };
+}
+
+/**
+ * Return the base path that sits before the locale segment.
+ * Examples: `/ru/...` -> `/`, `/site/ru/...` -> `/site/`.
+ * @param {string} [pathname]
+ * @returns {string}
+ */
+export function getSiteBasePath(pathname = window.location.pathname) {
+    const { segments, localeIndex } = getPathInfo(pathname);
+    if (localeIndex <= 0) return '/';
+    return `/${segments.slice(0, localeIndex).join('/')}/`;
+}
+
+/**
+ * Build the equivalent route path for a locale while preserving the current suffix.
+ * @param {string} locale
+ * @param {string} [pathname]
+ * @returns {string}
+ */
+export function buildLocalizedRoutePath(locale, pathname = window.location.pathname) {
+    const { segments, localeIndex, hasTrailingSlash } = getPathInfo(pathname);
+    const prefixSegments = localeIndex >= 0 ? segments.slice(0, localeIndex) : [];
+    const suffixSegments = localeIndex >= 0 ? segments.slice(localeIndex + 1) : segments;
+    const localizedSegments = [...prefixSegments, normalizeLocale(locale), ...suffixSegments];
+
+    if (!localizedSegments.length) {
+        return '/';
+    }
+
+    return `/${localizedSegments.join('/')}${hasTrailingSlash ? '/' : ''}`;
+}
+
+/**
+ * Resolve the locale-neutral home URL for the site root/base path.
+ * @param {string} [origin]
+ * @param {string} [pathname]
+ * @returns {string}
+ */
+export function getSiteRootHref(origin = window.location.origin, pathname = window.location.pathname) {
+    return new URL(getSiteBasePath(pathname), origin).toString();
+}
+
+/**
  * Map any locale-like string to a supported locale key.
  * @param {string} raw
  * @returns {string}
@@ -51,10 +122,10 @@ export function normalizeLocale(raw) {
  * @returns {string}
  */
 export function detectLocaleFromPath(pathname = window.location.pathname) {
-    const p = String(pathname || '/').replace(/\\/g, '/').toLowerCase();
-    if (/^\/en(?:\/|$)/.test(p)) return 'en';
-    if (/^\/(ua|uk)(?:\/|$)/.test(p)) return 'ua';
-    if (/^\/ru(?:\/|$)/.test(p)) return 'ru';
+    const { segments, localeIndex } = getPathInfo(pathname);
+    if (localeIndex >= 0) {
+        return normalizeLocale(segments[localeIndex]);
+    }
     return normalizeLocale(/** @type {any} */ (window).__ALEPH_LOCALE__);
 }
 
@@ -74,8 +145,10 @@ export function getLocalePath(locale) {
  * @returns {string}
  */
 export function getRouteAssetPrefix(pathname = window.location.pathname) {
-    const p = String(pathname || '/').replace(/\\/g, '/').toLowerCase();
-    return /^\/(ru|en|ua|uk)(?:\/|$)/.test(p) ? '../' : './';
+    const { segments, localeIndex } = getPathInfo(pathname);
+    if (localeIndex < 0) return './';
+    const depthAfterLocale = Math.max(0, segments.length - localeIndex - 1);
+    return '../'.repeat(depthAfterLocale + 1);
 }
 
 /**
@@ -87,19 +160,24 @@ export function getRouteAssetPrefix(pathname = window.location.pathname) {
  */
 export function resolveRouteRelativePath(path, pathname = window.location.pathname) {
     const value = String(path || '').trim();
-    if (!value || /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value)) return value;
+    if (!value) return value;
+    if (value.startsWith('#') || /^(?:https?:)?\/\//i.test(value)) return value;
+    const externalHref = normalizeBareWebUrl(value);
+    if (externalHref) return externalHref;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return '';
     const cleaned = value.replace(/^\.\//, '').replace(/^\/+/, '');
     return `${getRouteAssetPrefix(pathname)}${cleaned}`;
 }
 
 /**
- * Build the canonical URL for a given locale.
+ * Build the canonical URL for a given locale and current route.
  * @param {string} locale
  * @param {string} [origin]
+ * @param {string} [pathname]
  * @returns {string}
  */
-export function getCanonicalHref(locale, origin = window.location.origin) {
-    return `${origin}${getLocalePath(normalizeLocale(locale))}`;
+export function getCanonicalHref(locale, origin = window.location.origin, pathname = window.location.pathname) {
+    return new URL(buildLocalizedRoutePath(locale, pathname), origin).toString();
 }
 
 /**
@@ -121,14 +199,10 @@ export function getLocaleOptions(
     search = window.location.search || '',
     hash = window.location.hash || '',
 ) {
-    const normalizedPath = String(pathname || '/').replace(/\\/g, '/');
-    const routeSuffix = normalizedPath.replace(/^\/(?:ru|en|ua|uk)(?=\/|$)/i, '') || '/';
-    const cleanSuffix = routeSuffix.startsWith('/') ? routeSuffix : `/${routeSuffix}`;
-
     return LOCALE_ORDER.map((locale) => ({
         ...getLocaleMeta(locale),
         locale,
-        href: `${getLocalePath(locale).replace(/\/$/, '')}${cleanSuffix}${search}${hash}`,
+        href: `${buildLocalizedRoutePath(locale, pathname)}${search}${hash}`,
         flagSvg: FLAG_SVG[locale],
     }));
 }
