@@ -95,12 +95,7 @@ function injectEmbeddedSiteData(content, data, format) {
 function describeGitHubTokenAccessError(status, errorText, config) {
     const text = String(errorText || '');
     if (status === 403 && /Resource not accessible by personal access token/i.test(text)) {
-        return [
-            `Token does not have access to ${config.owner}/${config.repo}.`,
-            `For a fine-grained token set Resource owner = ${config.owner},`,
-            `Repository access = ${config.repo}, Permissions -> Contents: Read and write.`,
-            'For a classic token the repo scope is required.',
-        ].join(' ');
+        return `The provided password does not have permission to publish to ${config.owner}/${config.repo}. Check the access settings and try again.`;
     }
     return null;
 }
@@ -331,7 +326,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
             throw new Error(getMessage('githubTargetMissing', 'Could not determine the GitHub repository for publishing.'));
         }
         if (!token) {
-            throw new Error(getMessage('githubTokenRequired', 'A GitHub token is required to save.'));
+            throw new Error(getMessage('githubTokenRequired', 'A password is required to save.'));
         }
 
         const normalizedPath = config.path.replace(/\\/g, '/');
