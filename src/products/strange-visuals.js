@@ -890,7 +890,7 @@ function boot() {
   const previewState = {
     locale: getGuiPreviewLanguageOptions(localeController.locale)[0] || localeController.locale,
     languageOptions: getGuiPreviewLanguageOptions(localeController.locale),
-    themeKey: 'black',
+    themeKey: document.documentElement.getAttribute('data-theme') === 'light' ? 'white' : 'black',
     tab: tabKeys[0] || 'player',
   };
 
@@ -907,6 +907,17 @@ function boot() {
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
   renderGuiPreview(elements, previewContexts, previewState);
+
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.attributeName === 'data-theme') {
+        const nextTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'white' : 'black';
+        previewState.themeKey = nextTheme;
+        setGuiPreviewTheme(elements, nextTheme);
+        break;
+      }
+    }
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   renderModuleList(elements, tabKeys, tabs, localeMeta);
   initCompareSlider(elements);
   initCompareMedia(elements, compareCopy);

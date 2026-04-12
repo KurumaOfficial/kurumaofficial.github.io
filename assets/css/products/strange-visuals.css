@@ -151,25 +151,19 @@ html[data-theme-switching="true"] .hero-side-btn,
 html[data-theme-switching="true"] .hero-share-bg,
 html[data-theme-switching="true"] .hero-share-link,
 html[data-theme-switching="true"] .hero-meta-item,
-html[data-theme-switching="true"] .hero-meta-value,
-html[data-theme-switching="true"] .hero-meta-label,
 html[data-theme-switching="true"] .hero-info,
 html[data-theme-switching="true"] .hero-store-card,
 html[data-theme-switching="true"] .hero-breadcrumb a,
 html[data-theme-switching="true"] .feat-card,
-html[data-theme-switching="true"] .feat-card h3,
-html[data-theme-switching="true"] .feat-card p,
 html[data-theme-switching="true"] .feat-ico,
 html[data-theme-switching="true"] .mod-item,
 html[data-theme-switching="true"] .note-block,
 html[data-theme-switching="true"] .faq-item,
 html[data-theme-switching="true"] .compare-card,
 html[data-theme-switching="true"] .compare-image,
-html[data-theme-switching="true"] .compare-label,
-html[data-theme-switching="true"] .compare-slider,
 html[data-theme-switching="true"] .compare-handle,
 html[data-theme-switching="true"] footer {
-  transition:background-color .28s ease,border-color .28s ease,color .28s ease,box-shadow .28s ease;
+  transition:background-color .28s ease,border-color .28s ease,color .28s ease;
 }
 
 html[data-theme-switching="true"] .gui-w {
@@ -464,7 +458,7 @@ html[data-theme-switching="true"] .gui-w {
   flex-direction:column;
   padding-top:calc(94px + var(--safe-top));
   isolation:isolate;
-  overflow:hidden;
+  overflow:clip;
 }
 
 .hero-store::before {
@@ -530,7 +524,6 @@ html[data-theme-switching="true"] .gui-w {
   );
 }
 
-.hero-store-top,
 .hero-store-content {
   position:relative;
   z-index:2;
@@ -542,6 +535,10 @@ html[data-theme-switching="true"] .gui-w {
   justify-content:space-between;
   gap:18px;
   padding:10px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+  position:sticky;
+  top:calc(94px + var(--safe-top));
+  z-index:10;
+  background:var(--bg);
 }
 
 .hero-store-back {
@@ -1947,7 +1944,7 @@ footer {
 
   .hero-store { padding-top:calc(76px + var(--safe-top)); min-height:auto; }
   .hero-store-content { padding:24px calc(var(--page-gutter) + var(--safe-right)) calc(64px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left)); }
-  .hero-store-top { padding:16px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); }
+  .hero-store-top { top:calc(76px + var(--safe-top)); padding:16px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); }
 
   .hero-store-action,
   .hero-source-btn,
