@@ -347,6 +347,7 @@ export function normalizeProduct(raw = {}, index = 0) {
         instructions,
         sourceUrl: cleanText(raw.sourceUrl, ''),
         downloadUrl: cleanText(raw.downloadUrl, ''),
+        downloadName: cleanText(raw.downloadName, ''),
         detailUrl: cleanText(raw.detailUrl, ''),
         note: cleanText(raw.note, ''),
         autoRouteRedirect: Boolean(raw.autoRouteRedirect),
