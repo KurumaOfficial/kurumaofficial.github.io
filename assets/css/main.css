@@ -133,10 +133,50 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-html[data-theme-switching="true"] *:not(svg *):not(canvas),
-html[data-theme-switching="true"] *:not(svg *):not(canvas)::before,
-html[data-theme-switching="true"] *:not(svg *):not(canvas)::after {
-    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+html[data-theme-switching="true"] body,
+html[data-theme-switching="true"] .nav,
+html[data-theme-switching="true"] .logo-text,
+html[data-theme-switching="true"] .nav-links a,
+html[data-theme-switching="true"] .nav__link,
+html[data-theme-switching="true"] .theme-btn,
+html[data-theme-switching="true"] .locale-switcher__trigger,
+html[data-theme-switching="true"] .locale-switcher__menu,
+html[data-theme-switching="true"] .locale-option,
+html[data-theme-switching="true"] .locale-option__code,
+html[data-theme-switching="true"] .hero-title,
+html[data-theme-switching="true"] .hero-sub,
+html[data-theme-switching="true"] .btn-primary,
+html[data-theme-switching="true"] .btn-ghost,
+html[data-theme-switching="true"] .btn-download,
+html[data-theme-switching="true"] .btn-detail,
+html[data-theme-switching="true"] .marquee-wrap,
+html[data-theme-switching="true"] .section-title,
+html[data-theme-switching="true"] .products-grid,
+html[data-theme-switching="true"] .product-card,
+html[data-theme-switching="true"] .product-name,
+html[data-theme-switching="true"] .product-desc,
+html[data-theme-switching="true"] .product-meta-links,
+html[data-theme-switching="true"] .catalog-grid,
+html[data-theme-switching="true"] .catalog-item,
+html[data-theme-switching="true"] .catalog-item-name,
+html[data-theme-switching="true"] #catalogDesc,
+html[data-theme-switching="true"] .manifesto,
+html[data-theme-switching="true"] .manifesto-text,
+html[data-theme-switching="true"] .manifesto-item,
+html[data-theme-switching="true"] .m-title,
+html[data-theme-switching="true"] .m-body,
+html[data-theme-switching="true"] .team-card,
+html[data-theme-switching="true"] .team-name,
+html[data-theme-switching="true"] .team-bio,
+html[data-theme-switching="true"] .social-link,
+html[data-theme-switching="true"] footer,
+html[data-theme-switching="true"] .footer-name,
+html[data-theme-switching="true"] .footer-desc,
+html[data-theme-switching="true"] .footer-links a,
+html[data-theme-switching="true"] .footer-copy,
+html[data-theme-switching="true"] .toast,
+html[data-theme-switching="true"] .skip-link {
+    transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .btn-primary,
@@ -861,6 +901,8 @@ section {
 #catalogDesc  { color: var(--color-text-muted); font-size: 14px; margin-top: var(--space-2); }
 
 .catalog-grid {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
     margin-top: var(--space-4);
     border: 1px solid var(--border-subtle);
     border-top: none;
@@ -992,6 +1034,8 @@ body.route-ready {
 }
 
 .team-grid {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 400px;
     display: flex;
     gap: 2px;
     margin-top: var(--space-16);

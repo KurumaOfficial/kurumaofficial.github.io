@@ -85,9 +85,38 @@ body::after {
   opacity:.42;
 }
 
-html[data-theme-switching="true"] *:not(svg *):not(canvas),
-html[data-theme-switching="true"] *:not(svg *):not(canvas)::before,
-html[data-theme-switching="true"] *:not(svg *):not(canvas)::after { transition:background-color .35s ease,border-color .35s ease,color .35s ease; }
+html[data-theme-switching="true"] body,
+html[data-theme-switching="true"] .nav,
+html[data-theme-switching="true"] .logo-text,
+html[data-theme-switching="true"] .nav__link,
+html[data-theme-switching="true"] .theme-btn,
+html[data-theme-switching="true"] .locale-switcher__trigger,
+html[data-theme-switching="true"] .locale-switcher__menu,
+html[data-theme-switching="true"] .locale-option,
+html[data-theme-switching="true"] .locale-option__code,
+html[data-theme-switching="true"] .donate-hero,
+html[data-theme-switching="true"] .donate-back,
+html[data-theme-switching="true"] .donate-crown,
+html[data-theme-switching="true"] .donate-eyebrow,
+html[data-theme-switching="true"] .donate-title em,
+html[data-theme-switching="true"] .donate-desc,
+html[data-theme-switching="true"] .donate-section,
+html[data-theme-switching="true"] .section-head h2,
+html[data-theme-switching="true"] .section-head p,
+html[data-theme-switching="true"] .count-chip,
+html[data-theme-switching="true"] .pay-btn,
+html[data-theme-switching="true"] .pay-btn-label,
+html[data-theme-switching="true"] .pay-btn-note,
+html[data-theme-switching="true"] .pay-btn-arrow,
+html[data-theme-switching="true"] .card-donor,
+html[data-theme-switching="true"] .donor-avatar-default,
+html[data-theme-switching="true"] .donor-name,
+html[data-theme-switching="true"] .donor-badge,
+html[data-theme-switching="true"] .donor-amount,
+html[data-theme-switching="true"] .empty-state,
+html[data-theme-switching="true"] footer,
+html[data-theme-switching="true"] .footer-copy,
+html[data-theme-switching="true"] .skip-link { transition:background-color .35s ease,border-color .35s ease,color .35s ease,box-shadow .35s ease; }
 
 :focus-visible {
   outline:2px solid var(--accent);
@@ -578,7 +607,7 @@ button {
 
 .pay-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
 .top-grid { grid-template-columns:repeat(3, minmax(0,1fr)); }
-.supporters-grid { grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); }
+.supporters-grid { grid-template-columns:repeat(auto-fill, minmax(180px,1fr)); content-visibility:auto; contain-intrinsic-size:auto 500px; }
 
 .pay-btn,
 .empty-state {
@@ -991,7 +1020,7 @@ button {
   .donate-hero-body {
     padding:20px 32px 36px;
   }
-  .nav-links { display:flex; }
+  .nav-links { display:none; }
   .pay-grid,
   .top-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
   .supporters-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); }

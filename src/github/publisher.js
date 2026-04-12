@@ -28,7 +28,7 @@ function uint8ToBase64(bytes) {
     const chunkSize = 0x8000;
     for (let index = 0; index < bytes.length; index += chunkSize) {
         const chunk = bytes.subarray(index, index + chunkSize);
-        binary += String.fromCharCode.apply(null, chunk);
+        binary += String.fromCharCode(...chunk);
     }
     return btoa(binary);
 }
@@ -257,20 +257,19 @@ async function createGitHubBlob(config, headers, bytes) {
 async function commitRepoFilesAtomically(config, token, files, message) {
     const headers = buildGitHubHeaders(token);
     const { commitSha, treeSha, refPath } = await fetchBranchCommitState(config, headers);
-    const treeEntries = [];
 
-    for (const file of files) {
+    const treeEntries = await Promise.all(files.map(async (file) => {
         const bytes = file.bytes instanceof Uint8Array
             ? file.bytes
             : new Uint8Array(await file.file.arrayBuffer());
         const blobSha = await createGitHubBlob(config, headers, bytes);
-        treeEntries.push({
+        return {
             path: file.path,
             mode: '100644',
             type: 'blob',
             sha: blobSha,
-        });
-    }
+        };
+    }));
 
     const treeUrl = buildGitHubRepoApiUrl(config, '/git/trees');
     const treeData = await githubRequestJson(treeUrl, {
