@@ -813,6 +813,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const upload = getPendingProductUpload(previousProduct.id);
         if (!upload) return nextProduct;
 
+        if (upload.isManualPath) {
+            pendingProductUploads.delete(previousProduct.id);
+            pendingProductUploads.set(nextProduct.id, { ...upload });
+            return nextProduct;
+        }
+
         const nextRelativePath = buildProductUploadRelativePath(nextProduct, upload.originalName);
         const previousAutoUrl = getPendingUploadHref(upload);
         const shouldRewriteDownload = currentDownloadValue === previousAutoUrl || previousProduct.downloadUrl === previousAutoUrl;
@@ -884,12 +890,13 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             !currentDownloadUrl.includes('://') &&
             !currentDownloadUrl.includes('/../') &&
             !currentDownloadUrl.startsWith('./..');
-        const relativePath = isLocalPath
+        const isManualPath = isLocalPath;
+        const relativePath = isManualPath
             ? currentDownloadUrl.slice(2)
             : buildProductUploadRelativePath(product, file.name);
         const existingUpload = getPendingProductUpload(product.id);
         const previousDownloadUrl = existingUpload?.previousDownloadUrl ?? String(product.downloadUrl || '').trim();
-        pendingProductUploads.set(product.id, { file, originalName: file.name, relativePath, previousDownloadUrl });
+        pendingProductUploads.set(product.id, { file, originalName: file.name, relativePath, isManualPath, previousDownloadUrl });
         if (editorFieldDownloadEl) editorFieldDownloadEl.value = `./${relativePath}`;
         syncSelectedProductFromForm();
         renderProductUploadMeta();
