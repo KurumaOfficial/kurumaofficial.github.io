@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ru" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Aleph Studio — Admin</title>
+    <meta name="description" content="Aleph Studio admin route.">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="theme-color" content="#0e0d0c">
+    <meta name="color-scheme" content="dark light">
+    <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+    <script>
+    window.__ALEPH_LOCALE__ = (function () {
+        var supported = ['ru', 'en', 'ua'];
+        var raw = (navigator.languages || [navigator.language || ''])
+            .map(function (l) { return l.split('-')[0].toLowerCase(); });
+        for (var i = 0; i < raw.length; i++) {
+            if (raw[i] === 'uk') return 'ua';
+            if (supported.indexOf(raw[i]) !== -1) return raw[i];
+        }
+        return 'ru';
+    })();
+    document.documentElement.lang = window.__ALEPH_LOCALE__ === 'ua' ? 'uk' : window.__ALEPH_LOCALE__;
+    </script>
+</head>
+<body data-admin-page="true">
+    <div id="editorOverlay" class="editor-overlay" aria-hidden="true">
+        <div class="editor-backdrop" data-close-editor></div>
+        <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
+            <div class="dash-layout">
+                <aside class="dash-sidebar">
+                    <a class="dash-brand" href="../ru/" target="_blank" rel="noopener noreferrer" aria-label="Открыть витрину Aleph Studio">
+                        <span class="logo-sq" aria-hidden="true"></span>
+                        <div class="dash-brand-copy">
+                            <span class="logo-text">Aleph Studio</span>
+                            <span class="dash-brand-sub">Admin Route</span>
+                        </div>
+                    </a>
+
+                    <nav class="dash-nav" aria-label="Разделы админки">
+                        <div class="dash-nav-section">Навигация</div>
+                        <a href="#" class="dash-nav-link active" data-admin-view="home">
+                            <span class="material-icons">home</span>
+                            <span class="dash-nav-label">Главная</span>
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="products">
+                            <span class="material-icons">inventory_2</span>
+                            <span class="dash-nav-label">Продукты</span>
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="support">
+                            <span class="material-icons">favorite</span>
+                            <span class="dash-nav-label">Поддержка</span>
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="misc">
+                            <span class="material-icons">tune</span>
+                            <span class="dash-nav-label">Прочее</span>
+                        </a>
+                    </nav>
+
+                    <div class="dash-sidebar-footer">
+                        <p>Aleph Studio © 2026</p>
+                    </div>
+                </aside>
+
+                <main class="dash-main">
+                    <header class="dash-header">
+                        <div class="dash-title-wrap">
+                            <span class="section-label dash-header-label">Admin route</span>
+                            <h1 id="editorAdminTitle" class="dash-header-title">Главная</h1>
+                            <p id="editorAdminSubtitle">Центр управления черновиком, публикацией и быстрыми переходами по админке.</p>
+                        </div>
+
+                        <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
+                            <span class="material-icons" id="themeIco">light_mode</span>
+                        </button>
+
+                        <div id="draftStateChip" class="dash-draft-chip is-clean">
+                            <span class="dash-draft-dot"></span>
+                            <span id="draftStateText">Без изменений</span>
+                        </div>
+
+                        <div class="dash-actions">
+                            <button id="exportJsonBtn" type="button" class="dash-btn">
+                                <span class="material-icons">download</span>
+                                JSON
+                            </button>
+                            <button id="importJsonBtn" type="button" class="dash-btn">
+                                <span class="material-icons">upload</span>
+                                Импорт
+                            </button>
+                            <button id="discardDraftBtn" type="button" class="dash-btn">
+                                <span class="material-icons">undo</span>
+                                Откатить
+                            </button>
+                            <button id="applyDraftBtn" type="button" class="dash-btn dash-primary">
+                                <span class="material-icons">check</span>
+                                Применить
+                            </button>
+                            <button type="button" class="dash-btn-icon" data-close-editor aria-label="Закрыть">
+                                <span class="material-icons">close</span>
+                            </button>
+                        </div>
+                    </header>
+
+                    <section class="dash-content">
+                        <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
+
+                        <div id="homeView" class="dash-view active">
+                            <div class="dash-metrics-grid">
+                                <article class="dash-metric-card">
+                                    <strong id="homeProductsCount">0</strong>
+                                    <span>Продукты</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeFeaturedCount">0</strong>
+                                    <span>Витрина</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeTeamCount">0</strong>
+                                    <span>Команда</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeSocialCount">0</strong>
+                                    <span>Соц. ссылки</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeUploadsCount">0</strong>
+                                    <span>Upload очередь</span>
+                                </article>
+                            </div>
+
+                            <div class="dash-home-grid">
+                                <article class="dash-card dash-status-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-red"><span class="material-icons">radio_button_checked</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title">Статус черновика</div>
+                                            <div class="dash-card-head-sub">Синхронизация, публикация и очередь загрузок</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div id="homeDraftSummary" class="dash-status-grid"></div>
+                                        <div class="dash-row-actions">
+                                            <button id="saveLocalBtn" type="button" class="dash-btn dash-primary">
+                                                <span class="material-icons">save</span>
+                                                Сохранить локально
+                                            </button>
+                                            <button id="clearLocalBtn" type="button" class="dash-btn">
+                                                <span class="material-icons">delete_sweep</span>
+                                                Очистить local
+                                            </button>
+                                            <button id="saveGithubBtn" type="button" class="dash-btn dash-blue">
+                                                <span class="material-icons">cloud_upload</span>
+                                                Сохранить Глобально
+                                            </button>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-gold"><span class="material-icons">lock</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title">GitHub token</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div class="dash-field">
+                                            <label for="githubToken">GitHub token</label>
+                                            <input id="githubToken" type="password" placeholder="Вставьте fine-grained token">
+                                            <p class="dash-help">Нужен token с доступом <strong>Contents: Read and write</strong> к <strong>KurumaOfficial/kurumaofficial.github.io</strong> для ветки <strong>dev/v2</strong>.</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-green"><span class="material-icons">help_outline</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title">Порядок работы</div>
+                                            <div class="dash-card-head-sub">Короткий сценарий без лишних шагов</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div class="dash-steps">
+                                            <div class="dash-step">
+                                                <div class="dash-step-number">1</div>
+                                                <div class="dash-step-text">Редактируй данные во вкладках <strong>Продукты</strong>, <strong>Поддержка</strong> и <strong>Прочее</strong>.</div>
+                                            </div>
+                                            <div class="dash-step">
+                                                <div class="dash-step-number">2</div>
+                                                <div class="dash-step-text">Нажми <strong>Применить</strong>, чтобы обновить preview прямо в текущей сессии.</div>
+                                            </div>
+                                            <div class="dash-step">
+                                                <div class="dash-step-number">3</div>
+                                                <div class="dash-step-text">Сохрани локально, если нужно пережить перезагрузку браузера без публикации.</div>
+                                            </div>
+                                            <div class="dash-step">
+                                                <div class="dash-step-number">4</div>
+                                                <div class="dash-step-text">Когда всё готово, вставь GitHub token и нажми <strong>Сохранить Глобально</strong>.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div id="productsView" class="dash-view">
+                            <div class="dash-products-layout">
+                                <aside class="dash-products-sidebar">
+                                    <div class="dash-products-toolbar">
+                                        <span class="dash-chip">Всего: <strong id="editorTotalCount">0</strong></span>
+                                        <span class="dash-chip">Витрина: <strong id="editorShowcaseCount">0</strong></span>
+                                        <input id="editorSearchInput" class="dash-search" type="text" placeholder="Поиск…">
+                                        <button id="addProductBtn" type="button" class="dash-btn dash-primary" aria-label="Добавить продукт">
+                                            <span class="material-icons">add</span>
+                                        </button>
+                                    </div>
+                                    <div id="editorProductGrid" class="dash-product-grid"></div>
+                                </aside>
+
+                                <div class="dash-products-editor">
+                                    <div id="editorEmptyState" class="dash-editor-empty">
+                                        <span class="material-icons">edit_note</span>
+                                        <p>Выбери продукт слева, чтобы открыть редактор.</p>
+                                    </div>
+
+                                    <div id="editor" class="dash-editor">
+                                        <div class="dash-editor-header">
+                                            <div class="dash-editor-header-copy">
+                                                <h2 id="editorTitle">Редактирование</h2>
+                                                <p>Поля ниже меняют черновик и обновляют карточку продукта в каталоге.</p>
+                                            </div>
+                                            <button id="closeProductEditorBtn" type="button" class="dash-btn-icon" aria-label="Закрыть редактор продукта">
+                                                <span class="material-icons">close</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="dash-tab-bar">
+                                            <button type="button" class="dash-tab-btn active" data-tab="tab-main">Основное</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-content">Контент</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-publish">Публикация</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-route">Route</button>
+                                        </div>
+
+                                        <div class="dash-editor-body">
+                                            <div class="dash-tab-panel active" data-panel="tab-main">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6"><label for="f-name">Название</label><input type="text" id="f-name"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-slug">ID / якорь</label><input type="text" id="f-slug"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-tag">Тег</label><input type="text" id="f-tag"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-version">Версия</label><input type="text" id="f-version"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-order">Порядок</label><input type="number" id="f-order"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-stage">Стадия</label>
+                                                            <select id="f-stage">
+                                                                <option value="">Без флага</option>
+                                                                <option value="alpha">Alpha</option>
+                                                                <option value="beta">Beta</option>
+                                                                <option value="release">Release</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="dash-field dash-c6"><label for="f-tone">Цвет карточки</label>
+                                                            <select id="f-tone">
+                                                                <option value="red">Красный</option>
+                                                                <option value="green">Зелёный</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="dash-field dash-c12"><label for="f-status">Статус</label><input type="text" id="f-status"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-content">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-field dash-c12"><label for="f-desc">Краткое описание</label><textarea id="f-desc"></textarea></div>
+                                                </div>
+                                                <div class="dash-form-section">
+                                                    <div class="dash-field dash-c12"><label for="f-instructions">Инструкция (каждый пункт с новой строки)</label><textarea id="f-instructions"></textarea></div>
+                                                </div>
+                                                <div class="dash-form-section">
+                                                    <div class="dash-field dash-c12"><label for="f-note">Примечание</label><textarea id="f-note"></textarea></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-publish">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6">
+                                                            <label>Витрина</label>
+                                                            <label class="dash-inline-check">
+                                                                <input type="checkbox" id="f-showcase">
+                                                                <span>Показывать на витрине</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="dash-field dash-c6"><label for="f-showcase-order">Порядок на витрине</label><input type="number" id="f-showcase-order"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-download">Download URL</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-source">Исходный код</label><input type="text" id="f-source"></div>
+                                                        <div class="dash-field dash-c12">
+                                                            <label for="f-download-file">Файл для GitHub upload</label>
+                                                            <input type="file" id="f-download-file">
+                                                            <p id="f-download-file-meta" class="dash-help">Файл не выбран.</p>
+                                                            <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Убрать файл</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-route">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c12">
+                                                            <label class="dash-inline-check">
+                                                                <input type="checkbox" id="f-auto-route-redirect">
+                                                                <span>Авто-redirect на этот route</span>
+                                                            </label>
+                                                            <p class="dash-help">Если включено, сайт сразу открывает этот продуктовый route.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dash-form-section dash-form-section--spaced">
+                                                    <h4>Модули</h4>
+                                                    <div class="dash-route-toolbar">
+                                                        <div class="dash-field">
+                                                            <label for="route-module-category">Категория</label>
+                                                            <select id="route-module-category">
+                                                                <option value="player">На игроке</option>
+                                                                <option value="world">В мире</option>
+                                                                <option value="utils">Утилиты</option>
+                                                                <option value="other">Остальное</option>
+                                                                <option value="interface">Интерфейс</option>
+                                                                <option value="themes">Темы</option>
+                                                            </select>
+                                                        </div>
+                                                        <button id="addRouteModuleBtn" type="button" class="dash-btn dash-primary">
+                                                            <span class="material-icons">add</span>
+                                                            Функция
+                                                        </button>
+                                                    </div>
+                                                    <div id="routeModuleList" class="dash-route-list"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dash-editor-footer">
+                                            <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">
+                                                <span class="material-icons">delete</span>
+                                                Удалить
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="supportView" class="dash-view">
+                            <div class="dash-support-metrics">
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportSummaryMinAmount">$0</strong>
+                                    <span>Мин. донат</span>
+                                </article>
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportSummaryRoleName">@Premium</strong>
+                                    <span>Роль Discord</span>
+                                </article>
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportButtonsCount">0</strong>
+                                    <span>Методов оплаты</span>
+                                </article>
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportSupportersCount">0</strong>
+                                    <span>Поддержавших</span>
+                                </article>
+                            </div>
+
+                            <article class="dash-card dash-support-settings-card">
+                                <div class="dash-card-head">
+                                    <div class="dash-card-head-icon is-gold"><span class="material-icons">settings</span></div>
+                                    <div class="dash-card-head-copy">
+                                        <div class="dash-card-head-title">Базовые настройки</div>
+                                        <div class="dash-card-head-sub">Параметры публичной donate-страницы</div>
+                                    </div>
+                                </div>
+                                <div class="dash-card-body">
+                                    <div class="dash-support-settings-grid">
+                                        <div class="dash-field">
+                                            <label for="supportMinAmount">Минимальная сумма (USD)</label>
+                                            <input id="supportMinAmount" type="number" min="0" step="0.01">
+                                        </div>
+                                        <div class="dash-field">
+                                            <label for="supportRoleName">Название роли</label>
+                                            <input id="supportRoleName" type="text" placeholder="@Premium">
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <div class="dash-support-layout">
+                                <article class="dash-support-column">
+                                    <div class="dash-support-column-head">
+                                        <span class="dash-support-column-title">Способы поддержки</span>
+                                        <button id="addSupportButtonBtn" type="button" class="dash-btn dash-primary dash-sm">
+                                            <span class="material-icons">add</span>
+                                            Добавить
+                                        </button>
+                                    </div>
+                                    <div id="supportButtonsList" class="dash-support-list"></div>
+                                </article>
+
+                                <article class="dash-support-column">
+                                    <div class="dash-support-column-head">
+                                        <span class="dash-support-column-title">Поддержавшие</span>
+                                        <button id="addSupporterBtn" type="button" class="dash-btn dash-primary dash-sm">
+                                            <span class="material-icons">person_add</span>
+                                            Участник
+                                        </button>
+                                    </div>
+                                    <div id="supportersAdminList" class="dash-support-list"></div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div id="miscView" class="dash-view">
+                            <div class="dash-misc-layout">
+                                <article class="dash-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-blue"><span class="material-icons">link</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title">Социальные ссылки</div>
+                                            <div class="dash-card-head-sub">Показываются в футере и под витриной продуктов</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div class="dash-social-item">
+                                            <div class="dash-social-icon youtube"><span class="material-icons">play_circle</span></div>
+                                            <div class="dash-social-input">
+                                                <label for="socialYoutube">YouTube</label>
+                                                <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                                            </div>
+                                        </div>
+                                        <div class="dash-social-item">
+                                            <div class="dash-social-icon discord"><span class="material-icons">forum</span></div>
+                                            <div class="dash-social-input">
+                                                <label for="socialDiscord">Discord</label>
+                                                <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                                            </div>
+                                        </div>
+                                        <div class="dash-social-item">
+                                            <div class="dash-social-icon telegram"><span class="material-icons">send</span></div>
+                                            <div class="dash-social-input">
+                                                <label for="socialTelegram">Telegram</label>
+                                                <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                                            </div>
+                                        </div>
+                                        <div class="dash-divider"></div>
+                                        <div class="dash-field">
+                                            <label>Превью кнопок</label>
+                                            <div id="editorSocialPreview" class="dash-social-preview"></div>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card dash-team-editor-shell">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-red"><span class="material-icons">edit</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title">Редактор участника</div>
+                                            <div class="dash-card-head-sub">Заполняет публичную карточку команды на сайте</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div id="teamEditorEmpty" class="dash-team-editor-empty">
+                                            Выбери участника слева или создай новую карточку кнопкой «Участник».
+                                        </div>
+
+                                        <div id="teamEditor" class="dash-team-editor" hidden>
+                                            <div class="dash-editor-header dash-editor-header--nested">
+                                                <div class="dash-editor-header-copy">
+                                                    <h2 id="teamEditorTitle">Участник</h2>
+                                                    <p>Поля ниже сразу редактируют командный блок в черновике.</p>
+                                                </div>
+                                                <button id="closeTeamEditorBtn" type="button" class="dash-btn-icon" aria-label="Закрыть редактор участника">
+                                                    <span class="material-icons">close</span>
+                                                </button>
+                                            </div>
+                                            <div class="dash-editor-body dash-editor-body--nested">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6"><label for="team-name">Имя</label><input type="text" id="team-name"></div>
+                                                        <div class="dash-field dash-c6"><label for="team-role">Роль</label><input type="text" id="team-role"></div>
+                                                        <div class="dash-field dash-c9"><label for="team-avatar">Ссылка на аватар</label><input type="text" id="team-avatar"></div>
+                                                        <div class="dash-field dash-c3"><label for="team-order">Порядок</label><input type="number" id="team-order"></div>
+                                                        <div class="dash-field dash-c12"><label for="team-bio">Описание</label><textarea id="team-bio"></textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-editor-footer">
+                                                <div class="note">Карточка обновляет общий черновик витрины и команды.</div>
+                                                <div class="btns">
+                                                    <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">
+                                                        <span class="material-icons">delete</span>
+                                                        Удалить
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card dash-team-list-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-gold"><span class="material-icons">group</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title">Команда</div>
+                                            <div class="dash-card-head-sub">Карточки участников, порядок и краткие описания</div>
+                                        </div>
+                                        <div class="dash-card-head-actions">
+                                            <div class="dash-chip">Карточек: <strong id="teamMemberCount">0</strong></div>
+                                            <button id="addTeamMemberBtn" type="button" class="dash-btn dash-primary dash-sm" hidden>
+                                                <span class="material-icons">add</span>
+                                                Участник
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div id="teamGrid" class="dash-team-grid"></div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+    <script type="module" src="../src/app.js"></script>
+</body>
+</html>

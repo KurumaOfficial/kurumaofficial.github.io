@@ -1,0 +1,1369 @@
+import { initReveal } from '../components/reveal.js';
+import { $, cleanUrl, createElement, optimizeDiscordAvatarUrl, sanitizeHref } from '../core/dom.js';
+import { createInlineIcon } from '../core/icons.js';
+import { localizeSiteData } from '../data/localized-site-data.js';
+import { resolveRouteRelativePath } from '../i18n/config.js';
+import { createLocaleController } from '../i18n/controller.js';
+import {
+    getAdminHref,
+    getEffectiveSiteData,
+    initAdminRouteAccess,
+    initSkipLink,
+    initSharedThemeToggle,
+    initSmoothRouteTransitions,
+} from '../core/site-shell.js';
+
+const COPY = Object.freeze({
+    ru: {
+        common: {
+            titleHtml: 'Поддержка<br><em>проекта</em>',
+            introLead: 'Поддерживая нас от ',
+            introMiddle: 'вы получаете роль ',
+            introAfterRole: 'на нашем ',
+            discordLabel: 'Discord-сервере',
+            introTail: ' и ваш профиль появится на сайте — достаточно указать свой Discord-логин при покупке или донате.',
+            paymentsTitle: 'Способы поддержки',
+            paymentsDesc: 'Выберите удобный способ поддержки проекта и команды.',
+            topTitle: 'Общий топ 3',
+            topDesc: 'Чем больше сумма, тем ярче золотое свечение карточки.',
+            supportersTitle: 'Поддержали нас',
+            supportersEmpty: 'Пока никто не поддержал проект. Когда появятся первые донаты, карточки покажутся здесь.',
+            buttonsEmpty: 'Скоро здесь появятся доступные способы поддержки.',
+        },
+        site: {
+            metaTitle: 'Aleph Studio — Поддержать',
+            metaDescription: 'Поддержите Aleph Studio и помогите финансировать открытые релизы, инструменты и будущие обновления.',
+            backLabel: 'Назад к Aleph Studio',
+            eyebrow: 'Поддержать Aleph Studio',
+            titleHtml: 'Поддержка<br><em>студии</em>',
+        },
+        product: {
+            metaTitle: '{productTitle} — Поддержать',
+            metaDescription: 'Поддержите {productTitle} и помогите финансировать дальнейшую разработку и будущие обновления от Aleph Studio.',
+            backLabel: 'Назад к {productTitle}',
+            eyebrow: 'Поддержать проект',
+        },
+    },
+    en: {
+        common: {
+            titleHtml: 'Support<br><em>the project</em>',
+            introLead: 'By supporting us from ',
+            introMiddle: 'you get the ',
+            introAfterRole: 'role on our ',
+            discordLabel: 'Discord server',
+            introTail: ' and your profile will appear on the site — just specify your Discord login when donating or buying support.',
+            paymentsTitle: 'Support methods',
+            paymentsDesc: 'Choose a convenient way to support the project and the team.',
+            topTitle: 'Overall top 3',
+            topDesc: 'The higher the amount, the stronger the golden glow of the card.',
+            supportersTitle: 'Supported us',
+            supportersEmpty: 'Nobody has supported the project yet. Cards will appear here once the first donations are added.',
+            buttonsEmpty: 'Available support methods will appear here soon.',
+        },
+        site: {
+            metaTitle: 'Aleph Studio — Support',
+            metaDescription: 'Support Aleph Studio and help fund open source releases, tools and future updates.',
+            backLabel: 'Back to Aleph Studio',
+            eyebrow: 'Support Aleph Studio',
+            titleHtml: 'Support<br><em>the studio</em>',
+        },
+        product: {
+            metaTitle: '{productTitle} — Support',
+            metaDescription: 'Support {productTitle} and help fund its ongoing development and future updates from Aleph Studio.',
+            backLabel: 'Back to {productTitle}',
+            eyebrow: 'Support the project',
+        },
+    },
+    ua: {
+        common: {
+            titleHtml: 'Підтримка<br><em>проєкту</em>',
+            introLead: 'Підтримуючи нас від ',
+            introMiddle: 'ви отримуєте роль ',
+            introAfterRole: 'на нашому ',
+            discordLabel: 'Discord-сервері',
+            introTail: ' і ваш профіль зʼявиться на сайті — достатньо вказати свій Discord-логін під час покупки або донату.',
+            paymentsTitle: 'Способи підтримки',
+            paymentsDesc: 'Оберіть зручний спосіб підтримати проєкт і команду.',
+            topTitle: 'Загальний топ 3',
+            topDesc: 'Що більша сума, то сильніше золотаве сяйво картки.',
+            supportersTitle: 'Підтримали нас',
+            supportersEmpty: 'Поки ніхто не підтримав проєкт. Картки зʼявляться тут після перших донатів.',
+            buttonsEmpty: 'Незабаром тут зʼявляться доступні способи підтримки.',
+        },
+        site: {
+            metaTitle: 'Aleph Studio — Підтримати',
+            metaDescription: 'Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.',
+            backLabel: 'Назад до Aleph Studio',
+            eyebrow: 'Підтримати Aleph Studio',
+            titleHtml: 'Підтримка<br><em>студії</em>',
+        },
+        product: {
+            metaTitle: '{productTitle} — Підтримати',
+            metaDescription: 'Підтримайте {productTitle} і допоможіть фінансувати подальшу розробку та майбутні оновлення від Aleph Studio.',
+            backLabel: 'Назад до {productTitle}',
+            eyebrow: 'Підтримати проєкт',
+        },
+    },
+});
+
+function formatCopyText(template, values) {
+    return String(template || '').replace(/\{(\w+)\}/g, (match, key) => {
+        const replacement = values?.[key];
+        return replacement == null ? match : String(replacement);
+    });
+}
+
+function humanizeProductSlug(slug) {
+    return String(slug || '')
+        .split('-')
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ') || 'Project';
+}
+
+function getDonateRouteContext(siteData) {
+    const match = window.location.pathname.match(/\/products\/([^/]+)\/donate(?:\/index\.html)?\/?$/i);
+    if (!match) {
+        return {
+            isProductRoute: false,
+            productTitle: 'Aleph Studio',
+        };
+    }
+
+    const slug = match[1] || '';
+    const products = Array.isArray(siteData?.products) ? siteData.products : [];
+    const product = products.find((item) => item?.id === slug)
+        || products.find((item) => String(item?.detailUrl || '').includes(`/products/${slug}/`))
+        || null;
+
+    return {
+        isProductRoute: true,
+        productTitle: String(product?.title || humanizeProductSlug(slug)).trim() || humanizeProductSlug(slug),
+    };
+}
+
+function getCopy(locale, routeContext) {
+    const localeCopy = COPY[locale] || COPY.ru;
+    const variant = routeContext?.isProductRoute ? localeCopy.product : localeCopy.site;
+    const values = {
+        productTitle: routeContext?.productTitle || 'Aleph Studio',
+    };
+
+    return {
+        ...localeCopy.common,
+        metaTitle: formatCopyText(variant.metaTitle, values),
+        metaDescription: formatCopyText(variant.metaDescription, values),
+        backLabel: formatCopyText(variant.backLabel, values),
+        eyebrow: variant.eyebrow,
+        titleHtml: variant.titleHtml || localeCopy.common.titleHtml,
+    };
+}
+
+function stripHtmlTags(value) {
+    return String(value || '').replace(/<[^>]*>/g, '').trim();
+}
+
+function renderDonateTitle(element, titleHtml) {
+    if (!(element instanceof HTMLElement)) return;
+
+    const match = String(titleHtml || '').trim().match(/^([\s\S]*?)<br\s*\/?>\s*<em>([\s\S]*?)<\/em>\s*$/i);
+    element.textContent = '';
+
+    if (!match) {
+        element.textContent = stripHtmlTags(titleHtml);
+        return;
+    }
+
+    const lead = stripHtmlTags(match[1]);
+    const accentText = stripHtmlTags(match[2]);
+    if (lead) {
+        element.append(document.createTextNode(lead));
+    }
+    element.append(document.createElement('br'));
+
+    const accent = document.createElement('em');
+    accent.textContent = accentText;
+    element.append(accent);
+}
+
+const TIER_COPY = Object.freeze({
+    ru: {
+        premium: 'Premium',
+        gold: 'Gold',
+        royalGold: 'Royal Gold',
+        mythicGold: 'Mythic Gold',
+        platinum: 'Темная Платина',
+    },
+    en: {
+        premium: 'Premium',
+        gold: 'Gold',
+        royalGold: 'Royal Gold',
+        mythicGold: 'Mythic Gold',
+        platinum: 'Dark Platinum',
+    },
+    ua: {
+        premium: 'Premium',
+        gold: 'Gold',
+        royalGold: 'Royal Gold',
+        mythicGold: 'Mythic Gold',
+        platinum: 'Темна Платина',
+    },
+});
+
+const SUPPORTER_AVATAR_DISCORD_SIZE = 256;
+
+function getElements() {
+    return {
+        donateBackLink: document.querySelector('.donate-back'),
+        donateBackLabel: $('donateBackLabel'),
+        donateEyebrow: $('donateEyebrow'),
+        donateTitle: $('donateTitle'),
+        donateDesc: $('donateDesc'),
+        paymentsTitle: $('paymentsTitle'),
+        paymentsDesc: $('paymentsDesc'),
+        supportButtonsGrid: $('supportButtonsGrid'),
+        topSupportersSection: $('topSupportersSection'),
+        topSupportersTitle: $('topSupportersTitle'),
+        topSupportersDesc: $('topSupportersDesc'),
+        topSupportersGrid: $('topSupportersGrid'),
+        supportersTitle: $('supportersTitle'),
+        supporterCount: $('supporterCount'),
+        supportersGrid: $('supportersGrid'),
+    };
+}
+
+function resolveAsset(path) {
+    const value = String(path || '').trim();
+    if (!value) return value;
+
+    const resolved = resolveRouteRelativePath(value, window.location.pathname);
+    if (!resolved) return '';
+    if (resolved.startsWith('#')) return resolved;
+
+    return new URL(resolved, window.location.href).toString();
+}
+
+function optimizeSupportAvatarSrc(path) {
+    const resolved = resolveAsset(path);
+    if (!resolved) return '';
+    return optimizeDiscordAvatarUrl(resolved, SUPPORTER_AVATAR_DISCORD_SIZE) || resolved;
+}
+
+function resolveButtonUrl(path) {
+    const value = String(path || '').trim();
+    if (!value) return '';
+    const externalHref = sanitizeHref(value);
+    if (externalHref) return externalHref;
+    if (/^(?:\/|\.{1,2}\/)/.test(value)) {
+        const resolved = resolveRouteRelativePath(value, window.location.pathname);
+        return resolved ? new URL(resolved, window.location.href).toString() : '';
+    }
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('#')) return '';
+    return cleanUrl(value);
+}
+
+function initials(name) {
+    return String(name || '')
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((part) => part[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2) || 'A';
+}
+
+function formatUsd(value) {
+    const amount = Number(value) || 0;
+    const fixed = Number.isInteger(amount) ? amount.toFixed(0) : amount.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+    return `$${fixed}`;
+}
+
+const _reducedMotionQuery = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+
+function prefersReducedMotion() {
+    return _reducedMotionQuery?.matches === true;
+}
+
+const viewportResizeSubscribers = new Set();
+let viewportResizeFrame = 0;
+let viewportResizeBound = false;
+
+function runViewportResizeSubscribers() {
+    viewportResizeFrame = 0;
+    viewportResizeSubscribers.forEach((callback) => callback());
+}
+
+function scheduleViewportResize() {
+    if (viewportResizeFrame) return;
+    viewportResizeFrame = window.requestAnimationFrame(runViewportResizeSubscribers);
+}
+
+function subscribeViewportResize(callback) {
+    viewportResizeSubscribers.add(callback);
+
+    if (!viewportResizeBound) {
+        viewportResizeBound = true;
+        window.addEventListener('resize', scheduleViewportResize);
+    }
+
+    return () => {
+        viewportResizeSubscribers.delete(callback);
+
+        if (viewportResizeSubscribers.size || !viewportResizeBound) return;
+
+        viewportResizeBound = false;
+        window.removeEventListener('resize', scheduleViewportResize);
+        if (viewportResizeFrame) {
+            window.cancelAnimationFrame(viewportResizeFrame);
+            viewportResizeFrame = 0;
+        }
+    };
+}
+
+function isElementInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return rect.bottom > 0
+        && rect.right > 0
+        && rect.top < window.innerHeight
+        && rect.left < window.innerWidth;
+}
+
+/* ── Shared IntersectionObserver for all canvas FX ─────────────── */
+const _fxObserverCallbacks = new WeakMap();
+let _fxObserver = null;
+
+function getSharedFxObserver() {
+    if (_fxObserver) return _fxObserver;
+    _fxObserver = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+            const cbs = _fxObserverCallbacks.get(entry.target);
+            if (!cbs) continue;
+            if (entry.isIntersecting) {
+                cbs.enter();
+            } else {
+                cbs.leave();
+            }
+        }
+    }, { threshold: 0.02 });
+    return _fxObserver;
+}
+
+function observeFxTarget(target, enter, leave) {
+    _fxObserverCallbacks.set(target, { enter, leave });
+    getSharedFxObserver().observe(target);
+}
+
+function unobserveFxTarget(target) {
+    getSharedFxObserver().unobserve(target);
+    _fxObserverCallbacks.delete(target);
+}
+
+function getTierCopy(locale) {
+    return TIER_COPY[locale] || TIER_COPY.ru;
+}
+
+function hueFromName(name) {
+    let hue = 0;
+    for (let index = 0; index < String(name || '').length; index += 1) {
+        hue = (hue * 31 + String(name).charCodeAt(index)) & 0xffffffff;
+    }
+    return Math.abs(hue) % 360;
+}
+
+function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+}
+
+function lerp(start, end, progress) {
+    return start + (end - start) * progress;
+}
+
+function mapRange(value, inputMin, inputMax, outputMin, outputMax) {
+    if (inputMax === inputMin) return outputMin;
+    const progress = clamp((value - inputMin) / (inputMax - inputMin), 0, 1);
+    return lerp(outputMin, outputMax, progress);
+}
+
+function roundedRect(context, x, y, width, height, radius) {
+    context.beginPath();
+    context.moveTo(x + radius, y);
+    context.lineTo(x + width - radius, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + radius);
+    context.lineTo(x + width, y + height - radius);
+    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    context.lineTo(x + radius, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - radius);
+    context.lineTo(x, y + radius);
+    context.quadraticCurveTo(x, y, x + radius, y);
+    context.closePath();
+}
+
+function sortButtons(buttons, locale) {
+    return [...(Array.isArray(buttons) ? buttons : [])].sort((a, b) => {
+        const bySort = Number(a.sortOrder || 0) - Number(b.sortOrder || 0);
+        if (bySort !== 0) return bySort;
+        return String(a.title || '').localeCompare(String(b.title || ''), locale === 'ua' ? 'uk' : locale);
+    });
+}
+
+function sortSupporters(supporters, locale) {
+    return [...(Array.isArray(supporters) ? supporters : [])].sort((a, b) => {
+        const byAmount = Number(b.amountUsd || 0) - Number(a.amountUsd || 0);
+        if (byAmount !== 0) return byAmount;
+        const bySort = Number(a.sortOrder || 0) - Number(b.sortOrder || 0);
+        if (bySort !== 0) return bySort;
+        return String(a.name || '').localeCompare(String(b.name || ''), locale === 'ua' ? 'uk' : locale);
+    });
+}
+
+function createEmptyState(text) {
+    return createElement('div', { className: 'empty-state' }, text);
+}
+
+function buildIntro(container, copy, minimumAmountUsd, roleName, discordUrl) {
+    if (!container) return;
+    container.textContent = '';
+
+    container.append(
+        document.createTextNode(copy.introLead),
+        createElement('strong', { textContent: `${formatUsd(minimumAmountUsd)} ` }),
+        document.createTextNode(copy.introMiddle),
+        createElement('strong', { textContent: `${roleName || '@Premium'} ` }),
+        document.createTextNode(copy.introAfterRole),
+    );
+
+    if (discordUrl) {
+        container.append(
+            createElement('a', {
+                href: discordUrl,
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                textContent: copy.discordLabel,
+            }),
+        );
+    } else {
+        container.append(document.createTextNode(copy.discordLabel));
+    }
+
+    container.append(document.createTextNode(copy.introTail));
+}
+
+function createPaymentCard(button) {
+    const href = resolveButtonUrl(button.url);
+    if (!href) return null;
+
+    const tag = 'a';
+    const attrs = {
+        className: 'pay-btn',
+    };
+
+    attrs.href = href;
+    if (/^(?:https?:)?\/\//i.test(href)) {
+        attrs.target = '_blank';
+        attrs.rel = 'noopener noreferrer';
+    }
+
+    const card = createElement(tag, attrs);
+    card.append(
+        createElement('span', { className: 'pay-btn-label', textContent: button.label || 'Support' }),
+        createElement('span', { className: 'pay-btn-name', textContent: button.title || 'Support' }),
+        createElement('span', { className: 'pay-btn-note', textContent: button.note || '' }),
+        createElement(
+            'span',
+            { className: 'pay-btn-arrow' },
+            createInlineIcon('arrow_outward'),
+        ),
+    );
+    return card;
+}
+
+function renderPaymentButtons(container, buttons, copy, locale) {
+    if (!container) return;
+    container.textContent = '';
+
+    const sorted = sortButtons(buttons, locale).filter((button) => Boolean(resolveButtonUrl(button.url)));
+    if (!sorted.length) {
+        container.append(createEmptyState(copy.buttonsEmpty));
+        return;
+    }
+
+    sorted.forEach((button) => {
+        const card = createPaymentCard(button);
+        if (card) container.append(card);
+    });
+}
+
+function getDonorStyle(amount, locale) {
+    const tierCopy = getTierCopy(locale);
+
+    if (amount >= 1000) {
+        return {
+            kind: 'platinum',
+            title: tierCopy.platinum,
+            icon: 'diamond',
+            glow: 1,
+            aura: 1,
+            cometCount: Math.round(mapRange(amount, 1000, 5000, 5, 12)),
+            starCount: Math.round(mapRange(amount, 1000, 5000, 18, 42)),
+            ring: true,
+            goldCount: 0,
+            sparkCount: 0,
+            showMark: true,
+        };
+    }
+
+    if (amount < 100) {
+        return {
+            kind: 'standard',
+            title: tierCopy.premium,
+            icon: 'workspace_premium',
+            glow: 0,
+            aura: 0,
+            goldCount: 0,
+            sparkCount: 0,
+            ring: false,
+            showMark: amount >= 10,
+        };
+    }
+
+    const glow = Math.pow(clamp((amount - 100) / 900, 0, 1), 0.78);
+    return {
+        kind: 'gold',
+        title: amount >= 500 ? tierCopy.mythicGold : amount >= 250 ? tierCopy.royalGold : tierCopy.gold,
+        icon: amount >= 500 ? 'auto_awesome' : 'workspace_premium',
+        glow,
+        aura: mapRange(amount, 100, 999, 0.025, 0.14),
+        goldCount: Math.round(mapRange(amount, 100, 999, 3, 26)),
+        sparkCount: Math.round(mapRange(amount, 100, 999, 2, 14)),
+        ring: amount >= 500,
+        showMark: true,
+    };
+}
+
+function drawGlowSparkle(context, x, y, radius, alpha, palette = 'gold', cachedGradient = null) {
+    context.save();
+    context.translate(x, y);
+    context.globalAlpha = alpha;
+
+    let gradient = cachedGradient;
+    if (!gradient) {
+        gradient = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
+        if (palette === 'platinum') {
+            gradient.addColorStop(0, 'rgba(228,242,255,0.98)');
+            gradient.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+            gradient.addColorStop(1, 'rgba(120,170,255,0)');
+        } else {
+            gradient.addColorStop(0, 'rgba(255,248,220,0.95)');
+            gradient.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+            gradient.addColorStop(1, 'rgba(255,224,140,0)');
+        }
+    }
+    context.fillStyle = gradient;
+    context.beginPath();
+    context.arc(0, 0, radius * 3.8, 0, Math.PI * 2);
+    context.fill();
+    context.restore();
+}
+
+function createCanvasSizer(canvas) {
+    const context = canvas.getContext('2d');
+    if (!context) return null;
+
+    let lastWidth = 0;
+    let lastHeight = 0;
+    let lastDpr = 0;
+
+    const resize = () => {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const width = Math.max(1, Math.floor(rect.width));
+        const height = Math.max(1, Math.floor(rect.height));
+
+        if (width === lastWidth && height === lastHeight && dpr === lastDpr) {
+            return { width, height };
+        }
+
+        lastWidth = width;
+        lastHeight = height;
+        lastDpr = dpr;
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.scale(dpr, dpr);
+        return { width, height };
+    };
+
+    return { context, resize };
+}
+
+function spawnGoldFX(canvas, amount, tier) {
+    const sizedCanvas = createCanvasSizer(canvas);
+    if (!sizedCanvas) return;
+
+    const { context, resize } = sizedCanvas;
+    let frameId = 0;
+    const observedTarget = canvas.closest('.card-donor') || canvas;
+    let active = isElementInViewport(observedTarget);
+    let angle = 0;
+    let size = resize();
+
+    const ingots = Array.from({ length: tier.goldCount }, (_, index) => {
+        const depth = 0.68 + Math.random() * 1.1;
+        return {
+            x: Math.random() * size.width,
+            y: -Math.random() * size.height - index * 10,
+            width: (13 + Math.random() * 8) * depth,
+            height: (7.5 + Math.random() * 4.5) * depth,
+            velocityY: 0.2 + Math.random() * 0.22 + depth * 0.15,
+            drift: (Math.random() - 0.5) * (0.07 + depth * 0.11),
+            rotation: Math.random() * Math.PI * 2,
+            velocityRotation: (Math.random() - 0.5) * (0.012 + Math.random() * 0.02),
+            alpha: 0.16 + Math.random() * (0.1 + tier.glow * 0.22),
+            wobble: Math.random() * Math.PI * 2,
+            wobbleSpeed: 0.008 + Math.random() * 0.02,
+            shine: Math.random() * Math.PI * 2,
+            shineSpeed: 0.02 + Math.random() * 0.03,
+            depth,
+        };
+    });
+    ingots.sort((left, right) => left.depth - right.depth);
+
+    ingots.forEach((ingot) => {
+        const hw = ingot.width / 2;
+        const hh = ingot.height / 2;
+        const d3 = ingot.height * 0.52;
+        const sk = d3 * 0.72;
+        ingot._hw = hw;
+        ingot._hh = hh;
+        ingot._d3 = d3;
+        ingot._sk = sk;
+        ingot._r = Math.max(2, Math.min(ingot.width, ingot.height) * 0.23);
+
+        ingot._halo = context.createRadialGradient(0, 0, 0, 0, 0, ingot.width * 1.8);
+        ingot._halo.addColorStop(0, 'rgba(255,220,120,0.16)');
+        ingot._halo.addColorStop(0.5, 'rgba(201,168,76,0.07)');
+        ingot._halo.addColorStop(1, 'rgba(201,168,76,0)');
+
+        ingot._shadow = context.createRadialGradient(0, 0, 0, 0, 0, ingot.width * 0.95);
+        ingot._shadow.addColorStop(0, 'rgba(0,0,0,0.22)');
+        ingot._shadow.addColorStop(1, 'rgba(0,0,0,0)');
+
+        ingot._topGrad = context.createLinearGradient(-hw, -hh - d3, hw + sk, -hh);
+        ingot._topGrad.addColorStop(0, '#fff3ba');
+        ingot._topGrad.addColorStop(0.22, '#f6de92');
+        ingot._topGrad.addColorStop(0.58, '#ddb75c');
+        ingot._topGrad.addColorStop(1, '#af7f2b');
+
+        ingot._sideGrad = context.createLinearGradient(hw, -hh, hw + sk, hh);
+        ingot._sideGrad.addColorStop(0, '#d6a946');
+        ingot._sideGrad.addColorStop(0.45, '#b07d28');
+        ingot._sideGrad.addColorStop(1, '#7e591f');
+
+        ingot._frontGrad = context.createLinearGradient(-hw, -hh, hw, hh);
+        ingot._frontGrad.addColorStop(0, '#f6df8e');
+        ingot._frontGrad.addColorStop(0.18, '#ebca6f');
+        ingot._frontGrad.addColorStop(0.52, '#ca9b3f');
+        ingot._frontGrad.addColorStop(0.82, '#a77524');
+        ingot._frontGrad.addColorStop(1, '#8b601e');
+
+        ingot._bevelGrad = context.createLinearGradient(-hw, -hh, hw, hh);
+        ingot._bevelGrad.addColorStop(0, 'rgba(255,247,210,0.28)');
+        ingot._bevelGrad.addColorStop(0.25, 'rgba(255,230,155,0.14)');
+        ingot._bevelGrad.addColorStop(0.7, 'rgba(140,90,15,0.05)');
+        ingot._bevelGrad.addColorStop(1, 'rgba(65,35,0,0.16)');
+
+        ingot._sparkleRadius = 0.9 + ingot.depth * 0.8;
+        ingot._sparkleGrad = context.createRadialGradient(0, 0, 0, 0, 0, ingot._sparkleRadius * 3.8);
+        ingot._sparkleGrad.addColorStop(0, 'rgba(255,248,220,0.95)');
+        ingot._sparkleGrad.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+        ingot._sparkleGrad.addColorStop(1, 'rgba(255,224,140,0)');
+    });
+
+    const sparkles = Array.from({ length: tier.sparkCount }, () => {
+        const radius = 0.8 + Math.random() * 1.7;
+        const grad = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
+        grad.addColorStop(0, 'rgba(255,248,220,0.95)');
+        grad.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+        grad.addColorStop(1, 'rgba(255,224,140,0)');
+        return {
+            x: Math.random() * size.width,
+            y: Math.random() * size.height,
+            radius,
+            pulse: Math.random() * Math.PI * 2,
+            speed: 0.02 + Math.random() * 0.04,
+            alpha: 0.05 + Math.random() * 0.1,
+            _grad: grad,
+        };
+    });
+
+    const _ringSparkleGrad = context.createRadialGradient(0, 0, 0, 0, 0, 0.9 * 3.8);
+    _ringSparkleGrad.addColorStop(0, 'rgba(255,248,220,0.95)');
+    _ringSparkleGrad.addColorStop(0.35, 'rgba(255,224,140,0.55)');
+    _ringSparkleGrad.addColorStop(1, 'rgba(255,224,140,0)');
+
+    let cachedAura = null;
+    let cachedRingGrad = null;
+    let ringRadius = 0;
+
+    const rebuildSizeGradients = () => {
+        cachedAura = context.createRadialGradient(size.width * 0.5, size.height * 0.18, 0, size.width * 0.5, size.height * 0.18, size.height);
+        cachedAura.addColorStop(0, `rgba(255,220,120,${tier.aura})`);
+        cachedAura.addColorStop(1, 'rgba(255,220,120,0)');
+
+        if (tier.ring) {
+            ringRadius = Math.min(size.width, size.height) * 0.32;
+            cachedRingGrad = context.createLinearGradient(-ringRadius, -ringRadius, ringRadius, ringRadius);
+            cachedRingGrad.addColorStop(0, 'rgba(255,245,200,0.7)');
+            cachedRingGrad.addColorStop(0.5, 'rgba(210,170,80,0.24)');
+            cachedRingGrad.addColorStop(1, 'rgba(255,240,190,0.62)');
+        }
+    };
+
+    rebuildSizeGradients();
+
+    const drawRing = () => {
+        if (!tier.ring) return;
+
+        const centerX = size.width / 2;
+        const centerY = size.height / 2 + 8;
+
+        context.save();
+        context.translate(centerX, centerY);
+        context.rotate(angle * 0.25);
+        context.globalAlpha = 0.12 + tier.glow * 0.14;
+
+        context.strokeStyle = cachedRingGrad;
+        context.lineWidth = 1.2;
+        context.beginPath();
+        context.arc(0, 0, ringRadius, 0, Math.PI * 2);
+        context.stroke();
+
+        for (let index = 0; index < 6; index += 1) {
+            const sparkleAngle = angle + (Math.PI * 2 / 6) * index;
+            drawGlowSparkle(context, Math.cos(sparkleAngle) * ringRadius, Math.sin(sparkleAngle) * ringRadius, 0.9, 0.12 + tier.glow * 0.08, 'gold', _ringSparkleGrad);
+        }
+
+        context.restore();
+    };
+
+    const drawIngot = (ingot) => {
+        context.save();
+        context.translate(ingot.x, ingot.y);
+        context.rotate(ingot.rotation);
+        context.globalAlpha = ingot.alpha;
+
+        const hw = ingot._hw;
+        const hh = ingot._hh;
+        const d3 = ingot._d3;
+        const sk = ingot._sk;
+        const r = ingot._r;
+
+        context.fillStyle = ingot._halo;
+        context.beginPath();
+        context.arc(0, 0, ingot.width * 1.8, 0, Math.PI * 2);
+        context.fill();
+
+        context.save();
+        context.translate(d3 * 0.35, d3 * 0.75);
+        context.scale(1.15, 0.7);
+        context.fillStyle = ingot._shadow;
+        context.beginPath();
+        context.arc(0, 0, ingot.width * 0.95, 0, Math.PI * 2);
+        context.fill();
+        context.restore();
+
+        context.beginPath();
+        context.moveTo(-hw, -hh);
+        context.lineTo(hw, -hh);
+        context.lineTo(hw + sk, -hh - d3);
+        context.lineTo(-hw + sk, -hh - d3);
+        context.closePath();
+        context.fillStyle = ingot._topGrad;
+        context.fill();
+
+        context.beginPath();
+        context.moveTo(hw, -hh);
+        context.lineTo(hw + sk, -hh - d3);
+        context.lineTo(hw + sk, hh - d3);
+        context.lineTo(hw, hh);
+        context.closePath();
+        context.fillStyle = ingot._sideGrad;
+        context.fill();
+
+        roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
+        context.fillStyle = ingot._frontGrad;
+        context.fill();
+
+        roundedRect(context, -hw + 1.2, -hh + 1.2, ingot.width - 2.4, ingot.height - 2.4, Math.max(1.5, r * 0.7));
+        context.fillStyle = ingot._bevelGrad;
+        context.fill();
+
+        const shineX = Math.sin(ingot.shine) * (ingot.width * 0.55);
+        const shineAlpha = 1 - Math.abs(shineX) / (ingot.width * 0.55 + ingot.width * 0.45);
+        if (shineAlpha > 0.05) {
+            const sweep = context.createLinearGradient(shineX - ingot.width * 0.45, -hh, shineX + ingot.width * 0.15, hh);
+            sweep.addColorStop(0, 'rgba(255,255,255,0)');
+            sweep.addColorStop(0.46, 'rgba(255,250,230,0)');
+            sweep.addColorStop(0.52, `rgba(255,250,230,${(0.26 * shineAlpha).toFixed(3)})`);
+            sweep.addColorStop(0.6, 'rgba(255,240,190,0)');
+            sweep.addColorStop(1, 'rgba(255,255,255,0)');
+            roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
+            context.fillStyle = sweep;
+            context.fill();
+        }
+
+        context.strokeStyle = 'rgba(95,60,10,0.35)';
+        context.lineWidth = 0.9;
+        roundedRect(context, -hw, -hh, ingot.width, ingot.height, r);
+        context.stroke();
+
+        if (Math.sin(ingot.shine * 1.2) > 0.92) {
+            drawGlowSparkle(context, hw * 0.12, -hh * 0.25, ingot._sparkleRadius, 0.22, 'gold', ingot._sparkleGrad);
+        }
+
+        context.restore();
+    };
+
+    let lastFrameTime = 0;
+
+    const renderFrame = () => {
+        if (!active) return;
+
+        const now = performance.now();
+        if (now - lastFrameTime < 16) {
+            frameId = requestAnimationFrame(renderFrame);
+            return;
+        }
+        lastFrameTime = now;
+
+        angle += 0.012;
+        context.clearRect(0, 0, size.width, size.height);
+
+        context.fillStyle = cachedAura;
+        context.fillRect(0, 0, size.width, size.height);
+
+        drawRing();
+
+        sparkles.forEach((sparkle) => {
+            sparkle.pulse += sparkle.speed;
+            const alpha = sparkle.alpha * (0.55 + (Math.sin(sparkle.pulse) + 1) * 0.45);
+            drawGlowSparkle(context, sparkle.x, sparkle.y, sparkle.radius, alpha, 'gold', sparkle._grad);
+        });
+
+        ingots.forEach((ingot) => {
+            ingot.wobble += ingot.wobbleSpeed;
+            ingot.shine += ingot.shineSpeed;
+            ingot.x += ingot.drift + Math.sin(ingot.wobble) * (0.08 + ingot.depth * 0.16);
+            ingot.y += ingot.velocityY;
+            ingot.rotation += ingot.velocityRotation;
+
+            if (ingot.y > size.height + 35) {
+                ingot.y = -20 - Math.random() * 40;
+                ingot.x = Math.random() * size.width;
+                ingot.rotation = Math.random() * Math.PI * 2;
+            }
+
+            drawIngot(ingot);
+        });
+
+        frameId = requestAnimationFrame(renderFrame);
+    };
+
+    const handleResize = () => {
+        size = resize();
+        rebuildSizeGradients();
+    };
+
+    observeFxTarget(observedTarget, () => {
+        if (!active) { active = true; renderFrame(); }
+    }, () => {
+        active = false;
+        cancelAnimationFrame(frameId);
+    });
+
+    const unsubscribeResize = subscribeViewportResize(handleResize);
+    if (active) {
+        renderFrame();
+    }
+
+    canvas._destroyFX = () => {
+        active = false;
+        cancelAnimationFrame(frameId);
+        unobserveFxTarget(observedTarget);
+        unsubscribeResize();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = canvas.height = 0;
+    };
+}
+
+function spawnPlatinumFX(canvas, amount, tier) {
+    const sizedCanvas = createCanvasSizer(canvas);
+    if (!sizedCanvas) return;
+
+    const { context, resize } = sizedCanvas;
+    let frameId = 0;
+    const observedTarget = canvas.closest('.card-donor') || canvas;
+    let active = isElementInViewport(observedTarget);
+    let angle = 0;
+    let size = resize();
+
+    const stars = Array.from({ length: tier.starCount }, () => {
+        const radius = 0.5 + Math.random() * 1.8;
+        const grad = context.createRadialGradient(0, 0, 0, 0, 0, radius * 3.8);
+        grad.addColorStop(0, 'rgba(228,242,255,0.98)');
+        grad.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+        grad.addColorStop(1, 'rgba(120,170,255,0)');
+        return {
+            x: Math.random() * size.width,
+            y: Math.random() * size.height,
+            radius,
+            pulse: Math.random() * Math.PI * 2,
+            speed: 0.015 + Math.random() * 0.035,
+            alpha: 0.05 + Math.random() * 0.18,
+            _grad: grad,
+        };
+    });
+
+    const comets = Array.from({ length: tier.cometCount }, (_, index) => {
+        const width = 1 + Math.random() * 1.7;
+        const sparkRadius = 0.8 + width * 0.5;
+        const grad = context.createRadialGradient(0, 0, 0, 0, 0, sparkRadius * 3.8);
+        grad.addColorStop(0, 'rgba(228,242,255,0.98)');
+        grad.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+        grad.addColorStop(1, 'rgba(120,170,255,0)');
+        return {
+            x: Math.random() * size.width - 80,
+            y: Math.random() * size.height - size.height * 0.35,
+            velocityX: 1.4 + Math.random() * 1.9 + index * 0.03,
+            velocityY: 0.75 + Math.random() * 1.2,
+            length: 18 + Math.random() * 38,
+            width,
+            alpha: 0.14 + Math.random() * 0.24,
+            _sparkRadius: sparkRadius,
+            _grad: grad,
+        };
+    });
+
+    let cachedGlow = null;
+    let cachedSheen = null;
+    let cachedPlatRingGrad = null;
+    let platRingRadius = 0;
+
+    const rebuildSizeGradients = () => {
+        cachedGlow = context.createRadialGradient(size.width * 0.5, size.height * 0.15, 0, size.width * 0.5, size.height * 0.15, size.height);
+        cachedGlow.addColorStop(0, 'rgba(120,170,255,0.16)');
+        cachedGlow.addColorStop(0.55, 'rgba(60,90,150,0.09)');
+        cachedGlow.addColorStop(1, 'rgba(40,60,120,0)');
+
+        cachedSheen = context.createLinearGradient(0, 0, size.width, size.height);
+        cachedSheen.addColorStop(0, 'rgba(20,30,50,0.18)');
+        cachedSheen.addColorStop(0.5, 'rgba(10,16,28,0.05)');
+        cachedSheen.addColorStop(1, 'rgba(70,110,190,0.08)');
+
+        platRingRadius = Math.min(size.width, size.height) * 0.34;
+        cachedPlatRingGrad = context.createLinearGradient(-platRingRadius, -platRingRadius, platRingRadius, platRingRadius);
+        cachedPlatRingGrad.addColorStop(0, 'rgba(230,242,255,0.82)');
+        cachedPlatRingGrad.addColorStop(0.26, 'rgba(145,190,255,0.55)');
+        cachedPlatRingGrad.addColorStop(0.7, 'rgba(96,145,235,0.18)');
+        cachedPlatRingGrad.addColorStop(1, 'rgba(220,240,255,0.74)');
+    };
+
+    rebuildSizeGradients();
+
+    const _platRingSparkleGrad = context.createRadialGradient(0, 0, 0, 0, 0, 0.85 * 3.8);
+    _platRingSparkleGrad.addColorStop(0, 'rgba(228,242,255,0.98)');
+    _platRingSparkleGrad.addColorStop(0.25, 'rgba(172,214,255,0.52)');
+    _platRingSparkleGrad.addColorStop(1, 'rgba(120,170,255,0)');
+
+    const drawComet = (comet) => {
+        context.save();
+        context.globalAlpha = comet.alpha;
+
+        const tailX = comet.x - comet.length;
+        const tailY = comet.y - comet.length * 0.65;
+        const gradient = context.createLinearGradient(tailX, tailY, comet.x, comet.y);
+        gradient.addColorStop(0, 'rgba(110,165,255,0)');
+        gradient.addColorStop(0.5, 'rgba(110,165,255,0.24)');
+        gradient.addColorStop(0.82, 'rgba(170,215,255,0.72)');
+        gradient.addColorStop(1, 'rgba(230,244,255,0.98)');
+
+        context.strokeStyle = gradient;
+        context.lineWidth = comet.width;
+        context.lineCap = 'round';
+        context.beginPath();
+        context.moveTo(tailX, tailY);
+        context.lineTo(comet.x, comet.y);
+        context.stroke();
+
+        drawGlowSparkle(context, comet.x, comet.y, comet._sparkRadius, comet.alpha * 0.85, 'platinum', comet._grad);
+        context.restore();
+    };
+
+    const drawRing = () => {
+        const centerX = size.width / 2;
+        const centerY = size.height / 2 + 4;
+
+        context.save();
+        context.translate(centerX, centerY);
+        context.rotate(angle * 0.18);
+        context.globalAlpha = 0.22;
+
+        context.strokeStyle = cachedPlatRingGrad;
+        context.lineWidth = 1.35;
+        context.beginPath();
+        context.arc(0, 0, platRingRadius, 0, Math.PI * 2);
+        context.stroke();
+
+        context.beginPath();
+        context.arc(0, 0, platRingRadius * 0.78, 0, Math.PI * 2);
+        context.strokeStyle = 'rgba(130,180,255,0.11)';
+        context.lineWidth = 0.8;
+        context.stroke();
+
+        for (let index = 0; index < 8; index += 1) {
+            const sparkleAngle = angle * 1.3 + (Math.PI * 2 / 8) * index;
+            drawGlowSparkle(context, Math.cos(sparkleAngle) * platRingRadius, Math.sin(sparkleAngle) * platRingRadius, 0.85, 0.18, 'platinum', _platRingSparkleGrad);
+        }
+
+        context.restore();
+    };
+
+    let lastFrameTime = 0;
+
+    const renderFrame = () => {
+        if (!active) return;
+
+        const now = performance.now();
+        if (now - lastFrameTime < 16) {
+            frameId = requestAnimationFrame(renderFrame);
+            return;
+        }
+        lastFrameTime = now;
+
+        angle += 0.012;
+        context.clearRect(0, 0, size.width, size.height);
+
+        context.fillStyle = cachedGlow;
+        context.fillRect(0, 0, size.width, size.height);
+
+        context.fillStyle = cachedSheen;
+        context.fillRect(0, 0, size.width, size.height);
+
+        drawRing();
+
+        stars.forEach((star) => {
+            star.pulse += star.speed;
+            const alpha = star.alpha * (0.45 + (Math.sin(star.pulse) + 1) * 0.55);
+            drawGlowSparkle(context, star.x, star.y, star.radius, alpha, 'platinum', star._grad);
+        });
+
+        comets.forEach((comet) => {
+            comet.x += comet.velocityX;
+            comet.y += comet.velocityY;
+
+            if (comet.x > size.width + 90 || comet.y > size.height + 60) {
+                comet.x = -40 - Math.random() * 90;
+                comet.y = -30 - Math.random() * 90;
+            }
+
+            drawComet(comet);
+        });
+
+        frameId = requestAnimationFrame(renderFrame);
+    };
+
+    const handleResize = () => {
+        size = resize();
+        rebuildSizeGradients();
+    };
+
+    observeFxTarget(observedTarget, () => {
+        if (!active) { active = true; renderFrame(); }
+    }, () => {
+        active = false;
+        cancelAnimationFrame(frameId);
+    });
+
+    const unsubscribeResize = subscribeViewportResize(handleResize);
+    if (active) {
+        renderFrame();
+    }
+
+    canvas._destroyFX = () => {
+        active = false;
+        cancelAnimationFrame(frameId);
+        unobserveFxTarget(observedTarget);
+        unsubscribeResize();
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        canvas.width = canvas.height = 0;
+    };
+}
+
+function destroySupportEffects(container) {
+    if (!(container instanceof HTMLElement)) return;
+
+    container.querySelectorAll('.fx-canvas').forEach((canvas) => {
+        if (canvas instanceof HTMLCanvasElement && typeof canvas._destroyFX === 'function') {
+            canvas._destroyFX();
+        }
+    });
+}
+
+function createAvatar(supporter, tier, fallbackHue) {
+    const avatar = createElement('div', { className: 'donor-avatar', 'aria-hidden': 'true' });
+    const src = optimizeSupportAvatarSrc(supporter.avatarUrl || '');
+
+    if (src) {
+        avatar.append(createElement('img', {
+            src,
+            alt: '',
+            loading: 'lazy',
+            decoding: 'async',
+            width: 52,
+            height: 52,
+        }));
+    } else {
+        const fallback = createElement('div', { className: 'donor-avatar-default' });
+        if (tier.kind !== 'platinum') {
+            fallback.style.background = `hsl(${fallbackHue},18%,22%)`;
+        } else {
+            fallback.classList.add('is-platinum');
+        }
+        fallback.textContent = initials(supporter.name);
+        avatar.append(fallback);
+    }
+
+    return avatar;
+}
+
+function createTierMark(tier) {
+    if (!tier.showMark) return null;
+
+    return createElement(
+        'div',
+        { className: `tier-mark ${tier.kind === 'platinum' ? 'platinum' : 'gold'}` },
+        createInlineIcon(tier.icon),
+    );
+}
+
+function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru', effectsEnabled = true } = {}) {
+    const amount = Number(supporter.amountUsd || 0);
+    const tier = getDonorStyle(amount, locale);
+    const hue = hueFromName(supporter.name || supporter.id || 'supporter');
+    const card = createElement('article', {
+        className: `card-donor${tier.kind === 'platinum' ? ' is-platinum' : ''}${top ? ' is-top' : ''}`,
+        ...(rank > 0 ? { 'data-rank': String(rank) } : {}),
+    });
+
+    let borderAlpha;
+    let boxShadow;
+    let ringWidth;
+    let ringAlpha;
+    let ringGlow;
+    let backgroundAlpha;
+
+    if (tier.kind === 'platinum') {
+        borderAlpha = 0.34;
+        boxShadow = [
+            '0 0 16px rgba(110,165,255,0.18)',
+            '0 0 34px rgba(110,165,255,0.16)',
+            '0 0 70px rgba(70,120,230,0.16)',
+            'inset 0 0 20px rgba(190,225,255,0.06)',
+        ].join(',');
+        ringWidth = 2.6;
+        ringAlpha = 0.92;
+        ringGlow = '0 0 18px rgba(145,190,255,0.55), 0 0 34px rgba(90,145,245,0.26)';
+        backgroundAlpha = 0.12;
+        card.style.cssText = `
+            --g-alpha: .88;
+            border-color: rgba(130,180,255,${borderAlpha});
+            box-shadow: ${boxShadow};
+            background:
+              radial-gradient(circle at 50% 0%, rgba(110,165,255,0.16), transparent 58%),
+              linear-gradient(135deg, rgba(18,24,38,0.96), rgba(10,14,24,0.98) 55%, rgba(18,34,66,0.92));
+        `;
+    } else if (tier.kind === 'gold') {
+        borderAlpha = 0.12 + tier.glow * 0.78;
+        boxShadow = [
+            `0 0 ${8 + tier.glow * 24}px rgba(201,168,76,${0.05 + tier.glow * 0.2})`,
+            `0 0 ${16 + tier.glow * 36}px rgba(201,168,76,${0.03 + tier.glow * 0.12})`,
+            `0 0 ${24 + tier.glow * 58}px rgba(201,168,76,${0.02 + tier.glow * 0.07})`,
+            `inset 0 0 ${6 + tier.glow * 16}px rgba(242,210,130,${tier.glow * 0.08})`,
+        ].join(',');
+        ringWidth = 1 + tier.glow * 2.5;
+        ringAlpha = 0.15 + tier.glow * 0.85;
+        ringGlow = `0 0 ${4 + tier.glow * 14}px rgba(201,168,76,${tier.glow * 0.7})`;
+        backgroundAlpha = tier.aura * 0.55;
+        card.style.cssText = `
+            --g-alpha: ${(0.15 + tier.glow * 0.85).toFixed(3)};
+            border-color: rgba(201,168,76,${borderAlpha.toFixed(3)});
+            box-shadow: ${boxShadow};
+            background: rgba(201,168,76,${backgroundAlpha.toFixed(4)});
+        `;
+    } else {
+        borderAlpha = 0.12;
+        boxShadow = [
+            '0 0 8px rgba(201,168,76,0.05)',
+            '0 0 16px rgba(201,168,76,0.03)',
+            '0 0 24px rgba(201,168,76,0.02)',
+            'inset 0 0 6px rgba(242,210,130,0)',
+        ].join(',');
+        ringWidth = 1;
+        ringAlpha = 0.15;
+        ringGlow = '0 0 4px rgba(201,168,76,0)';
+        backgroundAlpha = 0;
+        card.style.cssText = `
+            --g-alpha: 0.150;
+            border-color: rgba(201,168,76,${borderAlpha.toFixed(3)});
+            box-shadow: ${boxShadow};
+            background: rgba(201,168,76,${backgroundAlpha.toFixed(4)});
+        `;
+    }
+
+    const effectCanvas = effectsEnabled
+        && !prefersReducedMotion()
+        && ((tier.kind === 'gold' && tier.goldCount) || tier.kind === 'platinum')
+        ? createElement('canvas', { className: 'fx-canvas', 'aria-hidden': 'true' })
+        : null;
+
+    if (effectCanvas) {
+        card.append(effectCanvas);
+    }
+
+    const tierMark = createTierMark(tier);
+    if (tierMark) {
+        card.append(tierMark);
+    }
+
+    const avatar = createAvatar(supporter, tier, hue);
+    avatar.append(
+        createElement('div', {
+            className: 'donor-avatar-ring',
+            style: `box-shadow:${ringGlow};border:${ringWidth.toFixed(1)}px solid ${tier.kind === 'platinum' ? `rgba(190,225,255,${ringAlpha.toFixed(3)})` : `rgba(201,168,76,${ringAlpha.toFixed(3)})`};`,
+            'aria-hidden': 'true',
+        }),
+    );
+
+    card.append(
+        avatar,
+        createElement('span', { className: 'donor-name', textContent: supporter.name || 'Supporter' }),
+        createElement('span', { className: 'donor-badge', textContent: tier.title }),
+        createElement('span', { className: 'donor-amount', textContent: formatUsd(amount) }),
+    );
+
+    if (effectCanvas instanceof HTMLCanvasElement) {
+        requestAnimationFrame(() => {
+            if (!card.isConnected) return;
+            if (tier.kind === 'platinum') {
+                spawnPlatinumFX(effectCanvas, amount, tier);
+            } else if (tier.kind === 'gold') {
+                spawnGoldFX(effectCanvas, amount, tier);
+            }
+        });
+    }
+
+    return card;
+}
+
+function renderSupporters(elements, supporters, copy, locale) {
+    const sorted = sortSupporters(supporters, locale);
+    const topSupporterIds = new Set(sorted.slice(0, 3).map((supporter) => String(supporter?.id || '')));
+
+    if (elements.supporterCount) {
+        elements.supporterCount.textContent = String(sorted.length);
+    }
+
+    if (!elements.supportersGrid) return;
+    destroySupportEffects(elements.supportersGrid);
+    elements.supportersGrid.textContent = '';
+
+    if (!sorted.length) {
+        elements.supportersGrid.append(createEmptyState(copy.supportersEmpty));
+        if (elements.topSupportersSection) elements.topSupportersSection.hidden = true;
+        return;
+    }
+
+    sorted.forEach((supporter) => {
+        elements.supportersGrid.append(createSupportCard(supporter, {
+            locale,
+            effectsEnabled: !topSupporterIds.has(String(supporter?.id || '')),
+        }));
+    });
+
+    if (!elements.topSupportersSection || !elements.topSupportersGrid) return;
+
+    const topThree = sorted.slice(0, 3);
+    if (!topThree.length) {
+        elements.topSupportersSection.hidden = true;
+        return;
+    }
+
+    elements.topSupportersSection.hidden = false;
+    destroySupportEffects(elements.topSupportersGrid);
+    elements.topSupportersGrid.textContent = '';
+    topThree.forEach((supporter, index) => {
+        elements.topSupportersGrid.append(createSupportCard(supporter, {
+            rank: index + 1,
+            top: true,
+            locale,
+        }));
+    });
+}
+
+function applyStaticCopy(elements, copy) {
+    document.title = copy.metaTitle;
+    const descriptionEl = document.querySelector('meta[name="description"]');
+    if (descriptionEl) descriptionEl.setAttribute('content', copy.metaDescription);
+    if (elements.donateBackLink instanceof HTMLAnchorElement) {
+        elements.donateBackLink.href = '../';
+    }
+    if (elements.donateBackLabel) elements.donateBackLabel.textContent = copy.backLabel;
+    if (elements.donateEyebrow) elements.donateEyebrow.textContent = copy.eyebrow;
+    if (elements.donateTitle) renderDonateTitle(elements.donateTitle, copy.titleHtml);
+    if (elements.paymentsTitle) elements.paymentsTitle.textContent = copy.paymentsTitle;
+    if (elements.paymentsDesc) elements.paymentsDesc.textContent = copy.paymentsDesc;
+    if (elements.topSupportersTitle) elements.topSupportersTitle.textContent = copy.topTitle;
+    if (elements.topSupportersDesc) {
+        const hasTopDescription = Boolean(String(copy.topDesc || '').trim());
+        elements.topSupportersDesc.textContent = copy.topDesc || '';
+        elements.topSupportersDesc.hidden = !hasTopDescription;
+    }
+    if (elements.supportersTitle) elements.supportersTitle.textContent = copy.supportersTitle;
+}
+
+let booted = false;
+
+function boot() {
+    if (booted) return;
+    booted = true;
+
+    const localeController = createLocaleController();
+    const locale = localeController.locale;
+    const siteData = localizeSiteData(getEffectiveSiteData(), locale);
+    const routeContext = getDonateRouteContext(siteData);
+    const copy = getCopy(locale, routeContext);
+    const elements = getElements();
+    const supportPage = siteData.supportPage || { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] };
+
+    localeController.mountLanguageSwitcher();
+    initSharedThemeToggle();
+    initAdminRouteAccess({ adminHref: getAdminHref() });
+    initSkipLink();
+    initSmoothRouteTransitions();
+
+    applyStaticCopy(elements, copy);
+    localeController.applyDocumentMeta({
+        title: copy.metaTitle,
+        description: copy.metaDescription,
+    });
+    buildIntro(elements.donateDesc, copy, Number(supportPage.minimumAmountUsd || 2), supportPage.roleName || '@Premium', resolveButtonUrl(siteData.socials?.discord || ''));
+    renderPaymentButtons(elements.supportButtonsGrid, supportPage.buttons, copy, locale);
+    renderSupporters(elements, supportPage.supporters, copy, locale);
+    initReveal([document.getElementById('main')].filter(Boolean));
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+} else {
+    boot();
+}

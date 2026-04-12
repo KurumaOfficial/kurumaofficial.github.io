@@ -5,29 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <title>Aleph Studio — Redirecting…</title>
     <meta name="robots" content="noindex">
-    <link rel="icon" href="./favicon.ico" sizes="48x48">
-    <link rel="icon" href="./assets/icons/favicon.svg" type="image/svg+xml">
-
-    <!-- Instant redirect for JS-enabled browsers -->
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
     <script>
         (function () {
             'use strict';
 
-            var supported = { ru: './ru/', en: './en/', ua: './ua/' };
-            var fallback  = supported.ru;
+            var supported = { ru: '../ru/donate/', en: '../en/donate/', ua: '../ua/donate/' };
+            var fallback = supported.ru;
 
             function resolve(path) {
                 return new URL(path, location.href);
             }
 
-            /** Derive best locale from Accept-Language / navigator. */
             function detect() {
                 var raw = (navigator.languages || [navigator.language || ''])
                     .map(function (l) { return l.split('-')[0].toLowerCase(); });
 
                 for (var i = 0; i < raw.length; i++) {
                     if (raw[i] === 'uk' || raw[i] === 'ua') return supported.ua;
-                    if (supported[raw[i]])                   return supported[raw[i]];
+                    if (supported[raw[i]]) return supported[raw[i]];
                 }
                 return fallback;
             }
@@ -38,12 +35,9 @@
             location.replace(dest.toString());
         })();
     </script>
-
-    <!-- Fallback for NoScript users -->
     <noscript>
-        <meta http-equiv="refresh" content="0; url=./ru/">
+        <meta http-equiv="refresh" content="0; url=../ru/donate/">
     </noscript>
-
     <style>
         body {
             background: #080606;
@@ -56,11 +50,11 @@
             min-height: 100dvh;
             margin: 0;
         }
-        p { font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; }
+        p { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; }
         a { color: #8b1a2a; }
     </style>
 </head>
 <body>
-    <p>Redirecting… <a href="./ru/">RU</a> · <a href="./en/">EN</a> · <a href="./ua/">UA</a></p>
+    <p>Redirecting… <a href="../ru/donate/">RU</a> · <a href="../en/donate/">EN</a> · <a href="../ua/donate/">UA</a></p>
 </body>
 </html>
