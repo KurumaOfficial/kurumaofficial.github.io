@@ -328,6 +328,36 @@ function isElementInViewport(element) {
         && rect.left < window.innerWidth;
 }
 
+/* ── Shared IntersectionObserver for all canvas FX ─────────────── */
+const _fxObserverCallbacks = new WeakMap();
+let _fxObserver = null;
+
+function getSharedFxObserver() {
+    if (_fxObserver) return _fxObserver;
+    _fxObserver = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+            const cbs = _fxObserverCallbacks.get(entry.target);
+            if (!cbs) continue;
+            if (entry.isIntersecting) {
+                cbs.enter();
+            } else {
+                cbs.leave();
+            }
+        }
+    }, { threshold: 0.02 });
+    return _fxObserver;
+}
+
+function observeFxTarget(target, enter, leave) {
+    _fxObserverCallbacks.set(target, { enter, leave });
+    getSharedFxObserver().observe(target);
+}
+
+function unobserveFxTarget(target) {
+    getSharedFxObserver().unobserve(target);
+    _fxObserverCallbacks.delete(target);
+}
+
 function getTierCopy(locale) {
     return TIER_COPY[locale] || TIER_COPY.ru;
 }
@@ -844,23 +874,13 @@ function spawnGoldFX(canvas, amount, tier) {
         rebuildSizeGradients();
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        const [entry] = entries;
-        if (!entry) return;
-
-        if (entry.isIntersecting) {
-            if (!active) {
-                active = true;
-                renderFrame();
-            }
-            return;
-        }
-
+    observeFxTarget(observedTarget, () => {
+        if (!active) { active = true; renderFrame(); }
+    }, () => {
         active = false;
         cancelAnimationFrame(frameId);
-    }, { threshold: 0.02 });
+    });
 
-    observer.observe(observedTarget);
     const unsubscribeResize = subscribeViewportResize(handleResize);
     if (active) {
         renderFrame();
@@ -869,7 +889,7 @@ function spawnGoldFX(canvas, amount, tier) {
     canvas._destroyFX = () => {
         active = false;
         cancelAnimationFrame(frameId);
-        observer.disconnect();
+        unobserveFxTarget(observedTarget);
         unsubscribeResize();
         context.clearRect(0, 0, canvas.width, canvas.height);
         canvas.width = canvas.height = 0;
@@ -1057,23 +1077,13 @@ function spawnPlatinumFX(canvas, amount, tier) {
         rebuildSizeGradients();
     };
 
-    const observer = new IntersectionObserver((entries) => {
-        const [entry] = entries;
-        if (!entry) return;
-
-        if (entry.isIntersecting) {
-            if (!active) {
-                active = true;
-                renderFrame();
-            }
-            return;
-        }
-
+    observeFxTarget(observedTarget, () => {
+        if (!active) { active = true; renderFrame(); }
+    }, () => {
         active = false;
         cancelAnimationFrame(frameId);
-    }, { threshold: 0.02 });
+    });
 
-    observer.observe(observedTarget);
     const unsubscribeResize = subscribeViewportResize(handleResize);
     if (active) {
         renderFrame();
@@ -1082,7 +1092,7 @@ function spawnPlatinumFX(canvas, amount, tier) {
     canvas._destroyFX = () => {
         active = false;
         cancelAnimationFrame(frameId);
-        observer.disconnect();
+        unobserveFxTarget(observedTarget);
         unsubscribeResize();
         context.clearRect(0, 0, canvas.width, canvas.height);
         canvas.width = canvas.height = 0;
@@ -1349,7 +1359,7 @@ function boot() {
     buildIntro(elements.donateDesc, copy, Number(supportPage.minimumAmountUsd || 2), supportPage.roleName || '@Premium', resolveButtonUrl(siteData.socials?.discord || ''));
     renderPaymentButtons(elements.supportButtonsGrid, supportPage.buttons, copy, locale);
     renderSupporters(elements, supportPage.supporters, copy, locale);
-    initReveal();
+    initReveal([document.getElementById('main')].filter(Boolean));
 }
 
 if (document.readyState === 'loading') {

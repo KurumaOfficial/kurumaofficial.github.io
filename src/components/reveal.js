@@ -40,7 +40,9 @@ export function initReveal(watchRoots = []) {
         { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
     );
 
-    const rootsToWatch = [...new Set([document.body, ...watchRoots].filter(Boolean))];
+    const rootsToWatch = watchRoots.length > 0
+        ? [...new Set(watchRoots.filter(Boolean))]
+        : [document.body];
     let scheduledScanFrame = 0;
     let destroyed = false;
 

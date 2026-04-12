@@ -123,6 +123,14 @@ function unlockNavigation() {
     navigationRecoveryTimer = 0;
 }
 
+/* Recover from blocked navigations (bfcache restore, beforeunload cancel, etc.) */
+window.addEventListener('pageshow', (event) => {
+    if (event.persisted || navigationLocked) {
+        unlockNavigation();
+        clearTransientPageState();
+    }
+});
+
 function replayRouteEnterAnimation() {
     if (!document.body) return;
 

@@ -1818,7 +1818,6 @@ footer {
     opacity .65s ease var(--reveal-delay, 0ms),
     transform .65s ease var(--reveal-delay, 0ms);
 }
-.reveal.on,
 .reveal.is-visible {
   opacity:1;
   transform:translateY(0);

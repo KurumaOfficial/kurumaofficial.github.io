@@ -1828,7 +1828,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         link.href = url;
         link.download = 'site-content.json';
         link.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
     }
 
     async function importEditorJson(file) {
