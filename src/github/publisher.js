@@ -28,7 +28,7 @@ function uint8ToBase64(bytes) {
     const chunkSize = 0x8000;
     for (let index = 0; index < bytes.length; index += chunkSize) {
         const chunk = bytes.subarray(index, index + chunkSize);
-        binary += String.fromCharCode(...chunk);
+        binary += String.fromCharCode.apply(null, chunk);
     }
     return btoa(binary);
 }
@@ -166,7 +166,7 @@ async function upsertGitHubRepoFile(config, token, repoPath, bytes, message) {
     return putResponse.json();
 }
 
-export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, renderProductUploadMeta, syncDraftControls }) {
+export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, renderProductUploadMeta, syncDraftControls, getMessage = (_key, fallback = '') => fallback }) {
     const githubTokenEl = document.getElementById('githubToken');
     const githubSyncTargetEl = document.getElementById('githubSyncTarget');
 
@@ -207,10 +207,10 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
         const token = githubTokenEl?.value.trim() || '';
 
         if (!config.owner || !config.repo || !config.branch || !config.path) {
-            throw new Error('Could not determine the GitHub repository for publishing.');
+            throw new Error(getMessage('githubTargetMissing', 'Could not determine the GitHub repository for publishing.'));
         }
         if (!token) {
-            throw new Error('A GitHub token is required to save.');
+            throw new Error(getMessage('githubTokenRequired', 'A GitHub token is required to save.'));
         }
 
         const normalizedPath = config.path.replace(/\\/g, '/');

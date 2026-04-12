@@ -14,6 +14,44 @@ const ESC_MAP = Object.freeze({
     "'": '&#39;',
 });
 
+const ABSOLUTE_WEB_URL_RE = /^(?:https?:)?\/\//i;
+const GENERIC_SCHEME_RE = /^[a-z][a-z0-9+.-]*:/i;
+const URL_PATTERN = /https?:\/\/[^\s<]+/gi;
+const WRAPPING_PUNCTUATION = Object.freeze({
+    ')': '(',
+    ']': '[',
+    '}': '{',
+});
+
+function splitTrailingUrlPunctuation(value) {
+    let text = String(value || '');
+    let trailing = '';
+
+    while (text) {
+        const lastChar = text[text.length - 1];
+
+        if (/[.,!?;:]/.test(lastChar)) {
+            trailing = lastChar + trailing;
+            text = text.slice(0, -1);
+            continue;
+        }
+
+        const openChar = WRAPPING_PUNCTUATION[lastChar];
+        if (!openChar) break;
+
+        const escapedOpenChar = openChar.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+        const escapedLastChar = lastChar.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+        const openCount = (text.match(new RegExp(escapedOpenChar, 'g')) || []).length;
+        const closeCount = (text.match(new RegExp(escapedLastChar, 'g')) || []).length;
+        if (closeCount <= openCount) break;
+
+        trailing = lastChar + trailing;
+        text = text.slice(0, -1);
+    }
+
+    return { text, trailing };
+}
+
 /**
  * Escape a string for safe insertion into HTML.
  * @param {unknown} value
@@ -29,10 +67,35 @@ export function escapeHtml(value) {
  * @returns {string} HTML with clickable links.
  */
 export function linkify(text) {
-    return escapeHtml(text).replace(
-        /(https?:\/\/[^\s<]+)/g,
-        '<a class="inline-link" href="$1" target="_blank" rel="noopener noreferrer">$1</a>',
-    );
+    const source = String(text ?? '');
+    let html = '';
+    let lastIndex = 0;
+
+    URL_PATTERN.lastIndex = 0;
+    let match = URL_PATTERN.exec(source);
+    while (match) {
+        const rawUrl = match[0] || '';
+        const startIndex = match.index;
+        const endIndex = startIndex + rawUrl.length;
+        const { text: cleanUrlText, trailing } = splitTrailingUrlPunctuation(rawUrl);
+        const href = sanitizeHref(cleanUrlText);
+
+        html += escapeHtml(source.slice(lastIndex, startIndex));
+
+        if (href) {
+            const escapedHref = escapeHtml(href);
+            html += `<a class="inline-link" href="${escapedHref}" target="_blank" rel="noopener noreferrer">${escapedHref}</a>`;
+            html += escapeHtml(trailing);
+        } else {
+            html += escapeHtml(rawUrl);
+        }
+
+        lastIndex = endIndex;
+        match = URL_PATTERN.exec(source);
+    }
+
+    html += escapeHtml(source.slice(lastIndex));
+    return html;
 }
 
 // ── DOM helpers ─────────────────────────────────────────────
@@ -79,6 +142,61 @@ export function createElement(tag, attrs = {}, ...children) {
 // ── URL helpers ─────────────────────────────────────────────
 
 /**
+ * Sanitize a href-like value.
+ * Allows only http(s), protocol-relative URLs, and optionally relative/hash links.
+ * @param {unknown} value
+ * @param {{ allowRelative?: boolean; allowHash?: boolean }} [options]
+ * @returns {string}
+ */
+export function sanitizeHref(value, options = {}) {
+    const text = String(value ?? '').trim();
+    if (!text) return '';
+    if (options.allowHash && text.startsWith('#')) return text;
+    if (ABSOLUTE_WEB_URL_RE.test(text)) return text;
+    if (options.allowRelative && /^(?:\/|\.{1,2}\/)/.test(text)) return text;
+    if (GENERIC_SCHEME_RE.test(text)) return '';
+    return '';
+}
+
+/**
+ * Accept a bare hostname-or-URL (no scheme) and return a validated https:// URL.
+ * Returns empty string for anything that could not be safely normalized.
+ * Used by both dom.js utilities and i18n/config.js route resolution.
+ * @param {unknown} value
+ * @returns {string}
+ */
+export function normalizeBareWebUrl(value) {
+    const text = String(value || '').trim();
+    if (!text || /\s/.test(text) || text.startsWith('.') || text.startsWith('/') || text.startsWith('#')) {
+        return '';
+    }
+
+    const hostCandidate = text.split(/[/?#]/, 1)[0] || '';
+    if (hostCandidate.includes('@')) {
+        return '';
+    }
+
+    const hostname = hostCandidate.replace(/:\d+$/, '').replace(/^\[|\]$/g, '').toLowerCase();
+    const isIpv4 = /^(?:\d{1,3}\.){3}\d{1,3}$/.test(hostname);
+    const isLocalhost = hostname === 'localhost';
+    const hasDnsLikeHost = hostname.includes('.');
+
+    if (!hostname || (!isIpv4 && !isLocalhost && !hasDnsLikeHost)) {
+        return '';
+    }
+
+    try {
+        const normalized = new URL(`https://${text.replace(/^\/+/, '')}`);
+        if (normalized.username || normalized.password) return '';
+        if (!/^https?:$/i.test(normalized.protocol)) return '';
+        if (!normalized.hostname) return '';
+        return normalized.toString();
+    } catch {
+        return '';
+    }
+}
+
+/**
  * Normalise a URL value – prepend https:// when the scheme is missing.
  * Returns empty string for falsy / blank input.
  * @param {unknown} value
@@ -87,6 +205,9 @@ export function createElement(tag, attrs = {}, ...children) {
 export function cleanUrl(value) {
     const text = String(value ?? '').trim();
     if (!text) return '';
-    if (/^(https?:)?\/\//i.test(text)) return text;
+    if (ABSOLUTE_WEB_URL_RE.test(text)) return text;
+    const bareUrl = normalizeBareWebUrl(text);
+    if (bareUrl) return bareUrl;
+    if (GENERIC_SCHEME_RE.test(text) || text.startsWith('#')) return '';
     return 'https://' + text.replace(/^\/+/, '');
 }
