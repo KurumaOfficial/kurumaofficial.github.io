@@ -879,7 +879,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         syncSelectedProductFromForm();
         const product = editorData.products[editorSelectedIndex];
-        const relativePath = buildProductUploadRelativePath(product, file.name);
+        const currentDownloadUrl = String(product.downloadUrl || '').trim();
+        const isLocalPath = currentDownloadUrl.startsWith('./') &&
+            !currentDownloadUrl.includes('://') &&
+            !currentDownloadUrl.includes('/../') &&
+            !currentDownloadUrl.startsWith('./..');
+        const relativePath = isLocalPath
+            ? currentDownloadUrl.slice(2)
+            : buildProductUploadRelativePath(product, file.name);
         const existingUpload = getPendingProductUpload(product.id);
         const previousDownloadUrl = existingUpload?.previousDownloadUrl ?? String(product.downloadUrl || '').trim();
         pendingProductUploads.set(product.id, { file, originalName: file.name, relativePath, previousDownloadUrl });
