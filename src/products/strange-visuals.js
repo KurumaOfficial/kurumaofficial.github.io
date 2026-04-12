@@ -2,7 +2,7 @@ import { initReveal } from '../components/reveal.js';
 import { createLocaleController } from '../i18n/controller.js';
 import { resolveRouteRelativePath } from '../i18n/config.js';
 import { escapeHtml } from '../core/dom.js';
-import { getIconMarkup } from '../core/icons.js';
+import { getIconMarkup, setInlineIcon } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import {
   applyGlobalRouteRedirect,
@@ -184,6 +184,16 @@ function getElements() {
     gwTitleEl: document.querySelector('.gw-title'),
     gwSubEl: document.querySelector('.gw-sub'),
   };
+}
+
+function hydrateHeroActionIcons(elements) {
+  if (!(elements.shareBtn instanceof HTMLElement)) return;
+
+  const shareIcon = elements.shareBtn.querySelector('.hero-share-toggle-icon--share');
+  if (shareIcon instanceof HTMLElement) {
+    setInlineIcon(shareIcon, 'link', { className: 'hero-share-toggle-icon hero-share-toggle-icon--share ui-icon' });
+    shareIcon.setAttribute('aria-hidden', 'true');
+  }
 }
 
 function getLocaleMeta(locale) {
@@ -857,6 +867,7 @@ function boot() {
     tab: tabKeys[0] || 'player',
   };
 
+  hydrateHeroActionIcons(elements);
   localeController.mountLanguageSwitcher();
   initSharedThemeToggle();
   initAdminRouteAccess({ adminHref: getAdminHref() });
