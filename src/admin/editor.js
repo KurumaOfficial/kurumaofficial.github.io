@@ -4,6 +4,7 @@ import {
     deepClone,
     formatBytes,
     getFlagMeta,
+    makeUniqueId,
     normalizeData,
     normalizeProduct,
     normalizeRouteModules,
@@ -103,7 +104,9 @@ const ADMIN_MESSAGES = Object.freeze({
         toastFileRemoved: 'Файл убран из очереди GitHub sync.',
         toastGithubSaved: 'Сохранено для всех. Данные и файлы отправлены в GitHub, сайт обновится после публикации GitHub Pages.',
         toastGithubFailed: 'Не удалось сохранить в GitHub.',
-        toastSavedLocalWithFiles: 'Локально сохранено. Файлы в GitHub не загружались, для общей публикации их нужно выбрать заново.',
+        githubTokenRequired: 'Для публикации нужен GitHub token с доступом к репозиторию.',
+        githubTargetMissing: 'Не удалось определить GitHub-репозиторий для публикации.',
+        toastSavedLocalWithFiles: 'Локально сохранено. Файлы не опубликованы и останутся в очереди только до перезагрузки страницы; для релиза в GitHub нажмите «Сохранить Глобально» в этой сессии.',
         toastSavedLocal: 'Локально сохранено. Изменения уже видны в этом браузере и в preview-вкладках с Главной.',
         toastSavedNoStorage: 'Изменения применены, но localStorage недоступен в этом браузере.',
         toastLocalCleared: 'Локальный черновик очищен. В этом браузере снова активна встроенная версия сайта.',
@@ -170,7 +173,9 @@ const ADMIN_MESSAGES = Object.freeze({
         toastFileRemoved: 'File removed from the GitHub queue.',
         toastGithubSaved: 'Saved for everyone. Content and files were pushed to GitHub.',
         toastGithubFailed: 'Could not save to GitHub.',
-        toastSavedLocalWithFiles: 'Saved locally. Re-select files before publishing them to GitHub.',
+        githubTokenRequired: 'A GitHub token with repository access is required to publish.',
+        githubTargetMissing: 'Could not determine the GitHub repository for publishing.',
+        toastSavedLocalWithFiles: 'Saved locally. Files were not published and stay queued only until this page is reloaded; use Save Global in this session to publish them to GitHub.',
         toastSavedLocal: 'Saved locally. Changes are now visible in this browser and in preview tabs opened from Home.',
         toastSavedNoStorage: 'Changes were applied but localStorage is unavailable in this browser.',
         toastLocalCleared: 'Local draft cleared. The embedded site version is active again in this browser.',
@@ -237,7 +242,9 @@ const ADMIN_MESSAGES = Object.freeze({
         toastFileRemoved: 'Файл прибрано з черги GitHub sync.',
         toastGithubSaved: 'Збережено для всіх. Дані та файли відправлено в GitHub.',
         toastGithubFailed: 'Не вдалося зберегти в GitHub.',
-        toastSavedLocalWithFiles: 'Збережено локально. Перед публікацією в GitHub вибери файли ще раз.',
+        githubTokenRequired: 'Для публікації потрібен GitHub token з доступом до репозиторію.',
+        githubTargetMissing: 'Не вдалося визначити GitHub-репозиторій для публікації.',
+        toastSavedLocalWithFiles: 'Збережено локально. Файли не опубліковані й залишаться в черзі лише до перезавантаження сторінки; для релізу в GitHub натисніть «Зберегти Глобально» в цій сесії.',
         toastSavedLocal: 'Збережено локально. Зміни вже видно в цьому браузері та у preview-вкладках з Головної.',
         toastSavedNoStorage: 'Зміни застосовані, але localStorage недоступний у цьому браузері.',
         toastLocalCleared: 'Локальну чернетку очищено. У цьому браузері знову активна вбудована версія сайту.',
@@ -454,6 +461,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     let editorAccessArmed = false;
     let editorAccessTimer = null;
     const pendingProductUploads = new Map();
+    const adminViewLinks = Array.from(document.querySelectorAll('[data-admin-view]'));
+    let editorGridRenderFrame = 0;
 
     if (editorEmptyStateEl) {
         editorEmptyStateEl.textContent = msg('selectProduct');
@@ -464,7 +473,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         document.documentElement.lang = locale === 'ua' ? 'uk' : locale;
 
         /* Sidebar nav labels — reuse view titles from ADMIN_VIEW_COPY */
-        document.querySelectorAll('[data-admin-view]').forEach((link) => {
+        adminViewLinks.forEach((link) => {
             const view = link.dataset.adminView;
             const label = link.querySelector('.dash-nav-label');
             if (label && copy[view]) label.textContent = copy[view].title;
@@ -498,7 +507,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
 
         /* Close button aria */
-        const closeBtn = document.querySelector('[data-close-editor]');
+        const closeBtn = document.querySelector('.dash-btn-icon[data-close-editor]');
         if (closeBtn) closeBtn.setAttribute('aria-label', copy.header.closeLabel);
 
         /* Theme toggle aria */
@@ -508,6 +517,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function emitToast(message, kind = 'info') {
         if (typeof showToast === 'function') showToast(message, kind);
+    }
+
+    function scheduleEditorGridRender() {
+        if (editorGridRenderFrame) return;
+        editorGridRenderFrame = window.requestAnimationFrame(() => {
+            editorGridRenderFrame = 0;
+            renderEditorGrid();
+        });
     }
 
     function hasStagedUploads() {
@@ -650,6 +667,27 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         return pendingProductUploads.get(String(productId || '')) || null;
     }
 
+    function getPendingUploadHref(upload) {
+        return upload ? `./${upload.relativePath}` : '';
+    }
+
+    function isProductUsingPendingUpload(product, upload) {
+        return Boolean(upload && String(product?.downloadUrl || '').trim() === getPendingUploadHref(upload));
+    }
+
+    function stripPendingUploadLinks(data) {
+        const normalized = normalizeData(data);
+        normalized.products = normalized.products.map((product) => {
+            const upload = getPendingProductUpload(product.id);
+            if (!isProductUsingPendingUpload(product, upload)) return product;
+            return {
+                ...product,
+                downloadUrl: upload.previousDownloadUrl || '',
+            };
+        });
+        return normalized;
+    }
+
     function renderProductUploadMeta() {
         if (!editorFieldDownloadFileMetaEl) return;
 
@@ -678,7 +716,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (!upload) return nextProduct;
 
         const nextRelativePath = buildProductUploadRelativePath(nextProduct, upload.originalName);
-        const previousAutoUrl = `./${upload.relativePath}`;
+        const previousAutoUrl = getPendingUploadHref(upload);
         const shouldRewriteDownload = currentDownloadValue === previousAutoUrl || previousProduct.downloadUrl === previousAutoUrl;
         const nextUpload = { ...upload, relativePath: nextRelativePath };
 
@@ -686,7 +724,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         pendingProductUploads.set(nextProduct.id, nextUpload);
 
         if (shouldRewriteDownload && editorFieldDownloadEl) {
-            nextProduct.downloadUrl = `./${nextRelativePath}`;
+            nextProduct.downloadUrl = getPendingUploadHref(nextUpload);
             editorFieldDownloadEl.value = nextProduct.downloadUrl;
         }
 
@@ -709,9 +747,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         pendingProductUploads.delete(product.id);
         if (!preserveUrl) {
-            const expectedUrl = `./${upload.relativePath}`;
+            const expectedUrl = getPendingUploadHref(upload);
             if (editorFieldDownloadEl && editorFieldDownloadEl.value.trim() === expectedUrl) {
-                editorFieldDownloadEl.value = '';
+                editorFieldDownloadEl.value = upload.previousDownloadUrl || '';
             }
             syncSelectedProductFromForm();
         } else if (editorFieldDownloadFileEl) {
@@ -744,7 +782,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         syncSelectedProductFromForm();
         const product = editorData.products[editorSelectedIndex];
         const relativePath = buildProductUploadRelativePath(product, file.name);
-        pendingProductUploads.set(product.id, { file, originalName: file.name, relativePath });
+        const existingUpload = getPendingProductUpload(product.id);
+        const previousDownloadUrl = existingUpload?.previousDownloadUrl ?? String(product.downloadUrl || '').trim();
+        pendingProductUploads.set(product.id, { file, originalName: file.name, relativePath, previousDownloadUrl });
         if (editorFieldDownloadEl) editorFieldDownloadEl.value = `./${relativePath}`;
         syncSelectedProductFromForm();
         renderProductUploadMeta();
@@ -895,7 +935,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             const attrs = disabled
                 ? 'href="#" aria-disabled="true" tabindex="-1"'
                 : `href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer"`;
-            return `<a class="social-link square ${disabled ? 'is-disabled' : ''}" ${attrs} aria-label="${label}">${renderSocialIcon(key)}</a>`;
+            return `<a class="social-link ${disabled ? 'is-disabled' : ''}" ${attrs} aria-label="${label}">${renderSocialIcon(key)}</a>`;
         }).join('');
         renderHomeDashboard();
     }
@@ -1082,7 +1122,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (addProductBtnEl) addProductBtnEl.hidden = editorActiveView !== 'products';
         if (addTeamMemberBtnEl) addTeamMemberBtnEl.hidden = editorActiveView !== 'misc';
         if (editorActiveView === 'support') fillSupportForm();
-        document.querySelectorAll('[data-admin-view]').forEach((link) => {
+        adminViewLinks.forEach((link) => {
             link.classList.toggle('active', link.dataset.adminView === editorActiveView);
         });
         syncProductEditorState();
@@ -1527,8 +1567,23 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             autoRouteRedirect: Boolean(editorFieldAutoRouteRedirectEl?.checked),
             routeModules: current.routeModules,
         }, editorSelectedIndex);
+
+        const usedProductIds = new Set(
+            editorData.products
+                .map((product, index) => (index === editorSelectedIndex ? '' : String(product?.id || '').trim()))
+                .filter(Boolean),
+        );
+        nextProduct = {
+            ...nextProduct,
+            id: makeUniqueId(nextProduct.id, usedProductIds, nextProduct.title),
+        };
+
         nextProduct = syncPendingUploadForProduct(current, nextProduct, editorFieldDownloadEl?.value.trim() || '');
         editorData.products[editorSelectedIndex] = nextProduct;
+
+        if (editorFieldSlugEl && editorFieldSlugEl.value !== nextProduct.id) {
+            editorFieldSlugEl.value = nextProduct.id;
+        }
 
         if (nextProduct.autoRouteRedirect) {
             editorData.products = editorData.products.map((product, index) => {
@@ -1653,10 +1708,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function saveEditorDataLocally() {
         const normalized = applyEditorDataToPreview();
-        const stored = persistEditorData(normalized);
-        pendingProductUploads.clear();
+        const localSafeData = stripPendingUploadLinks(normalized);
+        const stored = persistEditorData(localSafeData);
         renderProductUploadMeta();
-        return { normalized, stored };
+        return { normalized: localSafeData, stored };
     }
 
     function handleApplyDraft() {
@@ -1700,6 +1755,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         clearPendingUploads: () => pendingProductUploads.clear(),
         renderProductUploadMeta,
         syncDraftControls,
+        getMessage: (key, fallback = '') => msg(key) || fallback,
     });
     const { renderGitHubSyncTarget, saveToGitHub } = publisher;
 
@@ -1924,7 +1980,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         syncDraftControls();
     });
 
-    document.querySelectorAll('[data-admin-view]').forEach((link) => {
+    adminViewLinks.forEach((link) => {
         link.addEventListener('click', (event) => {
             event.preventDefault();
             setAdminView(link.dataset.adminView);
@@ -1949,7 +2005,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     editorSearchEl?.addEventListener('input', (event) => {
         editorSearchQuery = event.target.value;
-        renderEditorGrid();
+        scheduleEditorGridRender();
     });
 
     [socialYoutubeEl, socialDiscordEl, socialTelegramEl].filter(Boolean).forEach((field) => {

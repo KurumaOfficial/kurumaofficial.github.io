@@ -3,11 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Strange Visuals — Підтримати</title>
+<title>Aleph Studio — Підтримати</title>
 <meta name="theme-color" content="#080606">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="dark light">
 <meta name="author" content="WeTTeA">
-<meta name="description" content="Підтримайте розробку Strange Visuals — візуального мода для Minecraft від Aleph Studio.">
+<meta name="description" content="Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aleph Studio — Підтримати">
+<meta property="og:description" content="Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:site_name" content="Aleph Studio">
+<meta property="og:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:width" content="1919">
+<meta property="og:image:height" content="1054">
+<meta property="og:image:alt" content="Прев'ю підтримки Aleph Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aleph Studio — Підтримати">
+<meta name="twitter:description" content="Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.">
+<meta name="twitter:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+<meta name="twitter:image:alt" content="Прев'ю підтримки Aleph Studio">
+<script>window.__ALEPH_LOCALE__ = 'ua';</script>
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../favicon.ico" sizes="48x48">
 <link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -15,12 +32,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/support/donate.css">
-<script>window.__ALEPH_LOCALE__ = 'ua';</script>
-<script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body>
+
+<a id="skipLink" class="skip-link" href="#main">Перейти до основного вмісту</a>
 
 <nav class="nav" role="navigation" aria-label="Основна навігація">
   <a class="nav-logo" href="../" aria-label="Aleph Studio — на головну">
@@ -35,7 +51,7 @@
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">
-      <span class="material-icons" id="themeIco">light_mode</span>
+      <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
     </button>
 
     <div id="localeSwitcher" class="locale-switcher">
@@ -43,7 +59,7 @@
         id="localeSwitcherTrigger"
         class="locale-switcher__trigger"
         type="button"
-        aria-haspopup="listbox"
+        aria-haspopup="menu"
         aria-expanded="false"
         aria-label="Вибір мови"
       >
@@ -53,27 +69,27 @@
           <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
         </svg>
       </button>
-      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="listbox" aria-label="Змінити мову" hidden></div>
+      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Змінити мову" hidden></div>
     </div>
   </div>
 </nav>
 
-<main class="donate-page">
+<main id="main" class="donate-page">
   <div class="donate-page-top">
-    <a class="donate-back" href="../products/strange-visuals/">
-      <span class="material-icons" aria-hidden="true">arrow_back</span>
-      <span id="donateBackLabel">Назад до Strange Visuals</span>
+    <a class="donate-back" href="../">
+      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+      <span id="donateBackLabel">Назад до Aleph Studio</span>
     </a>
   </div>
 
   <section class="donate-hero reveal">
     <div class="donate-hero-body">
       <div class="donate-crown">
-        <span class="material-icons">workspace_premium</span>
+        <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5.2 18.2h13.6l-1.45-7.45-4.2 3.1L12 8.1l-1.15 5.75-4.2-3.1Z" fill="currentColor"></path><path d="M5 20h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
       </div>
 
-      <div class="donate-eyebrow" id="donateEyebrow">Підтримати проєкт</div>
-      <h1 class="donate-title" id="donateTitle">Підтримка<br><em>проєкту</em></h1>
+      <div class="donate-eyebrow" id="donateEyebrow">Підтримати Aleph Studio</div>
+      <h1 class="donate-title" id="donateTitle">Підтримка<br><em>студії</em></h1>
       <p class="donate-desc" id="donateDesc"></p>
     </div>
   </section>

@@ -12,9 +12,10 @@ import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
 import {
-    applyGlobalRouteRedirect,
     getAdminHref,
+    getEffectiveSiteData,
     initAdminRouteAccess,
+    initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
 } from './core/site-shell.js';
@@ -23,34 +24,45 @@ import {
 /*  Boot                                                              */
 /* ------------------------------------------------------------------ */
 
+let booted = false;
+
 /**
  * Main initialisation sequence.
  * Idempotent — calling twice is harmless.
  */
 function boot() {
+    if (booted) return;
+    booted = true;
+
     /* 1 — Build locale controller (auto-detects locale from path) -- */
     const lc = createLocaleController();
+    const isAdminPage = document.body?.dataset.adminPage === 'true';
+
+    if (isAdminPage) {
+        document.documentElement.lang = lc.locale === 'ua' ? 'uk' : lc.locale;
+    }
 
     /* 2 — Apply document‑level meta (lang, title, OG, etc.) -------- */
-    lc.applyDocumentMeta();
+    if (!isAdminPage) {
+        lc.applyDocumentMeta();
+    }
 
     /* 3 — Stamp static text copies (nav, hero, manifesto, footer) -- */
-    lc.applyStaticCopy();
-
-    /* 3.1 — Global redirect to enabled product route --------------- */
-    if (applyGlobalRouteRedirect()) return;
+    if (!isAdminPage) {
+        lc.applyStaticCopy();
+    }
 
     /* 4 — Mount language switcher ---------------------------------- */
-    lc.mountLanguageSwitcher();
+    if (!isAdminPage) {
+        lc.mountLanguageSwitcher();
+    }
 
     /* 5 — Render dynamic sections (products, team, socials) -------- */
     const renderer = createRenderer({ localeController: lc });
-    renderer.renderSite();
+    renderer.renderSite(isAdminPage ? undefined : getEffectiveSiteData());
 
     /* 5.1 — Admin: lazy-load editor on admin page, otherwise just
              wire up the secret key-sequence redirect. --------------- */
-    const isAdminPage = document.body?.dataset.adminPage === 'true';
-
     if (isAdminPage) {
         import('./admin/editor.js').then(({ createEditorController }) => {
             const editor = createEditorController({
@@ -59,6 +71,9 @@ function boot() {
                 locale: lc.locale,
             });
             void editor.initialize();
+        }).catch((error) => {
+            console.error(error);
+            showToast('Failed to load editor module', 'error');
         });
     } else {
         initAdminRouteAccess({ adminHref: getAdminHref() });
@@ -69,7 +84,7 @@ function boot() {
 
     /* 7 — Bind global UI helpers ----------------------------------- */
     bindNavClose();
-    bindSkipLink();
+    initSkipLink();
     initSharedThemeToggle();
     initSmoothRouteTransitions();
 
@@ -94,24 +109,6 @@ function bindNavClose() {
         link.addEventListener('click', () => {
             toggle.checked = false;
         });
-    });
-}
-
-/**
- * Ensure skip-to-content link moves focus correctly.
- */
-function bindSkipLink() {
-    const link = document.querySelector('.skip-link');
-    if (!link) return;
-
-    link.addEventListener('click', (e) => {
-        const target = document.getElementById('main');
-        if (target) {
-            e.preventDefault();
-            target.setAttribute('tabindex', '-1');
-            target.focus({ preventScroll: false });
-            target.removeAttribute('tabindex');
-        }
     });
 }
 

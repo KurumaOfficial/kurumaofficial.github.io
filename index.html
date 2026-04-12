@@ -13,8 +13,12 @@
         (function () {
             'use strict';
 
-            var supported = { ru: '/ru/', en: '/en/', ua: '/ua/' };
-            var fallback  = '/ru/';
+            var supported = { ru: './ru/', en: './en/', ua: './ua/' };
+            var fallback  = supported.ru;
+
+            function resolve(path) {
+                return new URL(path, location.href);
+            }
 
             /** Derive best locale from Accept-Language / navigator. */
             function detect() {
@@ -22,20 +26,22 @@
                     .map(function (l) { return l.split('-')[0].toLowerCase(); });
 
                 for (var i = 0; i < raw.length; i++) {
-                    if (raw[i] === 'uk' || raw[i] === 'ua') return '/ua/';
+                    if (raw[i] === 'uk' || raw[i] === 'ua') return supported.ua;
                     if (supported[raw[i]])                   return supported[raw[i]];
                 }
                 return fallback;
             }
 
-            var dest = detect() + (location.search || '') + (location.hash || '');
-            location.replace(dest);
+            var dest = resolve(detect());
+            dest.search = location.search || '';
+            dest.hash = location.hash || '';
+            location.replace(dest.toString());
         })();
     </script>
 
     <!-- Fallback for NoScript users -->
     <noscript>
-        <meta http-equiv="refresh" content="0; url=/ru/">
+        <meta http-equiv="refresh" content="0; url=./ru/">
     </noscript>
 
     <style>
@@ -55,6 +61,6 @@
     </style>
 </head>
 <body>
-    <p>Redirecting… <a href="/ru/">RU</a> · <a href="/en/">EN</a> · <a href="/ua/">UA</a></p>
+    <p>Redirecting… <a href="./ru/">RU</a> · <a href="./en/">EN</a> · <a href="./ua/">UA</a></p>
 </body>
 </html>

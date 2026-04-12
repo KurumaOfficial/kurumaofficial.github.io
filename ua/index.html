@@ -7,7 +7,7 @@
     <title>Aleph Studio</title>
     <meta name="description" content="Aleph Studio — моди, ігри, DLC та невеликі цифрові релізи з відкритим вихідним кодом, зрозумілою установкою та швидким доступом до актуальної версії.">
     <meta name="theme-color" content="#080606">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="dark light">
     <meta name="author" content="WeTTeA">
 
     <meta property="og:type" content="website">
@@ -15,9 +15,20 @@
     <meta property="og:description" content="Моди, ігри, DLC — відкритий вихідний код, зрозуміла установка, швидкий доступ.">
     <meta property="og:locale" content="uk_UA">
     <meta property="og:site_name" content="Aleph Studio">
+    <meta property="og:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+    <meta property="og:image:type" content="image/webp">
+    <meta property="og:image:width" content="1919">
+    <meta property="og:image:height" content="1054">
+    <meta property="og:image:alt" content="Прев'ю Aleph Studio">
 
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Aleph Studio">
+    <meta name="twitter:description" content="Моди, ігри, DLC — відкритий вихідний код, зрозуміла установка, швидкий доступ.">
+    <meta name="twitter:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+    <meta name="twitter:image:alt" content="Прев'ю Aleph Studio">
+
+    <script>window.__ALEPH_LOCALE__ = 'ua';</script>
+    <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 
     <link rel="icon" href="../favicon.ico" sizes="48x48">
     <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
@@ -30,10 +41,6 @@
 
     <link rel="stylesheet" href="../assets/css/main.css">
 
-    <script>window.__ALEPH_LOCALE__ = 'ua';</script>
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body>
 
@@ -55,7 +62,7 @@
 
         <div class="nav-right">
             <button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">
-                <span class="material-icons" id="themeIco">light_mode</span>
+                <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
             </button>
 
             <div id="localeSwitcher" class="locale-switcher">
@@ -63,7 +70,7 @@
                     id="localeSwitcherTrigger"
                     class="locale-switcher__trigger"
                     type="button"
-                    aria-haspopup="listbox"
+                    aria-haspopup="menu"
                     aria-expanded="false"
                     aria-label="Перемикач мови"
                 >
@@ -76,7 +83,7 @@
                 <div
                     id="localeSwitcherMenu"
                     class="locale-switcher__menu"
-                    role="listbox"
+                    role="menu"
                     aria-label="Оберіть мову"
                     hidden
                 ></div>
@@ -86,10 +93,12 @@
         <input id="nav-toggle" class="visually-hidden" type="checkbox" aria-label="Відкрити меню">
     </nav>
 
-    <section class="hero" id="main" aria-labelledby="heroTitle">
+    <main id="main">
+
+    <section class="hero" aria-labelledby="heroTitle">
         <div class="hero-bg-sq" aria-hidden="true"></div>
 
-        <span class="hero-tag" aria-hidden="true">Game Development</span>
+        <span class="hero-tag" aria-hidden="true">Розробка ігор</span>
         <h1 id="heroTitle" class="hero-title">Aleph<span>Studio</span></h1>
 
         <p id="heroIntro" class="hero-sub">
@@ -106,18 +115,18 @@
 
     <div class="marquee-wrap" aria-hidden="true">
         <div class="marquee-track">
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
+            <span class="marquee-item">Відкритий код</span>
+            <span class="marquee-item">Моди</span>
+            <span class="marquee-item">Ігри</span>
             <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
+            <span class="marquee-item">Вільний доступ</span>
+            <span class="marquee-item">Ліцензія GPL</span>
+            <span class="marquee-item">Відкритий код</span>
+            <span class="marquee-item">Моди</span>
+            <span class="marquee-item">Ігри</span>
             <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
+            <span class="marquee-item">Вільний доступ</span>
+            <span class="marquee-item">Ліцензія GPL</span>
         </div>
     </div>
 
@@ -128,7 +137,7 @@
                     <div class="p-sq-inner"></div>
                     <div class="p-sq-center"></div>
                 </div>
-                <span class="p-label">Structure</span>
+                <span class="p-label">Структура</span>
             </div>
             <div class="principle-text">
                 <span class="section-label">Підхід</span>
@@ -189,6 +198,8 @@
         <div id="teamShowcase" class="team-grid"></div>
     </section>
 
+    </main>
+
     <footer role="contentinfo">
         <div class="footer-brand">
             <div class="footer-logo" aria-hidden="true">
@@ -215,7 +226,7 @@
             </ul>
         </div>
 
-        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed</p>
+        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · Дочірній проєкт WeTTeA · Ліцензія GPL</p>
     </footer>
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>

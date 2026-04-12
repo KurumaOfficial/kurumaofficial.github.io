@@ -11,13 +11,21 @@
  * @param {HTMLElement[]} [watchRoots] – containers to watch for new `.reveal` children.
  * @returns {{ destroy: () => void }}
  */
+let activeRevealController = null;
+let revealGeneration = 0;
+
 export function initReveal(watchRoots = []) {
+    activeRevealController?.destroy();
+
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const generationToken = String(++revealGeneration);
 
     /* If the user prefers reduced motion, mark everything visible immediately. */
     if (prefersReduced) {
         document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
-        return { destroy: () => {} };
+        const reducedMotionController = { destroy: () => {} };
+        activeRevealController = reducedMotionController;
+        return reducedMotionController;
     }
 
     const observer = new IntersectionObserver(
@@ -32,29 +40,79 @@ export function initReveal(watchRoots = []) {
         { threshold: 0.08, rootMargin: '0px 0px -40px 0px' },
     );
 
-    /** Scan the DOM for un-observed `.reveal` elements. */
-    function scan() {
-        document.querySelectorAll('.reveal').forEach((el) => {
-            if (/** @type {HTMLElement} */ (el).dataset.revealBound === '1') return;
-            /** @type {HTMLElement} */ (el).dataset.revealBound = '1';
-            observer.observe(el);
+    const rootsToWatch = [...new Set([document.body, ...watchRoots].filter(Boolean))];
+    let scheduledScanFrame = 0;
+    let destroyed = false;
+
+    /**
+     * Observe a single `.reveal` node once per generation.
+     * @param {Element} node
+     */
+    function observeRevealNode(node) {
+        if (!(node instanceof HTMLElement)) return;
+        if (!node.classList.contains('reveal')) return;
+        if (node.dataset.revealBound === generationToken) return;
+
+        node.dataset.revealBound = generationToken;
+        if (node.classList.contains('is-visible')) return;
+        observer.observe(node);
+    }
+
+    /**
+     * Observe a root and any nested `.reveal` descendants.
+     * @param {ParentNode | Element | DocumentFragment | Document | null | undefined} root
+     */
+    function observeRevealTree(root) {
+        if (!root) return;
+
+        if (root instanceof Element) {
+            observeRevealNode(root);
+        }
+
+        if (typeof root.querySelectorAll !== 'function') return;
+        root.querySelectorAll('.reveal').forEach((el) => observeRevealNode(el));
+    }
+
+    function scheduleScan() {
+        if (destroyed || scheduledScanFrame) return;
+
+        scheduledScanFrame = window.requestAnimationFrame(() => {
+            scheduledScanFrame = 0;
+            if (destroyed) return;
+            rootsToWatch.forEach((root) => observeRevealTree(root));
         });
     }
 
-    scan();
+    scheduleScan();
 
     /* Watch for dynamically-added .reveal elements. */
-    const mutationObs = new MutationObserver(scan);
-    for (const root of watchRoots) {
+    const mutationObs = new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+            mutation.addedNodes.forEach((node) => {
+                if (node instanceof Element || node instanceof DocumentFragment) {
+                    observeRevealTree(node);
+                }
+            });
+        }
+
+        scheduleScan();
+    });
+
+    for (const root of rootsToWatch) {
         if (root) mutationObs.observe(root, { childList: true, subtree: true });
     }
-    /* Also watch body for top-level additions. */
-    mutationObs.observe(document.body, { childList: true, subtree: true });
 
     function destroy() {
+        destroyed = true;
+        window.cancelAnimationFrame(scheduledScanFrame);
         observer.disconnect();
         mutationObs.disconnect();
+        if (activeRevealController === controller) {
+            activeRevealController = null;
+        }
     }
 
-    return { destroy };
+    const controller = { destroy };
+    activeRevealController = controller;
+    return controller;
 }

@@ -1,12 +1,15 @@
 import { initReveal } from '../components/reveal.js';
 import { createLocaleController } from '../i18n/controller.js';
+import { resolveRouteRelativePath } from '../i18n/config.js';
 import { escapeHtml } from '../core/dom.js';
+import { getIconMarkup } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import {
   applyGlobalRouteRedirect,
   getAdminHref,
   getEffectiveSiteData,
   initAdminRouteAccess,
+  initSkipLink,
   initSharedThemeToggle,
   initSmoothRouteTransitions,
   navigateWithRouteTransition,
@@ -119,6 +122,21 @@ const GUI_PREVIEW_LANGUAGE_LABELS = Object.freeze({
   ua: Object.freeze({ ru: 'Російська', en: 'English', ua: 'Українська' }),
 });
 
+const ROUTE_COMPARE_ALT_COPY = Object.freeze({
+  ru: Object.freeze({
+    before: 'до применения мода',
+    after: 'после применения мода',
+  }),
+  en: Object.freeze({
+    before: 'before applying the mod',
+    after: 'after applying the mod',
+  }),
+  ua: Object.freeze({
+    before: 'до застосування мода',
+    after: 'після застосування мода',
+  }),
+});
+
 const GUI_PREVIEW_THEMES = Object.freeze([
   Object.freeze({ key: 'white', labels: Object.freeze({ ru: 'Белая', en: 'White', ua: 'Біла' }) }),
   Object.freeze({ key: 'black', labels: Object.freeze({ ru: 'Черная', en: 'Black', ua: 'Чорна' }) }),
@@ -127,6 +145,12 @@ const GUI_PREVIEW_THEMES = Object.freeze([
   Object.freeze({ key: 'pink', labels: Object.freeze({ ru: 'Розовая', en: 'Pink', ua: 'Рожева' }) }),
   Object.freeze({ key: 'violet', labels: Object.freeze({ ru: 'Фиолетовая', en: 'Violet', ua: 'Фіолетова' }) }),
 ]);
+
+function iconHtml(name, className = 'ui-icon') {
+  const markup = getIconMarkup(name);
+  if (!markup) return '';
+  return `<span class="${className}" aria-hidden="true">${markup}</span>`;
+}
 
 function getElements() {
   return {
@@ -138,7 +162,10 @@ function getElements() {
     shareYoutubeBtn: document.getElementById('shareYoutubeBtn'),
     installBtn: document.getElementById('installBtn'),
     sourceBtn: document.getElementById('sourceBtn'),
+    heroTitleEl: document.querySelector('.hero-app-name'),
+    heroBackLabelEl: document.querySelector('.hero-store-back-label'),
     heroProductVersion: document.getElementById('heroProductVersion'),
+    featureSummaryEl: document.querySelector('#features .s-desc'),
     gwTabsEl: document.getElementById('gwTabs'),
     gwSecEl: document.getElementById('gwSec'),
     gwBodyEl: document.getElementById('gwBody'),
@@ -183,9 +210,62 @@ function getGuiPreviewLanguageLabels(locale) {
   return GUI_PREVIEW_LANGUAGE_LABELS[locale] || GUI_PREVIEW_LANGUAGE_LABELS.ru;
 }
 
+function getRouteCompareAltCopy(locale) {
+  return ROUTE_COMPARE_ALT_COPY[locale] || ROUTE_COMPARE_ALT_COPY.ru;
+}
+
 function getGuiPreviewThemeLabel(locale, themeKey) {
   const theme = GUI_PREVIEW_THEMES.find((item) => item.key === themeKey);
   return theme?.labels?.[locale] || theme?.labels?.ru || themeKey;
+}
+
+function replaceLeadingSegment(source, nextLeadingSegment) {
+  const sourceText = String(source || '').trim();
+  const nextText = String(nextLeadingSegment || '').trim();
+  if (!nextText) return sourceText;
+
+  const match = sourceText.match(/\s+[—-]\s+/);
+  if (!match || typeof match.index !== 'number') {
+    return nextText;
+  }
+
+  const separator = match[0];
+  const suffix = sourceText.slice(match.index + separator.length).trim();
+  return suffix ? `${nextText}${separator}${suffix}` : nextText;
+}
+
+function buildRouteDocumentMeta(routeProduct) {
+  const currentTitle = document.title;
+  const currentDescription = document.querySelector('meta[name="description"]')?.getAttribute('content') || '';
+  const nextTitle = String(routeProduct?.title || '').trim();
+  const nextDescription = String(routeProduct?.summary || '').trim();
+
+  return {
+    title: nextTitle ? replaceLeadingSegment(currentTitle, nextTitle) : currentTitle,
+    description: nextDescription || currentDescription,
+  };
+}
+
+function renderProductName(target, title) {
+  if (!(target instanceof HTMLElement)) return;
+
+  const nextTitle = String(title || '').trim();
+  if (!nextTitle) return;
+
+  const segments = nextTitle.split(/\s+/).filter(Boolean);
+  target.textContent = '';
+
+  if (segments.length < 2) {
+    target.textContent = nextTitle;
+    return;
+  }
+
+  const lastSegment = segments.pop();
+  target.append(document.createTextNode(`${segments.join(' ')} `));
+
+  const accent = document.createElement('em');
+  accent.textContent = lastSegment || '';
+  target.append(accent);
 }
 
 function syncGuiPreviewThemeCards(elements, themeKey) {
@@ -201,7 +281,7 @@ function syncGuiPreviewThemeCards(elements, themeKey) {
 
 function setGuiPreviewTheme(elements, themeKey) {
   if (elements.guiWidgetEl instanceof HTMLElement) {
-    elements.guiWidgetEl.removeAttribute('data-gui-preview-theme');
+    elements.guiWidgetEl.setAttribute('data-gui-preview-theme', themeKey || 'black');
   }
   syncGuiPreviewThemeCards(elements, themeKey);
 }
@@ -223,13 +303,17 @@ function buildGuiPreviewContext(siteData, locale) {
 
 function resolveRouteAsset(path) {
   const value = String(path || '').trim();
-  if (!value || /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value)) return value;
-  const cleaned = value.replace(/^\.\//, '').replace(/^\/+/, '');
-  return new URL(`../../../${cleaned}`, window.location.href).toString();
+  if (!value) return value;
+
+  const resolved = resolveRouteRelativePath(value, window.location.pathname);
+  if (!resolved) return '';
+  if (resolved.startsWith('#')) return resolved;
+
+  return new URL(resolved, window.location.href).toString();
 }
 
 function getDonateHref() {
-  return new URL('../../donate/', window.location.href).toString();
+  return new URL('donate/', window.location.href).toString();
 }
 
 function getRouteProduct(products) {
@@ -332,9 +416,34 @@ function initShareDock(elements, siteData, shareMeta) {
   });
 }
 
-function bindRouteProductMeta(elements, routeProduct) {
+function bindRouteProductMeta(elements, routeProduct, locale) {
+  const nextTitle = String(routeProduct?.title || '').trim();
+  const nextSummary = String(routeProduct?.summary || '').trim();
+
+  if (nextTitle) {
+    renderProductName(elements.heroTitleEl, nextTitle);
+    if (elements.heroBackLabelEl instanceof HTMLElement) {
+      elements.heroBackLabelEl.textContent = nextTitle;
+    }
+    if (elements.gwTitleEl instanceof HTMLElement) {
+      elements.gwTitleEl.textContent = nextTitle;
+    }
+  }
+
   if (elements.heroProductVersion && routeProduct?.version) {
     elements.heroProductVersion.textContent = routeProduct.version;
+  }
+
+  if (nextSummary && elements.featureSummaryEl instanceof HTMLElement) {
+    elements.featureSummaryEl.textContent = nextSummary;
+  }
+
+  const altCopy = getRouteCompareAltCopy(locale);
+  if (nextTitle && elements.compareBeforeImage instanceof HTMLImageElement) {
+    elements.compareBeforeImage.alt = `${nextTitle} ${altCopy.before}`;
+  }
+  if (nextTitle && elements.compareAfterImage instanceof HTMLImageElement) {
+    elements.compareAfterImage.alt = `${nextTitle} ${altCopy.after}`;
   }
 }
 
@@ -375,12 +484,17 @@ function initActionButtons(elements, routeProduct) {
   if (elements.installBtn) {
     if (routeProduct?.downloadUrl) {
       const downloadHref = resolveRouteAsset(routeProduct.downloadUrl);
-      elements.installBtn.href = downloadHref;
-      elements.installBtn.setAttribute('download', '');
-      elements.installBtn.addEventListener('click', (event) => {
-        event.preventDefault();
-        startDownloadThenRedirect(downloadHref, donateHref);
-      });
+      if (downloadHref) {
+        elements.installBtn.href = downloadHref;
+        elements.installBtn.setAttribute('download', '');
+        elements.installBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          startDownloadThenRedirect(downloadHref, donateHref);
+        });
+      } else {
+        elements.installBtn.href = donateHref;
+        elements.installBtn.removeAttribute('download');
+      }
     } else {
       elements.installBtn.href = donateHref;
       elements.installBtn.removeAttribute('download');
@@ -389,7 +503,7 @@ function initActionButtons(elements, routeProduct) {
 
   if (!elements.sourceBtn) return;
 
-  const sourceUrl = routeProduct?.sourceUrl || elements.sourceBtn.getAttribute('href') || '';
+  const sourceUrl = resolveRouteAsset(routeProduct?.sourceUrl || elements.sourceBtn.getAttribute('href') || '');
   if (!sourceUrl) {
     elements.sourceBtn.hidden = true;
     return;
@@ -417,6 +531,53 @@ function toggleGwItem(itemEl, localeMeta) {
 
 let guiBuildTimer = 0;
 
+function bindGuiInteractions(elements, previewContexts, previewState) {
+  if (!(elements.gwItemsEl instanceof HTMLElement) || elements.gwItemsEl.dataset.gwInteractionsBound === '1') return;
+  elements.gwItemsEl.dataset.gwInteractionsBound = '1';
+
+  elements.gwItemsEl.addEventListener('click', (event) => {
+    const target = event.target instanceof Element
+      ? event.target.closest('[data-gw-toggle], [data-gui-theme], [data-gui-locale]')
+      : null;
+    if (!(target instanceof HTMLElement) || !elements.gwItemsEl.contains(target)) return;
+
+    if (target.hasAttribute('data-gw-toggle')) {
+      const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
+      toggleGwItem(target, previewContext.localeMeta);
+      return;
+    }
+
+    const nextThemeKey = target.dataset.guiTheme;
+    if (nextThemeKey) {
+      if (nextThemeKey === previewState.themeKey) return;
+      previewState.themeKey = nextThemeKey;
+      setGuiPreviewTheme(elements, previewState.themeKey);
+      return;
+    }
+
+    const nextLocale = target.dataset.guiLocale;
+    if (!nextLocale || nextLocale === previewState.locale) return;
+    previewState.locale = nextLocale;
+    renderGuiPreview(elements, previewContexts, previewState);
+  });
+}
+
+function bindGuiTabs(elements, previewContexts, previewState) {
+  if (!(elements.gwTabsEl instanceof HTMLElement) || elements.gwTabsEl.dataset.gwTabsBound === '1') return;
+  elements.gwTabsEl.dataset.gwTabsBound = '1';
+
+  elements.gwTabsEl.addEventListener('click', (event) => {
+    const target = event.target instanceof Element ? event.target.closest('[data-tab]') : null;
+    if (!(target instanceof HTMLElement) || !elements.gwTabsEl.contains(target)) return;
+
+    const nextKey = target.dataset.tab || previewState.tab;
+    if (!nextKey || nextKey === previewState.tab) return;
+
+    previewState.tab = nextKey;
+    renderGuiPreview(elements, previewContexts, previewState);
+  });
+}
+
 function buildGuiList(elements, tabs, localeMeta, key) {
   if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
 
@@ -432,23 +593,22 @@ function buildGuiList(elements, tabs, localeMeta, key) {
     elements.gwSecEl.textContent = meta.title;
     elements.gwBodyEl.dataset.mode = 'list';
     elements.gwItemsEl.className = 'gw-items';
-    elements.gwItemsEl.onclick = null;
     elements.gwItemsEl.textContent = '';
 
     items.forEach((item) => {
       const itemEl = document.createElement('button');
       itemEl.type = 'button';
       itemEl.className = 'gw-item';
+      itemEl.dataset.gwToggle = 'true';
       itemEl.setAttribute('aria-pressed', String(Boolean(item.enabled)));
       itemEl.innerHTML = `
-        <div class="gw-av"><span class="material-icons">${meta.icon}</span></div>
+        <div class="gw-av">${iconHtml(meta.icon, 'ui-icon')}</div>
         <div class="gw-info">
           <div class="gw-name">${escapeHtml(item.name)}</div>
           <div class="gw-status ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.enabled : localeMeta.disabled}</div>
         </div>
-        <div class="gw-dots"><span class="material-icons">more_vert</span></div>
+        <div class="gw-dots">${iconHtml('more_vert', 'ui-icon')}</div>
       `;
-      itemEl.addEventListener('click', () => toggleGwItem(itemEl, localeMeta));
       elements.gwItemsEl.appendChild(itemEl);
     });
 
@@ -461,7 +621,7 @@ function buildGuiList(elements, tabs, localeMeta, key) {
   }, 170);
 }
 
-function buildGuiThemePanel(elements, previewContext, previewState, onThemeChange, onLocaleChange) {
+function buildGuiThemePanel(elements, previewContext, previewState) {
   if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
 
   const scrollEl = elements.gwBodyEl.querySelector('.gw-scroll');
@@ -507,24 +667,6 @@ function buildGuiThemePanel(elements, previewContext, previewState, onThemeChang
       </div>
     `;
 
-    elements.gwItemsEl.querySelectorAll('[data-gui-theme]').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!(button instanceof HTMLButtonElement)) return;
-        const nextThemeKey = button.dataset.guiTheme || previewState.themeKey;
-        if (nextThemeKey === previewState.themeKey) return;
-        onThemeChange(nextThemeKey);
-      });
-    });
-
-    elements.gwItemsEl.querySelectorAll('[data-gui-locale]').forEach((button) => {
-      button.addEventListener('click', () => {
-        if (!(button instanceof HTMLButtonElement)) return;
-        const nextLocale = button.dataset.guiLocale || previewState.locale;
-        if (nextLocale === previewState.locale) return;
-        onLocaleChange(nextLocale);
-      });
-    });
-
     if (scrollEl instanceof HTMLElement) {
       scrollEl.scrollTop = 0;
     }
@@ -534,7 +676,7 @@ function buildGuiThemePanel(elements, previewContext, previewState, onThemeChang
   }, 170);
 }
 
-function renderGwTabs(elements, tabKeys, localeMeta, activeKey, onSelect) {
+function renderGwTabs(elements, tabKeys, localeMeta, activeKey) {
   if (!elements.gwTabsEl) return;
 
   if (!tabKeys.length) {
@@ -545,22 +687,13 @@ function renderGwTabs(elements, tabKeys, localeMeta, activeKey, onSelect) {
   elements.gwTabsEl.innerHTML = tabKeys.map((key, index) => `
     <button type="button" class="${key === activeKey || (!activeKey && index === 0) ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>
   `).join('');
-
-  elements.gwTabsEl.onclick = (event) => {
-    const target = event.target instanceof Element ? event.target.closest('[data-tab]') : null;
-    if (!(target instanceof HTMLElement)) return;
-
-    const nextKey = target.dataset.tab || tabKeys[0];
-    elements.gwTabsEl.querySelectorAll('[data-tab]').forEach((item) => {
-      item.classList.toggle('active', item === target);
-    });
-    onSelect(nextKey);
-  };
 }
 
 function renderGuiPreview(elements, previewContexts, previewState) {
   const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
   if (!previewContext) return;
+
+  previewState.languageOptions = getGuiPreviewLanguageOptions(previewState.locale);
 
   if (!previewContext.tabKeys.includes(previewState.tab)) {
     previewState.tab = previewContext.tabKeys[0] || 'themes';
@@ -572,25 +705,10 @@ function renderGuiPreview(elements, previewContexts, previewState) {
 
   setGuiPreviewTheme(elements, previewState.themeKey);
 
-  renderGwTabs(elements, previewContext.tabKeys, previewContext.localeMeta, previewState.tab, (nextKey) => {
-    previewState.tab = nextKey;
-    renderGuiPreview(elements, previewContexts, previewState);
-  });
+  renderGwTabs(elements, previewContext.tabKeys, previewContext.localeMeta, previewState.tab);
 
   if (previewState.tab === 'themes') {
-    buildGuiThemePanel(
-      elements,
-      previewContext,
-      previewState,
-      (nextThemeKey) => {
-        previewState.themeKey = nextThemeKey;
-        setGuiPreviewTheme(elements, previewState.themeKey);
-      },
-      (nextLocale) => {
-        previewState.locale = nextLocale;
-        renderGuiPreview(elements, previewContexts, previewState);
-      },
-    );
+    buildGuiThemePanel(elements, previewContext, previewState);
     return;
   }
 
@@ -606,7 +724,7 @@ function renderModuleList(elements, tabKeys, tabs, localeMeta) {
 
     return `
       <div class="mod-group reveal">
-        <div class="mod-head"><span class="material-icons">${meta.icon}</span><span class="mod-head-name">${meta.title}</span><span class="mod-head-ct">${items.length}</span></div>
+        <div class="mod-head">${iconHtml(meta.icon, 'ui-icon')}<span class="mod-head-name">${meta.title}</span><span class="mod-head-ct">${items.length}</span></div>
         <div class="mod-items">
           ${items.map((item) => `
             <div class="mod-item"><span class="mod-item-name">${escapeHtml(item.name)}</span><span class="mod-badge ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.badgeOn : localeMeta.badgeOff}</span></div>
@@ -691,16 +809,23 @@ function applyRevealDelays() {
   });
 }
 
+let booted = false;
+
 function boot() {
+  if (booted) return;
+  booted = true;
+
   const localeController = createLocaleController();
   const rawSiteData = getEffectiveSiteData();
   const siteData = localizeSiteData(rawSiteData, localeController.locale);
   if (applyGlobalRouteRedirect(siteData)) return;
+  const routeProduct = getRouteProduct(siteData.products);
+
+  localeController.applyDocumentMeta(buildRouteDocumentMeta(routeProduct));
 
   const localeMeta = getLocaleMeta(localeController.locale);
   const shareMeta = getShareMeta(localeController.locale);
   const compareCopy = getCompareCopy(localeController.locale);
-  const routeProduct = getRouteProduct(siteData.products);
   const tabs = routeProduct?.routeModules || {};
   const tabKeys = getTabKeys(localeMeta, tabs);
   const elements = getElements();
@@ -719,9 +844,12 @@ function boot() {
   localeController.mountLanguageSwitcher();
   initSharedThemeToggle();
   initAdminRouteAccess({ adminHref: getAdminHref() });
+  initSkipLink();
   initSmoothRouteTransitions();
+  bindGuiInteractions(elements, previewContexts, previewState);
+  bindGuiTabs(elements, previewContexts, previewState);
 
-  bindRouteProductMeta(elements, routeProduct);
+  bindRouteProductMeta(elements, routeProduct, localeController.locale);
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
   renderGuiPreview(elements, previewContexts, previewState);

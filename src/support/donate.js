@@ -1,71 +1,163 @@
 import { initReveal } from '../components/reveal.js';
-import { $, createElement } from '../core/dom.js';
+import { $, cleanUrl, createElement, sanitizeHref } from '../core/dom.js';
+import { createInlineIcon } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
+import { resolveRouteRelativePath } from '../i18n/config.js';
 import { createLocaleController } from '../i18n/controller.js';
 import {
     getAdminHref,
     getEffectiveSiteData,
     initAdminRouteAccess,
+    initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
 } from '../core/site-shell.js';
 
 const COPY = Object.freeze({
     ru: {
-        metaTitle: 'Strange Visuals — Поддержать',
-        backLabel: 'Назад к Strange Visuals',
-        eyebrow: 'Поддержать проект',
-        titleHtml: 'Поддержка<br><em>проекта</em>',
-        introLead: 'Поддерживая нас от ',
-        introMiddle: 'вы получаете роль ',
-        introAfterRole: 'на нашем ',
-        discordLabel: 'Discord-сервере',
-        introTail: ' и ваш профиль появится на сайте — достаточно указать свой Discord-логин при покупке или донате.',
-        paymentsTitle: 'Способы поддержки',
-        paymentsDesc: 'Выберите удобный способ поддержки проекта и команды.',
-        topTitle: 'Общий топ 3',
-        topDesc: 'Чем больше сумма, тем ярче золотое свечение карточки.',
-        supportersTitle: 'Поддержали нас',
-        supportersEmpty: 'Пока никто не поддержал проект. Когда появятся первые донаты, карточки покажутся здесь.',
-        buttonsEmpty: 'Скоро здесь появятся доступные способы поддержки.',
+        common: {
+            titleHtml: 'Поддержка<br><em>проекта</em>',
+            introLead: 'Поддерживая нас от ',
+            introMiddle: 'вы получаете роль ',
+            introAfterRole: 'на нашем ',
+            discordLabel: 'Discord-сервере',
+            introTail: ' и ваш профиль появится на сайте — достаточно указать свой Discord-логин при покупке или донате.',
+            paymentsTitle: 'Способы поддержки',
+            paymentsDesc: 'Выберите удобный способ поддержки проекта и команды.',
+            topTitle: 'Общий топ 3',
+            topDesc: 'Чем больше сумма, тем ярче золотое свечение карточки.',
+            supportersTitle: 'Поддержали нас',
+            supportersEmpty: 'Пока никто не поддержал проект. Когда появятся первые донаты, карточки покажутся здесь.',
+            buttonsEmpty: 'Скоро здесь появятся доступные способы поддержки.',
+        },
+        site: {
+            metaTitle: 'Aleph Studio — Поддержать',
+            metaDescription: 'Поддержите Aleph Studio и помогите финансировать открытые релизы, инструменты и будущие обновления.',
+            backLabel: 'Назад к Aleph Studio',
+            eyebrow: 'Поддержать Aleph Studio',
+            titleHtml: 'Поддержка<br><em>студии</em>',
+        },
+        product: {
+            metaTitle: '{productTitle} — Поддержать',
+            metaDescription: 'Поддержите {productTitle} и помогите финансировать дальнейшую разработку и будущие обновления от Aleph Studio.',
+            backLabel: 'Назад к {productTitle}',
+            eyebrow: 'Поддержать проект',
+        },
     },
     en: {
-        metaTitle: 'Strange Visuals — Support',
-        backLabel: 'Back to Strange Visuals',
-        eyebrow: 'Support the project',
-        titleHtml: 'Support<br><em>the project</em>',
-        introLead: 'By supporting us from ',
-        introMiddle: 'you get the ',
-        introAfterRole: 'role on our ',
-        discordLabel: 'Discord server',
-        introTail: ' and your profile will appear on the site — just specify your Discord login when donating or buying support.',
-        paymentsTitle: 'Support methods',
-        paymentsDesc: 'Choose a convenient way to support the project and the team.',
-        topTitle: 'Overall top 3',
-        topDesc: 'The higher the amount, the stronger the golden glow of the card.',
-        supportersTitle: 'Supported us',
-        supportersEmpty: 'Nobody has supported the project yet. Cards will appear here once the first donations are added.',
-        buttonsEmpty: 'Available support methods will appear here soon.',
+        common: {
+            titleHtml: 'Support<br><em>the project</em>',
+            introLead: 'By supporting us from ',
+            introMiddle: 'you get the ',
+            introAfterRole: 'role on our ',
+            discordLabel: 'Discord server',
+            introTail: ' and your profile will appear on the site — just specify your Discord login when donating or buying support.',
+            paymentsTitle: 'Support methods',
+            paymentsDesc: 'Choose a convenient way to support the project and the team.',
+            topTitle: 'Overall top 3',
+            topDesc: 'The higher the amount, the stronger the golden glow of the card.',
+            supportersTitle: 'Supported us',
+            supportersEmpty: 'Nobody has supported the project yet. Cards will appear here once the first donations are added.',
+            buttonsEmpty: 'Available support methods will appear here soon.',
+        },
+        site: {
+            metaTitle: 'Aleph Studio — Support',
+            metaDescription: 'Support Aleph Studio and help fund open source releases, tools and future updates.',
+            backLabel: 'Back to Aleph Studio',
+            eyebrow: 'Support Aleph Studio',
+            titleHtml: 'Support<br><em>the studio</em>',
+        },
+        product: {
+            metaTitle: '{productTitle} — Support',
+            metaDescription: 'Support {productTitle} and help fund its ongoing development and future updates from Aleph Studio.',
+            backLabel: 'Back to {productTitle}',
+            eyebrow: 'Support the project',
+        },
     },
     ua: {
-        metaTitle: 'Strange Visuals — Підтримати',
-        backLabel: 'Назад до Strange Visuals',
-        eyebrow: 'Підтримати проєкт',
-        titleHtml: 'Підтримка<br><em>проєкту</em>',
-        introLead: 'Підтримуючи нас від ',
-        introMiddle: 'ви отримуєте роль ',
-        introAfterRole: 'на нашому ',
-        discordLabel: 'Discord-сервері',
-        introTail: ' і ваш профіль зʼявиться на сайті — достатньо вказати свій Discord-логін під час покупки або донату.',
-        paymentsTitle: 'Способи підтримки',
-        paymentsDesc: 'Оберіть зручний спосіб підтримати проєкт і команду.',
-        topTitle: 'Загальний топ 3',
-        topDesc: 'Що більша сума, то сильніше золотаве сяйво картки.',
-        supportersTitle: 'Підтримали нас',
-        supportersEmpty: 'Поки ніхто не підтримав проєкт. Картки зʼявляться тут після перших донатів.',
-        buttonsEmpty: 'Незабаром тут зʼявляться доступні способи підтримки.',
+        common: {
+            titleHtml: 'Підтримка<br><em>проєкту</em>',
+            introLead: 'Підтримуючи нас від ',
+            introMiddle: 'ви отримуєте роль ',
+            introAfterRole: 'на нашому ',
+            discordLabel: 'Discord-сервері',
+            introTail: ' і ваш профіль зʼявиться на сайті — достатньо вказати свій Discord-логін під час покупки або донату.',
+            paymentsTitle: 'Способи підтримки',
+            paymentsDesc: 'Оберіть зручний спосіб підтримати проєкт і команду.',
+            topTitle: 'Загальний топ 3',
+            topDesc: 'Що більша сума, то сильніше золотаве сяйво картки.',
+            supportersTitle: 'Підтримали нас',
+            supportersEmpty: 'Поки ніхто не підтримав проєкт. Картки зʼявляться тут після перших донатів.',
+            buttonsEmpty: 'Незабаром тут зʼявляться доступні способи підтримки.',
+        },
+        site: {
+            metaTitle: 'Aleph Studio — Підтримати',
+            metaDescription: 'Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.',
+            backLabel: 'Назад до Aleph Studio',
+            eyebrow: 'Підтримати Aleph Studio',
+            titleHtml: 'Підтримка<br><em>студії</em>',
+        },
+        product: {
+            metaTitle: '{productTitle} — Підтримати',
+            metaDescription: 'Підтримайте {productTitle} і допоможіть фінансувати подальшу розробку та майбутні оновлення від Aleph Studio.',
+            backLabel: 'Назад до {productTitle}',
+            eyebrow: 'Підтримати проєкт',
+        },
     },
 });
+
+function formatCopyText(template, values) {
+    return String(template || '').replace(/\{(\w+)\}/g, (match, key) => {
+        const replacement = values?.[key];
+        return replacement == null ? match : String(replacement);
+    });
+}
+
+function humanizeProductSlug(slug) {
+    return String(slug || '')
+        .split('-')
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(' ') || 'Project';
+}
+
+function getDonateRouteContext(siteData) {
+    const match = window.location.pathname.match(/\/products\/([^/]+)\/donate(?:\/index\.html)?\/?$/i);
+    if (!match) {
+        return {
+            isProductRoute: false,
+            productTitle: 'Aleph Studio',
+        };
+    }
+
+    const slug = match[1] || '';
+    const products = Array.isArray(siteData?.products) ? siteData.products : [];
+    const product = products.find((item) => item?.id === slug)
+        || products.find((item) => String(item?.detailUrl || '').includes(`/products/${slug}/`))
+        || null;
+
+    return {
+        isProductRoute: true,
+        productTitle: String(product?.title || humanizeProductSlug(slug)).trim() || humanizeProductSlug(slug),
+    };
+}
+
+function getCopy(locale, routeContext) {
+    const localeCopy = COPY[locale] || COPY.ru;
+    const variant = routeContext?.isProductRoute ? localeCopy.product : localeCopy.site;
+    const values = {
+        productTitle: routeContext?.productTitle || 'Aleph Studio',
+    };
+
+    return {
+        ...localeCopy.common,
+        metaTitle: formatCopyText(variant.metaTitle, values),
+        metaDescription: formatCopyText(variant.metaDescription, values),
+        backLabel: formatCopyText(variant.backLabel, values),
+        eyebrow: variant.eyebrow,
+        titleHtml: variant.titleHtml || localeCopy.common.titleHtml,
+    };
+}
 
 const TIER_COPY = Object.freeze({
     ru: {
@@ -91,12 +183,9 @@ const TIER_COPY = Object.freeze({
     },
 });
 
-function getCopy(locale) {
-    return COPY[locale] || COPY.ru;
-}
-
 function getElements() {
     return {
+        donateBackLink: document.querySelector('.donate-back'),
         donateBackLabel: $('donateBackLabel'),
         donateEyebrow: $('donateEyebrow'),
         donateTitle: $('donateTitle'),
@@ -116,17 +205,26 @@ function getElements() {
 
 function resolveAsset(path) {
     const value = String(path || '').trim();
-    if (!value || /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value)) return value;
-    const cleaned = value.replace(/^\.\//, '').replace(/^\/+/, '');
-    return new URL(`../../../../${cleaned}`, window.location.href).toString();
+    if (!value) return value;
+
+    const resolved = resolveRouteRelativePath(value, window.location.pathname);
+    if (!resolved) return '';
+    if (resolved.startsWith('#')) return resolved;
+
+    return new URL(resolved, window.location.href).toString();
 }
 
 function resolveButtonUrl(path) {
     const value = String(path || '').trim();
     if (!value) return '';
-    if (/^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(value)) return value;
-    if (/^(?:\/|\.{1,2}\/)/.test(value)) return new URL(value, window.location.href).toString();
-    return `https://${value.replace(/^\/+/, '')}`;
+    const externalHref = sanitizeHref(value);
+    if (externalHref) return externalHref;
+    if (/^(?:\/|\.{1,2}\/)/.test(value)) {
+        const resolved = resolveRouteRelativePath(value, window.location.pathname);
+        return resolved ? new URL(resolved, window.location.href).toString() : '';
+    }
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value) || value.startsWith('#')) return '';
+    return cleanUrl(value);
 }
 
 function initials(name) {
@@ -147,6 +245,50 @@ function formatUsd(value) {
 
 function prefersReducedMotion() {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+const viewportResizeSubscribers = new Set();
+let viewportResizeFrame = 0;
+let viewportResizeBound = false;
+
+function runViewportResizeSubscribers() {
+    viewportResizeFrame = 0;
+    viewportResizeSubscribers.forEach((callback) => callback());
+}
+
+function scheduleViewportResize() {
+    if (viewportResizeFrame) return;
+    viewportResizeFrame = window.requestAnimationFrame(runViewportResizeSubscribers);
+}
+
+function subscribeViewportResize(callback) {
+    viewportResizeSubscribers.add(callback);
+
+    if (!viewportResizeBound) {
+        viewportResizeBound = true;
+        window.addEventListener('resize', scheduleViewportResize);
+    }
+
+    return () => {
+        viewportResizeSubscribers.delete(callback);
+
+        if (viewportResizeSubscribers.size || !viewportResizeBound) return;
+
+        viewportResizeBound = false;
+        window.removeEventListener('resize', scheduleViewportResize);
+        if (viewportResizeFrame) {
+            window.cancelAnimationFrame(viewportResizeFrame);
+            viewportResizeFrame = 0;
+        }
+    };
+}
+
+function isElementInViewport(element) {
+    const rect = element.getBoundingClientRect();
+    return rect.bottom > 0
+        && rect.right > 0
+        && rect.top < window.innerHeight
+        && rect.left < window.innerWidth;
 }
 
 function getTierCopy(locale) {
@@ -261,7 +403,7 @@ function createPaymentCard(button) {
         createElement(
             'span',
             { className: 'pay-btn-arrow' },
-            createElement('span', { className: 'material-icons', textContent: 'arrow_outward' }),
+            createInlineIcon('arrow_outward'),
         ),
     );
     return card;
@@ -356,11 +498,23 @@ function createCanvasSizer(canvas) {
     const context = canvas.getContext('2d');
     if (!context) return null;
 
+    let lastWidth = 0;
+    let lastHeight = 0;
+    let lastDpr = 0;
+
     const resize = () => {
         const rect = canvas.getBoundingClientRect();
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         const width = Math.max(1, Math.floor(rect.width));
         const height = Math.max(1, Math.floor(rect.height));
+
+        if (width === lastWidth && height === lastHeight && dpr === lastDpr) {
+            return { width, height };
+        }
+
+        lastWidth = width;
+        lastHeight = height;
+        lastDpr = dpr;
         canvas.width = Math.floor(width * dpr);
         canvas.height = Math.floor(height * dpr);
         context.setTransform(1, 0, 0, 1, 0, 0);
@@ -377,7 +531,8 @@ function spawnGoldFX(canvas, amount, tier) {
 
     const { context, resize } = sizedCanvas;
     let frameId = 0;
-    let active = true;
+    const observedTarget = canvas.closest('.card-donor') || canvas;
+    let active = isElementInViewport(observedTarget);
     let angle = 0;
     let size = resize();
 
@@ -400,6 +555,7 @@ function spawnGoldFX(canvas, amount, tier) {
             depth,
         };
     });
+    ingots.sort((left, right) => left.depth - right.depth);
 
     const sparkles = Array.from({ length: tier.sparkCount }, () => ({
         x: Math.random() * size.width,
@@ -563,7 +719,6 @@ function spawnGoldFX(canvas, amount, tier) {
             drawGlowSparkle(context, sparkle.x, sparkle.y, sparkle.radius, alpha);
         });
 
-        ingots.sort((left, right) => left.depth - right.depth);
         ingots.forEach((ingot) => {
             ingot.wobble += ingot.wobbleSpeed;
             ingot.shine += ingot.shineSpeed;
@@ -603,15 +758,17 @@ function spawnGoldFX(canvas, amount, tier) {
         cancelAnimationFrame(frameId);
     }, { threshold: 0.02 });
 
-    observer.observe(canvas.closest('.card-donor') || canvas);
-    window.addEventListener('resize', handleResize);
-    renderFrame();
+    observer.observe(observedTarget);
+    const unsubscribeResize = subscribeViewportResize(handleResize);
+    if (active) {
+        renderFrame();
+    }
 
     canvas._destroyFX = () => {
         active = false;
         cancelAnimationFrame(frameId);
         observer.disconnect();
-        window.removeEventListener('resize', handleResize);
+        unsubscribeResize();
     };
 }
 
@@ -621,7 +778,8 @@ function spawnPlatinumFX(canvas, amount, tier) {
 
     const { context, resize } = sizedCanvas;
     let frameId = 0;
-    let active = true;
+    const observedTarget = canvas.closest('.card-donor') || canvas;
+    let active = isElementInViewport(observedTarget);
     let angle = 0;
     let size = resize();
 
@@ -767,15 +925,17 @@ function spawnPlatinumFX(canvas, amount, tier) {
         cancelAnimationFrame(frameId);
     }, { threshold: 0.02 });
 
-    observer.observe(canvas.closest('.card-donor') || canvas);
-    window.addEventListener('resize', handleResize);
-    renderFrame();
+    observer.observe(observedTarget);
+    const unsubscribeResize = subscribeViewportResize(handleResize);
+    if (active) {
+        renderFrame();
+    }
 
     canvas._destroyFX = () => {
         active = false;
         cancelAnimationFrame(frameId);
         observer.disconnect();
-        window.removeEventListener('resize', handleResize);
+        unsubscribeResize();
     };
 }
 
@@ -798,6 +958,7 @@ function createAvatar(supporter, tier, fallbackHue) {
             src,
             alt: supporter.name || 'Supporter avatar',
             loading: 'lazy',
+            decoding: 'async',
         }));
     } else {
         const fallback = createElement('div', { className: 'donor-avatar-default' });
@@ -819,11 +980,11 @@ function createTierMark(tier) {
     return createElement(
         'div',
         { className: `tier-mark ${tier.kind === 'platinum' ? 'platinum' : 'gold'}` },
-        createElement('span', { className: 'material-icons', textContent: tier.icon }),
+        createInlineIcon(tier.icon),
     );
 }
 
-function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru' } = {}) {
+function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru', effectsEnabled = true } = {}) {
     const amount = Number(supporter.amountUsd || 0);
     const tier = getDonorStyle(amount, locale);
     const hue = hueFromName(supporter.name || supporter.id || 'supporter');
@@ -897,7 +1058,9 @@ function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru' } =
         `;
     }
 
-    const effectCanvas = !prefersReducedMotion() && ((tier.kind === 'gold' && tier.goldCount) || tier.kind === 'platinum')
+    const effectCanvas = effectsEnabled
+        && !prefersReducedMotion()
+        && ((tier.kind === 'gold' && tier.goldCount) || tier.kind === 'platinum')
         ? createElement('canvas', { className: 'fx-canvas', 'aria-hidden': 'true' })
         : null;
 
@@ -946,6 +1109,7 @@ function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru' } =
 
 function renderSupporters(elements, supporters, copy, locale) {
     const sorted = sortSupporters(supporters, locale);
+    const topSupporterIds = new Set(sorted.slice(0, 3).map((supporter) => String(supporter?.id || '')));
 
     if (elements.supporterCount) {
         elements.supporterCount.textContent = String(sorted.length);
@@ -962,7 +1126,10 @@ function renderSupporters(elements, supporters, copy, locale) {
     }
 
     sorted.forEach((supporter) => {
-        elements.supportersGrid.append(createSupportCard(supporter, { locale }));
+        elements.supportersGrid.append(createSupportCard(supporter, {
+            locale,
+            effectsEnabled: !topSupporterIds.has(String(supporter?.id || '')),
+        }));
     });
 
     if (!elements.topSupportersSection || !elements.topSupportersGrid) return;
@@ -987,6 +1154,11 @@ function renderSupporters(elements, supporters, copy, locale) {
 
 function applyStaticCopy(elements, copy) {
     document.title = copy.metaTitle;
+    const descriptionEl = document.querySelector('meta[name="description"]');
+    if (descriptionEl) descriptionEl.setAttribute('content', copy.metaDescription);
+    if (elements.donateBackLink instanceof HTMLAnchorElement) {
+        elements.donateBackLink.href = '../';
+    }
     if (elements.donateBackLabel) elements.donateBackLabel.textContent = copy.backLabel;
     if (elements.donateEyebrow) elements.donateEyebrow.textContent = copy.eyebrow;
     if (elements.donateTitle) elements.donateTitle.innerHTML = copy.titleHtml;
@@ -1001,20 +1173,31 @@ function applyStaticCopy(elements, copy) {
     if (elements.supportersTitle) elements.supportersTitle.textContent = copy.supportersTitle;
 }
 
+let booted = false;
+
 function boot() {
+    if (booted) return;
+    booted = true;
+
     const localeController = createLocaleController();
     const locale = localeController.locale;
-    const copy = getCopy(locale);
     const siteData = localizeSiteData(getEffectiveSiteData(), locale);
+    const routeContext = getDonateRouteContext(siteData);
+    const copy = getCopy(locale, routeContext);
     const elements = getElements();
     const supportPage = siteData.supportPage || { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] };
 
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
     initAdminRouteAccess({ adminHref: getAdminHref() });
+    initSkipLink();
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
+    localeController.applyDocumentMeta({
+        title: copy.metaTitle,
+        description: copy.metaDescription,
+    });
     buildIntro(elements.donateDesc, copy, Number(supportPage.minimumAmountUsd || 2), supportPage.roleName || '@Premium', resolveButtonUrl(siteData.socials?.discord || ''));
     renderPaymentButtons(elements.supportButtonsGrid, supportPage.buttons, copy, locale);
     renderSupporters(elements, supportPage.supporters, copy, locale);

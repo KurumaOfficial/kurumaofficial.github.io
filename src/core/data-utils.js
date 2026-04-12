@@ -43,16 +43,77 @@ export function cleanText(value, fallback) {
 /**
  * Generate a URL-safe slug.
  * @param {string} value
+ * @param {string} [fallback='item']
  * @returns {string}
  */
-export function slugify(value) {
-    return (
-        String(value || '')
-            .toLowerCase()
-            .replace(/[^a-z0-9а-яёії]+/gi, '-')
-            .replace(/^-+|-+$/g, '') ||
-        'item-' + Math.random().toString(36).slice(2, 8)
-    );
+export function slugify(value, fallback = 'item') {
+    const primary = String(value || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9а-яёії]+/gi, '-')
+        .replace(/^-+|-+$/g, '');
+
+    if (primary) return primary;
+
+    const secondary = String(fallback || 'item')
+        .toLowerCase()
+        .replace(/[^a-z0-9а-яёії]+/gi, '-')
+        .replace(/^-+|-+$/g, '');
+
+    return secondary || 'item';
+}
+
+/**
+ * Ensure identifiers stay unique inside a single normalized collection.
+ * @param {string} value
+ * @param {Set<string>} usedIds
+ * @param {string} [fallback='item']
+ * @returns {string}
+ */
+export function makeUniqueId(value, usedIds, fallback = 'item') {
+    const baseId = slugify(value, fallback);
+    let nextId = baseId;
+    let suffix = 2;
+
+    while (usedIds.has(nextId)) {
+        nextId = `${baseId}-${suffix}`;
+        suffix += 1;
+    }
+
+    usedIds.add(nextId);
+    return nextId;
+}
+
+/**
+ * Ensure identifiers stay unique inside a single normalized collection.
+ * @template {{ id: string }} T
+ * @param {T[]} items
+ * @returns {T[]}
+ */
+function ensureUniqueIds(items) {
+    const usedIds = new Set();
+
+    return items.map((item) => {
+        const nextId = makeUniqueId(item.id, usedIds, 'item');
+        return nextId === item.id ? item : { ...item, id: nextId };
+    });
+}
+
+/**
+ * Keep at most one product marked for automatic route redirect.
+ * @param {Product[]} products
+ * @returns {Product[]}
+ */
+function ensureSingleAutoRouteRedirect(products) {
+    let hasRedirectProduct = false;
+
+    return products.map((product) => {
+        if (!product.autoRouteRedirect) return product;
+        if (!hasRedirectProduct) {
+            hasRedirectProduct = true;
+            return product;
+        }
+        return { ...product, autoRouteRedirect: false };
+    });
 }
 
 /**
@@ -173,7 +234,7 @@ function clampCurrency(value) {
 export function normalizeSupportButton(raw = {}, index = 0) {
     const title = cleanText(raw.title, `Method ${index + 1}`);
     return {
-        id: cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(title),
+        id: slugify(raw.id, title),
         label: cleanText(raw.label, 'Support'),
         title,
         note: cleanText(raw.note, ''),
@@ -191,7 +252,7 @@ export function normalizeSupporter(raw = {}, index = 0) {
     const name = cleanText(raw.name, `Supporter ${String(index + 1).padStart(2, '0')}`);
     const legacyAmount = raw.amountUsd ?? raw.amount ?? raw.value ?? 2;
     return {
-        id: cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(name),
+        id: slugify(raw.id, name),
         name,
         avatarUrl: cleanText(raw.avatarUrl || raw.avatar, ''),
         amountUsd: clampCurrency(legacyAmount),
@@ -215,8 +276,8 @@ export function normalizeSupportPage(raw) {
     return {
         minimumAmountUsd: Math.max(0, toNumber(src.minimumAmountUsd ?? src.minimumUsd, 2)),
         roleName: cleanText(src.roleName ?? src.role ?? src.premiumRole, '@Premium'),
-        buttons: buttons.map((item, index) => normalizeSupportButton(/** @type {Record<string, unknown>} */ (item), index)),
-        supporters: supporters.map((item, index) => normalizeSupporter(/** @type {Record<string, unknown>} */ (item), index)),
+        buttons: ensureUniqueIds(buttons.map((item, index) => normalizeSupportButton(/** @type {Record<string, unknown>} */ (item), index))),
+        supporters: ensureUniqueIds(supporters.map((item, index) => normalizeSupporter(/** @type {Record<string, unknown>} */ (item), index))),
     };
 }
 
@@ -250,7 +311,7 @@ export function normalizeSupportPage(raw) {
  */
 export function normalizeProduct(raw = {}, index = 0) {
     const title = cleanText(raw.title, 'New product');
-    const id = cleanText(raw.id, '') ? slugify(/** @type {string} */ (raw.id)) : slugify(title);
+    const id = slugify(raw.id, title);
 
     /** @type {string[]} */
     let instructions;
@@ -304,7 +365,7 @@ export function normalizeProduct(raw = {}, index = 0) {
 export function normalizeTeamMember(raw = {}, index = 0) {
     const name = cleanText(raw.name, `Member ${String(index + 1).padStart(2, '0')}`);
     return {
-        id: slugify(cleanText(raw.id, name)),
+        id: slugify(raw.id, name),
         name,
         role: cleanText(raw.role, 'Role'),
         avatarUrl: cleanText(raw.avatarUrl, ''),
@@ -353,9 +414,14 @@ export function normalizeData(data = {}) {
         supporters: data.supporters,
     };
 
+    const normalizedProducts = ensureSingleAutoRouteRedirect(
+        ensureUniqueIds(rawProducts.map((p, i) => normalizeProduct(p, i))),
+    );
+    const normalizedTeam = ensureUniqueIds(rawTeam.map((m, i) => normalizeTeamMember(m, i)));
+
     return {
-        products: rawProducts.map((p, i) => normalizeProduct(p, i)),
-        team: rawTeam.map((m, i) => normalizeTeamMember(m, i)),
+        products: normalizedProducts,
+        team: normalizedTeam,
         supportPage: normalizeSupportPage(rawSupportPage),
         socials: normalizeSocials(data.socials),
     };

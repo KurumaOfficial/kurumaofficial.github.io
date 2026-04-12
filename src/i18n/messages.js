@@ -22,10 +22,12 @@ export const MESSAGES = Object.freeze({
         locale: {
             triggerLabel: 'Выбор языка',
             menuLabel: 'Сменить язык',
+            openLabel: 'Открыть меню выбора языка',
+            closeLabel: 'Закрыть меню выбора языка',
         },
         hero: {
             intro:
-                'Игровые проекты с открытым исходным кодом. Моды, игры, DLC — всё что мы делаем, ты можешь изучить, изменить и запустить сам.',
+                'Игровые проекты с открытым исходным кодом. Моды, игры, DLC — всё, что мы делаем, ты можешь изучить, изменить и запустить сам.',
             ctaPrimary: 'Смотреть продукты',
             ctaSecondary: 'Наш принцип',
         },
@@ -41,6 +43,11 @@ export const MESSAGES = Object.freeze({
             soon: 'Скоро',
             sourceCode: 'Исходный код ↗',
             detail: 'Подробнее',
+            flags: {
+                alpha: 'Альфа',
+                beta: 'Бета',
+                release: 'Релиз',
+            },
             noFeatured:
                 'Откройте скрытый редактор и выведите хотя бы один продукт на витрину.',
         },
@@ -50,20 +57,21 @@ export const MESSAGES = Object.freeze({
             case1Title: 'Открытый код',
             case1Text: 'Репозиторий публикуется, структура не прячется за закрытой сборкой.',
             case2Title: 'Честный статус',
-            case2Text: 'Alpha это alpha. Beta это beta. Без маркетинговых слов вместо правды.',
+            case2Text: 'Alpha — это alpha. Beta — это beta. Без маркетинговых слов вместо правды.',
             case3Title: 'Прямой доступ',
             case3Text: 'Если файл готов — скачай сразу. Без лишних переходов и непрозрачных установщиков.',
         },
         team: {
             title: 'Люди за проектом',
             intro: 'Участники, которые ведут разработку, поддерживают релизы и держат в порядке публичную часть проекта.',
+            avatarFallback: 'Участник команды',
             empty: 'Нет участников.',
         },
         footer: {
             desc: 'Дочерний проект WeTTeA. Игровые разработки с открытым исходным кодом.',
             navHeading: 'Навигация',
             wetteaHeading: 'WeTTeA',
-            copyright: '© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed',
+            copyright: '© 2026 Aleph Studio · Дочерний проект WeTTeA · Лицензия GPL',
         },
     },
 
@@ -84,6 +92,8 @@ export const MESSAGES = Object.freeze({
         locale: {
             triggerLabel: 'Language switcher',
             menuLabel: 'Choose language',
+            openLabel: 'Open language menu',
+            closeLabel: 'Close language menu',
         },
         hero: {
             intro:
@@ -103,6 +113,11 @@ export const MESSAGES = Object.freeze({
             soon: 'Soon',
             sourceCode: 'Source code ↗',
             detail: 'Details',
+            flags: {
+                alpha: 'Alpha',
+                beta: 'Beta',
+                release: 'Release',
+            },
             noFeatured:
                 'Open the hidden editor and feature at least one product.',
         },
@@ -119,6 +134,7 @@ export const MESSAGES = Object.freeze({
         team: {
             title: 'The people behind the project',
             intro: 'Members who lead development, maintain releases and keep the public side of the project in order.',
+            avatarFallback: 'Team member avatar',
             empty: 'No team members.',
         },
         footer: {
@@ -146,10 +162,12 @@ export const MESSAGES = Object.freeze({
         locale: {
             triggerLabel: 'Перемикач мови',
             menuLabel: 'Оберіть мову',
+            openLabel: 'Відкрити меню вибору мови',
+            closeLabel: 'Закрити меню вибору мови',
         },
         hero: {
             intro:
-                'Ігрові проєкти з відкритим вихідним кодом. Моди, ігри, DLC — все що ми робимо, ти можеш вивчити, змінити і запустити сам.',
+                'Ігрові проєкти з відкритим вихідним кодом. Моди, ігри, DLC — все, що ми робимо, ти можеш вивчити, змінити і запустити сам.',
             ctaPrimary: 'Переглянути продукти',
             ctaSecondary: 'Наш принцип',
         },
@@ -165,6 +183,11 @@ export const MESSAGES = Object.freeze({
             soon: 'Скоро',
             sourceCode: 'Вихідний код ↗',
             detail: 'Детальніше',
+            flags: {
+                alpha: 'Альфа',
+                beta: 'Бета',
+                release: 'Реліз',
+            },
             noFeatured:
                 'Відкрийте прихований редактор і виведіть хоча б один продукт на вітрину.',
         },
@@ -174,20 +197,21 @@ export const MESSAGES = Object.freeze({
             case1Title: 'Відкритий код',
             case1Text: 'Репозиторій публікується, структура не ховається за закритою збіркою.',
             case2Title: 'Чесний статус',
-            case2Text: 'Alpha це alpha. Beta це beta. Без маркетингових слів замість правди.',
+            case2Text: 'Alpha — це alpha. Beta — це beta. Без маркетингових слів замість правди.',
             case3Title: 'Прямий доступ',
             case3Text: 'Якщо файл готовий — скачай одразу. Без зайвих переходів і непрозорих інсталяторів.',
         },
         team: {
             title: 'Люди за проєктом',
             intro: 'Учасники, які ведуть розробку, підтримують релізи та тримають у порядку публічну частину проєкту.',
+            avatarFallback: 'Учасник команди',
             empty: 'Немає учасників.',
         },
         footer: {
             desc: 'Дочірній проєкт WeTTeA. Ігрові розробки з відкритим вихідним кодом.',
             navHeading: 'Навігація',
             wetteaHeading: 'WeTTeA',
-            copyright: '© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed',
+            copyright: '© 2026 Aleph Studio · Дочірній проєкт WeTTeA · Ліцензія GPL',
         },
     },
 });

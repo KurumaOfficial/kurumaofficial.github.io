@@ -3,11 +3,28 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Strange Visuals — Minecraft Visual Mod</title>
+<title>Strange Visuals — Візуальний мод Minecraft</title>
 <meta name="theme-color" content="#080606">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="dark light">
 <meta name="author" content="WeTTeA">
 <meta name="description" content="Strange Visuals — візуальний мод для Minecraft 1.21.8 від Aleph Studio. Безкоштовно і з відкритим кодом.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Strange Visuals — Візуальний мод Minecraft">
+<meta property="og:description" content="Strange Visuals — візуальний мод для Minecraft 1.21.8 від Aleph Studio. Безкоштовно і з відкритим кодом.">
+<meta property="og:locale" content="uk_UA">
+<meta property="og:site_name" content="Aleph Studio">
+<meta property="og:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+<meta property="og:image:type" content="image/webp">
+<meta property="og:image:width" content="1919">
+<meta property="og:image:height" content="1054">
+<meta property="og:image:alt" content="Прев'ю Strange Visuals">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Strange Visuals — Візуальний мод Minecraft">
+<meta name="twitter:description" content="Strange Visuals — візуальний мод для Minecraft 1.21.8 від Aleph Studio. Безкоштовно і з відкритим кодом.">
+<meta name="twitter:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+<meta name="twitter:image:alt" content="Прев'ю Strange Visuals">
+<script>window.__ALEPH_LOCALE__ = 'ua';</script>
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../../favicon.ico" sizes="48x48">
 <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="../../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -15,12 +32,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css">
-<script>window.__ALEPH_LOCALE__ = 'ua';</script>
-<script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body>
+
+<a id="skipLink" class="skip-link" href="#main">Перейти до основного вмісту</a>
 
 <nav class="nav" role="navigation" aria-label="Основна навігація">
   <a class="nav-logo" href="../../" aria-label="Aleph Studio — на головну">
@@ -32,7 +48,7 @@
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">
-      <span class="material-icons" id="themeIco">light_mode</span>
+      <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
     </button>
 
     <div id="localeSwitcher" class="locale-switcher">
@@ -40,7 +56,7 @@
         id="localeSwitcherTrigger"
         class="locale-switcher__trigger"
         type="button"
-        aria-haspopup="listbox"
+        aria-haspopup="menu"
         aria-expanded="false"
         aria-label="Вибір мови"
       >
@@ -50,19 +66,19 @@
           <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
         </svg>
       </button>
-      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="listbox" aria-label="Змінити мову" hidden></div>
+      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Змінити мову" hidden></div>
     </div>
   </div>
 </nav>
 
-<main>
+<main id="main">
 <section class="hero-store">
   <div class="hero-left-fog"></div>
   <div class="hero-left-shade"></div>
 
   <div class="hero-store-top">
     <a href="../../" class="hero-store-back" aria-label="Назад на головну сторінку Aleph Studio">
-      <span class="material-icons">arrow_back</span>
+      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       <span class="hero-store-back-label">Strange Visuals</span>
     </a>
     <div class="hero-store-actions"></div>
@@ -99,7 +115,7 @@
         <a href="../../" class="hero-dev">
           Aleph Studio
           <span class="hero-verified">
-            <span class="material-icons">check</span>
+            <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </span>
         </a>
 
@@ -125,13 +141,13 @@
         </div>
 
         <div class="hero-actions">
-          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals.jar" download>ЗАВАНТАЖИТИ</a>
-          <a class="hero-source-btn" id="sourceBtn" title="Відкрити вихідний код" aria-label="Відкрити вихідний код" href="https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy" target="_blank" rel="noopener noreferrer"><span class="material-icons" aria-hidden="true">code</span></a>
+          <a class="hero-install-btn" id="installBtn" href="../../../assets/files/strange-visuals-1.1.0-strange-visuals-v1.jar" download>ЗАВАНТАЖИТИ</a>
+          <a class="hero-source-btn" id="sourceBtn" title="Відкрити вихідний код" aria-label="Відкрити вихідний код" href="https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy" target="_blank" rel="noopener noreferrer"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8.2 7.2-4.3 4.8 4.3 4.8M15.8 7.2l4.3 4.8-4.3 4.8M13.9 5.1l-3.8 13.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
           <div class="hero-share-dock" id="shareDock">
             <div class="hero-share-bg" aria-hidden="true"></div>
             <button class="hero-side-btn hero-share-toggle" id="shareBtn" type="button" title="Поділитися" aria-label="Відкрити меню посилань" aria-controls="shareMenu" aria-expanded="false">
-              <span class="material-icons hero-share-toggle-icon hero-share-toggle-icon--share" aria-hidden="true">share</span>
-              <span class="material-icons hero-share-toggle-icon hero-share-toggle-icon--close" aria-hidden="true">close</span>
+              <span class="hero-share-toggle-icon hero-share-toggle-icon--share ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="18" cy="5.2" r="2.4" fill="currentColor"/><circle cx="6" cy="12" r="2.4" fill="currentColor"/><circle cx="18" cy="18.8" r="2.4" fill="currentColor"/><path d="M8.1 11.1 15.9 6M8.1 12.9l7.8 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="hero-share-toggle-icon hero-share-toggle-icon--close ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
             </button>
             <div class="hero-share-menu" id="shareMenu" aria-label="Поділитися у соцмережах">
               <a class="hero-share-link hero-share-link--telegram" id="shareTelegramBtn" data-social-link="telegram" href="https://t.me/AlephStudio_Official" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram">
@@ -161,42 +177,42 @@
   </div>
   <div class="feat-grid reveal">
     <div class="feat-card">
-        <div class="feat-ico"><span class="material-icons">file_download</span></div>
+        <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.8v9.6M8.3 11.6 12 15.3l3.7-3.7M5.2 18.8h13.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
         <h3>Встановлення</h3>
         <p>Встановіть Minecraft Fabric 1.21.8 у своєму лаунчері. Завантажте <a href="https://modrinth.com/mod/fabric-api" target="_blank" rel="noopener noreferrer">Fabric API</a> і покладіть файл у папку mods. Після цього завантажте наш мод і також покладіть його у папку mods. Готово, можна запускати.</p>
       </div>
       <div class="feat-card">
-        <div class="feat-ico"><span class="material-icons">layers</span></div>
+        <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 5-7 3.8 7 3.8 7-3.8Zm-7 7.2L12 16l7-3.8M5 15.8l7 3.8 7-3.8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
         <h3>Сумісність</h3>
         <p>Мод сумісний з іншими Fabric-модами і добре працює у збірках. Рекомендуємо використовувати його разом із модами на оптимізацію та іншими клієнтськими доповненнями.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">code</span></div>
-      <h3>Open Source</h3>
+      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m8.2 7.2-4.3 4.8 4.3 4.8M15.8 7.2l4.3 4.8-4.3 4.8M13.9 5.1l-3.8 13.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <h3>Відкритий код</h3>
         <p>Проєкт поширюється з відкритим GPL-кодом. Код можна вивчати, доопрацьовувати й форкати зі збереженням ліцензії та авторства.</p>
     </div>
     <div class="feat-card w2">
-      <div class="feat-ico"><span class="material-icons">public</span></div>
+      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.7 9.4h14.6M4.9 14.6h14.2M12 3.8c2.1 2.1 3.3 5 3.3 8.2S14.1 18.1 12 20.2M12 3.8C9.9 5.9 8.7 8.8 8.7 12s1.2 6.1 3.3 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
       <h3>Мультисерверність</h3>
         <p>Мод може використовуватися на серверах з різними правилами. Гнучка система приховування окремих функцій автоматично вимикає те, що заборонено на конкретному сервері.</p>
     </div>
     <div class="feat-card">
-        <div class="feat-ico"><span class="material-icons">workspace_premium</span></div>
+        <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.2 18.2h13.6l-1.45-7.45-4.2 3.1L12 8.1l-1.15 5.75-4.2-3.1Z" fill="currentColor"/><path d="M5 20h14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
         <h3>Підтримка</h3>
-        <p>Якщо ви хочете допомогти в розвитку мода та підтримати нашу команду, зробити це можна на <a href="../../donate/" data-donate-link>сторінці підтримки</a>.</p>
+      <p>Якщо ви хочете допомогти в розвитку мода та підтримати нашу команду, зробити це можна на <a href="../../donate/" data-donate-link>сторінці підтримки</a>.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="material-icons">update</span></div>
+      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19.2 8.3A7.9 7.9 0 1 0 20 12h-2.3M19.2 8.3V4.9m0 3.4h-3.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
       <h3>Версія Minecraft</h3>
         <p>Мод розроблений і підтримується для версії 1.21.8 та може перейти на новішу версію в майбутньому.</p>
     </div>
     <div class="feat-card">
-        <div class="feat-ico"><span class="material-icons">bolt</span></div>
+        <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.7 3.8 6.8 13h4.2l-.8 7.2 6.8-9.2h-4.2Z" fill="currentColor"/></svg></span></div>
       <h3>Fabric API</h3>
       <p>Для коректної роботи мода потрібні актуальні Fabric Loader і Fabric API під Minecraft 1.21.8.</p>
     </div>
     <div class="feat-card">
-        <div class="feat-ico"><span class="material-icons">report_problem</span></div>
+        <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.5 20 18.5H4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4.4M12 16.4h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
         <h3>Проблеми</h3>
         <p>Якщо у вас виникли проблеми із запуском або ви знайшли баг, можете повідомити про це на нашому <a id="supportDiscordLink" href="https://discord.gg/3YxB2R6eqQ" target="_blank" rel="noopener noreferrer">Discord</a> сервері.</p>
     </div>
@@ -229,7 +245,7 @@
 
       <div class="compare-divider" id="compareDivider"></div>
       <div class="compare-handle" id="compareHandle">
-        <span class="material-icons">drag_indicator</span>
+        <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="1.3" fill="currentColor"/><circle cx="15" cy="7" r="1.3" fill="currentColor"/><circle cx="9" cy="12" r="1.3" fill="currentColor"/><circle cx="15" cy="12" r="1.3" fill="currentColor"/><circle cx="9" cy="17" r="1.3" fill="currentColor"/><circle cx="15" cy="17" r="1.3" fill="currentColor"/></svg></span>
       </div>
 
       <input
@@ -259,7 +275,7 @@
       </p>
       <div class="preview-tags">
         <span class="tag">Мінімалізм</span>
-        <span class="tag">Vanilla style</span>
+        <span class="tag">Стиль Vanilla</span>
         <span class="tag">Плавна зміна</span>
         <span class="tag">Швидкий доступ</span>
       </div>
@@ -279,7 +295,7 @@
           </svg>
           <div class="gw-htxt">
             <div class="gw-title">Strange Visuals</div>
-            <div class="gw-sub">FREE</div>
+            <div class="gw-sub">БЕЗКОШТОВНО</div>
           </div>
         </div>
 
@@ -314,7 +330,7 @@
   <div class="mod-grid" id="modGrid">
 
     <div class="mod-group reveal">
-      <div class="mod-head"><span class="material-icons">person</span><span class="mod-head-name">На гравці</span><span class="mod-head-ct">5</span></div>
+      <div class="mod-head"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.3" r="3.2" fill="currentColor"/><path d="M5.6 18.9c.8-3.1 3.4-4.9 6.4-4.9s5.6 1.8 6.4 4.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span class="mod-head-name">На гравці</span><span class="mod-head-ct">5</span></div>
       <div class="mod-items">
         <div class="mod-item"><span class="mod-item-name">Бокси</span><span class="mod-badge on">УВІМК</span></div>
         <div class="mod-item"><span class="mod-item-name">Джампіки</span><span class="mod-badge on">УВІМК</span></div>
@@ -325,7 +341,7 @@
     </div>
 
     <div class="mod-group reveal">
-      <div class="mod-head"><span class="material-icons">public</span><span class="mod-head-name">У світі</span><span class="mod-head-ct">7</span></div>
+      <div class="mod-head"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.7 9.4h14.6M4.9 14.6h14.2M12 3.8c2.1 2.1 3.3 5 3.3 8.2S14.1 18.1 12 20.2M12 3.8C9.9 5.9 8.7 8.8 8.7 12s1.2 6.1 3.3 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span><span class="mod-head-name">У світі</span><span class="mod-head-ct">7</span></div>
       <div class="mod-items">
         <div class="mod-item"><span class="mod-item-name">Чамси</span><span class="mod-badge on">УВІМК</span></div>
         <div class="mod-item"><span class="mod-item-name">Трейсери</span><span class="mod-badge off">ВИМК</span></div>
@@ -338,7 +354,7 @@
     </div>
 
     <div class="mod-group reveal">
-      <div class="mod-head"><span class="material-icons">build</span><span class="mod-head-name">Утиліти</span><span class="mod-head-ct">6</span></div>
+      <div class="mod-head"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m14.7 6.2 3.1 3.1-8.3 8.3-3.5.4.4-3.5Zm-.6-1.8a4 4 0 0 0-5.4 5.4l-3.5 3.5a2 2 0 1 0 2.8 2.8l3.5-3.5a4 4 0 0 0 5.4-5.4l-2 2-2.8-2.8Z" fill="currentColor"/></svg></span><span class="mod-head-name">Утиліти</span><span class="mod-head-ct">6</span></div>
       <div class="mod-items">
         <div class="mod-item"><span class="mod-item-name">Авто спринт</span><span class="mod-badge on">УВІМК</span></div>
         <div class="mod-item"><span class="mod-item-name">Авто тул</span><span class="mod-badge off">ВИМК</span></div>
@@ -350,7 +366,7 @@
     </div>
 
     <div class="mod-group reveal">
-      <div class="mod-head"><span class="material-icons">dashboard</span><span class="mod-head-name">Інтерфейс</span><span class="mod-head-ct">8</span></div>
+      <div class="mod-head"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4.2" y="4.2" width="6.6" height="6.6" rx="1.2" fill="currentColor"/><rect x="13.2" y="4.2" width="6.6" height="4.4" rx="1.2" fill="currentColor" opacity=".88"/><rect x="4.2" y="13.2" width="6.6" height="6.6" rx="1.2" fill="currentColor" opacity=".88"/><rect x="13.2" y="10.8" width="6.6" height="9" rx="1.2" fill="currentColor"/></svg></span><span class="mod-head-name">Інтерфейс</span><span class="mod-head-ct">8</span></div>
       <div class="mod-items">
         <div class="mod-item"><span class="mod-item-name">Масив ліст</span><span class="mod-badge on">УВІМК</span></div>
         <div class="mod-item"><span class="mod-item-name">Ватермарка</span><span class="mod-badge on">УВІМК</span></div>

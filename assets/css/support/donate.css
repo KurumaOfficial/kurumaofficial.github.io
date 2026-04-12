@@ -1,4 +1,5 @@
 [data-theme="dark"] {
+  color-scheme: dark;
   --bg: #111110;
   --bg2: #1a1917;
   --text: #e4e2dc;
@@ -26,6 +27,7 @@
 }
 
 [data-theme="light"] {
+  color-scheme: light;
   --bg: #f3f1eb;
   --bg2: #eae7df;
   --text: #1a1916;
@@ -83,13 +85,37 @@ body::after {
   opacity:.42;
 }
 
-*:not(svg *):not(canvas) { transition:background-color .35s ease,border-color .35s ease,color .35s ease; }
+html[data-theme-switching="true"] *:not(svg *):not(canvas),
+html[data-theme-switching="true"] *:not(svg *):not(canvas)::before,
+html[data-theme-switching="true"] *:not(svg *):not(canvas)::after { transition:background-color .35s ease,border-color .35s ease,color .35s ease; }
 
 :focus-visible {
   outline:2px solid var(--accent);
   outline-offset:2px;
 }
 :focus:not(:focus-visible) { outline:none; }
+
+.skip-link {
+  position:fixed;
+  top:-100%;
+  left:calc(16px + var(--safe-left));
+  z-index:220;
+  width:max-content;
+  max-width:calc(100vw - var(--safe-left) - var(--safe-right) - 32px);
+  padding:12px 20px;
+  background:var(--accent);
+  color:#fff;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-decoration:none;
+  transition:top .18s ease;
+}
+
+.skip-link:focus {
+  top:calc(16px + var(--safe-top));
+}
 
 a { color:inherit; }
 
@@ -197,7 +223,26 @@ button {
   color:var(--text);
 }
 
-.theme-btn .material-icons { font-size:16px; }
+.ui-icon,
+.theme-btn .theme-icon {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  line-height:0;
+  flex:0 0 auto;
+}
+
+.ui-icon svg,
+.theme-btn .theme-icon svg {
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.theme-btn .theme-icon {
+  width:16px;
+  height:16px;
+}
 
 .locale-switcher {
   position:relative;
@@ -307,12 +352,12 @@ button {
   color:var(--text);
 }
 
-.locale-option[aria-selected="true"] {
+.locale-option[aria-checked="true"] {
   background:var(--surface);
   color:var(--text);
 }
 
-.locale-option[aria-selected="true"]::after {
+.locale-option[aria-checked="true"]::after {
   content:'';
   position:absolute;
   right:14px;
@@ -418,8 +463,9 @@ button {
   background:var(--surface);
 }
 
-.donate-back .material-icons {
-  font-size:22px;
+.donate-back .ui-icon {
+  width:22px;
+  height:22px;
 }
 
 .donate-crown {
@@ -434,7 +480,10 @@ button {
   color:var(--gold-light);
 }
 
-.donate-crown .material-icons { font-size:30px; }
+.donate-crown .ui-icon {
+  width:30px;
+  height:30px;
+}
 
 .donate-eyebrow,
 .section-head h2,
@@ -583,6 +632,11 @@ button {
   border:1px solid var(--gold-border);
   color:var(--gold-light);
   background:var(--gold-dim);
+}
+
+.pay-btn-arrow .ui-icon {
+  width:16px;
+  height:16px;
 }
 
 /* Dead .support-card system removed — JS uses .card-donor exclusively */
@@ -737,8 +791,9 @@ button {
   box-shadow:0 0 24px rgba(110,165,255,0.28);
 }
 
-.tier-mark .material-icons {
-  font-size:15px;
+.tier-mark .ui-icon {
+  width:15px;
+  height:15px;
 }
 
 .donor-avatar,

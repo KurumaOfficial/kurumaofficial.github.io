@@ -11,8 +11,12 @@
         (function () {
             'use strict';
 
-            var supported = { ru: '/ru/donate/', en: '/en/donate/', ua: '/ua/donate/' };
-            var fallback = '/ru/donate/';
+            var supported = { ru: '../ru/donate/', en: '../en/donate/', ua: '../ua/donate/' };
+            var fallback = supported.ru;
+
+            function resolve(path) {
+                return new URL(path, location.href);
+            }
 
             function detect() {
                 var raw = (navigator.languages || [navigator.language || ''])
@@ -25,11 +29,14 @@
                 return fallback;
             }
 
-            location.replace(detect() + (location.search || '') + (location.hash || ''));
+            var dest = resolve(detect());
+            dest.search = location.search || '';
+            dest.hash = location.hash || '';
+            location.replace(dest.toString());
         })();
     </script>
     <noscript>
-        <meta http-equiv="refresh" content="0; url=/ru/donate/">
+        <meta http-equiv="refresh" content="0; url=../ru/donate/">
     </noscript>
     <style>
         body {
@@ -48,6 +55,6 @@
     </style>
 </head>
 <body>
-    <p>Redirecting… <a href="/ru/donate/">RU</a> · <a href="/en/donate/">EN</a> · <a href="/ua/donate/">UA</a></p>
+    <p>Redirecting… <a href="../ru/donate/">RU</a> · <a href="../en/donate/">EN</a> · <a href="../ua/donate/">UA</a></p>
 </body>
 </html>
