@@ -298,6 +298,8 @@ function serializeData(value) {
     return JSON.stringify(normalizeData(value));
 }
 
+let _editorIdSeq = 0;
+
 function sanitizeFileSegment(value, fallback = 'file') {
     const safe = String(value || '')
         .toLowerCase()
@@ -991,7 +993,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const supportPage = ensureSupportDraft();
         const index = supportPage.buttons.length;
         return normalizeSupportButton({
-            id: `support-${Date.now()}`,
+            id: `support-${Date.now()}-${++_editorIdSeq}`,
             label: msg('supportLabel'),
             title: msg('methodN', index + 1),
             note: '',
@@ -1004,7 +1006,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const supportPage = ensureSupportDraft();
         const index = supportPage.supporters.length;
         return normalizeSupporter({
-            id: `supporter-${Date.now()}`,
+            id: `supporter-${Date.now()}-${++_editorIdSeq}`,
             name: msg('newSupporter'),
             avatarUrl: '',
             amountUsd: 0,
@@ -1255,7 +1257,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function createEmptyTeamMember() {
         const count = editorData.team.length + 1;
         return normalizeTeamMember({
-            id: `team-member-${Date.now()}`,
+            id: `team-member-${Date.now()}-${++_editorIdSeq}`,
             name: msg('newMember'),
             role: msg('roleDefault'),
             avatarUrl: '',
@@ -1532,7 +1534,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function createEmptyProduct() {
         const count = editorData.products.length + 1;
         return normalizeProduct({
-            id: `new-product-${Date.now()}`,
+            id: `new-product-${Date.now()}-${++_editorIdSeq}`,
             title: msg('newProduct'),
             version: 'x',
             tag: `product ${String(count).padStart(2, '0')}`,

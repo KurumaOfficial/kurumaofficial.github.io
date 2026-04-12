@@ -734,8 +734,17 @@ function spawnGoldFX(canvas, amount, tier) {
         context.restore();
     };
 
+    let lastFrameTime = 0;
+
     const renderFrame = () => {
         if (!active) return;
+
+        const now = performance.now();
+        if (now - lastFrameTime < 16) {
+            frameId = requestAnimationFrame(renderFrame);
+            return;
+        }
+        lastFrameTime = now;
 
         angle += 0.012;
         context.clearRect(0, 0, size.width, size.height);
@@ -914,8 +923,17 @@ function spawnPlatinumFX(canvas, amount, tier) {
         context.restore();
     };
 
+    let lastFrameTime = 0;
+
     const renderFrame = () => {
         if (!active) return;
+
+        const now = performance.now();
+        if (now - lastFrameTime < 16) {
+            frameId = requestAnimationFrame(renderFrame);
+            return;
+        }
+        lastFrameTime = now;
 
         angle += 0.012;
         context.clearRect(0, 0, size.width, size.height);

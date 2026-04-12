@@ -135,7 +135,7 @@ function performRouteNavigation(nextHref, { replace = false } = {}) {
     navigationRecoveryTimer = window.setTimeout(() => {
         unlockNavigation();
         clearTransientPageState();
-    }, ROUTE_TRANSITION_MS + 4000);
+    }, ROUTE_TRANSITION_MS + 2000);
     document.body?.classList.add('route-leaving');
 
     window.setTimeout(() => {
