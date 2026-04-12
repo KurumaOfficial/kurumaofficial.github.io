@@ -58,7 +58,7 @@
     /* Layout */
     --page-gutter:    64px;
     --section-block:  120px;
-    --nav-height:     80px;
+    --nav-height:     92px;
     --safe-top:       env(safe-area-inset-top, 0px);
     --safe-right:     env(safe-area-inset-right, 0px);
     --safe-bottom:    env(safe-area-inset-bottom, 0px);
@@ -224,7 +224,7 @@ body::before {
 /* ── §5 Navigation ─────────────────────────────────────────── */
 
 .nav {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -979,7 +979,7 @@ section {
 
 body.route-ready {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
 }
 
 /* ── §15 Team ─────────────────────────────────────────────── */
@@ -1546,6 +1546,7 @@ footer {
     :root {
         --page-gutter:   24px;
         --section-block: 80px;
+        --nav-height:    76px;
     }
 
     .nav-links { display: none; }
@@ -1580,6 +1581,7 @@ footer {
     :root {
         --page-gutter:   16px;
         --section-block: 60px;
+        --nav-height:    64px;
     }
 
     .nav {

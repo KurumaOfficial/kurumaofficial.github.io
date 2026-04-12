@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Top 3 Podium Playground</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d0b0b;
+      --panel: rgba(255,255,255,0.045);
+      --panel-strong: rgba(255,255,255,0.08);
+      --text: #efe8dd;
+      --muted: #9d8f88;
+      --gold: #f4d47c;
+      --silver: #d2d9e4;
+      --bronze: #d49667;
+      --shadow: 0 18px 48px rgba(0,0,0,0.34);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top, rgba(139,26,42,0.18), transparent 40%),
+        linear-gradient(180deg, #110d0d, #080707 60%);
+      color: var(--text);
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .stage {
+      width: min(1120px, 100%);
+      padding: 36px;
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(10,8,8,0.76);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #b98a8a;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(32px, 5vw, 60px);
+      line-height: 0.96;
+      font-weight: 700;
+    }
+
+    .intro {
+      margin: 0 0 32px;
+      max-width: 720px;
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .podium {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      align-items: end;
+    }
+
+    .podium-card {
+      position: relative;
+      min-height: 280px;
+      padding: 22px 20px 30px;
+      border-radius: var(--radius);
+      border: 1px solid var(--panel-strong);
+      background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+
+    .podium-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 48%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .podium-card::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 10px;
+      height: 8px;
+      border-radius: 999px;
+      filter: blur(10px);
+      opacity: 0.95;
+      z-index: 0;
+    }
+
+    .podium-card[data-rank="1"] {
+      min-height: 340px;
+      transform: translateY(-12px);
+      border-color: rgba(244,212,124,0.32);
+    }
+
+    .podium-card[data-rank="1"]::after {
+      background: linear-gradient(90deg, rgba(244,212,124,0), rgba(244,212,124,0.72) 22%, rgba(255,238,184,1) 50%, rgba(244,212,124,0.72) 78%, rgba(244,212,124,0));
+    }
+
+    .podium-card[data-rank="2"] {
+      min-height: 308px;
+      border-color: rgba(210,217,228,0.28);
+    }
+
+    .podium-card[data-rank="2"]::after {
+      background: linear-gradient(90deg, rgba(210,217,228,0), rgba(210,217,228,0.68) 22%, rgba(242,246,250,0.94) 50%, rgba(210,217,228,0.68) 78%, rgba(210,217,228,0));
+    }
+
+    .podium-card[data-rank="3"] {
+      min-height: 288px;
+      border-color: rgba(212,150,103,0.28);
+    }
+
+    .podium-card[data-rank="3"]::after {
+      background: linear-gradient(90deg, rgba(212,150,103,0), rgba(212,150,103,0.7) 22%, rgba(234,183,139,0.9) 50%, rgba(212,150,103,0.7) 78%, rgba(212,150,103,0));
+    }
+
+    .rank-chip {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 30px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text);
+      z-index: 2;
+    }
+
+    .avatar {
+      position: relative;
+      z-index: 1;
+      width: 72px;
+      height: 72px;
+      margin: 34px auto 14px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04));
+      border: 1px solid rgba(255,255,255,0.09);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .name,
+    .tier,
+    .amount,
+    .note {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .name {
+      margin: 0 0 8px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .tier {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 auto 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .medal {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.9;
+    }
+
+    .amount {
+      margin: 0 0 14px;
+      font-size: 14px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .note {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .podium-card[data-rank="1"] .tier { color: var(--gold); }
+    .podium-card[data-rank="2"] .tier { color: var(--silver); }
+    .podium-card[data-rank="3"] .tier { color: var(--bronze); }
+
+    @media (max-width: 900px) {
+      .podium { grid-template-columns: 1fr; }
+      .podium-card,
+      .podium-card[data-rank="1"],
+      .podium-card[data-rank="2"],
+      .podium-card[data-rank="3"] {
+        min-height: auto;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <section class="stage">
+    <p class="eyebrow">Top 3 Podium</p>
+    <h1>Supporter cards<br>playground</h1>
+    <p class="intro">Single-file sandbox for testing top-3 supporter card layouts. You can paste this file into another AI as-is and ask it to redesign the podium/cards while keeping the three-rank structure.</p>
+
+    <div class="podium">
+      <article class="podium-card" data-rank="2">
+        <div class="rank-chip">#2</div>
+        <div class="avatar">AK</div>
+        <h2 class="name">Aki</h2>
+        <div class="tier"><span class="medal"></span> Silver Supporter</div>
+        <p class="amount">$720 total</p>
+        <p class="note">Balanced highlight, colder chrome line, medium pedestal height.</p>
+      </article>
+
+      <article class="podium-card" data-rank="1">
+        <div class="rank-chip">#1</div>
+        <div class="avatar">KR</div>
+        <h2 class="name">Kuruma</h2>
+        <div class="tier"><span class="medal"></span> Gold Supporter</div>
+        <p class="amount">$1,540 total</p>
+        <p class="note">Main hero card with the brightest bottom glow and the tallest stage height.</p>
+      </article>
+
+      <article class="podium-card" data-rank="3">
+        <div class="rank-chip">#3</div>
+        <div class="avatar">SV</div>
+        <h2 class="name">Sova</h2>
+        <div class="tier"><span class="medal"></span> Bronze Supporter</div>
+        <p class="amount">$410 total</p>
+        <p class="note">Warmer accent, shorter pedestal, softer bronze underglow.</p>
+      </article>
+    </div>
+  </section>
+</body>
+</html>

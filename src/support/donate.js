@@ -1205,10 +1205,6 @@ function createSupportCard(supporter, { rank = 0, top = false, locale = 'ru', ef
         card.append(tierMark);
     }
 
-    if (rank > 0) {
-        card.append(createElement('div', { className: 'donor-rank', 'aria-hidden': 'true' }, `#${rank}`));
-    }
-
     const avatar = createAvatar(supporter, tier, hue);
     avatar.append(
         createElement('div', {

@@ -475,14 +475,20 @@ button {
   display:flex;
   align-items:center;
   justify-content:center;
-  background:var(--gold-dim);
+  background:
+    linear-gradient(180deg, rgba(201,168,76,0.18), rgba(201,168,76,0.08)),
+    var(--gold-dim);
   border:1px solid var(--gold-border);
   color:var(--gold-light);
+  box-shadow:
+    inset 0 1px 0 rgba(255,244,204,0.22),
+    0 12px 28px rgba(201,168,76,0.08);
 }
 
 .donate-crown .ui-icon {
-  width:30px;
-  height:30px;
+  width:32px;
+  height:32px;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,0.18));
 }
 
 .donate-eyebrow,
@@ -709,6 +715,7 @@ button {
 .card-donor.is-top {
   border-color:rgba(201,168,76,.35);
   box-shadow:0 0 22px rgba(201,168,76,.12), 0 0 44px rgba(201,168,76,.06);
+  padding-bottom:26px;
 }
 
 .card-donor.is-top:hover {
@@ -716,21 +723,41 @@ button {
   box-shadow:0 0 28px rgba(201,168,76,.18), 0 0 50px rgba(201,168,76,.09);
 }
 
-.donor-rank {
-  position:absolute;
-  top:10px;
-  right:12px;
-  font-family:var(--font-mono, 'JetBrains Mono', monospace);
-  font-size:11px;
-  font-weight:700;
-  color:rgba(201,168,76,.7);
-  letter-spacing:.04em;
-  pointer-events:none;
-  z-index:2;
+.card-donor.is-top::after {
+  left:14px;
+  right:14px;
+  bottom:10px;
+  height:6px;
+  border-radius:999px;
+  filter:blur(9px);
+  opacity:.98;
 }
 
-.card-donor.is-platinum .donor-rank {
-  color:rgba(145,190,255,.7);
+.card-donor.is-top[data-rank="1"] {
+  border-color:rgba(244,212,124,.34);
+  box-shadow:0 0 24px rgba(244,212,124,.14), 0 0 52px rgba(244,212,124,.08);
+}
+
+.card-donor.is-top[data-rank="1"]::after {
+  background:linear-gradient(90deg, rgba(244,212,124,0), rgba(244,212,124,.72) 24%, rgba(255,233,167,.98) 50%, rgba(244,212,124,.72) 76%, rgba(244,212,124,0));
+}
+
+.card-donor.is-top[data-rank="2"] {
+  border-color:rgba(204,214,226,.28);
+  box-shadow:0 0 22px rgba(204,214,226,.12), 0 0 46px rgba(204,214,226,.06);
+}
+
+.card-donor.is-top[data-rank="2"]::after {
+  background:linear-gradient(90deg, rgba(204,214,226,0), rgba(204,214,226,.68) 24%, rgba(236,242,247,.96) 50%, rgba(204,214,226,.68) 76%, rgba(204,214,226,0));
+}
+
+.card-donor.is-top[data-rank="3"] {
+  border-color:rgba(205,143,102,.28);
+  box-shadow:0 0 22px rgba(205,143,102,.12), 0 0 44px rgba(205,143,102,.06);
+}
+
+.card-donor.is-top[data-rank="3"]::after {
+  background:linear-gradient(90deg, rgba(205,143,102,0), rgba(205,143,102,.64) 24%, rgba(231,173,126,.94) 50%, rgba(205,143,102,.64) 76%, rgba(205,143,102,0));
 }
 
 .card-donor.is-platinum::before {
@@ -798,8 +825,8 @@ button {
 }
 
 .tier-mark .ui-icon {
-  width:15px;
-  height:15px;
+  width:16px;
+  height:16px;
 }
 
 .donor-avatar,
@@ -1002,6 +1029,12 @@ button {
   .donate-hero-body { padding:12px 22px 22px; }
   .donate-section { padding:22px; border-radius:20px; }
   .section-head { flex-direction:column; align-items:flex-start; }
+  .card-donor.is-top { padding-bottom:22px; }
+  .card-donor.is-top::after {
+    left:12px;
+    right:12px;
+    bottom:8px;
+  }
   .pay-grid,
   .top-grid,
   .supporters-grid { grid-template-columns:1fr; }
