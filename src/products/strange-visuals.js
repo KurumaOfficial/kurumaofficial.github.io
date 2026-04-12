@@ -911,7 +911,7 @@ function boot() {
   initCompareSlider(elements);
   initCompareMedia(elements, compareCopy);
   applyRevealDelays();
-  initReveal();
+  initReveal([document.getElementById('main')].filter(Boolean));
 }
 
 if (document.readyState === 'loading') {

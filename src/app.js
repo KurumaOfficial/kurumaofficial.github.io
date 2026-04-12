@@ -84,7 +84,7 @@ function boot() {
     }
 
     /* 6 — Activate scroll-reveal ----------------------------------- */
-    initReveal();
+    initReveal([document.getElementById('main')].filter(Boolean));
 
     /* 7 — Bind global UI helpers ----------------------------------- */
     bindNavClose();
