@@ -9,17 +9,28 @@
  */
 
 import {
+    buildLocalizedRoutePath,
     DEFAULT_LOCALE,
     detectLocaleFromPath,
     getCanonicalHref,
     getLocaleMeta,
     getLocaleOptions,
-    getLocalePath,
+    getSiteRootHref,
     normalizeLocale,
     resolveRouteRelativePath,
 } from './config.js';
 import { MESSAGES } from './messages.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js';
+
+const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/products/strange-visuals/after.webp';
+const DEFAULT_SOCIAL_IMAGE_WIDTH = '1919';
+const DEFAULT_SOCIAL_IMAGE_HEIGHT = '1054';
+
+const OG_LOCALE_MAP = Object.freeze({
+    ru: 'ru_RU',
+    en: 'en_US',
+    ua: 'uk_UA',
+});
 
 // ── Private helpers ─────────────────────────────────────────
 
@@ -55,6 +66,29 @@ function ensureHeadLink(id, rel, attrs = {}) {
     return link;
 }
 
+/**
+ * Ensure a `<meta>` element exists in `<head>`.
+ * @param {string} id
+ * @param {string} key
+ * @param {'name' | 'property'} [attr='name']
+ * @returns {HTMLMetaElement}
+ */
+function ensureHeadMeta(id, key, attr = 'name') {
+    let meta = /** @type {HTMLMetaElement | null} */ (document.getElementById(id));
+    if (!meta) {
+        meta = /** @type {HTMLMetaElement | null} */ (document.head.querySelector(`meta[${attr}="${key}"]`));
+    }
+    if (!meta) {
+        meta = /** @type {HTMLMetaElement} */ (document.createElement('meta'));
+        document.head.appendChild(meta);
+    }
+    if (!meta.id) {
+        meta.id = id;
+    }
+    meta.setAttribute(attr, key);
+    return meta;
+}
+
 // ── Factory ─────────────────────────────────────────────────
 
 /**
@@ -64,9 +98,6 @@ export function createLocaleController() {
     const locale = detectLocaleFromPath();
     const messages = MESSAGES[locale] ?? MESSAGES[DEFAULT_LOCALE];
     const meta = getLocaleMeta(locale);
-
-    /** @type {boolean} */
-    let switcherMounted = false;
 
     /**
      * Look up a translation string by dot-path.
@@ -90,20 +121,35 @@ export function createLocaleController() {
 
     // ── Document-level meta ─────────────────────────────────
 
-    function applyDocumentMeta() {
+    /**
+     * Apply page-level metadata.
+     * When overrides are omitted, locale default messages are used.
+     * @param {{ title?: string; description?: string }} [overrides]
+     */
+    function applyDocumentMeta(overrides = {}) {
         document.documentElement.lang = meta.code;
-        document.title = t('meta.title', 'Aleph Studio');
+        const descriptionEl = document.querySelector('meta[name="description"]') || ensureHeadMeta('siteDescription', 'description');
+        const fallbackTitle = document.title || 'Aleph Studio';
+        const fallbackDescription = descriptionEl?.getAttribute('content') || '';
+        const title = overrides.title ?? t('meta.title', fallbackTitle);
+        const description = overrides.description ?? t('meta.description', fallbackDescription);
+        const canonicalHref = getCanonicalHref(locale, window.location.origin, window.location.pathname);
+        const socialImagePath = resolveRouteRelativePath(DEFAULT_SOCIAL_IMAGE_PATH, window.location.pathname);
+        const socialImageHref = socialImagePath ? new URL(socialImagePath, window.location.href).toString() : '';
 
-        const descEl = document.querySelector('meta[name="description"]');
-        if (descEl) descEl.setAttribute('content', t('meta.description', ''));
+        document.title = title;
+
+        if (descriptionEl) {
+            descriptionEl.setAttribute('content', description);
+        }
 
         /* Canonical */
         const canonical = ensureHeadLink('siteCanonical', 'canonical');
-        canonical.href = getCanonicalHref(locale);
+        canonical.href = canonicalHref;
 
         /* x-default alternate */
         const xDefault = ensureHeadLink('siteAltDefault', 'alternate', { hreflang: 'x-default' });
-        xDefault.href = `${window.location.origin}/`;
+        xDefault.href = getSiteRootHref(window.location.origin, window.location.pathname);
 
         /* per-locale alternates */
         for (const { routeLocale, hreflang } of [
@@ -112,8 +158,27 @@ export function createLocaleController() {
             { routeLocale: 'ua', hreflang: 'uk' },
         ]) {
             const alt = ensureHeadLink(`siteAlt-${routeLocale}`, 'alternate', { hreflang });
-            alt.href = `${window.location.origin}${getLocalePath(routeLocale)}`;
+            alt.href = getCanonicalHref(routeLocale, window.location.origin, window.location.pathname);
         }
+
+        ensureHeadMeta('siteOgType', 'og:type', 'property').content = 'website';
+        ensureHeadMeta('siteOgTitle', 'og:title', 'property').content = title;
+        ensureHeadMeta('siteOgDescription', 'og:description', 'property').content = description;
+        ensureHeadMeta('siteOgLocale', 'og:locale', 'property').content = OG_LOCALE_MAP[locale] || OG_LOCALE_MAP[DEFAULT_LOCALE];
+        ensureHeadMeta('siteOgSiteName', 'og:site_name', 'property').content = 'Aleph Studio';
+        ensureHeadMeta('siteOgUrl', 'og:url', 'property').content = canonicalHref;
+        if (socialImageHref) {
+            ensureHeadMeta('siteOgImage', 'og:image', 'property').content = socialImageHref;
+            ensureHeadMeta('siteOgImageType', 'og:image:type', 'property').content = 'image/webp';
+            ensureHeadMeta('siteOgImageWidth', 'og:image:width', 'property').content = DEFAULT_SOCIAL_IMAGE_WIDTH;
+            ensureHeadMeta('siteOgImageHeight', 'og:image:height', 'property').content = DEFAULT_SOCIAL_IMAGE_HEIGHT;
+            ensureHeadMeta('siteOgImageAlt', 'og:image:alt', 'property').content = title;
+            ensureHeadMeta('siteTwitterImage', 'twitter:image').content = socialImageHref;
+            ensureHeadMeta('siteTwitterImageAlt', 'twitter:image:alt').content = title;
+        }
+        ensureHeadMeta('siteTwitterCard', 'twitter:card').content = 'summary_large_image';
+        ensureHeadMeta('siteTwitterTitle', 'twitter:title').content = title;
+        ensureHeadMeta('siteTwitterDescription', 'twitter:description').content = description;
     }
 
     // ── Static copy binding ─────────────────────────────────
@@ -185,6 +250,9 @@ export function createLocaleController() {
 
         if (!container || !trigger || !flag || !label || !menu) return;
 
+        const openLabel = t('locale.openLabel', t('locale.triggerLabel', 'Choose language'));
+        const closeLabel = t('locale.closeLabel', openLabel);
+
         const options = getLocaleOptions();
         const current = options.find((o) => o.locale === locale);
 
@@ -193,19 +261,23 @@ export function createLocaleController() {
             flag.innerHTML = current.flagSvg;
             label.textContent = current.label;
         }
-        trigger.setAttribute('aria-label', t('locale.triggerLabel', 'Choose language'));
+        trigger.setAttribute('aria-controls', 'localeSwitcherMenu');
+        trigger.setAttribute('aria-label', openLabel);
         menu.setAttribute('aria-label', t('locale.menuLabel', 'Choose language'));
+        menu.setAttribute('aria-orientation', 'vertical');
 
         /* Build option buttons via DOM API (no innerHTML with user data) */
         menu.textContent = ''; // clear
         for (const opt of options) {
             const btn = document.createElement('button');
             btn.type = 'button';
+            btn.id = `localeSwitcherOption-${opt.locale}`;
             btn.className = 'locale-option';
-            btn.setAttribute('role', 'option');
-            btn.setAttribute('aria-selected', String(opt.locale === locale));
+            btn.setAttribute('role', 'menuitemradio');
+            btn.setAttribute('aria-checked', String(opt.locale === locale));
             btn.dataset.locale = opt.locale;
             btn.dataset.href = opt.href;
+            btn.tabIndex = opt.locale === locale ? 0 : -1;
 
             const flagSpan = document.createElement('span');
             flagSpan.className = 'locale-option__flag';
@@ -227,21 +299,65 @@ export function createLocaleController() {
             menu.appendChild(btn);
         }
 
+        const getItems = () => Array.from(menu.querySelectorAll('[data-locale]')).filter((item) => item instanceof HTMLButtonElement);
+
+        const getCurrentIndex = (items) => {
+            const focusedIndex = items.findIndex((item) => item === document.activeElement);
+            if (focusedIndex >= 0) return focusedIndex;
+
+            const selectedIndex = items.findIndex((item) => item.dataset.locale === locale);
+            return selectedIndex >= 0 ? selectedIndex : 0;
+        };
+
+        const syncMenuFocus = (items, activeIndex, { focus = false } = {}) => {
+            items.forEach((item, index) => {
+                item.tabIndex = index === activeIndex ? 0 : -1;
+            });
+
+            if (focus) {
+                items[activeIndex]?.focus();
+            }
+        };
+
         /* Close menu */
-        const close = () => {
+        const close = ({ returnFocus = false } = {}) => {
             trigger.setAttribute('aria-expanded', 'false');
+            trigger.setAttribute('aria-label', openLabel);
             menu.hidden = true;
+            if (returnFocus) {
+                trigger.focus();
+            }
+        };
+        const open = ({ focusSelected = true } = {}) => {
+            const items = getItems();
+            const activeIndex = getCurrentIndex(items);
+            syncMenuFocus(items, activeIndex, { focus: false });
+            trigger.setAttribute('aria-expanded', 'true');
+            trigger.setAttribute('aria-label', closeLabel);
+            menu.hidden = false;
+            if (focusSelected) {
+                syncMenuFocus(items, activeIndex, { focus: true });
+            }
         };
         close();
 
-        if (switcherMounted) return;
-        switcherMounted = true;
+        if (container.dataset.localeSwitcherBound === '1') return;
+        container.dataset.localeSwitcherBound = '1';
 
         /* Toggle */
         trigger.addEventListener('click', () => {
             const expanded = trigger.getAttribute('aria-expanded') === 'true';
-            trigger.setAttribute('aria-expanded', String(!expanded));
-            menu.hidden = expanded;
+            if (expanded) {
+                close();
+                return;
+            }
+            open();
+        });
+
+        trigger.addEventListener('keydown', (event) => {
+            if (!['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(event.key)) return;
+            event.preventDefault();
+            open();
         });
 
         /* Select */
@@ -258,7 +374,41 @@ export function createLocaleController() {
             const search = window.location.search || '';
             const hash = window.location.hash || '';
             close();
-            navigateWithRouteTransition(`${getLocalePath(next)}${search}${hash}`);
+            navigateWithRouteTransition(`${buildLocalizedRoutePath(next, window.location.pathname)}${search}${hash}`);
+        });
+
+        menu.addEventListener('keydown', (event) => {
+            const items = getItems();
+            if (!items.length) return;
+
+            const currentIndex = getCurrentIndex(items);
+            let nextIndex = currentIndex;
+
+            if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
+                nextIndex = (currentIndex + 1) % items.length;
+            } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
+                nextIndex = (currentIndex - 1 + items.length) % items.length;
+            } else if (event.key === 'Home') {
+                nextIndex = 0;
+            } else if (event.key === 'End') {
+                nextIndex = items.length - 1;
+            } else if (event.key === 'Escape') {
+                event.preventDefault();
+                close({ returnFocus: true });
+                return;
+            } else if (event.key === 'Tab') {
+                close();
+                return;
+            } else if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                items[currentIndex]?.click();
+                return;
+            } else {
+                return;
+            }
+
+            event.preventDefault();
+            syncMenuFocus(items, nextIndex, { focus: true });
         });
 
         /* Click outside */

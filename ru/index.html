@@ -9,7 +9,7 @@
     <title>Aleph Studio</title>
     <meta name="description" content="Aleph Studio — моды, игры, DLC и небольшие цифровые релизы с открытым исходным кодом, понятной установкой и быстрым доступом к актуальной версии.">
     <meta name="theme-color" content="#080606">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="dark light">
     <meta name="author" content="WeTTeA">
 
     <!-- ─── Open Graph ─────────────────────────────────────── -->
@@ -18,10 +18,21 @@
     <meta property="og:description" content="Моды, игры, DLC — открытый исходный код, понятная установка, быстрый доступ.">
     <meta property="og:locale"      content="ru_RU">
     <meta property="og:site_name"   content="Aleph Studio">
+    <meta property="og:image"       content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+    <meta property="og:image:type"  content="image/webp">
+    <meta property="og:image:width" content="1919">
+    <meta property="og:image:height" content="1054">
+    <meta property="og:image:alt"   content="Превью Aleph Studio">
 
     <!-- ─── Twitter Card ───────────────────────────────────── -->
-    <meta name="twitter:card"  content="summary">
+    <meta name="twitter:card"  content="summary_large_image">
     <meta name="twitter:title" content="Aleph Studio">
+    <meta name="twitter:description" content="Моды, игры, DLC — открытый исходный код, понятная установка, быстрый доступ.">
+    <meta name="twitter:image" content="https://www.aleph.icu/assets/images/products/strange-visuals/after.webp">
+    <meta name="twitter:image:alt" content="Превью Aleph Studio">
+
+    <script>window.__ALEPH_LOCALE__ = 'ru';</script>
+    <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 
     <!-- ─── Favicons ───────────────────────────────────────── -->
     <link rel="icon" href="../favicon.ico" sizes="48x48">
@@ -37,12 +48,7 @@
     <!-- ─── Stylesheet ─────────────────────────────────────── -->
     <link rel="stylesheet" href="../assets/css/main.css">
 
-    <!-- ─── Locale Marker ──────────────────────────────────── -->
-    <script>window.__ALEPH_LOCALE__ = 'ru';</script>
-
     <!-- ─── Icons & Theme bootstrap ────────────────────────── -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body>
 
@@ -73,7 +79,7 @@
         <div class="nav-right">
             <!-- Theme toggle ────────────────────────────────── -->
             <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
-                <span class="material-icons" id="themeIco">light_mode</span>
+                <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
             </button>
 
             <!-- Locale switcher ─────────────────────────────── -->
@@ -82,7 +88,7 @@
                     id="localeSwitcherTrigger"
                     class="locale-switcher__trigger"
                     type="button"
-                    aria-haspopup="listbox"
+                    aria-haspopup="menu"
                     aria-expanded="false"
                     aria-label="Выбор языка"
                 >
@@ -95,7 +101,7 @@
                 <div
                     id="localeSwitcherMenu"
                     class="locale-switcher__menu"
-                    role="listbox"
+                    role="menu"
                     aria-label="Сменить язык"
                     hidden
                 ></div>
@@ -108,14 +114,19 @@
 
 
     <!-- ═══════════════════════════════════════════════════════
+         § MAIN CONTENT
+         ═══════════════════════════════════════════════════════ -->
+    <main id="main">
+
+    <!-- ═══════════════════════════════════════════════════════
          § HERO
          ═══════════════════════════════════════════════════════ -->
-    <section class="hero" id="main" aria-labelledby="heroTitle">
+    <section class="hero" aria-labelledby="heroTitle">
 
         <!-- Decorative background square -->
         <div class="hero-bg-sq" aria-hidden="true"></div>
 
-        <span class="hero-tag" aria-hidden="true">Game Development</span>
+        <span class="hero-tag" aria-hidden="true">Разработка игр</span>
         <h1 id="heroTitle" class="hero-title">Aleph<span>Studio</span></h1>
 
         <p id="heroIntro" class="hero-sub">
@@ -138,18 +149,18 @@
          ═══════════════════════════════════════════════════════ -->
     <div class="marquee-wrap" aria-hidden="true">
         <div class="marquee-track">
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
+            <span class="marquee-item">Открытый код</span>
+            <span class="marquee-item">Моды</span>
+            <span class="marquee-item">Игры</span>
             <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
-            <span class="marquee-item">Open Source</span>
-            <span class="marquee-item">Mods</span>
-            <span class="marquee-item">Games</span>
+            <span class="marquee-item">Свободный доступ</span>
+            <span class="marquee-item">Лицензия GPL</span>
+            <span class="marquee-item">Открытый код</span>
+            <span class="marquee-item">Моды</span>
+            <span class="marquee-item">Игры</span>
             <span class="marquee-item">DLC</span>
-            <span class="marquee-item">Free Access</span>
-            <span class="marquee-item">GPL License</span>
+            <span class="marquee-item">Свободный доступ</span>
+            <span class="marquee-item">Лицензия GPL</span>
         </div>
     </div>
 
@@ -164,7 +175,7 @@
                     <div class="p-sq-inner"></div>
                     <div class="p-sq-center"></div>
                 </div>
-                <span class="p-label">Structure</span>
+                <span class="p-label">Структура</span>
             </div>
             <div class="principle-text">
                 <span class="section-label">Подход</span>
@@ -247,6 +258,8 @@
         </div>
     </section>
 
+    </main>
+
 
     <!-- ═══════════════════════════════════════════════════════
          § FOOTER
@@ -277,7 +290,7 @@
             </ul>
         </div>
 
-        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed</p>
+        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · Дочерний проект WeTTeA · Лицензия GPL</p>
     </footer>
 
 

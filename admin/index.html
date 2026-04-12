@@ -8,9 +8,10 @@
     <meta name="robots" content="noindex,nofollow">
     <meta name="theme-color" content="#0e0d0c">
     <meta name="color-scheme" content="dark light">
+    <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="../assets/css/admin.css">
     <link rel="icon" href="../favicon.ico" sizes="48x48">
@@ -29,7 +30,6 @@
         return 'ru';
     })();
     </script>
-    <script>(function(){var t=localStorage.getItem('aleph-theme');if(t)document.documentElement.setAttribute('data-theme',t);}());</script>
 </head>
 <body data-admin-page="true">
     <div id="editorOverlay" class="editor-overlay" aria-hidden="true">
@@ -169,13 +169,14 @@
                                     <div class="dash-card-head">
                                         <div class="dash-card-head-icon is-gold"><span class="material-icons">lock</span></div>
                                         <div class="dash-card-head-copy">
-                                            <div class="dash-card-head-title">Пароль</div>
+                                            <div class="dash-card-head-title">GitHub token</div>
                                         </div>
                                     </div>
                                     <div class="dash-card-body">
                                         <div class="dash-field">
-                                            <label for="githubToken">Пароль</label>
-                                            <input id="githubToken" type="password" placeholder="Введите пароль">
+                                            <label for="githubToken">GitHub token</label>
+                                            <input id="githubToken" type="password" placeholder="Вставьте fine-grained token">
+                                            <p class="dash-help">Нужен token с доступом <strong>Contents: Read and write</strong> к <strong>KurumaOfficial/kurumaofficial.github.io</strong> для ветки <strong>dev/v2</strong>.</p>
                                         </div>
                                     </div>
                                 </article>
@@ -204,7 +205,7 @@
                                             </div>
                                             <div class="dash-step">
                                                 <div class="dash-step-number">4</div>
-                                                <div class="dash-step-text">Когда всё готово, вставь пароль и нажми <strong>Сохранить Глобально</strong>.</div>
+                                                <div class="dash-step-text">Когда всё готово, вставь GitHub token и нажми <strong>Сохранить Глобально</strong>.</div>
                                             </div>
                                         </div>
                                     </div>

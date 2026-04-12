@@ -9,6 +9,21 @@ import { $ } from '../core/dom.js';
 /** @type {number | undefined} */
 let timer;
 
+function ensureToastElement() {
+    const existing = $('toast');
+    if (existing) return existing;
+    if (!document.body) return null;
+
+    const toast = document.createElement('div');
+    toast.id = 'toast';
+    toast.className = 'toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-live', 'polite');
+    toast.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(toast);
+    return toast;
+}
+
 /**
  * Show a toast message.
  * @param {string} message
@@ -16,7 +31,7 @@ let timer;
  * @param {number} [duration=3200]
  */
 export function showToast(message, kind = 'info', duration = 3200) {
-    const el = $('toast');
+    const el = ensureToastElement();
     if (!el) return;
 
     el.textContent = message;

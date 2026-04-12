@@ -11,7 +11,7 @@ import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
-import { escapeHtml, linkify, $ } from '../core/dom.js';
+import { cleanUrl, escapeHtml, linkify, $ } from '../core/dom.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js';
 
 // ── Factory ─────────────────────────────────────────────────
@@ -32,6 +32,49 @@ export function createRenderer({ localeController }) {
 
     /** Shorthand for translations. */
     const t = localeController.t.bind(localeController);
+
+    function bindDetailNavLinks() {
+        if (!featuredEl || featuredEl.dataset.detailNavBound === '1') return;
+        featuredEl.dataset.detailNavBound = '1';
+
+        featuredEl.addEventListener('click', (event) => {
+            const target = event.target instanceof Element ? event.target : null;
+            if (!target) return;
+
+            const detailLink = target.closest('[data-detail-nav]');
+            if (detailLink instanceof HTMLAnchorElement && featuredEl.contains(detailLink)) {
+                event.preventDefault();
+                navigateWithRouteTransition(detailLink.href);
+                return;
+            }
+
+            const detailCard = target.closest('[data-detail-card]');
+            if (!(detailCard instanceof HTMLElement) || !featuredEl.contains(detailCard)) return;
+
+            const interactiveTarget = target.closest('a, button, input, textarea, select');
+            if (interactiveTarget) return;
+
+            const href = detailCard.dataset.detailCard;
+            if (href) {
+                navigateWithRouteTransition(href);
+            }
+        });
+
+        featuredEl.addEventListener('keydown', (event) => {
+            const detailCard = event.target instanceof Element
+                ? event.target.closest('[data-detail-card]')
+                : null;
+
+            if (!(detailCard instanceof HTMLElement) || !featuredEl.contains(detailCard)) return;
+            if (event.key !== 'Enter' && event.key !== ' ') return;
+
+            event.preventDefault();
+            const href = detailCard.dataset.detailCard;
+            if (href) {
+                navigateWithRouteTransition(href);
+            }
+        });
+    }
 
     // ── Sorting helpers ─────────────────────────────────────
 
@@ -66,18 +109,19 @@ export function createRenderer({ localeController }) {
     function flagBadgeHtml(flag) {
         const meta = getFlagMeta(flag);
         if (!meta) return '';
-        return `<span class="product-flag ${meta.className}">${meta.label}</span>`;
+        const label = t(`products.flags.${flag}`, meta.label);
+        return `<span class="product-flag ${meta.className}">${escapeHtml(label)}</span>`;
     }
 
     // ── Download button ─────────────────────────────────────
 
     function downloadBtnHtml(product) {
         if (product.downloadUrl) {
-            const isLocal = !/^https?:\/\//i.test(product.downloadUrl);
-            const href = isLocal
-                ? localeController.resolveSitePath(product.downloadUrl)
-                : product.downloadUrl;
-            return `<a href="${escapeHtml(href)}" class="btn-download"${isLocal ? ' download' : ''}>${escapeHtml(t('products.download', 'Скачать'))}</a>`;
+            const href = localeController.resolveSitePath(product.downloadUrl);
+            const isLocal = href && !/^(?:https?:)?\/\//i.test(href);
+            if (href) {
+                return `<a href="${escapeHtml(href)}" class="btn-download"${isLocal ? ' download' : ''}>${escapeHtml(t('products.download', 'Скачать'))}</a>`;
+            }
         }
         return `<button class="btn-disabled" type="button" disabled>${escapeHtml(t('products.soon', 'Скоро'))}</button>`;
     }
@@ -87,7 +131,7 @@ export function createRenderer({ localeController }) {
     function renderSocialLinks(target) {
         if (!target) return;
         target.innerHTML = SOCIAL_PLATFORMS.map(({ key, label }) => {
-            const href = siteData.socials?.[key] || '';
+            const href = cleanUrl(siteData.socials?.[key] || '');
             const icon = SOCIAL_ICON_SVG[key] || '';
             if (!href) {
                 return `<a class="social-link" aria-disabled="true" tabindex="-1" aria-label="${escapeHtml(label)}">${icon}</a>`;
@@ -139,8 +183,10 @@ export function createRenderer({ localeController }) {
                 ? `<ol class="product-steps">${product.instructions.map((s, i) =>
                     `<li><span class="step-num">${i + 1}</span><span>${linkify(s)}</span></li>`).join('')}</ol>`
                 : '';
-            const source = product.sourceUrl
-                ? `<div class="product-meta-links"><a class="inline-link" href="${escapeHtml(product.sourceUrl)}" target="_blank" rel="noopener noreferrer">${escapeHtml(t('products.sourceCode', 'Исходный код ↗'))}</a></div>`
+            const sourceHref = localeController.resolveSitePath(product.sourceUrl || '');
+            const sourceIsExternal = /^(?:https?:)?\/\//i.test(sourceHref);
+            const source = sourceHref
+                ? `<div class="product-meta-links"><a class="inline-link" href="${escapeHtml(sourceHref)}"${sourceIsExternal ? ' target="_blank" rel="noopener noreferrer"' : ''}>${escapeHtml(t('products.sourceCode', 'Исходный код ↗'))}</a></div>`
                 : '';
             const note = product.note
                 ? `<p class="product-note">${linkify(product.note)}</p>`
@@ -194,8 +240,9 @@ export function createRenderer({ localeController }) {
         const cardHtml = (m) => {
             const initials = String(m.name || '').split(/\s+/).filter(Boolean)
                 .map((w) => w[0]).join('').toUpperCase().slice(0, 2) || '?';
-            const avatar = m.avatarUrl
-                ? `<img src="${escapeHtml(m.avatarUrl)}" alt="${escapeHtml(m.name)}" loading="lazy">`
+            const avatarSrc = localeController.resolveSitePath(m.avatarUrl || '');
+            const avatar = avatarSrc
+                ? `<img src="${escapeHtml(avatarSrc)}" alt="${escapeHtml(m.name || t('team.avatarFallback', 'Team member avatar'))}" loading="lazy" decoding="async">`
                 : escapeHtml(initials);
             return `
 <div class="team-card">
@@ -216,42 +263,6 @@ export function createRenderer({ localeController }) {
         }
 
         teamShowcaseEl.innerHTML = members.map(cardHtml).join('');
-    }
-
-    // ── Detail page transition ──────────────────────────────
-
-    function bindDetailNavLinks() {
-        document.querySelectorAll('[data-detail-nav]').forEach((link) => {
-            if (/** @type {HTMLElement} */ (link).dataset.bound) return;
-            /** @type {HTMLElement} */ (link).dataset.bound = '1';
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                navigateWithRouteTransition(/** @type {HTMLAnchorElement} */ (link).href);
-            });
-        });
-
-        document.querySelectorAll('[data-detail-card]').forEach((card) => {
-            if (/** @type {HTMLElement} */ (card).dataset.boundCard) return;
-            /** @type {HTMLElement} */ (card).dataset.boundCard = '1';
-
-            const navigate = () => {
-                const href = /** @type {HTMLElement} */ (card).dataset.detailCard;
-                if (!href) return;
-                navigateWithRouteTransition(href);
-            };
-
-            card.addEventListener('click', (event) => {
-                const target = event.target instanceof Element ? event.target.closest('a, button, input, textarea, select') : null;
-                if (target) return;
-                navigate();
-            });
-
-            card.addEventListener('keydown', (event) => {
-                if (event.key !== 'Enter' && event.key !== ' ') return;
-                event.preventDefault();
-                navigate();
-            });
-        });
     }
 
     // ── Public API ──────────────────────────────────────────
