@@ -433,13 +433,16 @@ button {
 
 .donate-page-top {
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:flex-start;
   gap:18px;
-  padding:10px 0 0;
+  padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
   position:sticky;
   top:calc(94px + var(--safe-top));
   z-index:10;
+  pointer-events:none;
+  height:0;
+  overflow:visible;
 }
 
 .donate-hero {
@@ -465,8 +468,8 @@ button {
   display:inline-flex;
   align-items:center;
   gap:10px;
-  width:fit-content;
   min-height:42px;
+  margin-top:10px;
   padding:0 16px;
   border-radius:999px;
   border:1px solid var(--border);
@@ -477,6 +480,7 @@ button {
   font-size:11px;
   letter-spacing:.12em;
   text-transform:uppercase;
+  pointer-events:auto;
 }
 
 .donate-back:hover {
@@ -1008,7 +1012,7 @@ button {
     padding-left:calc(var(--page-gutter) + var(--safe-left));
   }
   .donate-page-top {
-    padding:0;
+    overflow:visible;
   }
   .donate-hero-body {
     padding:20px 32px 36px;
@@ -1026,7 +1030,6 @@ button {
 
   .donate-page-top {
     top:calc(76px + var(--safe-top));
-    padding:16px 0 0;
   }
 
   #donateBackLabel {
