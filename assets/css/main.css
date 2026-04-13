@@ -1667,6 +1667,11 @@ footer {
 
     .products-grid { gap: var(--space-2); }
 
+    .hero-actions {
+        flex-wrap: wrap;
+        gap: var(--space-4);
+    }
+
     footer .footer-copy {
         margin-top: var(--space-6);
         padding-top: var(--space-4);
