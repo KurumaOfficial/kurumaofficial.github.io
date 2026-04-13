@@ -456,9 +456,6 @@ function bindRouteProductMeta(elements, routeProduct, locale) {
 
   if (nextTitle) {
     renderProductName(elements.heroTitleEl, nextTitle);
-    if (elements.heroBackLabelEl instanceof HTMLElement) {
-      elements.heroBackLabelEl.textContent = nextTitle;
-    }
     if (elements.gwTitleEl instanceof HTMLElement) {
       elements.gwTitleEl.textContent = nextTitle;
     }
