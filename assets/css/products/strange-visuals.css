@@ -1988,7 +1988,17 @@ footer {
     --share-gap:10px;
   }
 
-  .hero-store-back-label,
+  .hero-store-back-label {
+    display:none;
+  }
+
+  .hero-store-back {
+    min-width:38px;
+    width:38px;
+    padding:0;
+    justify-content:center;
+  }
+
   .hero-source-btn {
     font-size:10px;
     letter-spacing:.1em;
