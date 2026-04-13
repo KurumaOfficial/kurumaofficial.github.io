@@ -568,21 +568,13 @@ function bindGuiInteractions(elements, previewContexts, previewState) {
 
   elements.gwItemsEl.addEventListener('click', (event) => {
     const target = event.target instanceof Element
-      ? event.target.closest('[data-gw-toggle], [data-gui-theme], [data-gui-locale]')
+      ? event.target.closest('[data-gw-toggle], [data-gui-locale]')
       : null;
     if (!(target instanceof HTMLElement) || !elements.gwItemsEl.contains(target)) return;
 
     if (target.hasAttribute('data-gw-toggle')) {
       const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
       toggleGwItem(target, previewContext.localeMeta);
-      return;
-    }
-
-    const nextThemeKey = target.dataset.guiTheme;
-    if (nextThemeKey) {
-      if (nextThemeKey === previewState.themeKey) return;
-      previewState.themeKey = nextThemeKey;
-      setGuiPreviewTheme(elements, previewState.themeKey);
       return;
     }
 
