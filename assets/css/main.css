@@ -1672,6 +1672,11 @@ footer {
         gap: var(--space-4);
     }
 
+    .hero-sub        { max-width: 100%; }
+    .principle-body  { max-width: 100%; }
+    .product-card    { padding: var(--space-6) var(--space-5); }
+    .catalog-item    { padding: var(--space-3) var(--space-5); flex-wrap: wrap; }
+
     footer .footer-copy {
         margin-top: var(--space-6);
         padding-top: var(--space-4);

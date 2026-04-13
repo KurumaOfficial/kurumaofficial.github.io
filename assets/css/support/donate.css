@@ -1066,6 +1066,14 @@ button {
   .supporters-grid { grid-template-columns:1fr; }
 }
 
+@media (max-width: 480px) {
+  .donate-title     { font-size: clamp(34px, 10vw, 48px); }
+  .donate-hero-body { padding: 12px 16px 20px; }
+  .donate-section   { padding: 16px; border-radius: 16px; }
+  .pay-btn          { min-height: 140px; padding: 18px; }
+  .donate-desc      { font-size: 15px; }
+}
+
 @media (max-width: 420px) {
   .logo-text {
     display:none;
