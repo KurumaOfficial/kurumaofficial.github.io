@@ -1902,9 +1902,11 @@ footer {
     align-items:flex-start;
   }
 
+  .hero-store-content { align-items:flex-start; }
+
   .hero-icon-wrap {
     width:100%;
-    transform:translateY(-212px);
+    transform:none;
   }
 
   .hero-app-icon {
@@ -1918,7 +1920,8 @@ footer {
   }
 
   .hero-info {
-    transform:translateY(-212px);
+    transform:none;
+    width:100%;
   }
 
   .hero-meta {
@@ -2070,4 +2073,15 @@ footer {
     min-height:36px;
     padding:6px 10px 6px 8px;
   }
+
+  .hero-app-name {
+    font-size:clamp(32px,12vw,42px);
+    letter-spacing:-2px;
+  }
+
+  .hero-dev { font-size:13px; }
+
+  .hero-actions { gap:8px; }
+
+  .wrap { padding:48px 16px; }
 }
