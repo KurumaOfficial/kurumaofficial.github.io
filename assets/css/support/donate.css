@@ -422,10 +422,13 @@ button {
   color:var(--text-muted);
 }
 
+.donate-main {
+  padding-top:calc(94px + var(--safe-top));
+}
+
 .donate-page {
   max-width:1120px;
   margin:0 auto;
-  padding-top:calc(94px + var(--safe-top));
   padding-right:calc(var(--page-gutter) + var(--safe-right));
   padding-bottom:calc(96px + var(--safe-bottom));
   padding-left:calc(var(--page-gutter) + var(--safe-left));
@@ -1006,7 +1009,6 @@ button {
     padding-left:calc(var(--page-gutter) + var(--safe-left));
   }
   .donate-page {
-    padding-top:calc(94px + var(--safe-top));
     padding-right:calc(var(--page-gutter) + var(--safe-right));
     padding-bottom:calc(72px + var(--safe-bottom));
     padding-left:calc(var(--page-gutter) + var(--safe-left));
@@ -1024,7 +1026,7 @@ button {
 }
 
 @media (max-width: 768px) {
-  .donate-page {
+  .donate-main {
     padding-top:calc(76px + var(--safe-top));
   }
 
@@ -1054,7 +1056,6 @@ button {
     padding-left:calc(var(--page-gutter) + var(--safe-left));
   }
   .donate-page {
-    padding-top:calc(76px + var(--safe-top));
     padding-right:calc(var(--page-gutter) + var(--safe-right));
     padding-bottom:calc(56px + var(--safe-bottom));
     padding-left:calc(var(--page-gutter) + var(--safe-left));
