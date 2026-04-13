@@ -896,7 +896,6 @@ function boot() {
   initSharedThemeToggle();
   initAdminRouteAccess({ adminHref: getAdminHref() });
   initSkipLink();
-  initSmoothRouteTransitions();
   bindGuiInteractions(elements, previewContexts, previewState);
   bindGuiTabs(elements, previewContexts, previewState);
 
@@ -920,6 +919,8 @@ function boot() {
   initCompareMedia(elements, compareCopy);
   applyRevealDelays();
   initReveal([document.getElementById('main')].filter(Boolean));
+  document.documentElement.removeAttribute('data-booting');
+  initSmoothRouteTransitions();
 }
 
 if (document.readyState === 'loading') {
