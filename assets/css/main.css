@@ -1586,6 +1586,42 @@ footer {
 
 /* ── §27 Responsive — Tablet (≤ 960px) ────────────────────── */
 
+@media (min-width: 481px) and (max-height: 760px),
+       (min-width: 481px) and (max-width: 1400px) {
+    :root {
+        --page-gutter:   clamp(20px, 2.2vw, 32px);
+        --section-block: 96px;
+        --nav-height:    84px;
+    }
+
+    .nav {
+        padding-top: calc(20px + var(--safe-top));
+        padding-right: calc(var(--page-gutter) + var(--safe-right));
+        padding-bottom: 18px;
+        padding-left: calc(var(--page-gutter) + var(--safe-left));
+    }
+
+    .nav-links {
+        gap: 20px;
+    }
+
+    .hero {
+        padding-top: calc(var(--nav-height) + var(--safe-top));
+        padding-right: calc(var(--page-gutter) + var(--safe-right));
+        padding-bottom: calc(56px + var(--safe-bottom));
+        padding-left: calc(var(--page-gutter) + var(--safe-left));
+    }
+
+    .hero-title {
+        font-size: clamp(68px, 8.6vw, 112px);
+    }
+
+    .hero-sub {
+        max-width: 54ch;
+        margin-bottom: var(--space-10);
+    }
+}
+
 @media (max-width: 960px) {
     :root {
         --page-gutter:   24px;

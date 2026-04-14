@@ -1105,8 +1105,20 @@ button {
     padding-top:calc(76px + var(--safe-top));
   }
 
+  .donate-page {
+    padding-top:56px;
+  }
+
   .donate-page-top {
+    position:sticky;
     top:calc(76px + var(--safe-top));
+    height:0;
+    margin-bottom:0;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:none;
+    z-index:12;
+    overflow:visible;
   }
 
   #donateBackLabel {
@@ -1179,5 +1191,101 @@ button {
   .donate-back {
     min-height:38px;
     padding:0 14px;
+  }
+}
+
+@media (min-width: 769px) and (max-height: 760px),
+       (min-width: 769px) and (max-width: 1400px) {
+  :root {
+    --page-gutter: 32px;
+  }
+
+  .donate-page-top {
+    position: sticky;
+    top: calc(94px + var(--safe-top));
+    height: 0;
+    margin-bottom: 0;
+    padding-right: calc(var(--page-gutter) + var(--safe-right));
+    padding-left: calc(var(--page-gutter) + var(--safe-left));
+    pointer-events: none;
+    z-index: 12;
+    overflow: visible;
+  }
+
+  #donateBackLabel {
+    display: none;
+  }
+
+  .donate-back {
+    min-height: 38px;
+    min-width: 38px;
+    width: 38px;
+    margin-top: 12px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .donate-back .ui-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  .donate-page {
+    max-width: 1040px;
+    padding-top: 56px;
+  }
+
+  .donate-hero-body {
+    gap: 16px;
+    padding: 18px 30px 32px;
+  }
+
+  .donate-crown {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+  }
+
+  .donate-crown .ui-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .donate-title {
+    font-size: clamp(46px, 6.4vw, 74px);
+  }
+
+  .donate-desc {
+    font-size: 15px;
+    line-height: 1.72;
+    max-width: 54ch;
+  }
+
+  .donate-section {
+    margin-top: 24px;
+    padding: 26px;
+  }
+}
+
+@media (min-width: 769px) and (max-height: 620px),
+       (min-width: 769px) and (max-width: 1180px) {
+  :root {
+    --page-gutter: 24px;
+  }
+
+  .donate-page {
+    padding-top: 52px;
+  }
+
+  .donate-hero-body {
+    padding: 16px 26px 28px;
+  }
+
+  .donate-title {
+    font-size: clamp(42px, 5.8vw, 62px);
+  }
+
+  .donate-section {
+    padding: 24px;
   }
 }
