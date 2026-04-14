@@ -583,6 +583,10 @@ html[data-booting] body { visibility: hidden; }
   pointer-events:auto;
 }
 
+.hero-store-actions:empty {
+  display:none;
+}
+
 .hero-store-back .ui-icon {
   width:22px;
   height:22px;
@@ -1868,6 +1872,71 @@ footer {
 }
 
 /* ─── RESPONSIVE ─── */
+@media(max-width:1180px){
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+}
+
+@media(max-height:840px){
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+
+  .hero-store-content {
+    padding-bottom:calc(72px + var(--safe-bottom));
+  }
+
+  .hero-icon-wrap {
+    transform:translateY(-164px);
+  }
+
+  .hero-app-icon {
+    width:288px;
+    height:288px;
+    top:-56px;
+  }
+
+  .hero-app-icon svg {
+    width:120px;
+    height:120px;
+  }
+
+  .hero-info {
+    transform:translateY(-156px);
+  }
+
+  .hero-app-name {
+    font-size:clamp(66px, 8vw, 98px);
+    line-height:.94;
+    letter-spacing:-3px;
+  }
+}
+
 @media(max-width:1100px){
   .hero-store-content { padding:28px calc(var(--page-gutter) + var(--safe-right)) calc(90px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left)); }
   .hero-store-top { padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); overflow:visible; }
