@@ -1872,6 +1872,107 @@ footer {
 }
 
 /* ─── RESPONSIVE ─── */
+@media(min-width:1181px) and (min-height:841px){
+  .hero-store-content {
+    padding:30px calc(var(--page-gutter) + var(--safe-right)) calc(88px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left));
+  }
+
+  .hero-store-card {
+    gap:48px;
+  }
+
+  .hero-icon-wrap {
+    transform:translateY(-190px);
+  }
+
+  .hero-app-icon {
+    width:288px;
+    height:288px;
+    top:-82px;
+  }
+
+  .hero-app-icon svg {
+    width:120px;
+    height:120px;
+  }
+
+  .hero-info {
+    gap:8px;
+    transform:translateY(-190px);
+  }
+
+  .hero-app-name {
+    max-width:690px;
+    font-size:clamp(54px, 10vw, 104px);
+    letter-spacing:-3.1px;
+  }
+
+  .hero-dev {
+    margin-top:6px;
+    font-size:15px;
+  }
+
+  .hero-category {
+    font-size:13px;
+  }
+
+  .hero-meta {
+    margin-top:14px;
+  }
+
+  .hero-meta-item {
+    min-width:112px;
+    padding:14px 20px;
+  }
+
+  .hero-meta-value {
+    font-size:18px;
+  }
+
+  .hero-meta-label {
+    font-size:10px;
+  }
+
+  .hero-actions {
+    gap:10px;
+    margin-top:16px;
+  }
+
+  .hero-install-btn {
+    min-width:324px;
+    padding:15px 30px;
+    font-size:14px;
+  }
+
+  .hero-source-btn {
+    width:48px;
+    min-width:48px;
+    min-height:48px;
+  }
+
+  .hero-source-btn .ui-icon {
+    width:28px;
+    height:20px;
+  }
+
+  .wrap {
+    max-width:1000px;
+    padding:92px 48px;
+  }
+
+  .feat-head,
+  .compare-section-head {
+    gap:42px;
+    margin-bottom:46px;
+  }
+
+  .gui-w {
+    max-width:372px;
+    height:454px;
+    padding:18px 16px 14px;
+  }
+}
+
 @media(max-width:1180px){
   .hero-store-top {
     position:static;
