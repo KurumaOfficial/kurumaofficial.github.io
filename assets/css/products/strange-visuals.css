@@ -1872,6 +1872,24 @@ footer {
 }
 
 /* ─── RESPONSIVE ─── */
+@media(min-width:1181px) and (min-height:841px){
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+}
+
 @media(max-width:1180px){
   .hero-store-top {
     position:static;
