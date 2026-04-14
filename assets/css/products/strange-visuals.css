@@ -1959,6 +1959,108 @@ footer {
   }
 }
 
+@media (min-width:1181px) and (max-height:760px),
+       (min-width:1181px) and (max-width:1400px){
+  .hero-store {
+    min-height:auto;
+  }
+
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+
+  .hero-store-content {
+    align-items:flex-start;
+    padding:16px calc(var(--page-gutter) + var(--safe-right)) calc(56px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left));
+  }
+
+  .hero-store-card {
+    gap:28px;
+    align-items:flex-start;
+  }
+
+  .hero-icon-wrap {
+    transform:none;
+  }
+
+  .hero-app-icon {
+    width:220px;
+    height:220px;
+    top:0;
+  }
+
+  .hero-app-icon svg {
+    width:100px;
+    height:100px;
+  }
+
+  .hero-info {
+    transform:none;
+    gap:8px;
+  }
+
+  .hero-app-name {
+    font-size:clamp(54px, 7vw, 84px);
+    line-height:.92;
+    letter-spacing:-2.8px;
+  }
+
+  .hero-dev {
+    font-size:15px;
+    margin-top:4px;
+  }
+
+  .hero-category {
+    font-size:13px;
+  }
+
+  .hero-meta {
+    margin-top:12px;
+  }
+
+  .hero-meta-item {
+    min-width:110px;
+    padding:14px 18px;
+  }
+
+  .hero-meta-value {
+    font-size:18px;
+  }
+
+  .hero-meta-label {
+    font-size:10px;
+  }
+
+  .hero-actions {
+    gap:10px;
+    margin-top:14px;
+  }
+
+  .hero-install-btn {
+    min-width:320px;
+    padding:14px 28px;
+    font-size:14px;
+  }
+
+  .hero-source-btn {
+    width:48px;
+    min-width:48px;
+    min-height:48px;
+  }
+}
+
 @media(max-width:1100px){
   .hero-store-content { padding:28px calc(var(--page-gutter) + var(--safe-right)) calc(90px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left)); }
   .hero-store-top { padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); overflow:visible; }
