@@ -8,6 +8,7 @@ import {
   getAdminHref,
   getEffectiveSiteData,
   initAdminRouteAccess,
+  getLocaleDonateHref,
   getLocaleShowcaseHref,
   initSkipLink,
   initSharedThemeToggle,
@@ -371,7 +372,7 @@ function syncExternalLinkBehavior(link, href, { allowNewTab = true } = {}) {
 }
 
 function getDonateHref() {
-  return new URL('donate/', window.location.href).toString();
+  return getLocaleDonateHref();
 }
 
 function getRouteProduct(products) {
