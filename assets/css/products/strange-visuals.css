@@ -1390,7 +1390,6 @@ html[data-theme-switching="true"] .gui-w {
   border:1px solid var(--gui-bdr);
   box-shadow:var(--shadow);
   animation:guiFloat 5.5s ease-in-out infinite;
-  will-change:transform;
 }
 
 @keyframes guiFloat {

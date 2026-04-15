@@ -7,6 +7,7 @@ import { createLocaleController } from '../i18n/controller.js';
 import {
     getAdminHref,
     getEffectiveSiteData,
+    getLocaleShowcaseHref,
     initAdminRouteAccess,
     initSkipLink,
     initSharedThemeToggle,
@@ -159,6 +160,11 @@ function getCopy(locale, routeContext) {
     };
 }
 
+function hasAutoRouteLanding(siteData) {
+    return Array.isArray(siteData?.products)
+        && siteData.products.some((product) => product?.autoRouteRedirect && String(product?.detailUrl || '').trim());
+}
+
 function stripHtmlTags(value) {
     return String(value || '').replace(/<[^>]*>/g, '').trim();
 }
@@ -214,6 +220,7 @@ const SUPPORTER_AVATAR_DISCORD_SIZE = 256;
 
 function getElements() {
     return {
+        navLogoLink: document.querySelector('.nav-logo'),
         donateBackLink: document.querySelector('.donate-back'),
         donateBackLabel: $('donateBackLabel'),
         donateEyebrow: $('donateEyebrow'),
@@ -1322,13 +1329,24 @@ function renderSupporters(elements, supporters, copy, locale) {
     elements.topSupportersGrid.append(topSupportersFragment);
 }
 
+function syncDonateNavigationLinks(elements, siteData, routeContext) {
+    if (!hasAutoRouteLanding(siteData)) return;
+
+    const showcaseHref = getLocaleShowcaseHref();
+
+    if (elements.navLogoLink instanceof HTMLAnchorElement) {
+        elements.navLogoLink.href = showcaseHref;
+    }
+
+    if (elements.donateBackLink instanceof HTMLAnchorElement && !routeContext?.isProductRoute) {
+        elements.donateBackLink.href = showcaseHref;
+    }
+}
+
 function applyStaticCopy(elements, copy) {
     document.title = copy.metaTitle;
     const descriptionEl = document.querySelector('meta[name="description"]');
     if (descriptionEl) descriptionEl.setAttribute('content', copy.metaDescription);
-    if (elements.donateBackLink instanceof HTMLAnchorElement) {
-        elements.donateBackLink.href = '../';
-    }
     if (elements.donateBackLabel) elements.donateBackLabel.textContent = copy.backLabel;
     if (elements.donateEyebrow) elements.donateEyebrow.textContent = copy.eyebrow;
     if (elements.donateTitle) renderDonateTitle(elements.donateTitle, copy.titleHtml);
@@ -1364,6 +1382,7 @@ function boot() {
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
+    syncDonateNavigationLinks(elements, siteData, routeContext);
     localeController.applyDocumentMeta({
         title: copy.metaTitle,
         description: copy.metaDescription,

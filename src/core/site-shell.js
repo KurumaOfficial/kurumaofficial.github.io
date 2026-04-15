@@ -10,11 +10,16 @@ const THEME_TRANSITION_MS = 260;
 const ROUTE_TRANSITION_MS = 210;
 const ROUTE_ENTER_MS = 320;
 const SHARED_MOTION_STYLE_ID = 'aleph-shared-motion';
+const SHOWCASE_SEARCH_PARAM = 'view';
+const SHOWCASE_SEARCH_VALUE = 'showcase';
+const NORMALIZED_DEFAULT_SITE_DATA = normalizeData(DEFAULT_SITE_DATA);
 
 let navigationLocked = false;
 let routeEnterTimer = 0;
 let themeSwitchTimer = 0;
 let navigationRecoveryTimer = 0;
+let cachedStoredSiteDataRaw = null;
+let cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
 
 function isEditableTarget() {
     const tag = document.activeElement?.tagName?.toLowerCase();
@@ -51,11 +56,30 @@ function normalizeComparablePath(pathname) {
 function getStoredSiteData() {
     try {
         const raw = window.localStorage.getItem(LOCAL_DATA_KEY);
-        if (!raw) return normalizeData(DEFAULT_SITE_DATA);
-        return normalizeData(JSON.parse(raw));
+        if (!raw) {
+            cachedStoredSiteDataRaw = null;
+            cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
+            return cachedStoredSiteData;
+        }
+
+        if (raw === cachedStoredSiteDataRaw) {
+            return cachedStoredSiteData;
+        }
+
+        cachedStoredSiteDataRaw = raw;
+        cachedStoredSiteData = normalizeData(JSON.parse(raw));
+        return cachedStoredSiteData;
     } catch {
-        return normalizeData(DEFAULT_SITE_DATA);
+        cachedStoredSiteDataRaw = null;
+        cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
+        return cachedStoredSiteData;
     }
+}
+
+function hasShowcaseBypass(search = window.location.search, hash = window.location.hash) {
+    if (String(hash || '').trim()) return true;
+    const params = new URLSearchParams(search || '');
+    return params.get(SHOWCASE_SEARCH_PARAM) === SHOWCASE_SEARCH_VALUE;
 }
 
 function ensureSharedMotionStyles() {
@@ -299,6 +323,16 @@ export function getEffectiveSiteData() {
     return getStoredSiteData();
 }
 
+export function getLocaleShowcaseHref({ pathname = window.location.pathname, hash = '' } = {}) {
+    const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
+    const url = new URL(buildSiteHref(localePrefix, pathname));
+    url.searchParams.set(SHOWCASE_SEARCH_PARAM, SHOWCASE_SEARCH_VALUE);
+    if (hash) {
+        url.hash = hash.startsWith('#') ? hash : `#${hash}`;
+    }
+    return url.toString();
+}
+
 export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathname = window.location.pathname) {
     const locale = detectLocaleFromPath(pathname);
     const redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
@@ -316,6 +350,7 @@ export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathn
 export function applyGlobalRouteRedirect(siteData = getStoredSiteData()) {
     const pathname = getNormalizedPathname(window.location.pathname);
     if (/\/admin\/?$/i.test(pathname) || document.body.dataset.adminPage === 'true') return false;
+    if (hasShowcaseBypass()) return false;
 
     const targetHref = getAutoRouteRedirectTarget(siteData, pathname);
     if (!targetHref) return false;
