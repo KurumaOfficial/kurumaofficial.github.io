@@ -7,7 +7,6 @@ import { createLocaleController } from '../i18n/controller.js';
 import {
     getAdminHref,
     getEffectiveSiteData,
-    getLocaleDonateHref,
     getLocaleShowcaseHref,
     initAdminRouteAccess,
     initSkipLink,
@@ -39,12 +38,6 @@ const COPY = Object.freeze({
             eyebrow: 'Поддержать Aleph Studio',
             titleHtml: 'Поддержка<br><em>студии</em>',
         },
-        product: {
-            metaTitle: '{productTitle} — Поддержать',
-            metaDescription: 'Поддержите {productTitle} и помогите финансировать дальнейшую разработку и будущие обновления от Aleph Studio.',
-            backLabel: 'Назад к {productTitle}',
-            eyebrow: 'Поддержать проект',
-        },
     },
     en: {
         common: {
@@ -68,12 +61,6 @@ const COPY = Object.freeze({
             backLabel: 'Back to Aleph Studio',
             eyebrow: 'Support Aleph Studio',
             titleHtml: 'Support<br><em>the studio</em>',
-        },
-        product: {
-            metaTitle: '{productTitle} — Support',
-            metaDescription: 'Support {productTitle} and help fund its ongoing development and future updates from Aleph Studio.',
-            backLabel: 'Back to {productTitle}',
-            eyebrow: 'Support the project',
         },
     },
     ua: {
@@ -99,80 +86,25 @@ const COPY = Object.freeze({
             eyebrow: 'Підтримати Aleph Studio',
             titleHtml: 'Підтримка<br><em>студії</em>',
         },
-        product: {
-            metaTitle: '{productTitle} — Підтримати',
-            metaDescription: 'Підтримайте {productTitle} і допоможіть фінансувати подальшу розробку та майбутні оновлення від Aleph Studio.',
-            backLabel: 'Назад до {productTitle}',
-            eyebrow: 'Підтримати проєкт',
-        },
     },
 });
 
-function formatCopyText(template, values) {
-    return String(template || '').replace(/\{(\w+)\}/g, (match, key) => {
-        const replacement = values?.[key];
-        return replacement == null ? match : String(replacement);
-    });
-}
-
-function humanizeProductSlug(slug) {
-    return String(slug || '')
-        .split('-')
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ') || 'Project';
-}
-
-function getDonateRouteContext(siteData) {
-    const match = window.location.pathname.match(/\/products\/([^/]+)\/donate(?:\/index\.html)?\/?$/i);
-    if (!match) {
-        return {
-            isProductRoute: false,
-            productTitle: 'Aleph Studio',
-        };
-    }
-
-    const slug = match[1] || '';
-    const products = Array.isArray(siteData?.products) ? siteData.products : [];
-    const product = products.find((item) => item?.id === slug)
-        || products.find((item) => String(item?.detailUrl || '').includes(`/products/${slug}/`))
-        || null;
-
-    return {
-        isProductRoute: true,
-        productTitle: String(product?.title || humanizeProductSlug(slug)).trim() || humanizeProductSlug(slug),
-    };
-}
-
-function getCopy(locale, routeContext) {
+function getCopy(locale) {
     const localeCopy = COPY[locale] || COPY.ru;
-    const variant = routeContext?.isProductRoute ? localeCopy.product : localeCopy.site;
-    const values = {
-        productTitle: routeContext?.productTitle || 'Aleph Studio',
-    };
 
     return {
         ...localeCopy.common,
-        metaTitle: formatCopyText(variant.metaTitle, values),
-        metaDescription: formatCopyText(variant.metaDescription, values),
-        backLabel: formatCopyText(variant.backLabel, values),
-        eyebrow: variant.eyebrow,
-        titleHtml: variant.titleHtml || localeCopy.common.titleHtml,
+        metaTitle: localeCopy.site.metaTitle,
+        metaDescription: localeCopy.site.metaDescription,
+        backLabel: localeCopy.site.backLabel,
+        eyebrow: localeCopy.site.eyebrow,
+        titleHtml: localeCopy.site.titleHtml || localeCopy.common.titleHtml,
     };
 }
 
 function hasAutoRouteLanding(siteData) {
     return Array.isArray(siteData?.products)
         && siteData.products.some((product) => product?.autoRouteRedirect && String(product?.detailUrl || '').trim());
-}
-
-function redirectLegacyProductDonateRoute() {
-    if (!/\/products\/[^/]+\/donate(?:\/index\.html)?\/?$/i.test(window.location.pathname)) {
-        return false;
-    }
-
-    window.location.replace(getLocaleDonateHref());
-    return true;
 }
 
 function stripHtmlTags(value) {
@@ -1339,7 +1271,7 @@ function renderSupporters(elements, supporters, copy, locale) {
     elements.topSupportersGrid.append(topSupportersFragment);
 }
 
-function syncDonateNavigationLinks(elements, siteData, routeContext) {
+function syncDonateNavigationLinks(elements, siteData) {
     if (!hasAutoRouteLanding(siteData)) return;
 
     const showcaseHref = getLocaleShowcaseHref();
@@ -1348,7 +1280,7 @@ function syncDonateNavigationLinks(elements, siteData, routeContext) {
         elements.navLogoLink.href = showcaseHref;
     }
 
-    if (elements.donateBackLink instanceof HTMLAnchorElement && !routeContext?.isProductRoute) {
+    if (elements.donateBackLink instanceof HTMLAnchorElement) {
         elements.donateBackLink.href = showcaseHref;
     }
 }
@@ -1377,13 +1309,10 @@ function boot() {
     if (booted) return;
     booted = true;
 
-    if (redirectLegacyProductDonateRoute()) return;
-
     const localeController = createLocaleController();
     const locale = localeController.locale;
     const siteData = localizeSiteData(getEffectiveSiteData(), locale);
-    const routeContext = getDonateRouteContext(siteData);
-    const copy = getCopy(locale, routeContext);
+    const copy = getCopy(locale);
     const elements = getElements();
     const supportPage = siteData.supportPage || { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] };
 
@@ -1394,7 +1323,7 @@ function boot() {
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
-    syncDonateNavigationLinks(elements, siteData, routeContext);
+    syncDonateNavigationLinks(elements, siteData);
     localeController.applyDocumentMeta({
         title: copy.metaTitle,
         description: copy.metaDescription,
