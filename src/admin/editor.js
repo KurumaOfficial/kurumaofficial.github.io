@@ -15,7 +15,7 @@ import {
     toNumber,
 } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260415c';
 import { createGitHubPublisher } from '../github/publisher.js';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
