@@ -333,6 +333,16 @@ export function getLocaleShowcaseHref({ pathname = window.location.pathname, has
     return url.toString();
 }
 
+export function getLocaleDonateHref(pathname = window.location.pathname) {
+    const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
+    return buildSiteHref(`${localePrefix}/donate/`, pathname);
+}
+
+function isAutoRouteRedirectImmunePath(pathname = window.location.pathname) {
+    const normalizedPath = normalizeComparablePath(pathname);
+    return /\/(?:ru|en|ua)\/donate\/?$/i.test(normalizedPath);
+}
+
 export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathname = window.location.pathname) {
     const locale = detectLocaleFromPath(pathname);
     const redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
@@ -350,6 +360,7 @@ export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathn
 export function applyGlobalRouteRedirect(siteData = getStoredSiteData()) {
     const pathname = getNormalizedPathname(window.location.pathname);
     if (/\/admin\/?$/i.test(pathname) || document.body.dataset.adminPage === 'true') return false;
+    if (isAutoRouteRedirectImmunePath(pathname)) return false;
     if (hasShowcaseBypass()) return false;
 
     const targetHref = getAutoRouteRedirectTarget(siteData, pathname);

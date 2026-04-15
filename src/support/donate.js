@@ -7,6 +7,7 @@ import { createLocaleController } from '../i18n/controller.js';
 import {
     getAdminHref,
     getEffectiveSiteData,
+    getLocaleDonateHref,
     getLocaleShowcaseHref,
     initAdminRouteAccess,
     initSkipLink,
@@ -163,6 +164,15 @@ function getCopy(locale, routeContext) {
 function hasAutoRouteLanding(siteData) {
     return Array.isArray(siteData?.products)
         && siteData.products.some((product) => product?.autoRouteRedirect && String(product?.detailUrl || '').trim());
+}
+
+function redirectLegacyProductDonateRoute() {
+    if (!/\/products\/[^/]+\/donate(?:\/index\.html)?\/?$/i.test(window.location.pathname)) {
+        return false;
+    }
+
+    window.location.replace(getLocaleDonateHref());
+    return true;
 }
 
 function stripHtmlTags(value) {
@@ -1366,6 +1376,8 @@ let booted = false;
 function boot() {
     if (booted) return;
     booted = true;
+
+    if (redirectLegacyProductDonateRoute()) return;
 
     const localeController = createLocaleController();
     const locale = localeController.locale;
