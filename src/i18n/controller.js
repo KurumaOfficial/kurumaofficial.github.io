@@ -19,7 +19,7 @@ import {
     resolveRouteRelativePath,
 } from './config.js';
 import { MESSAGES } from './messages.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260415c';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/products/strange-visuals/after.webp';
 const DEFAULT_SOCIAL_IMAGE_WIDTH = '1919';

@@ -345,7 +345,10 @@ function isAutoRouteRedirectImmunePath(pathname = window.location.pathname) {
 
 export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathname = window.location.pathname) {
     const locale = detectLocaleFromPath(pathname);
-    const redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
+    let redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
+    if (!redirectProduct) {
+        redirectProduct = (NORMALIZED_DEFAULT_SITE_DATA.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
+    }
     if (!redirectProduct) return null;
 
     const localePrefix = getLocalePath(locale).replace(/^\//, '');

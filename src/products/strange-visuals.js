@@ -14,7 +14,7 @@ import {
   initSharedThemeToggle,
   initSmoothRouteTransitions,
   navigateWithRouteTransition,
-} from '../core/site-shell.js?v=20260415b';
+} from '../core/site-shell.js?v=20260415c';
 
 const CATEGORY_ORDER = Object.freeze(['player', 'world', 'utils', 'other', 'interface', 'themes']);
 

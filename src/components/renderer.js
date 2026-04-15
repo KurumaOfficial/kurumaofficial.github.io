@@ -12,7 +12,7 @@ import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260415c';
 
 // ── Factory ─────────────────────────────────────────────────
 
