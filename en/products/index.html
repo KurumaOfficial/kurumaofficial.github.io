@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aleph Studio — Products</title>
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark light">
+<meta name="author" content="WeTTeA">
+<meta name="description" content="The Aleph Studio product catalog is being prepared and will appear on this route later.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aleph Studio — Products">
+<meta property="og:description" content="The Aleph Studio product catalog is being prepared and will appear on this route later.">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Aleph Studio">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aleph Studio — Products">
+<meta name="twitter:description" content="The Aleph Studio product catalog is being prepared and will appear on this route later.">
+<link rel="canonical" href="https://www.aleph.icu/en/products/">
+<link rel="alternate" hreflang="ru" href="https://www.aleph.icu/ru/products/">
+<link rel="alternate" hreflang="en" href="https://www.aleph.icu/en/products/">
+<link rel="alternate" hreflang="uk" href="https://www.aleph.icu/ua/products/">
+<link rel="alternate" hreflang="x-default" href="https://www.aleph.icu/ru/products/">
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+<link rel="icon" href="../../favicon.ico" sizes="48x48">
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #090807;
+  --bg-soft: rgba(255,255,255,.04);
+  --text: #f4efe6;
+  --muted: #b9ad9e;
+  --line: rgba(255,255,255,.1);
+  --accent: #e9d0aa;
+  --accent-strong: #f4dec2;
+  --shadow: 0 24px 80px rgba(0,0,0,.42);
+  --font-display: "Cormorant", serif;
+  --font-body: "Karla", sans-serif;
+  --font-ui: "Unbounded", sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(circle at top, rgba(233,208,170,.16), transparent 36%),
+    radial-gradient(circle at bottom right, rgba(255,255,255,.07), transparent 24%),
+    var(--bg);
+}
+a { color: inherit; text-decoration: none; }
+.shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.brand-mark {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent-strong), rgba(255,255,255,.22));
+  box-shadow: 0 0 0 1px rgba(255,255,255,.15);
+}
+.nav-link {
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.04);
+}
+.hero {
+  width: min(100%, 920px);
+  margin: auto;
+  padding: 56px 40px;
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+  box-shadow: var(--shadow);
+}
+.eyebrow {
+  margin: 0 0 18px;
+  color: var(--accent);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(46px, 8vw, 88px);
+  line-height: .92;
+  font-weight: 600;
+}
+p {
+  max-width: 620px;
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.7;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  transition: transform .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(255,255,255,.22);
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #171311;
+  font-weight: 700;
+}
+.btn-secondary {
+  background: rgba(255,255,255,.04);
+}
+@media (max-width: 720px) {
+  .shell { padding: 18px; }
+  .hero { padding: 32px 22px; border-radius: 24px; }
+  p { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="../?view=showcase" aria-label="Aleph Studio home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Aleph Studio</span>
+    </a>
+    <a class="nav-link" href="../donate/">Support</a>
+  </nav>
+
+  <main class="hero" id="main">
+    <div class="eyebrow">Products Route</div>
+    <h1>Product catalog is coming soon</h1>
+    <p>This route is already reserved for a standalone products page. For now it serves as a temporary placeholder so the navigation stays valid and does not lead to an error page.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="../?view=showcase#products">Back to showcase</a>
+      <a class="btn btn-secondary" href="../donate/">Open support page</a>
+    </div>
+  </main>
+</div>
+</body>
+</html>
