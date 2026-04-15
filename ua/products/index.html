@@ -22,7 +22,7 @@
 <link rel="alternate" hreflang="uk" href="https://www.aleph.icu/ua/products/">
 <link rel="alternate" hreflang="x-default" href="https://www.aleph.icu/ru/products/">
 <meta http-equiv="refresh" content="0; url=./strange-visuals/">
-<script>document.documentElement.dataset.routePending='true';window.__ALEPH_LOCALE__='ua';</script>
+<script>window.__ALEPH_LOCALE__='ua';window.location.replace(new URL('./strange-visuals/', window.location.href).toString());</script>
 <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../favicon.ico" sizes="48x48">
 <link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
@@ -31,7 +31,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
-<link rel="modulepreload" href="../../src/products/landing.js">
 <style>
 :root {
   --bg: #090807;
@@ -155,13 +154,7 @@ p {
   .hero { padding: 32px 22px; border-radius: 24px; }
   p { font-size: 16px; }
 }
-html[data-route-pending="true"] body {
-  opacity: 0;
-  pointer-events: none;
-}
 </style>
-<noscript><style>html[data-route-pending="true"] body{opacity:1;pointer-events:auto;}</style></noscript>
-<script type="module" src="../../src/products/landing.js"></script>
 </head>
 <body>
 <div class="shell">
