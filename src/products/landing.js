@@ -15,6 +15,8 @@ function boot() {
 
     if (applyGlobalRouteRedirect()) return;
 
+    delete document.documentElement.dataset.routePending;
+
     initSharedThemeToggle();
     initAdminRouteAccess({ adminHref: getAdminHref() });
     initSkipLink();

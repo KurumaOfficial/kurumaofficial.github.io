@@ -335,7 +335,7 @@ export function getLocaleShowcaseHref({ pathname = window.location.pathname, has
 
 export function getLocaleDonateHref(pathname = window.location.pathname) {
     const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
-    return buildSiteHref(`${localePrefix}/donate/`, pathname);
+    return buildSiteHref(`${localePrefix}donate/`, pathname);
 }
 
 function isAutoRouteRedirectImmunePath(pathname = window.location.pathname) {
