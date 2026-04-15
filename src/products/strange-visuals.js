@@ -9,7 +9,6 @@ import {
   getEffectiveSiteData,
   initAdminRouteAccess,
   getLocaleDonateHref,
-  getLocaleShowcaseHref,
   initSkipLink,
   initSharedThemeToggle,
   initSmoothRouteTransitions,
@@ -165,9 +164,6 @@ function getElements() {
     shareYoutubeBtn: document.getElementById('shareYoutubeBtn'),
     installBtn: document.getElementById('installBtn'),
     sourceBtn: document.getElementById('sourceBtn'),
-    navLogoEl: document.querySelector('.nav-logo'),
-    heroBackLinkEl: document.querySelector('.hero-store-back'),
-    heroDevLinkEl: document.querySelector('.hero-dev'),
     heroTitleEl: document.querySelector('.hero-app-name'),
     heroBackLabelEl: document.querySelector('.hero-store-back-label'),
     heroProductVersion: document.getElementById('heroProductVersion'),
@@ -384,30 +380,6 @@ function getRouteProduct(products) {
     || items.find((product) => String(product.detailUrl || '').includes(`/products/${slug}/`) || String(product.detailUrl || '').includes(`products/${slug}/`))
     || items[0]
     || null;
-}
-
-function hasAutoRouteLanding(siteData) {
-  return Array.isArray(siteData?.products)
-    && siteData.products.some((product) => product?.autoRouteRedirect && String(product?.detailUrl || '').trim());
-}
-
-function syncShowcaseHomeLinks(elements, siteData) {
-  if (!hasAutoRouteLanding(siteData)) return;
-
-  const showcaseHref = getLocaleShowcaseHref();
-  const showcaseProductsHref = getLocaleShowcaseHref({ hash: 'products' });
-
-  if (elements.navLogoEl instanceof HTMLAnchorElement) {
-    elements.navLogoEl.href = showcaseHref;
-  }
-
-  if (elements.heroDevLinkEl instanceof HTMLAnchorElement) {
-    elements.heroDevLinkEl.href = showcaseHref;
-  }
-
-  if (elements.heroBackLinkEl instanceof HTMLAnchorElement) {
-    elements.heroBackLinkEl.href = showcaseProductsHref;
-  }
 }
 
 function getTabKeys(localeMeta, tabs) {
@@ -1020,7 +992,6 @@ function boot() {
     tab: tabKeys[0] || 'player',
   };
 
-  syncShowcaseHomeLinks(elements, rawSiteData);
   syncRouteIcons(elements);
   localeController.mountLanguageSwitcher();
   initSharedThemeToggle();
