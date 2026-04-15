@@ -26,6 +26,7 @@ export function createRenderer({ localeController }) {
     const featuredSocialEl = $('featuredSocialLinks');
     const footerSocialEl = $('footerSocialLinks');
     const teamShowcaseEl = $('teamShowcase');
+    const collationLocale = localeController.locale === 'ua' ? 'uk' : localeController.locale;
 
     /** @type {import('../core/data-utils.js').SiteData} */
     let siteData = localizeSiteData(normalizeData(DEFAULT_SITE_DATA), localeController.locale);
@@ -81,7 +82,7 @@ export function createRenderer({ localeController }) {
     function sortedProducts(data = siteData) {
         return [...data.products].sort((a, b) => {
             const diff = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
-            return diff !== 0 ? diff : a.title.localeCompare(b.title, localeController.locale);
+            return diff !== 0 ? diff : a.title.localeCompare(b.title, collationLocale);
         });
     }
 
@@ -100,7 +101,7 @@ export function createRenderer({ localeController }) {
     function sortedTeam(data = siteData) {
         return [...data.team].sort((a, b) => {
             const diff = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
-            return diff !== 0 ? diff : a.name.localeCompare(b.name, localeController.locale);
+            return diff !== 0 ? diff : a.name.localeCompare(b.name, collationLocale);
         });
     }
 

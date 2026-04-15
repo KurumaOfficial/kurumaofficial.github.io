@@ -481,16 +481,19 @@ function renderPaymentButtons(container, buttons, copy, locale) {
     if (!container) return;
     container.textContent = '';
 
-    const sorted = sortButtons(buttons, locale).filter((button) => Boolean(resolveButtonUrl(button.url)));
-    if (!sorted.length) {
+    const cards = sortButtons(buttons, locale)
+        .map((button) => createPaymentCard(button))
+        .filter((card) => card instanceof HTMLElement);
+    if (!cards.length) {
         container.append(createEmptyState(copy.buttonsEmpty));
         return;
     }
 
-    sorted.forEach((button) => {
-        const card = createPaymentCard(button);
-        if (card) container.append(card);
+    const fragment = document.createDocumentFragment();
+    cards.forEach((card) => {
+        fragment.append(card);
     });
+    container.append(fragment);
 }
 
 function getDonorStyle(amount, locale) {
@@ -1281,15 +1284,21 @@ function renderSupporters(elements, supporters, copy, locale) {
     if (!sorted.length) {
         elements.supportersGrid.append(createEmptyState(copy.supportersEmpty));
         if (elements.topSupportersSection) elements.topSupportersSection.hidden = true;
+        if (elements.topSupportersGrid) {
+            destroySupportEffects(elements.topSupportersGrid);
+            elements.topSupportersGrid.textContent = '';
+        }
         return;
     }
 
+    const supportersFragment = document.createDocumentFragment();
     sorted.forEach((supporter) => {
-        elements.supportersGrid.append(createSupportCard(supporter, {
+        supportersFragment.append(createSupportCard(supporter, {
             locale,
             effectsEnabled: !topSupporterIds.has(String(supporter?.id || '')),
         }));
     });
+    elements.supportersGrid.append(supportersFragment);
 
     if (!elements.topSupportersSection || !elements.topSupportersGrid) return;
 
@@ -1302,13 +1311,15 @@ function renderSupporters(elements, supporters, copy, locale) {
     elements.topSupportersSection.hidden = false;
     destroySupportEffects(elements.topSupportersGrid);
     elements.topSupportersGrid.textContent = '';
+    const topSupportersFragment = document.createDocumentFragment();
     topThree.forEach((supporter, index) => {
-        elements.topSupportersGrid.append(createSupportCard(supporter, {
+        topSupportersFragment.append(createSupportCard(supporter, {
             rank: index + 1,
             top: true,
             locale,
         }));
     });
+    elements.topSupportersGrid.append(topSupportersFragment);
 }
 
 function applyStaticCopy(elements, copy) {

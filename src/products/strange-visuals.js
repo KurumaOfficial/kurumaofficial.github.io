@@ -5,7 +5,6 @@ import { escapeHtml } from '../core/dom.js';
 import { getIconMarkup, setInlineIcon } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import {
-  applyGlobalRouteRedirect,
   getAdminHref,
   getEffectiveSiteData,
   initAdminRouteAccess,
@@ -145,6 +144,8 @@ const GUI_PREVIEW_THEMES = Object.freeze([
   Object.freeze({ key: 'pink', labels: Object.freeze({ ru: 'Розовая', en: 'Pink', ua: 'Рожева' }) }),
   Object.freeze({ key: 'violet', labels: Object.freeze({ ru: 'Фиолетовая', en: 'Violet', ua: 'Фіолетова' }) }),
 ]);
+
+const GUI_PREVIEW_TRANSITION_MS = 170;
 
 function iconHtml(name, className = 'ui-icon') {
   const markup = getIconMarkup(name);
@@ -330,6 +331,41 @@ function resolveRouteAsset(path) {
   return new URL(resolved, window.location.href).toString();
 }
 
+function isExternalHttpHref(href) {
+  if (!href) return false;
+
+  try {
+    const url = new URL(href, window.location.href);
+    return /^https?:$/i.test(url.protocol) && url.origin !== window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
+function isDirectDownloadHref(href) {
+  if (!href) return false;
+
+  try {
+    const url = new URL(href, window.location.href);
+    return url.origin === window.location.origin && /\.[a-z0-9]+$/i.test(url.pathname);
+  } catch {
+    return false;
+  }
+}
+
+function syncExternalLinkBehavior(link, href, { allowNewTab = true } = {}) {
+  if (!(link instanceof HTMLAnchorElement) || !href) return;
+
+  if (allowNewTab && isExternalHttpHref(href)) {
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    return;
+  }
+
+  link.removeAttribute('target');
+  link.removeAttribute('rel');
+}
+
 function getDonateHref() {
   return new URL('donate/', window.location.href).toString();
 }
@@ -368,6 +404,53 @@ function setShareDockOpen(elements, isOpen, shareMeta) {
   if (!isOpen && elements.shareMenu instanceof HTMLElement && elements.shareMenu.contains(document.activeElement)) {
     elements.shareBtn.focus();
   }
+}
+
+function syncGwTabAccessibility(elements, activeKey) {
+  if (!(elements.gwTabsEl instanceof HTMLElement)) return;
+
+  const tabs = Array.from(elements.gwTabsEl.querySelectorAll('[data-tab]'))
+    .filter((button) => button instanceof HTMLButtonElement);
+  const resolvedActiveKey = tabs.some((button) => button.dataset.tab === activeKey)
+    ? activeKey
+    : tabs[0]?.dataset.tab || '';
+
+  elements.gwTabsEl.setAttribute('role', 'tablist');
+  elements.gwTabsEl.setAttribute('aria-orientation', 'horizontal');
+
+  if (elements.gwBodyEl instanceof HTMLElement) {
+    elements.gwBodyEl.setAttribute('role', 'tabpanel');
+  }
+
+  tabs.forEach((button) => {
+    const key = button.dataset.tab || '';
+    const isActive = key === resolvedActiveKey;
+    const tabId = `gw-tab-${key}`;
+
+    button.id = tabId;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-selected', String(isActive));
+    button.setAttribute('tabindex', isActive ? '0' : '-1');
+    button.classList.toggle('active', isActive);
+
+    if (elements.gwBodyEl instanceof HTMLElement) {
+      button.setAttribute('aria-controls', elements.gwBodyEl.id);
+      elements.gwBodyEl.setAttribute('aria-labelledby', tabId);
+    } else {
+      button.removeAttribute('aria-controls');
+    }
+  });
+}
+
+function scheduleGuiBuild(callback) {
+  window.clearTimeout(guiBuildTimer);
+
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true) {
+    callback();
+    return;
+  }
+
+  guiBuildTimer = window.setTimeout(callback, GUI_PREVIEW_TRANSITION_MS);
 }
 
 function syncSupportDiscordLink(elements, siteData) {
@@ -517,18 +600,35 @@ function initActionButtons(elements, routeProduct) {
       const downloadHref = resolveRouteAsset(routeProduct.downloadUrl);
       if (downloadHref) {
         elements.installBtn.href = downloadHref;
-        elements.installBtn.setAttribute('download', routeProduct.downloadName || '');
-        elements.installBtn.addEventListener('click', (event) => {
-          event.preventDefault();
-          startDownloadThenRedirect(downloadHref, donateHref, routeProduct.downloadName || '');
-        });
+        const canDirectDownload = isDirectDownloadHref(downloadHref);
+
+        if (canDirectDownload) {
+          elements.installBtn.setAttribute('download', routeProduct.downloadName || '');
+          elements.installBtn.setAttribute('data-no-route-transition', 'true');
+          elements.installBtn.removeAttribute('target');
+          elements.installBtn.removeAttribute('rel');
+          elements.installBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            startDownloadThenRedirect(downloadHref, donateHref, routeProduct.downloadName || '');
+          });
+        } else {
+          elements.installBtn.removeAttribute('download');
+          elements.installBtn.removeAttribute('data-no-route-transition');
+          syncExternalLinkBehavior(elements.installBtn, downloadHref);
+        }
       } else {
         elements.installBtn.href = donateHref;
         elements.installBtn.removeAttribute('download');
+        elements.installBtn.removeAttribute('data-no-route-transition');
+        elements.installBtn.removeAttribute('target');
+        elements.installBtn.removeAttribute('rel');
       }
     } else {
       elements.installBtn.href = donateHref;
       elements.installBtn.removeAttribute('download');
+      elements.installBtn.removeAttribute('data-no-route-transition');
+      elements.installBtn.removeAttribute('target');
+      elements.installBtn.removeAttribute('rel');
     }
   }
 
@@ -542,6 +642,7 @@ function initActionButtons(elements, routeProduct) {
 
   elements.sourceBtn.hidden = false;
   elements.sourceBtn.href = sourceUrl;
+  syncExternalLinkBehavior(elements.sourceBtn, sourceUrl);
 }
 
 function toggleGwItem(itemEl, localeMeta) {
@@ -635,8 +736,7 @@ function buildGuiList(elements, tabs, localeMeta, key) {
   elements.gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
   elements.gwBodyEl.classList.replace('fin', 'fout');
 
-  window.clearTimeout(guiBuildTimer);
-  guiBuildTimer = window.setTimeout(() => {
+  scheduleGuiBuild(() => {
     elements.gwSecEl.textContent = meta.title;
     elements.gwBodyEl.dataset.mode = 'list';
     elements.gwItemsEl.className = 'gw-items';
@@ -665,7 +765,7 @@ function buildGuiList(elements, tabs, localeMeta, key) {
 
     elements.gwBodyEl.style.transition = 'opacity .22s ease, transform .22s ease';
     elements.gwBodyEl.classList.replace('fout', 'fin');
-  }, 170);
+  });
 }
 
 function buildGuiThemePanel(elements, previewContext, previewState) {
@@ -677,8 +777,7 @@ function buildGuiThemePanel(elements, previewContext, previewState) {
   elements.gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
   elements.gwBodyEl.classList.replace('fin', 'fout');
 
-  window.clearTimeout(guiBuildTimer);
-  guiBuildTimer = window.setTimeout(() => {
+  scheduleGuiBuild(() => {
     elements.gwSecEl.textContent = previewContext.localeMeta.themes.title;
     elements.gwBodyEl.dataset.mode = 'themes';
     elements.gwItemsEl.className = 'gw-items gw-items--themes';
@@ -720,7 +819,7 @@ function buildGuiThemePanel(elements, previewContext, previewState) {
 
     elements.gwBodyEl.style.transition = 'opacity .22s ease, transform .22s ease';
     elements.gwBodyEl.classList.replace('fout', 'fin');
-  }, 170);
+  });
 }
 
 function renderGwTabs(elements, tabKeys, localeMeta, activeKey) {
@@ -731,11 +830,11 @@ function renderGwTabs(elements, tabKeys, localeMeta, activeKey) {
     return;
   }
 
-  elements.gwTabsEl.setAttribute('role', 'tablist');
   elements.gwTabsEl.innerHTML = tabKeys.map((key, index) => {
     const isActive = key === activeKey || (!activeKey && index === 0);
-    return `<button type="button" role="tab" aria-selected="${isActive}" class="${isActive ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>`;
+    return `<button type="button" class="${isActive ? 'active' : ''}" data-tab="${key}">${localeMeta[key].title}</button>`;
   }).join('');
+  syncGwTabAccessibility(elements, activeKey || tabKeys[0]);
 }
 
 function renderGuiPreview(elements, previewContexts, previewState) {
@@ -867,7 +966,6 @@ function boot() {
   const localeController = createLocaleController();
   const rawSiteData = getEffectiveSiteData();
   const siteData = localizeSiteData(rawSiteData, localeController.locale);
-  if (applyGlobalRouteRedirect(siteData)) return;
   const routeProduct = getRouteProduct(siteData.products);
 
   localeController.applyDocumentMeta(buildRouteDocumentMeta(routeProduct));
@@ -878,6 +976,9 @@ function boot() {
   const tabs = routeProduct?.routeModules || {};
   const tabKeys = getTabKeys(localeMeta, tabs);
   const elements = getElements();
+  if (elements.gwBodyEl instanceof HTMLElement) {
+    elements.gwBodyEl.setAttribute('role', 'tabpanel');
+  }
   const previewContexts = Object.freeze({
     ru: buildGuiPreviewContext(rawSiteData, 'ru'),
     en: buildGuiPreviewContext(rawSiteData, 'en'),
