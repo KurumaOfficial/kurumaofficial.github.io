@@ -21,7 +21,8 @@
 <link rel="alternate" hreflang="en" href="https://www.aleph.icu/en/products/">
 <link rel="alternate" hreflang="uk" href="https://www.aleph.icu/ua/products/">
 <link rel="alternate" hreflang="x-default" href="https://www.aleph.icu/ru/products/">
-<script>window.__ALEPH_LOCALE__ = 'en';</script>
+<meta http-equiv="refresh" content="0; url=./strange-visuals/">
+<script>document.documentElement.dataset.routePending='true';window.__ALEPH_LOCALE__='en';</script>
 <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../favicon.ico" sizes="48x48">
 <link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
@@ -154,7 +155,12 @@ p {
   .hero { padding: 32px 22px; border-radius: 24px; }
   p { font-size: 16px; }
 }
+html[data-route-pending="true"] body {
+  opacity: 0;
+  pointer-events: none;
+}
 </style>
+<noscript><style>html[data-route-pending="true"] body{opacity:1;pointer-events:auto;}</style></noscript>
 <script type="module" src="../../src/products/landing.js"></script>
 </head>
 <body>
