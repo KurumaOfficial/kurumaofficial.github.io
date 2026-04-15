@@ -449,9 +449,6 @@ html[data-theme-switching="true"] .gui-w {
   color:var(--text-muted);
 }
 
-/* ─── BOOT GUARD (prevents FOUC before JS hydration) ─── */
-html[data-booting] body { visibility: hidden; }
-
 /* ─── HERO / STORE STYLE ─── */
 #main {
   padding-top:calc(94px + var(--safe-top));

@@ -1119,6 +1119,7 @@ function createAvatar(supporter, tier, fallbackHue) {
             alt: '',
             loading: 'lazy',
             decoding: 'async',
+            fetchpriority: 'low',
             width: 52,
             height: 52,
         }));

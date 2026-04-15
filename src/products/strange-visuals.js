@@ -487,7 +487,7 @@ function syncDonateLinks(elements) {
   });
 }
 
-function startDownloadThenRedirect(downloadHref, redirectHref) {
+function startDownloadThenRedirect(downloadHref, redirectHref, downloadName = '') {
   if (!downloadHref) {
     navigateWithRouteTransition(redirectHref);
     return;
@@ -495,7 +495,7 @@ function startDownloadThenRedirect(downloadHref, redirectHref) {
 
   const tempLink = document.createElement('a');
   tempLink.href = downloadHref;
-  tempLink.setAttribute('download', '');
+  tempLink.setAttribute('download', String(downloadName || ''));
   tempLink.hidden = true;
   document.body.appendChild(tempLink);
   tempLink.click();
@@ -520,7 +520,7 @@ function initActionButtons(elements, routeProduct) {
         elements.installBtn.setAttribute('download', routeProduct.downloadName || '');
         elements.installBtn.addEventListener('click', (event) => {
           event.preventDefault();
-          startDownloadThenRedirect(downloadHref, donateHref);
+          startDownloadThenRedirect(downloadHref, donateHref, routeProduct.downloadName || '');
         });
       } else {
         elements.installBtn.href = donateHref;
@@ -568,13 +568,20 @@ function bindGuiInteractions(elements, previewContexts, previewState) {
 
   elements.gwItemsEl.addEventListener('click', (event) => {
     const target = event.target instanceof Element
-      ? event.target.closest('[data-gw-toggle], [data-gui-locale]')
+      ? event.target.closest('[data-gw-toggle], [data-gui-locale], [data-gui-theme]')
       : null;
     if (!(target instanceof HTMLElement) || !elements.gwItemsEl.contains(target)) return;
 
     if (target.hasAttribute('data-gw-toggle')) {
       const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
       toggleGwItem(target, previewContext.localeMeta);
+      return;
+    }
+
+    const nextThemeKey = target.dataset.guiTheme;
+    if (nextThemeKey && nextThemeKey !== previewState.themeKey) {
+      previewState.themeKey = nextThemeKey;
+      setGuiPreviewTheme(elements, nextThemeKey);
       return;
     }
 
