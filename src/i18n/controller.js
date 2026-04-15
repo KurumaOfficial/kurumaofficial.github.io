@@ -15,7 +15,6 @@ import {
     getCanonicalHref,
     getLocaleMeta,
     getLocaleOptions,
-    getSiteRootHref,
     normalizeLocale,
     resolveRouteRelativePath,
 } from './config.js';
@@ -149,7 +148,7 @@ export function createLocaleController() {
 
         /* x-default alternate */
         const xDefault = ensureHeadLink('siteAltDefault', 'alternate', { hreflang: 'x-default' });
-        xDefault.href = getSiteRootHref(window.location.origin, window.location.pathname);
+        xDefault.href = getCanonicalHref(DEFAULT_LOCALE, window.location.origin, window.location.pathname);
 
         /* per-locale alternates */
         for (const { routeLocale, hreflang } of [
