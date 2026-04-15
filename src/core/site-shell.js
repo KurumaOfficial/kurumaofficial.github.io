@@ -10,8 +10,6 @@ const THEME_TRANSITION_MS = 260;
 const ROUTE_TRANSITION_MS = 210;
 const ROUTE_ENTER_MS = 320;
 const SHARED_MOTION_STYLE_ID = 'aleph-shared-motion';
-const SHOWCASE_SEARCH_PARAM = 'view';
-const SHOWCASE_SEARCH_VALUE = 'showcase';
 const NORMALIZED_DEFAULT_SITE_DATA = normalizeData(DEFAULT_SITE_DATA);
 
 let navigationLocked = false;
@@ -74,12 +72,6 @@ function getStoredSiteData() {
         cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
         return cachedStoredSiteData;
     }
-}
-
-function hasShowcaseBypass(search = window.location.search, hash = window.location.hash) {
-    if (String(hash || '').trim()) return true;
-    const params = new URLSearchParams(search || '');
-    return params.get(SHOWCASE_SEARCH_PARAM) === SHOWCASE_SEARCH_VALUE;
 }
 
 function ensureSharedMotionStyles() {
@@ -323,16 +315,6 @@ export function getEffectiveSiteData() {
     return getStoredSiteData();
 }
 
-export function getLocaleShowcaseHref({ pathname = window.location.pathname, hash = '' } = {}) {
-    const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
-    const url = new URL(buildSiteHref(localePrefix, pathname));
-    url.searchParams.set(SHOWCASE_SEARCH_PARAM, SHOWCASE_SEARCH_VALUE);
-    if (hash) {
-        url.hash = hash.startsWith('#') ? hash : `#${hash}`;
-    }
-    return url.toString();
-}
-
 export function getLocaleDonateHref(pathname = window.location.pathname) {
     const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
     return buildSiteHref(`${localePrefix}donate/`, pathname);
@@ -364,7 +346,6 @@ export function applyGlobalRouteRedirect(siteData = getStoredSiteData()) {
     const pathname = getNormalizedPathname(window.location.pathname);
     if (/\/admin\/?$/i.test(pathname) || document.body.dataset.adminPage === 'true') return false;
     if (isAutoRouteRedirectImmunePath(pathname)) return false;
-    if (hasShowcaseBypass()) return false;
 
     const targetHref = getAutoRouteRedirectTarget(siteData, pathname);
     if (!targetHref) return false;

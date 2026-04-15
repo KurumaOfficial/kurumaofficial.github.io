@@ -7,7 +7,6 @@ import { createLocaleController } from '../i18n/controller.js';
 import {
     getAdminHref,
     getEffectiveSiteData,
-    getLocaleShowcaseHref,
     initAdminRouteAccess,
     initSkipLink,
     initSharedThemeToggle,
@@ -100,11 +99,6 @@ function getCopy(locale) {
         eyebrow: localeCopy.site.eyebrow,
         titleHtml: localeCopy.site.titleHtml || localeCopy.common.titleHtml,
     };
-}
-
-function hasAutoRouteLanding(siteData) {
-    return Array.isArray(siteData?.products)
-        && siteData.products.some((product) => product?.autoRouteRedirect && String(product?.detailUrl || '').trim());
 }
 
 function stripHtmlTags(value) {
@@ -1271,20 +1265,6 @@ function renderSupporters(elements, supporters, copy, locale) {
     elements.topSupportersGrid.append(topSupportersFragment);
 }
 
-function syncDonateNavigationLinks(elements, siteData) {
-    if (!hasAutoRouteLanding(siteData)) return;
-
-    const showcaseHref = getLocaleShowcaseHref();
-
-    if (elements.navLogoLink instanceof HTMLAnchorElement) {
-        elements.navLogoLink.href = showcaseHref;
-    }
-
-    if (elements.donateBackLink instanceof HTMLAnchorElement) {
-        elements.donateBackLink.href = showcaseHref;
-    }
-}
-
 function applyStaticCopy(elements, copy) {
     document.title = copy.metaTitle;
     const descriptionEl = document.querySelector('meta[name="description"]');
@@ -1323,7 +1303,6 @@ function boot() {
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
-    syncDonateNavigationLinks(elements, siteData);
     localeController.applyDocumentMeta({
         title: copy.metaTitle,
         description: copy.metaDescription,
