@@ -87,33 +87,12 @@ function boot() {
     initReveal([document.getElementById('main')].filter(Boolean));
 
     /* 7 — Bind global UI helpers ----------------------------------- */
-    bindNavClose();
     initSkipLink();
     initSharedThemeToggle();
     initSmoothRouteTransitions();
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Minor UI helpers                                                  */
-/* ------------------------------------------------------------------ */
-
-/**
- * Close mobile nav when a nav link is clicked.
- */
-function bindNavClose() {
-    const toggle = /** @type {HTMLInputElement | null} */ (
-        document.getElementById('nav-toggle')
-    );
-    if (!toggle) return;
-
-    document.querySelectorAll('.nav__link').forEach(link => {
-        link.addEventListener('click', () => {
-            toggle.checked = false;
-        });
-    });
 }
 
 /* ------------------------------------------------------------------ */

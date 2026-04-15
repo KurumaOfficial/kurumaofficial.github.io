@@ -1100,6 +1100,25 @@ button {
   .supporters-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); }
 }
 
+@media (min-width: 769px) and (max-width: 1780px) {
+  #donateBackLabel {
+    display:none;
+  }
+
+  .donate-back {
+    min-height:38px;
+    min-width:38px;
+    width:38px;
+    padding:0;
+    justify-content:center;
+  }
+
+  .donate-back .ui-icon {
+    width:18px;
+    height:18px;
+  }
+}
+
 @media (max-width: 768px) {
   .donate-main {
     padding-top:calc(76px + var(--safe-top));
