@@ -25,7 +25,7 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                     utils: Object.freeze(['Auto Sprint', 'Auto Tool', 'Fullbright', 'No Overlay', 'Coordinates', 'Timer']),
                     other: Object.freeze(['Anti-Bot', 'Proxy', 'Debug Mode', 'Name Hider']),
                     interface: Object.freeze(['Array List', 'Watermark', 'Keybinds', 'Notifications', 'Hotbar', 'Scoreboard', 'Tab List', 'Crosshair']),
-                    themes: Object.freeze(['Default', 'Minimalism', 'Neon', 'Retro']),
+                    themes: Object.freeze(['White', 'Black', 'Transparent White', 'Transparent Black', 'Pink', 'Violet']),
                 }),
             }),
             'next-release': Object.freeze({
@@ -93,7 +93,7 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                     utils: Object.freeze(['Авто спринт', 'Авто тул', 'Фулбрайт', 'Ноу оверлей', 'Координати', 'Таймер']),
                     other: Object.freeze(['Антибот', 'Проксі', 'Дебаг-режим', 'Приховувач ніку']),
                     interface: Object.freeze(['Масив лист', 'Вотермарка', 'Кейбінди', 'Сповіщення', 'Хотбар', 'Скорборд', 'Таблист', 'Приціл']),
-                    themes: Object.freeze(['Стандарт', 'Мінімалізм', 'Неон', 'Ретро']),
+                    themes: Object.freeze(['Біла', 'Чорна', 'Прозора біла', 'Прозора чорна', 'Рожева', 'Фіолетова']),
                 }),
             }),
             'next-release': Object.freeze({

@@ -33,12 +33,162 @@ export const DEFAULT_SITE_DATA = {
             "note": "Файл мода доступен по кнопке ниже.",
             "autoRouteRedirect": true,
             "routeModules": {
-                "player": [],
-                "world": [],
-                "utils": [],
-                "other": [],
-                "interface": [],
-                "themes": []
+                "player": [
+                    {
+                        "name": "Боксы",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Джампики",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Китайская шляпа",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Таргет рендер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Хит бабл",
+                        "enabled": false
+                    }
+                ],
+                "world": [
+                    {
+                        "name": "Чамсы",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Трейсеры",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Снаряды",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Частицы",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Блок оверлей",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Дроп рендер",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Скелетон",
+                        "enabled": false
+                    }
+                ],
+                "utils": [
+                    {
+                        "name": "Авто спринт",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Авто тул",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Фуллбрайт",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Ноу оверлей",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Координаты",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Таймер",
+                        "enabled": false
+                    }
+                ],
+                "other": [
+                    {
+                        "name": "Антибот",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Прокси",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Дебаг режим",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Ник хайдер",
+                        "enabled": true
+                    }
+                ],
+                "interface": [
+                    {
+                        "name": "Массив лист",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Ватермарка",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Кейбинды",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Нотификации",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Хотбар",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Скорборд",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Табулист",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Кроссхейр",
+                        "enabled": true
+                    }
+                ],
+                "themes": [
+                    {
+                        "name": "Белая",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Черная",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Прозрачная белая",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Прозрачная черная",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Розовая",
+                        "enabled": true
+                    },
+                    {
+                        "name": "Фиолетовая",
+                        "enabled": true
+                    }
+                ]
             }
         },
         {

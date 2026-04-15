@@ -166,7 +166,7 @@ export function createRenderer({ localeController }) {
                     ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
                     : '';
                 return `
-<article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}"${cardAttrs}>
+<article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}" role="listitem"${cardAttrs}>
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
@@ -193,7 +193,7 @@ export function createRenderer({ localeController }) {
                 : '';
 
             return `
-<article class="product-card" id="${escapeHtml(product.id)}">
+<article class="product-card" id="${escapeHtml(product.id)}" role="listitem">
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
@@ -242,10 +242,10 @@ export function createRenderer({ localeController }) {
                 .map((w) => w[0]).join('').toUpperCase().slice(0, 2) || '?';
             const avatarSrc = optimizeDiscordAvatarUrl(localeController.resolveSitePath(m.avatarUrl || ''));
             const avatar = avatarSrc
-                ? `<img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" width="44" height="44">`
+                ? `<img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" fetchpriority="low" width="44" height="44">`
                 : escapeHtml(initials);
             return `
-<div class="team-card">
+<div class="team-card" role="listitem">
   <div class="team-avatar" aria-hidden="true">${avatar}</div>
   <div class="team-name">${escapeHtml(m.name)}</div>
   <div class="team-role">${escapeHtml(m.role)}</div>
@@ -255,6 +255,7 @@ export function createRenderer({ localeController }) {
 
         if (members.length >= 5) {
             const cards = members.map(cardHtml).join('');
+            teamShowcaseEl.removeAttribute('role');
             teamShowcaseEl.innerHTML = `
 <div class="team-marquee-wrap">
   <div class="team-marquee-track">${cards}${cards}</div>
@@ -262,6 +263,7 @@ export function createRenderer({ localeController }) {
             return;
         }
 
+        teamShowcaseEl.setAttribute('role', 'list');
         teamShowcaseEl.innerHTML = members.map(cardHtml).join('');
     }
 
