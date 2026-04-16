@@ -148,6 +148,10 @@ const GUI_PREVIEW_THEMES = Object.freeze([
 
 const GUI_PREVIEW_TRANSITION_MS = 170;
 
+function getGuiPreviewThemeFromDocument() {
+  return document.documentElement.getAttribute('data-theme') === 'light' ? 'white' : 'black';
+}
+
 function iconHtml(name, className = 'ui-icon') {
   const markup = getIconMarkup(name);
   if (!markup) return '';
@@ -300,10 +304,11 @@ function syncGuiPreviewThemeCards(elements, themeKey) {
 }
 
 function setGuiPreviewTheme(elements, themeKey) {
+  const resolvedThemeKey = themeKey === 'white' ? 'white' : 'black';
   if (elements.guiWidgetEl instanceof HTMLElement) {
-    elements.guiWidgetEl.setAttribute('data-gui-preview-theme', themeKey || 'black');
+    elements.guiWidgetEl.setAttribute('data-gui-preview-theme', resolvedThemeKey);
   }
-  syncGuiPreviewThemeCards(elements, themeKey);
+  syncGuiPreviewThemeCards(elements, resolvedThemeKey);
 }
 
 function buildGuiPreviewContext(siteData, locale) {
@@ -680,10 +685,8 @@ function bindGuiInteractions(elements, previewContexts, previewState) {
       return;
     }
 
-    const nextThemeKey = target.dataset.guiTheme;
-    if (nextThemeKey && nextThemeKey !== previewState.themeKey) {
-      previewState.themeKey = nextThemeKey;
-      setGuiPreviewTheme(elements, nextThemeKey);
+    if (target.dataset.guiTheme) {
+      setGuiPreviewTheme(elements, previewState.themeKey);
       return;
     }
 
@@ -988,7 +991,7 @@ function boot() {
   const previewState = {
     locale: getGuiPreviewLanguageOptions(localeController.locale)[0] || localeController.locale,
     languageOptions: getGuiPreviewLanguageOptions(localeController.locale),
-    themeKey: document.documentElement.getAttribute('data-theme') === 'light' ? 'white' : 'black',
+    themeKey: getGuiPreviewThemeFromDocument(),
     tab: tabKeys[0] || 'player',
   };
 
@@ -1008,7 +1011,7 @@ function boot() {
   new MutationObserver((mutations) => {
     for (const mutation of mutations) {
       if (mutation.attributeName === 'data-theme') {
-        const nextTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'white' : 'black';
+        const nextTheme = getGuiPreviewThemeFromDocument();
         previewState.themeKey = nextTheme;
         setGuiPreviewTheme(elements, nextTheme);
         break;
