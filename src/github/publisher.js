@@ -41,7 +41,7 @@ function base64ToText(base64) {
         const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
         return new TextDecoder().decode(bytes);
     } catch {
-        throw new Error('Failed to decode base64 content from GitHub.');
+        throw new Error('Failed to decode remote content.');
     }
 }
 
@@ -95,7 +95,7 @@ function injectEmbeddedSiteData(content, data, format) {
 function describeGitHubTokenAccessError(status, errorText, config) {
     const text = String(errorText || '');
     if (status === 403 && /Resource not accessible by personal access token/i.test(text)) {
-        return `The provided password does not have permission to publish to ${config.owner}/${config.repo}. Check the access settings and try again.`;
+        return 'The provided password does not have permission to publish to the remote target. Check the access settings and try again.';
     }
     return null;
 }
@@ -209,7 +209,7 @@ function applyPendingUploadsToData(data, uploads) {
 async function fetchBranchCommitState(config, headers) {
     const refPath = buildGitHubRefPath(config.branch);
     const refUrl = buildGitHubRepoApiUrl(config, `/git/ref/${refPath}`);
-    const refData = await githubRequestJson(refUrl, { headers }, config, 'Could not read target branch reference');
+    const refData = await githubRequestJson(refUrl, { headers }, config, 'Could not read target publish branch reference');
     const commitSha = refData?.object?.sha;
 
     if (!commitSha) {
@@ -217,7 +217,7 @@ async function fetchBranchCommitState(config, headers) {
     }
 
     const commitUrl = buildGitHubRepoApiUrl(config, `/git/commits/${encodeURIComponent(commitSha)}`);
-    const commitData = await githubRequestJson(commitUrl, { headers }, config, 'Could not read target branch commit');
+    const commitData = await githubRequestJson(commitUrl, { headers }, config, 'Could not read target publish branch commit');
     const treeSha = commitData?.tree?.sha;
 
     if (!treeSha) {
@@ -240,10 +240,10 @@ async function createGitHubBlob(config, headers, bytes) {
             content: uint8ToBase64(bytes),
             encoding: 'base64',
         }),
-    }, config, 'Could not create GitHub blob');
+    }, config, 'Could not create remote publish blob');
 
     if (!blob?.sha) {
-        throw new Error('GitHub blob response did not include a SHA.');
+        throw new Error('The publish service response did not include a blob SHA.');
     }
 
     return blob.sha;
@@ -274,10 +274,10 @@ async function commitRepoFilesAtomically(config, token, files, message) {
             base_tree: treeSha,
             tree: treeEntries,
         }),
-    }, config, 'Could not create GitHub tree');
+    }, config, 'Could not create remote publish tree');
 
     if (!treeData?.sha) {
-        throw new Error('GitHub tree response did not include a SHA.');
+        throw new Error('The publish service response did not include a tree SHA.');
     }
 
     const commitUrl = buildGitHubRepoApiUrl(config, '/git/commits');
@@ -289,10 +289,10 @@ async function commitRepoFilesAtomically(config, token, files, message) {
             tree: treeData.sha,
             parents: [commitSha],
         }),
-    }, config, 'Could not create GitHub commit');
+    }, config, 'Could not create remote publish commit');
 
     if (!commitData?.sha) {
-        throw new Error('GitHub commit response did not include a SHA.');
+        throw new Error('The publish service response did not include a commit SHA.');
     }
 
     const updateRefUrl = buildGitHubRepoApiUrl(config, `/git/refs/${refPath}`);
@@ -313,7 +313,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
     function renderGitHubSyncTarget() {
         const config = resolveGitHubConfig();
         if (githubSyncTargetEl) {
-            githubSyncTargetEl.textContent = `Publish target: ${config.owner}/${config.repo} -> ${config.branch}:${config.path}`;
+            githubSyncTargetEl.textContent = `Publish target ready: ${config.branch}:${config.path}`;
         }
         return config;
     }
@@ -323,7 +323,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
         const token = githubTokenEl?.value.trim() || '';
 
         if (!config.owner || !config.repo || !config.branch || !config.path) {
-            throw new Error(getMessage('githubTargetMissing', 'Could not determine the GitHub repository for publishing.'));
+            throw new Error(getMessage('githubTargetMissing', 'Could not determine the publish target.'));
         }
         if (!token) {
             throw new Error(getMessage('githubTokenRequired', 'A password is required to save.'));
@@ -341,7 +341,7 @@ export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, 
         }
 
         if (format !== 'json' && !entry?.content) {
-            throw new Error('Target data file exists but has no content (file may exceed GitHub API size limit).');
+            throw new Error('Target data file exists but has no content (file may exceed the remote API size limit).');
         }
 
         const nextContentText = format === 'json'

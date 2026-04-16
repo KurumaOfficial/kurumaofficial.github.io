@@ -26,7 +26,7 @@ export const DEFAULT_SITE_DATA = {
                 "После этого скачайте наш мод и тоже закиньте его в папку mods.",
                 "Готово — можно запускать."
             ],
-            "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
+            "sourceUrl": "",
             "downloadUrl": "./assets/files/strange-visuals.jar",
             "downloadName": "",
             "detailUrl": "products/strange-visuals/",

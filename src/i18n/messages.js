@@ -75,7 +75,7 @@ export const MESSAGES = Object.freeze({
         footer: {
             desc: 'Дочерний проект WeTTeA. Игровые разработки с открытым исходным кодом.',
             navHeading: 'Навигация',
-            wetteaHeading: 'WeTTeA',
+            wetteaHeading: 'Ссылки',
             copyright: '© 2026 Aleph Studio · Дочерний проект WeTTeA · Лицензия GPL',
         },
     },
@@ -150,7 +150,7 @@ export const MESSAGES = Object.freeze({
         footer: {
             desc: 'A subsidiary project of WeTTeA. Open source game development.',
             navHeading: 'Navigation',
-            wetteaHeading: 'WeTTeA',
+            wetteaHeading: 'Links',
             copyright: '© 2026 Aleph Studio · A subsidiary of WeTTeA · GPL Licensed',
         },
     },
@@ -225,7 +225,7 @@ export const MESSAGES = Object.freeze({
         footer: {
             desc: 'Дочірній проєкт WeTTeA. Ігрові розробки з відкритим вихідним кодом.',
             navHeading: 'Навігація',
-            wetteaHeading: 'WeTTeA',
+            wetteaHeading: 'Посилання',
             copyright: '© 2026 Aleph Studio · Дочірній проєкт WeTTeA · Ліцензія GPL',
         },
     },
