@@ -308,7 +308,8 @@ export function initSkipLink() {
 }
 
 export function getAdminHref(pathname = window.location.pathname) {
-    return buildSiteHref('admin/', pathname);
+    const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
+    return buildSiteHref(`${localePrefix}admin/`, pathname);
 }
 
 export function getEffectiveSiteData() {

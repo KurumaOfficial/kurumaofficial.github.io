@@ -11,7 +11,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js?v=20260415c';
+} from '../core/site-shell.js?v=20260416c';
 
 const COPY = Object.freeze({
     ru: {

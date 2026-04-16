@@ -43,6 +43,11 @@ export const MESSAGES = Object.freeze({
             soon: 'Скоро',
             sourceCode: 'Исходный код ↗',
             detail: 'Подробнее',
+            lifecycle: {
+                active: 'Активно',
+                frozen: 'Заморожено',
+                abandoned: 'Заброшено',
+            },
             flags: {
                 alpha: 'Альфа',
                 beta: 'Бета',
@@ -113,6 +118,11 @@ export const MESSAGES = Object.freeze({
             soon: 'Soon',
             sourceCode: 'Source code ↗',
             detail: 'Details',
+            lifecycle: {
+                active: 'Active',
+                frozen: 'Frozen',
+                abandoned: 'Abandoned',
+            },
             flags: {
                 alpha: 'Alpha',
                 beta: 'Beta',
@@ -183,6 +193,11 @@ export const MESSAGES = Object.freeze({
             soon: 'Скоро',
             sourceCode: 'Вихідний код ↗',
             detail: 'Детальніше',
+            lifecycle: {
+                active: 'Активно',
+                frozen: 'Заморожено',
+                abandoned: 'Покинуто',
+            },
             flags: {
                 alpha: 'Альфа',
                 beta: 'Бета',

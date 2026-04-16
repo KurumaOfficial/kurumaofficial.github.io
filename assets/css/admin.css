@@ -2050,10 +2050,179 @@ button {
   display: block;
 }
 
+html[data-theme-switching="true"] .theme-btn,
+html[data-theme-switching="true"] .locale-switcher__trigger,
+html[data-theme-switching="true"] .locale-switcher__menu,
+html[data-theme-switching="true"] .locale-option,
+html[data-theme-switching="true"] .locale-option__code {
+  transition:
+    background-color 260ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 260ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 260ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 260ms cubic-bezier(0.4, 0, 0.2, 1),
+    fill 260ms cubic-bezier(0.4, 0, 0.2, 1),
+    stroke 260ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dash-header-tools {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.locale-switcher {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.locale-switcher__trigger {
+  min-height: 36px;
+  padding: 7px 12px 7px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.locale-switcher__trigger:hover,
+.locale-switcher__trigger[aria-expanded="true"] {
+  background: var(--surface);
+  border-color: var(--border-hi);
+  color: var(--color-text-heading);
+}
+
+.locale-switcher__flag,
+.locale-option__flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+
+.locale-switcher__flag svg,
+.locale-option__flag svg {
+  width: 18px;
+  height: 12px;
+  display: block;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.locale-switcher__caret {
+  width: 12px;
+  height: 12px;
+  stroke: currentColor;
+  fill: none;
+  transition: transform 0.15s ease;
+}
+
+.locale-switcher__trigger[aria-expanded="true"] .locale-switcher__caret {
+  transform: rotate(180deg);
+}
+
+.locale-switcher__menu {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  min-width: 196px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--color-ruby) 18%, var(--border) 82%);
+  background: color-mix(in srgb, var(--bg1) 94%, transparent);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  z-index: 60;
+  overflow: hidden;
+}
+
+.locale-switcher__menu[hidden] {
+  display: none;
+}
+
+.locale-option {
+  position: relative;
+  width: 100%;
+  padding: 12px 14px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.locale-option:hover {
+  background: var(--surface);
+  color: var(--color-text-heading);
+}
+
+.locale-option[aria-checked="true"] {
+  background: color-mix(in srgb, var(--color-ruby) 10%, transparent);
+  color: var(--color-text-heading);
+}
+
+.locale-option[aria-checked="true"]::after {
+  content: '';
+  position: absolute;
+  right: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--color-ruby);
+}
+
+.locale-option__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.locale-option__label {
+  color: inherit;
+}
+
+.locale-option__code {
+  color: var(--text-mute);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+}
+
 
 @media (max-width: 1440px) {
   .dash-header {
     grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+
+  .dash-header-tools {
+    justify-self: start;
   }
 
   .dash-title-wrap,
@@ -2173,9 +2342,19 @@ button {
     grid-template-columns: minmax(0, 1fr) auto;
   }
 
+  .dash-header-tools,
   .dash-draft-chip,
   .dash-actions {
     grid-column: 1 / -1;
+  }
+
+  .dash-header-tools {
+    justify-self: start;
+  }
+
+  .locale-switcher__menu {
+    left: 0;
+    right: auto;
   }
 
   .dash-home-grid,

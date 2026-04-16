@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=6">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=7">
     <link rel="icon" href="../favicon.ico" sizes="48x48">
     <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -21,6 +21,15 @@
     <script>
     window.__ALEPH_LOCALE__ = (function () {
         var supported = ['ru', 'en', 'ua'];
+        var params = new URLSearchParams(window.location.search || '');
+        var requested = (params.get('lang') || '').toLowerCase();
+        if (requested === 'uk') requested = 'ua';
+        if (supported.indexOf(requested) !== -1) return requested;
+
+        var pathLocale = (window.location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
+        if (pathLocale === 'uk') pathLocale = 'ua';
+        if (supported.indexOf(pathLocale) !== -1) return pathLocale;
+
         var raw = (navigator.languages || [navigator.language || ''])
             .map(function (l) { return l.split('-')[0].toLowerCase(); });
         for (var i = 0; i < raw.length; i++) {
@@ -79,9 +88,29 @@
                             <p id="editorAdminSubtitle">Центр управления черновиком, публикацией и быстрыми переходами по админке.</p>
                         </div>
 
-                        <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
-                            <span class="material-icons" id="themeIco">light_mode</span>
-                        </button>
+                        <div class="dash-header-tools">
+                            <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
+                                <span class="material-icons" id="themeIco">light_mode</span>
+                            </button>
+
+                            <div id="localeSwitcher" class="locale-switcher admin-locale-switcher">
+                                <button
+                                    id="localeSwitcherTrigger"
+                                    class="locale-switcher__trigger"
+                                    type="button"
+                                    aria-haspopup="menu"
+                                    aria-expanded="false"
+                                    aria-label="Выбор языка"
+                                >
+                                    <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                                    <span id="localeSwitcherLabel">RU</span>
+                                    <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+                                        <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                                    </svg>
+                                </button>
+                                <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Сменить язык" hidden></div>
+                            </div>
+                        </div>
 
                         <div id="draftStateChip" class="dash-draft-chip is-clean">
                             <span class="dash-draft-dot"></span>
@@ -258,7 +287,13 @@
                                                     <div class="dash-fg">
                                                         <div class="dash-field dash-c6"><label for="f-name">Название</label><input type="text" id="f-name"></div>
                                                         <div class="dash-field dash-c6"><label for="f-slug">ID / якорь</label><input type="text" id="f-slug"></div>
-                                                        <div class="dash-field dash-c4"><label for="f-tag">Тег</label><input type="text" id="f-tag"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-tag">Тег</label>
+                                                            <select id="f-tag">
+                                                                <option value="active">Активно</option>
+                                                                <option value="frozen">Заморожено</option>
+                                                                <option value="abandoned">Заброшено</option>
+                                                            </select>
+                                                        </div>
                                                         <div class="dash-field dash-c4"><label for="f-version">Версия</label><input type="text" id="f-version"></div>
                                                         <div class="dash-field dash-c4"><label for="f-order">Порядок</label><input type="number" id="f-order"></div>
                                                         <div class="dash-field dash-c6"><label for="f-stage">Стадия</label>
@@ -275,7 +310,13 @@
                                                                 <option value="green">Зелёный</option>
                                                             </select>
                                                         </div>
-                                                        <div class="dash-field dash-c12"><label for="f-status">Статус</label><input type="text" id="f-status"></div>
+                                                        <div class="dash-field dash-c12"><label for="f-status">Статус</label>
+                                                            <select id="f-status">
+                                                                <option value="active">Активно</option>
+                                                                <option value="frozen">Заморожено</option>
+                                                                <option value="abandoned">Заброшено</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -546,6 +587,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script type="module" src="../src/app.js"></script>
+    <script type="module" src="../src/app.js?v=20260416c"></script>
 </body>
 </html>
