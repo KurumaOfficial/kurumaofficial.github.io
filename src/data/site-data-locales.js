@@ -9,7 +9,7 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
     en: Object.freeze({
         products: Object.freeze({
             'strange-visuals': Object.freeze({
-                tag: 'Active',
+                tag: 'active',
                 status: 'active',
                 summary: 'Strange Visuals focuses on visual enhancements that do not violate server rules.',
                 instructions: Object.freeze([
@@ -30,15 +30,15 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
             }),
             'next-release': Object.freeze({
                 title: 'Unknown',
-                tag: 'Unknown',
-                status: 'in development',
+                tag: 'frozen',
+                status: 'frozen',
                 summary: 'This slot is reserved for the next public Aleph Studio release.',
                 note: 'Details will appear later.',
             }),
             'third-project': Object.freeze({
                 title: 'Unknown',
-                tag: 'Unknown',
-                status: 'planned',
+                tag: 'abandoned',
+                status: 'abandoned',
                 summary: 'This slot is reserved for the next public Aleph Studio release.',
                 note: 'Details will appear later.',
             }),
@@ -77,8 +77,8 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
     ua: Object.freeze({
         products: Object.freeze({
             'strange-visuals': Object.freeze({
-                tag: 'Активно',
-                status: 'активно',
+                tag: 'active',
+                status: 'active',
                 summary: 'Strange Visuals зосереджений на візуальних покращеннях, які не порушують правила серверів.',
                 instructions: Object.freeze([
                     'Встановіть Minecraft Fabric 1.21.8 у своєму лаунчері.',
@@ -98,15 +98,15 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
             }),
             'next-release': Object.freeze({
                 title: 'Невідомо',
-                tag: 'Невідомо',
-                status: 'у розробці',
+                tag: 'frozen',
+                status: 'frozen',
                 summary: 'Цей слот зарезервовано під наступний публічний реліз Aleph Studio.',
                 note: 'Подробиці зʼявляться пізніше.',
             }),
             'third-project': Object.freeze({
                 title: 'Невідомо',
-                tag: 'Невідомо',
-                status: 'заплановано',
+                tag: 'abandoned',
+                status: 'abandoned',
                 summary: 'Цей слот зарезервовано під наступний публічний реліз Aleph Studio.',
                 note: 'Подробиці зʼявляться пізніше.',
             }),

@@ -140,7 +140,25 @@ export function formatBytes(bytes) {
 
 /** Valid release stage keys. */
 const VALID_FLAGS = /** @type {const} */ (['alpha', 'beta', 'release']);
+export const PRODUCT_LIFECYCLE_KEYS = /** @type {const} */ (['active', 'frozen', 'abandoned']);
 export const ROUTE_MODULE_KEYS = /** @type {const} */ (['player', 'world', 'utils', 'other', 'interface', 'themes']);
+
+const PRODUCT_LIFECYCLE_ALIASES = Object.freeze({
+    active: new Set(['active', 'активно']),
+    frozen: new Set(['frozen', 'заморожено']),
+    abandoned: new Set(['abandoned', 'заброшено', 'покинуто', 'закинуто']),
+});
+
+export function getProductLifecycleKey(value) {
+    const raw = String(value || '').trim().toLowerCase();
+    if (!raw) return '';
+    for (const key of PRODUCT_LIFECYCLE_KEYS) {
+        if (PRODUCT_LIFECYCLE_ALIASES[key].has(raw)) {
+            return key;
+        }
+    }
+    return '';
+}
 
 /**
  * @typedef {{ name: string; enabled: boolean }} RouteModuleItem
@@ -320,6 +338,10 @@ export function normalizeSupportPage(raw) {
 export function normalizeProduct(raw = {}, index = 0) {
     const title = cleanText(raw.title, 'New product');
     const id = slugify(raw.id, title);
+    const rawTag = cleanText(raw.tag, `product ${String(index + 1).padStart(2, '0')}`);
+    const rawStatus = cleanText(raw.status, 'active');
+    const tagKey = getProductLifecycleKey(rawTag);
+    const statusKey = getProductLifecycleKey(rawStatus);
 
     /** @type {string[]} */
     let instructions;
@@ -336,9 +358,9 @@ export function normalizeProduct(raw = {}, index = 0) {
         id,
         title,
         version: cleanText(raw.version, 'x'),
-        tag: cleanText(raw.tag, `product ${String(index + 1).padStart(2, '0')}`),
+        tag: tagKey || rawTag,
         flag: VALID_FLAGS.includes(/** @type {any} */ (raw.flag)) ? /** @type {string} */ (raw.flag) : '',
-        status: cleanText(raw.status, 'later'),
+        status: statusKey || rawStatus,
         featured: Boolean(raw.featured),
         featuredOrder: toNumber(raw.featuredOrder, index + 1),
         sortOrder: toNumber(raw.sortOrder, index + 1),

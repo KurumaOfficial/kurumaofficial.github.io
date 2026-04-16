@@ -10,9 +10,9 @@
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
-import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
+import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260415c';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260416c';
 
 // ── Factory ─────────────────────────────────────────────────
 
@@ -114,6 +114,12 @@ export function createRenderer({ localeController }) {
         return `<span class="product-flag ${meta.className}">${escapeHtml(label)}</span>`;
     }
 
+    function lifecycleLabel(value) {
+        const key = getProductLifecycleKey(value);
+        if (!key) return String(value || '').trim();
+        return t(`products.lifecycle.${key}`, key);
+    }
+
     // ── Download button ─────────────────────────────────────
 
     function downloadBtnHtml(product) {
@@ -168,12 +174,12 @@ export function createRenderer({ localeController }) {
                     : '';
                 return `
 <article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}" role="listitem"${cardAttrs}>
-  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
+  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
   ${product.summary ? `<p class="product-desc">${linkify(product.summary)}</p>` : ''}
   <div class="product-meta">
-    <span class="product-tag">${escapeHtml(product.tag)}</span>
+    <span class="product-tag">${escapeHtml(lifecycleLabel(product.tag))}</span>
     <a class="btn-detail" href="${escapeHtml(href)}" data-detail-nav>${escapeHtml(t('products.detail', 'Подробнее'))}</a>
   </div>
 </article>`;
@@ -195,13 +201,13 @@ export function createRenderer({ localeController }) {
 
             return `
 <article class="product-card" id="${escapeHtml(product.id)}" role="listitem">
-  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
+  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
   ${product.summary ? `<p class="product-desc">${linkify(product.summary)}</p>` : ''}
   ${steps}${note}${source}
   <div class="product-meta">
-    <span class="product-tag">${escapeHtml(product.tag)}</span>
+    <span class="product-tag">${escapeHtml(lifecycleLabel(product.tag))}</span>
     ${downloadBtnHtml(product)}
   </div>
 </article>`;
@@ -221,9 +227,9 @@ export function createRenderer({ localeController }) {
 <div class="catalog-item" role="listitem">
   <div class="catalog-item-left">
     <span class="catalog-item-name">${escapeHtml(p.title)}</span>
-    <span class="catalog-item-status">${escapeHtml(p.status || p.tag)}</span>
+    <span class="catalog-item-status">${escapeHtml(lifecycleLabel(p.status || p.tag))}</span>
   </div>
-  <span class="product-tag">${escapeHtml(p.tag)}</span>
+  <span class="product-tag">${escapeHtml(lifecycleLabel(p.tag))}</span>
 </div>`).join('');
     }
 
