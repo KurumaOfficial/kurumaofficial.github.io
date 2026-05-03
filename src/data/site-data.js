@@ -36,156 +36,192 @@ export const DEFAULT_SITE_DATA = {
                 "player": [
                     {
                         "name": "Боксы",
+                        "nameEn": "Boxes",
                         "enabled": true
                     },
                     {
                         "name": "Джампики",
+                        "nameEn": "Jump Circles",
                         "enabled": true
                     },
                     {
                         "name": "Китайская шляпа",
+                        "nameEn": "China Hat",
                         "enabled": true
                     },
                     {
                         "name": "Таргет рендер",
+                        "nameEn": "Target Render",
                         "enabled": true
                     },
                     {
                         "name": "Хит бабл",
+                        "nameEn": "Hit Bubble",
                         "enabled": false
                     }
                 ],
                 "world": [
                     {
                         "name": "Чамсы",
+                        "nameEn": "Chams",
                         "enabled": true
                     },
                     {
                         "name": "Трейсеры",
+                        "nameEn": "Tracers",
                         "enabled": false
                     },
                     {
                         "name": "Снаряды",
+                        "nameEn": "Projectiles",
                         "enabled": true
                     },
                     {
                         "name": "Частицы",
+                        "nameEn": "Particles",
                         "enabled": true
                     },
                     {
                         "name": "Блок оверлей",
+                        "nameEn": "Block Overlay",
                         "enabled": false
                     },
                     {
                         "name": "Дроп рендер",
+                        "nameEn": "Item Drop Render",
                         "enabled": true
                     },
                     {
                         "name": "Скелетон",
+                        "nameEn": "Skeleton",
                         "enabled": false
                     }
                 ],
                 "utils": [
                     {
                         "name": "Авто спринт",
+                        "nameEn": "Auto Sprint",
                         "enabled": true
                     },
                     {
                         "name": "Авто тул",
+                        "nameEn": "Auto Tool",
                         "enabled": false
                     },
                     {
                         "name": "Фуллбрайт",
+                        "nameEn": "Fullbright",
                         "enabled": true
                     },
                     {
                         "name": "Ноу оверлей",
+                        "nameEn": "No Overlay",
                         "enabled": true
                     },
                     {
                         "name": "Координаты",
+                        "nameEn": "Coordinates",
                         "enabled": true
                     },
                     {
                         "name": "Таймер",
+                        "nameEn": "Timer",
                         "enabled": false
                     }
                 ],
                 "other": [
                     {
                         "name": "Антибот",
+                        "nameEn": "Anti-Bot",
                         "enabled": false
                     },
                     {
                         "name": "Прокси",
+                        "nameEn": "Proxy",
                         "enabled": false
                     },
                     {
                         "name": "Дебаг режим",
+                        "nameEn": "Debug Mode",
                         "enabled": true
                     },
                     {
                         "name": "Ник хайдер",
+                        "nameEn": "Name Hider",
                         "enabled": true
                     }
                 ],
                 "interface": [
                     {
                         "name": "Массив лист",
+                        "nameEn": "Array List",
                         "enabled": true
                     },
                     {
                         "name": "Ватермарка",
+                        "nameEn": "Watermark",
                         "enabled": true
                     },
                     {
                         "name": "Кейбинды",
+                        "nameEn": "Keybinds",
                         "enabled": false
                     },
                     {
                         "name": "Нотификации",
+                        "nameEn": "Notifications",
                         "enabled": true
                     },
                     {
                         "name": "Хотбар",
+                        "nameEn": "Hotbar",
                         "enabled": true
                     },
                     {
                         "name": "Скорборд",
+                        "nameEn": "Scoreboard",
                         "enabled": false
                     },
                     {
                         "name": "Табулист",
+                        "nameEn": "Tab List",
                         "enabled": true
                     },
                     {
                         "name": "Кроссхейр",
+                        "nameEn": "Crosshair",
                         "enabled": true
                     }
                 ],
                 "themes": [
                     {
                         "name": "Белая",
+                        "nameEn": "White",
                         "enabled": true
                     },
                     {
                         "name": "Черная",
+                        "nameEn": "Black",
                         "enabled": true
                     },
                     {
                         "name": "Прозрачная белая",
+                        "nameEn": "Transparent White",
                         "enabled": true
                     },
                     {
                         "name": "Прозрачная черная",
+                        "nameEn": "Transparent Black",
                         "enabled": true
                     },
                     {
                         "name": "Розовая",
+                        "nameEn": "Pink",
                         "enabled": true
                     },
                     {
                         "name": "Фиолетовая",
+                        "nameEn": "Violet",
                         "enabled": true
                     }
                 ]

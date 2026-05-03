@@ -562,6 +562,72 @@ button {
   border:1px solid var(--border);
   border-radius:24px;
   background:color-mix(in srgb, var(--bg2) 38%, transparent);
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* "Pentastar of light" — five narrow gold beams fan out from the bottom
+ * centre of the section toward the top edge of the cards. The angles
+ * 288°/324°/0°/36°/72° (= -72°,-36°,0°,+36°,+72° from straight up) lay
+ * the beam endpoints onto the five outer vertices of an upward-pointing
+ * five-pointed star. A soft halo at the anchor sells the light source.
+ */
+.donate-section::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 100%,
+      rgba(201,168,76,0.18) 0%,
+      rgba(201,168,76,0.06) 35%,
+      transparent 65%),
+    conic-gradient(from 288deg at 50% 100%,
+      transparent 0deg,
+      rgba(201,168,76,0.05) 1deg,
+      rgba(242,210,130,0.16) 4deg,
+      rgba(201,168,76,0.05) 7deg,
+      transparent 8deg,
+      transparent 35deg,
+      rgba(201,168,76,0.06) 36deg,
+      rgba(242,210,130,0.18) 40deg,
+      rgba(201,168,76,0.06) 44deg,
+      transparent 45deg,
+      transparent 71deg,
+      rgba(201,168,76,0.08) 72deg,
+      rgba(255,232,168,0.24) 76deg,
+      rgba(201,168,76,0.08) 80deg,
+      transparent 81deg,
+      transparent 107deg,
+      rgba(201,168,76,0.06) 108deg,
+      rgba(242,210,130,0.18) 112deg,
+      rgba(201,168,76,0.06) 116deg,
+      transparent 117deg,
+      transparent 143deg,
+      rgba(201,168,76,0.05) 144deg,
+      rgba(242,210,130,0.16) 148deg,
+      rgba(201,168,76,0.05) 152deg,
+      transparent 153deg,
+      transparent 360deg);
+  mix-blend-mode:screen;
+  filter:blur(0.6px);
+  opacity:0.85;
+}
+
+html[data-theme="light"] .donate-section::before {
+  mix-blend-mode:multiply;
+  opacity:0.55;
+}
+
+.donate-section > * {
+  position:relative;
+  z-index:1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donate-section::before { opacity:0.45; }
 }
 
 .section-head {
@@ -1098,25 +1164,6 @@ button {
   .pay-grid,
   .top-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
   .supporters-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); }
-}
-
-@media (min-width: 769px) and (max-width: 1780px) {
-  #donateBackLabel {
-    display:none;
-  }
-
-  .donate-back {
-    min-height:38px;
-    min-width:38px;
-    width:38px;
-    padding:0;
-    justify-content:center;
-  }
-
-  .donate-back .ui-icon {
-    width:18px;
-    height:18px;
-  }
 }
 
 @media (max-width: 768px) {

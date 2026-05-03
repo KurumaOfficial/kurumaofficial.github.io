@@ -4,6 +4,7 @@ import { resolveRouteRelativePath } from '../i18n/config.js';
 import { escapeHtml } from '../core/dom.js';
 import { getIconMarkup, setInlineIcon } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
+import { getRouteModuleDisplayName } from '../core/data-utils.js';
 import {
   getAdminHref,
   getEffectiveSiteData,
@@ -295,11 +296,10 @@ function renderProductName(target, title) {
 function syncGuiPreviewThemeCards(elements, themeKey) {
   if (!(elements.gwItemsEl instanceof HTMLElement)) return;
 
-  elements.gwItemsEl.querySelectorAll('[data-gui-theme]').forEach((button) => {
-    if (!(button instanceof HTMLButtonElement)) return;
-    const isActive = (button.dataset.guiTheme || '') === themeKey;
-    button.classList.toggle('is-active', isActive);
-    button.setAttribute('aria-pressed', String(isActive));
+  elements.gwItemsEl.querySelectorAll('[data-gui-theme]').forEach((card) => {
+    if (!(card instanceof HTMLElement)) return;
+    const isActive = (card.dataset.guiTheme || '') === themeKey;
+    card.classList.toggle('is-active', isActive);
   });
 }
 
@@ -373,7 +373,13 @@ function syncExternalLinkBehavior(link, href, { allowNewTab = true } = {}) {
 }
 
 function getDonateHref() {
-  return getLocaleDonateHref();
+  const baseHref = getLocaleDonateHref();
+  const match = window.location.pathname.match(/\/(products\/[^/]+\/)/i);
+  if (!match) return baseHref;
+
+  const fromValue = encodeURIComponent(match[1]);
+  const separator = baseHref.includes('?') ? '&' : '?';
+  return `${baseHref}${separator}from=${fromValue}`;
 }
 
 function getRouteProduct(products) {
@@ -675,18 +681,13 @@ function bindGuiInteractions(elements, previewContexts, previewState) {
 
   elements.gwItemsEl.addEventListener('click', (event) => {
     const target = event.target instanceof Element
-      ? event.target.closest('[data-gw-toggle], [data-gui-locale], [data-gui-theme]')
+      ? event.target.closest('[data-gw-toggle], [data-gui-locale]')
       : null;
     if (!(target instanceof HTMLElement) || !elements.gwItemsEl.contains(target)) return;
 
     if (target.hasAttribute('data-gw-toggle')) {
       const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
       toggleGwItem(target, previewContext.localeMeta);
-      return;
-    }
-
-    if (target.dataset.guiTheme) {
-      setGuiPreviewTheme(elements, previewState.themeKey);
       return;
     }
 
@@ -730,7 +731,7 @@ function bindGuiTabs(elements, previewContexts, previewState) {
   });
 }
 
-function buildGuiList(elements, tabs, localeMeta, key) {
+function buildGuiList(elements, tabs, localeMeta, key, locale) {
   if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
 
   const meta = localeMeta[key] || localeMeta.player;
@@ -755,7 +756,7 @@ function buildGuiList(elements, tabs, localeMeta, key) {
       itemEl.innerHTML = `
         <div class="gw-av">${iconHtml(meta.icon, 'ui-icon')}</div>
         <div class="gw-info">
-          <div class="gw-name">${escapeHtml(item.name)}</div>
+          <div class="gw-name">${escapeHtml(getRouteModuleDisplayName(item, locale))}</div>
           <div class="gw-status ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.enabled : localeMeta.disabled}</div>
         </div>
         <div class="gw-dots">${iconHtml('more_vert', 'ui-icon')}</div>
@@ -789,15 +790,15 @@ function buildGuiThemePanel(elements, previewContext, previewState) {
       <div class="gw-theme-panel">
         <div class="gw-theme-grid">
           ${GUI_PREVIEW_THEMES.map((theme) => `
-            <button
-              type="button"
+            <div
               class="gw-theme-card ${previewState.themeKey === theme.key ? 'is-active' : ''}"
               data-gui-theme="${theme.key}"
-              aria-pressed="${String(previewState.themeKey === theme.key)}"
+              role="figure"
+              aria-label="${escapeHtml(getGuiPreviewThemeLabel(previewContext.locale, theme.key))}"
             >
               <span class="gw-theme-preview" data-preview-theme="${theme.key}"></span>
               <span class="gw-theme-card-title">${escapeHtml(getGuiPreviewThemeLabel(previewContext.locale, theme.key))}</span>
-            </button>
+            </div>
           `).join('')}
         </div>
 
@@ -864,10 +865,10 @@ function renderGuiPreview(elements, previewContexts, previewState) {
     return;
   }
 
-  buildGuiList(elements, previewContext.tabs, previewContext.localeMeta, previewState.tab);
+  buildGuiList(elements, previewContext.tabs, previewContext.localeMeta, previewState.tab, previewContext.locale);
 }
 
-function renderModuleList(elements, tabKeys, tabs, localeMeta) {
+function renderModuleList(elements, tabKeys, tabs, localeMeta, locale) {
   if (!elements.modGridEl) return;
 
   elements.modGridEl.innerHTML = tabKeys.map((key) => {
@@ -879,7 +880,7 @@ function renderModuleList(elements, tabKeys, tabs, localeMeta) {
         <div class="mod-head">${iconHtml(meta.icon, 'ui-icon')}<span class="mod-head-name">${meta.title}</span><span class="mod-head-ct">${items.length}</span></div>
         <div class="mod-items">
           ${items.map((item) => `
-            <div class="mod-item"><span class="mod-item-name">${escapeHtml(item.name)}</span><span class="mod-badge ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.badgeOn : localeMeta.badgeOff}</span></div>
+            <div class="mod-item"><span class="mod-item-name">${escapeHtml(getRouteModuleDisplayName(item, locale))}</span><span class="mod-badge ${item.enabled ? 'on' : 'off'}">${item.enabled ? localeMeta.badgeOn : localeMeta.badgeOff}</span></div>
           `).join('')}
         </div>
       </div>
@@ -1018,7 +1019,7 @@ function boot() {
       }
     }
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  renderModuleList(elements, tabKeys, tabs, localeMeta);
+  renderModuleList(elements, tabKeys, tabs, localeMeta, localeController.locale);
   initCompareSlider(elements);
   initCompareMedia(elements, compareCopy);
   applyRevealDelays();

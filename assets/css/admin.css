@@ -1516,6 +1516,18 @@ button {
   border: 1px solid var(--border);
 }
 
+.dash-route-names {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  min-width: 0;
+}
+
+.dash-route-names input[type="text"] {
+  width: 100%;
+  min-width: 0;
+}
+
 .dash-route-toggle {
   display: inline-flex;
   align-items: center;
@@ -2375,6 +2387,10 @@ html[data-theme-switching="true"] .locale-option__code {
   }
 
   .dash-route-row {
+    grid-template-columns: 1fr;
+  }
+
+  .dash-route-names {
     grid-template-columns: 1fr;
   }
 
