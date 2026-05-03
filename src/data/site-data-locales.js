@@ -19,14 +19,9 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                     'Done — you can launch it.',
                 ]),
                 note: 'The mod file is available via the button below.',
-                routeModules: Object.freeze({
-                    player: Object.freeze(['Boxes', 'Jump Circles', 'China Hat', 'Target Render', 'Hit Bubble']),
-                    world: Object.freeze(['Chams', 'Tracers', 'Projectiles', 'Particles', 'Block Overlay', 'Item Drop Render', 'Skeleton']),
-                    utils: Object.freeze(['Auto Sprint', 'Auto Tool', 'Fullbright', 'No Overlay', 'Coordinates', 'Timer']),
-                    other: Object.freeze(['Anti-Bot', 'Proxy', 'Debug Mode', 'Name Hider']),
-                    interface: Object.freeze(['Array List', 'Watermark', 'Keybinds', 'Notifications', 'Hotbar', 'Scoreboard', 'Tab List', 'Crosshair']),
-                    themes: Object.freeze(['White', 'Black', 'Transparent White', 'Transparent Black', 'Pink', 'Violet']),
-                }),
+                // Per-item English names live alongside the Russian originals
+                // in DEFAULT_SITE_DATA (routeModules[*].nameEn). The renderer
+                // picks `nameEn` for the EN locale; no overlay is needed here.
             }),
             'next-release': Object.freeze({
                 title: 'Unknown',
@@ -87,14 +82,9 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                     'Готово — можна запускати.',
                 ]),
                 note: 'Файл мода доступний за кнопкою нижче.',
-                routeModules: Object.freeze({
-                    player: Object.freeze(['Бокси', 'Кола стрибка', 'Китайський капелюх', 'Рендер цілі', 'Хіт-бабл']),
-                    world: Object.freeze(['Чамси', 'Трейсери', 'Снаряди', 'Частинки', 'Блок-оверлей', 'Рендер дропу', 'Скелетон']),
-                    utils: Object.freeze(['Авто спринт', 'Авто тул', 'Фулбрайт', 'Ноу оверлей', 'Координати', 'Таймер']),
-                    other: Object.freeze(['Антибот', 'Проксі', 'Дебаг-режим', 'Приховувач ніку']),
-                    interface: Object.freeze(['Масив лист', 'Вотермарка', 'Кейбінди', 'Сповіщення', 'Хотбар', 'Скорборд', 'Таблист', 'Приціл']),
-                    themes: Object.freeze(['Біла', 'Чорна', 'Прозора біла', 'Прозора чорна', 'Рожева', 'Фіолетова']),
-                }),
+                // Module names fall back to the Russian originals on the UA
+                // route by design — these short labels read fine in Russian
+                // and an extra translation layer would only add admin work.
             }),
             'next-release': Object.freeze({
                 title: 'Невідомо',

@@ -34,6 +34,7 @@ const COPY = Object.freeze({
             metaTitle: 'Aleph Studio — Поддержать',
             metaDescription: 'Поддержите Aleph Studio и помогите финансировать открытые релизы, инструменты и будущие обновления.',
             backLabel: 'Назад к Aleph Studio',
+            backLabelTo: 'Назад к {0}',
             eyebrow: 'Поддержать Aleph Studio',
             titleHtml: 'Поддержка<br><em>студии</em>',
         },
@@ -58,6 +59,7 @@ const COPY = Object.freeze({
             metaTitle: 'Aleph Studio — Support',
             metaDescription: 'Support Aleph Studio and help fund open source releases, tools and future updates.',
             backLabel: 'Back to Aleph Studio',
+            backLabelTo: 'Back to {0}',
             eyebrow: 'Support Aleph Studio',
             titleHtml: 'Support<br><em>the studio</em>',
         },
@@ -82,6 +84,7 @@ const COPY = Object.freeze({
             metaTitle: 'Aleph Studio — Підтримати',
             metaDescription: 'Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.',
             backLabel: 'Назад до Aleph Studio',
+            backLabelTo: 'Назад до {0}',
             eyebrow: 'Підтримати Aleph Studio',
             titleHtml: 'Підтримка<br><em>студії</em>',
         },
@@ -96,9 +99,41 @@ function getCopy(locale) {
         metaTitle: localeCopy.site.metaTitle,
         metaDescription: localeCopy.site.metaDescription,
         backLabel: localeCopy.site.backLabel,
+        backLabelTo: localeCopy.site.backLabelTo,
         eyebrow: localeCopy.site.eyebrow,
         titleHtml: localeCopy.site.titleHtml || localeCopy.common.titleHtml,
     };
+}
+
+/**
+ * Read the optional `from` query param and resolve it to a back-button
+ * destination relative to the current locale. Only same-locale, relative
+ * paths are accepted (no scheme, no leading slash, no '..'); anything
+ * suspicious falls back to the locale root so the back button always
+ * goes somewhere sensible.
+ *
+ * @returns {{ href: string, productId: string } | null}
+ */
+function resolveOriginContext() {
+    let raw = '';
+    try {
+        raw = new URL(window.location.href).searchParams.get('from') || '';
+    } catch (e) {
+        return null;
+    }
+    if (!raw) return null;
+
+    const decoded = (() => {
+        try { return decodeURIComponent(raw); } catch (e) { return ''; }
+    })();
+    if (!decoded) return null;
+
+    if (!/^[a-z0-9][a-z0-9\-_/]*\/$/i.test(decoded)) return null;
+    if (decoded.includes('..')) return null;
+
+    const segments = decoded.split('/').filter(Boolean);
+    const productId = segments[0] === 'products' && segments[1] ? segments[1] : '';
+    return { href: `../${decoded}`, productId };
 }
 
 function stripHtmlTags(value) {
@@ -1283,6 +1318,31 @@ function applyStaticCopy(elements, copy) {
     if (elements.supportersTitle) elements.supportersTitle.textContent = copy.supportersTitle;
 }
 
+/**
+ * When the donate page is reached via a `?from=<locale-relative-path>` link,
+ * point the back button at that origin and replace the generic "Back to
+ * Aleph Studio" label with "Back to <product title>" if the origin maps to
+ * a known product.
+ */
+function applyOriginContext(elements, copy, siteData) {
+    const origin = resolveOriginContext();
+    if (!origin || !elements.donateBackLink) return;
+
+    elements.donateBackLink.href = origin.href;
+
+    if (!elements.donateBackLabel) return;
+    if (!origin.productId) return;
+
+    const product = (siteData.products || []).find((p) => p.id === origin.productId);
+    if (!product) return;
+
+    const productTitle = String(product.title || '').trim();
+    if (!productTitle) return;
+
+    const template = copy.backLabelTo || 'Back to {0}';
+    elements.donateBackLabel.textContent = template.replace('{0}', productTitle);
+}
+
 let booted = false;
 
 function boot() {
@@ -1303,6 +1363,7 @@ function boot() {
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
+    applyOriginContext(elements, copy, siteData);
     localeController.applyDocumentMeta({
         title: copy.metaTitle,
         description: copy.metaDescription,

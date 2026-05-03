@@ -126,9 +126,12 @@ const ADMIN_MESSAGES = Object.freeze({
         labelSortOrder: 'Порядок',
         ariaRemoveSupportMethod: 'Удалить способ поддержки',
         ariaRemoveSupporter: 'Удалить карточку поддержавшего',
-        ariaRouteModuleName: 'Название функции: {0} #{1}',
+        ariaRouteModuleName: 'Название функции (RU): {0} #{1}',
+        ariaRouteModuleNameEn: 'Название функции (EN): {0} #{1}',
         ariaRouteModuleEnabled: 'Состояние функции: {0} #{1}',
         ariaRemoveRouteModule: 'Удалить функцию: {0} #{1}',
+        routeModuleNamePlaceholderRu: 'Русское название',
+        routeModuleNamePlaceholderEn: 'English name',
         lifecycleActive: 'Активно',
         lifecycleFrozen: 'Заморожено',
         lifecycleAbandoned: 'Заброшено',
@@ -201,9 +204,12 @@ const ADMIN_MESSAGES = Object.freeze({
         labelSortOrder: 'Sort order',
         ariaRemoveSupportMethod: 'Remove support method',
         ariaRemoveSupporter: 'Remove supporter card',
-        ariaRouteModuleName: 'Function name: {0} #{1}',
+        ariaRouteModuleName: 'Function name (RU): {0} #{1}',
+        ariaRouteModuleNameEn: 'Function name (EN): {0} #{1}',
         ariaRouteModuleEnabled: 'Function state: {0} #{1}',
         ariaRemoveRouteModule: 'Remove function: {0} #{1}',
+        routeModuleNamePlaceholderRu: 'Russian name',
+        routeModuleNamePlaceholderEn: 'English name',
         lifecycleActive: 'Active',
         lifecycleFrozen: 'Frozen',
         lifecycleAbandoned: 'Abandoned',
@@ -276,9 +282,12 @@ const ADMIN_MESSAGES = Object.freeze({
         labelSortOrder: 'Порядок',
         ariaRemoveSupportMethod: 'Видалити спосіб підтримки',
         ariaRemoveSupporter: 'Видалити картку підтримувача',
-        ariaRouteModuleName: 'Назва функції: {0} #{1}',
+        ariaRouteModuleName: 'Назва функції (RU): {0} #{1}',
+        ariaRouteModuleNameEn: 'Назва функції (EN): {0} #{1}',
         ariaRouteModuleEnabled: 'Стан функції: {0} #{1}',
         ariaRemoveRouteModule: 'Видалити функцію: {0} #{1}',
+        routeModuleNamePlaceholderRu: 'Російська назва',
+        routeModuleNamePlaceholderEn: 'English name',
         lifecycleActive: 'Активно',
         lifecycleFrozen: 'Заморожено',
         lifecycleAbandoned: 'Покинуто',
@@ -1160,7 +1169,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         routeModuleListEl.innerHTML = items.map((item, index) => `
             <div class="dash-route-row" data-route-module-row="${index}">
-                <input type="text" value="${escapeHtml(item.name)}" data-route-module-name="${index}" aria-label="${escapeHtml(msg('ariaRouteModuleName', getRouteModuleLabel(activeKey), index + 1))}">
+                <div class="dash-route-names">
+                    <input type="text" value="${escapeHtml(item.name)}" data-route-module-name="${index}" placeholder="${escapeHtml(msg('routeModuleNamePlaceholderRu'))}" aria-label="${escapeHtml(msg('ariaRouteModuleName', getRouteModuleLabel(activeKey), index + 1))}">
+                    <input type="text" value="${escapeHtml(item.nameEn || '')}" data-route-module-name-en="${index}" placeholder="${escapeHtml(msg('routeModuleNamePlaceholderEn'))}" aria-label="${escapeHtml(msg('ariaRouteModuleNameEn', getRouteModuleLabel(activeKey), index + 1))}">
+                </div>
                 <label class="dash-route-toggle">
                     <input type="checkbox" data-route-module-enabled="${index}" aria-label="${escapeHtml(msg('ariaRouteModuleEnabled', getRouteModuleLabel(activeKey), index + 1))}" ${item.enabled ? 'checked' : ''}>
                     <span>${escapeHtml(msg('enabled'))}</span>
@@ -2216,6 +2228,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const activeKey = getSelectedRouteModuleKey();
         routeModules[activeKey].push({
             name: msg('newFunction'),
+            nameEn: '',
             enabled: true,
         });
         renderRouteModuleEditor();
@@ -2292,6 +2305,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             const index = Number(target.getAttribute('data-route-module-name'));
             if (!isValidListIndex(activeItems, index)) return;
             activeItems[index].name = target.value;
+            syncDraftControls();
+            return;
+        }
+
+        if (target.hasAttribute('data-route-module-name-en')) {
+            const index = Number(target.getAttribute('data-route-module-name-en'));
+            if (!isValidListIndex(activeItems, index)) return;
+            activeItems[index].nameEn = target.value;
             syncDraftControls();
         }
     });
