@@ -2048,25 +2048,6 @@ footer {
   .hero-store { min-height:calc(100svh - 166px - var(--safe-top)); min-height:calc(100dvh - 166px - var(--safe-top)); }
 }
 
-@media (min-width:769px) and (max-width:1780px) {
-  .hero-store-back-label {
-    display:none;
-  }
-
-  .hero-store-back {
-    min-height:38px;
-    min-width:38px;
-    width:38px;
-    padding:0;
-    justify-content:center;
-  }
-
-  .hero-store-back .ui-icon {
-    width:18px;
-    height:18px;
-  }
-}
-
 @media(max-width:920px){
   :root            { --page-gutter: 20px; }
   .nav             {

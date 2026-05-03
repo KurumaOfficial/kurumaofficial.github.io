@@ -161,7 +161,7 @@ export function getProductLifecycleKey(value) {
 }
 
 /**
- * @typedef {{ name: string; enabled: boolean }} RouteModuleItem
+ * @typedef {{ name: string; nameEn: string; enabled: boolean }} RouteModuleItem
  */
 
 /**
@@ -184,8 +184,22 @@ function normalizeRouteModuleItem(raw, fallback = 'New function') {
     const src = /** @type {Record<string, unknown>} */ (raw || {});
     return {
         name: cleanText(src.name, fallback),
+        nameEn: cleanText(src.nameEn, ''),
         enabled: Boolean(src.enabled ?? src.on),
     };
+}
+
+/**
+ * Resolve the display name for a route module item in the given locale.
+ * Falls back to the canonical Russian `name` when no localized variant exists.
+ * @param {RouteModuleItem | { name?: string; nameEn?: string } | null | undefined} item
+ * @param {string} [locale]
+ * @returns {string}
+ */
+export function getRouteModuleDisplayName(item, locale = 'ru') {
+    if (!item || typeof item !== 'object') return '';
+    const localized = locale === 'en' ? cleanText(item.nameEn, '') : '';
+    return localized || cleanText(item.name, '');
 }
 
 /**
