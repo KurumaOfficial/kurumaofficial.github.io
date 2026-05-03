@@ -1582,31 +1582,14 @@ html[data-theme-switching="true"] .gui-w {
 }
 
 .gw-theme-card {
-  appearance:none;
-  -webkit-appearance:none;
   width:100%;
   border:1px solid var(--gui-bdr);
   border-radius:10px;
-  padding:0;
   background:var(--gui-item);
   color:var(--gui-name);
   text-align:left;
-  cursor:pointer;
   overflow:hidden;
-  transition:border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
-}
-
-.gw-theme-card:hover {
-  background:var(--gui-item-h);
-}
-
-.gw-theme-card:focus-visible {
-  outline:none;
-  box-shadow:0 0 0 2px var(--accent);
-}
-
-.gw-theme-card:active {
-  transform:scale(.985);
+  transition:border-color .18s ease, box-shadow .18s ease;
 }
 
 .gw-theme-card.is-active {
