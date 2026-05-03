@@ -116,7 +116,8 @@ def validate_site_data(site_data: dict, errors: list[str]) -> None:
                     errors.append(f'products: missing detail route for {product_id!r}: {detail_index.relative_to(ROOT)}')
 
         if download_url and not EXTERNAL_RE.match(download_url):
-            asset_path = ROOT / download_url.replace('./', '').replace('/', '\\')
+            relative_download = download_url.replace('./', '').lstrip('/')
+            asset_path = ROOT.joinpath(*relative_download.split('/')) if relative_download else ROOT
             if not asset_path.exists():
                 errors.append(f'products: missing download asset for {product_id!r}: {download_url}')
 
@@ -254,18 +255,23 @@ def validate_sitemap(site_data: dict, errors: list[str]) -> None:
         route = str(product.get('detailUrl', '')).replace('./', '').strip('/')
         if not route:
             continue
-        expected |= {
-            f'https://www.aleph.icu/{locale}/{route}/'
-            for locale in PUBLIC_LOCALES
-        }
-        expected |= {
-            f'https://www.aleph.icu/{locale}/{route}/donate/'
-            for locale in PUBLIC_LOCALES
-        }
+        for locale in PUBLIC_LOCALES:
+            detail_index = ROOT / locale / route.replace('/', os.sep) / 'index.html'
+            if detail_index.exists():
+                expected.add(f'https://www.aleph.icu/{locale}/{route}/')
 
     missing = sorted(expected - locs)
     for loc in missing:
         errors.append(f'sitemap: missing route {loc}')
+
+    # Detect entries that point to nothing on disk so we never advertise 404s.
+    for loc in sorted(locs):
+        relative = loc.replace('https://www.aleph.icu/', '').strip('/')
+        if not relative:
+            continue
+        candidate_index = ROOT.joinpath(*relative.split('/')) / 'index.html'
+        if not candidate_index.exists():
+            errors.append(f'sitemap: route does not resolve to a static page: {loc}')
 
 
 def main() -> int:
