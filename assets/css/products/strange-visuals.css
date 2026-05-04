@@ -1,3 +1,11 @@
+/* The HTML `hidden` attribute must beat component-level `display:` rules
+ * (e.g. `.hero-source-btn { display: inline-flex }`). Without this, an
+ * element rendered with `<a hidden href="">` stays visible and clicks
+ * navigate to the current route. */
+[hidden] {
+  display: none !important;
+}
+
 /* ─── THEMES ─── */
 
 [data-theme="dark"] {
@@ -2321,19 +2329,6 @@ footer {
     --share-gap:10px;
   }
 
-  .hero-store-back-label {
-    display:none;
-  }
-
-  .hero-store-back {
-    min-height:38px;
-    min-width:38px;
-    width:38px;
-    padding:0;
-    justify-content:center;
-  }
-
-  .hero-store-back .ui-icon,
   .hero-source-btn .ui-icon {
     width:18px;
     height:18px;

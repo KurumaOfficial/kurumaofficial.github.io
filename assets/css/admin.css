@@ -1,4 +1,10 @@
-﻿:root,
+﻿/* HTML `hidden` attribute must always win over component-level
+ * `display:` rules in the admin UI as well. */
+[hidden] {
+  display: none !important;
+}
+
+:root,
 [data-theme="dark"] {
   color-scheme: dark;
   --color-bg: #080606;

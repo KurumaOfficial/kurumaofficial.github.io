@@ -111,6 +111,17 @@
     padding: 0;
 }
 
+/* The HTML `hidden` attribute must always win over component-level
+ * `display:` rules. Without `!important` here, declarations such as
+ * `.hero-source-btn { display: inline-flex; }` override the browser
+ * default `[hidden] { display: none; }`, which leaves <a hidden> in
+ * the DOM with `href=""`; clicking it then reloads the current
+ * route. Globally enforcing this rule fixes that whole class of
+ * bugs in one place. */
+[hidden] {
+    display: none !important;
+}
+
 html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
