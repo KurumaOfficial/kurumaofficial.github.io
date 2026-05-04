@@ -1,3 +1,9 @@
+/* HTML `hidden` attribute must always beat component-level `display:`
+ * rules so JS-toggled `.hidden = true` actually hides the element. */
+[hidden] {
+  display: none !important;
+}
+
 [data-theme="dark"] {
   color-scheme: dark;
   --bg: #111110;
@@ -1278,22 +1284,8 @@ html[data-theme="light"] .donate-section::before {
     overflow: visible;
   }
 
-  #donateBackLabel {
-    display: none;
-  }
-
   .donate-back {
-    min-height: 38px;
-    min-width: 38px;
-    width: 38px;
     margin-top: 12px;
-    padding: 0;
-    justify-content: center;
-  }
-
-  .donate-back .ui-icon {
-    width: 18px;
-    height: 18px;
   }
 
   .donate-page {
