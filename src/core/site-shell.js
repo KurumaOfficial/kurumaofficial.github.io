@@ -329,7 +329,10 @@ function isAutoRouteRedirectImmunePath(pathname = window.location.pathname) {
 export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathname = window.location.pathname) {
     const locale = detectLocaleFromPath(pathname);
     let redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
-    if (!redirectProduct) {
+    // If there's a locally stored site data payload (in localStorage), respect it
+    // and do NOT fall back to the embedded DEFAULT_SITE_DATA. Only fall back
+    // when no local stored payload exists.
+    if (!redirectProduct && !cachedStoredSiteDataRaw) {
         redirectProduct = (NORMALIZED_DEFAULT_SITE_DATA.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
     }
     if (!redirectProduct) return null;
