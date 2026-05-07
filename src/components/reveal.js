@@ -17,11 +17,12 @@ let revealGeneration = 0;
 export function initReveal(watchRoots = []) {
     activeRevealController?.destroy();
 
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+    const supportsObservers = 'IntersectionObserver' in window && 'MutationObserver' in window;
     const generationToken = String(++revealGeneration);
 
-    /* If the user prefers reduced motion, mark everything visible immediately. */
-    if (prefersReduced) {
+    /* Fallback to static visibility when motion is reduced or observers are unavailable. */
+    if (prefersReduced || !supportsObservers) {
         document.querySelectorAll('.reveal').forEach((el) => el.classList.add('is-visible'));
         const reducedMotionController = { destroy: () => {} };
         activeRevealController = reducedMotionController;

@@ -10,9 +10,9 @@
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
-import { normalizeData, toNumber, getFlagMeta } from '../core/data-utils.js';
+import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260416c';
 
 // ── Factory ─────────────────────────────────────────────────
 
@@ -26,6 +26,7 @@ export function createRenderer({ localeController }) {
     const featuredSocialEl = $('featuredSocialLinks');
     const footerSocialEl = $('footerSocialLinks');
     const teamShowcaseEl = $('teamShowcase');
+    const collationLocale = localeController.locale === 'ua' ? 'uk' : localeController.locale;
 
     /** @type {import('../core/data-utils.js').SiteData} */
     let siteData = localizeSiteData(normalizeData(DEFAULT_SITE_DATA), localeController.locale);
@@ -81,7 +82,7 @@ export function createRenderer({ localeController }) {
     function sortedProducts(data = siteData) {
         return [...data.products].sort((a, b) => {
             const diff = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
-            return diff !== 0 ? diff : a.title.localeCompare(b.title, localeController.locale);
+            return diff !== 0 ? diff : a.title.localeCompare(b.title, collationLocale);
         });
     }
 
@@ -100,7 +101,7 @@ export function createRenderer({ localeController }) {
     function sortedTeam(data = siteData) {
         return [...data.team].sort((a, b) => {
             const diff = toNumber(a.sortOrder, 0) - toNumber(b.sortOrder, 0);
-            return diff !== 0 ? diff : a.name.localeCompare(b.name, localeController.locale);
+            return diff !== 0 ? diff : a.name.localeCompare(b.name, collationLocale);
         });
     }
 
@@ -111,6 +112,12 @@ export function createRenderer({ localeController }) {
         if (!meta) return '';
         const label = t(`products.flags.${flag}`, meta.label);
         return `<span class="product-flag ${meta.className}">${escapeHtml(label)}</span>`;
+    }
+
+    function lifecycleLabel(value) {
+        const key = getProductLifecycleKey(value);
+        if (!key) return String(value || '').trim();
+        return t(`products.lifecycle.${key}`, key);
     }
 
     // ── Download button ─────────────────────────────────────
@@ -166,13 +173,13 @@ export function createRenderer({ localeController }) {
                     ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
                     : '';
                 return `
-<article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}"${cardAttrs}>
-  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
+<article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}" role="listitem"${cardAttrs}>
+  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
   ${product.summary ? `<p class="product-desc">${linkify(product.summary)}</p>` : ''}
   <div class="product-meta">
-    <span class="product-tag">${escapeHtml(product.tag)}</span>
+    <span class="product-tag">${escapeHtml(lifecycleLabel(product.tag))}</span>
     <a class="btn-detail" href="${escapeHtml(href)}" data-detail-nav>${escapeHtml(t('products.detail', 'Подробнее'))}</a>
   </div>
 </article>`;
@@ -193,14 +200,14 @@ export function createRenderer({ localeController }) {
                 : '';
 
             return `
-<article class="product-card" id="${escapeHtml(product.id)}">
-  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(product.status || product.tag)} ${badge}</div>
+<article class="product-card" id="${escapeHtml(product.id)}" role="listitem">
+  <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
   ${product.summary ? `<p class="product-desc">${linkify(product.summary)}</p>` : ''}
   ${steps}${note}${source}
   <div class="product-meta">
-    <span class="product-tag">${escapeHtml(product.tag)}</span>
+    <span class="product-tag">${escapeHtml(lifecycleLabel(product.tag))}</span>
     ${downloadBtnHtml(product)}
   </div>
 </article>`;
@@ -220,9 +227,9 @@ export function createRenderer({ localeController }) {
 <div class="catalog-item" role="listitem">
   <div class="catalog-item-left">
     <span class="catalog-item-name">${escapeHtml(p.title)}</span>
-    <span class="catalog-item-status">${escapeHtml(p.status || p.tag)}</span>
+    <span class="catalog-item-status">${escapeHtml(lifecycleLabel(p.status || p.tag))}</span>
   </div>
-  <span class="product-tag">${escapeHtml(p.tag)}</span>
+  <span class="product-tag">${escapeHtml(lifecycleLabel(p.tag))}</span>
 </div>`).join('');
     }
 
@@ -242,10 +249,10 @@ export function createRenderer({ localeController }) {
                 .map((w) => w[0]).join('').toUpperCase().slice(0, 2) || '?';
             const avatarSrc = optimizeDiscordAvatarUrl(localeController.resolveSitePath(m.avatarUrl || ''));
             const avatar = avatarSrc
-                ? `<img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" width="44" height="44">`
+                ? `<img src="${escapeHtml(avatarSrc)}" alt="" loading="lazy" decoding="async" fetchpriority="low" width="44" height="44" data-fallback-initials="${escapeHtml(initials)}">`
                 : escapeHtml(initials);
             return `
-<div class="team-card">
+<div class="team-card" role="listitem">
   <div class="team-avatar" aria-hidden="true">${avatar}</div>
   <div class="team-name">${escapeHtml(m.name)}</div>
   <div class="team-role">${escapeHtml(m.role)}</div>
@@ -255,14 +262,36 @@ export function createRenderer({ localeController }) {
 
         if (members.length >= 5) {
             const cards = members.map(cardHtml).join('');
+            teamShowcaseEl.removeAttribute('role');
             teamShowcaseEl.innerHTML = `
 <div class="team-marquee-wrap">
   <div class="team-marquee-track">${cards}${cards}</div>
 </div>`;
+            bindAvatarFallbacks(teamShowcaseEl);
             return;
         }
 
+        teamShowcaseEl.setAttribute('role', 'list');
         teamShowcaseEl.innerHTML = members.map(cardHtml).join('');
+        bindAvatarFallbacks(teamShowcaseEl);
+    }
+
+    /**
+     * Bind error → initials fallback handlers to all `img[data-fallback-initials]`
+     * descendants of the given root. Avoids inline `onerror=` attributes so we can
+     * keep CSP tight if `'unsafe-inline'` is dropped from script-src in the future.
+     */
+    function bindAvatarFallbacks(root) {
+        if (!(root instanceof HTMLElement)) return;
+        root.querySelectorAll('img[data-fallback-initials]').forEach((img) => {
+            if (!(img instanceof HTMLImageElement)) return;
+            const fallback = img.getAttribute('data-fallback-initials') || '?';
+            img.addEventListener('error', () => {
+                if (img.parentNode) {
+                    img.parentNode.replaceChild(document.createTextNode(fallback), img);
+                }
+            }, { once: true });
+        });
     }
 
     // ── Public API ──────────────────────────────────────────

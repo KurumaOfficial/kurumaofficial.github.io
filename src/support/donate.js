@@ -11,7 +11,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js';
+} from '../core/site-shell.js?v=20260416c';
 
 const COPY = Object.freeze({
     ru: {
@@ -34,14 +34,9 @@ const COPY = Object.freeze({
             metaTitle: 'Aleph Studio — Поддержать',
             metaDescription: 'Поддержите Aleph Studio и помогите финансировать открытые релизы, инструменты и будущие обновления.',
             backLabel: 'Назад к Aleph Studio',
+            backLabelTo: 'Назад к {0}',
             eyebrow: 'Поддержать Aleph Studio',
             titleHtml: 'Поддержка<br><em>студии</em>',
-        },
-        product: {
-            metaTitle: '{productTitle} — Поддержать',
-            metaDescription: 'Поддержите {productTitle} и помогите финансировать дальнейшую разработку и будущие обновления от Aleph Studio.',
-            backLabel: 'Назад к {productTitle}',
-            eyebrow: 'Поддержать проект',
         },
     },
     en: {
@@ -64,14 +59,9 @@ const COPY = Object.freeze({
             metaTitle: 'Aleph Studio — Support',
             metaDescription: 'Support Aleph Studio and help fund open source releases, tools and future updates.',
             backLabel: 'Back to Aleph Studio',
+            backLabelTo: 'Back to {0}',
             eyebrow: 'Support Aleph Studio',
             titleHtml: 'Support<br><em>the studio</em>',
-        },
-        product: {
-            metaTitle: '{productTitle} — Support',
-            metaDescription: 'Support {productTitle} and help fund its ongoing development and future updates from Aleph Studio.',
-            backLabel: 'Back to {productTitle}',
-            eyebrow: 'Support the project',
         },
     },
     ua: {
@@ -94,69 +84,56 @@ const COPY = Object.freeze({
             metaTitle: 'Aleph Studio — Підтримати',
             metaDescription: 'Підтримайте Aleph Studio і допоможіть фінансувати відкриті релізи, інструменти та майбутні оновлення.',
             backLabel: 'Назад до Aleph Studio',
+            backLabelTo: 'Назад до {0}',
             eyebrow: 'Підтримати Aleph Studio',
             titleHtml: 'Підтримка<br><em>студії</em>',
-        },
-        product: {
-            metaTitle: '{productTitle} — Підтримати',
-            metaDescription: 'Підтримайте {productTitle} і допоможіть фінансувати подальшу розробку та майбутні оновлення від Aleph Studio.',
-            backLabel: 'Назад до {productTitle}',
-            eyebrow: 'Підтримати проєкт',
         },
     },
 });
 
-function formatCopyText(template, values) {
-    return String(template || '').replace(/\{(\w+)\}/g, (match, key) => {
-        const replacement = values?.[key];
-        return replacement == null ? match : String(replacement);
-    });
-}
-
-function humanizeProductSlug(slug) {
-    return String(slug || '')
-        .split('-')
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ') || 'Project';
-}
-
-function getDonateRouteContext(siteData) {
-    const match = window.location.pathname.match(/\/products\/([^/]+)\/donate(?:\/index\.html)?\/?$/i);
-    if (!match) {
-        return {
-            isProductRoute: false,
-            productTitle: 'Aleph Studio',
-        };
-    }
-
-    const slug = match[1] || '';
-    const products = Array.isArray(siteData?.products) ? siteData.products : [];
-    const product = products.find((item) => item?.id === slug)
-        || products.find((item) => String(item?.detailUrl || '').includes(`/products/${slug}/`))
-        || null;
-
-    return {
-        isProductRoute: true,
-        productTitle: String(product?.title || humanizeProductSlug(slug)).trim() || humanizeProductSlug(slug),
-    };
-}
-
-function getCopy(locale, routeContext) {
+function getCopy(locale) {
     const localeCopy = COPY[locale] || COPY.ru;
-    const variant = routeContext?.isProductRoute ? localeCopy.product : localeCopy.site;
-    const values = {
-        productTitle: routeContext?.productTitle || 'Aleph Studio',
-    };
 
     return {
         ...localeCopy.common,
-        metaTitle: formatCopyText(variant.metaTitle, values),
-        metaDescription: formatCopyText(variant.metaDescription, values),
-        backLabel: formatCopyText(variant.backLabel, values),
-        eyebrow: variant.eyebrow,
-        titleHtml: variant.titleHtml || localeCopy.common.titleHtml,
+        metaTitle: localeCopy.site.metaTitle,
+        metaDescription: localeCopy.site.metaDescription,
+        backLabel: localeCopy.site.backLabel,
+        backLabelTo: localeCopy.site.backLabelTo,
+        eyebrow: localeCopy.site.eyebrow,
+        titleHtml: localeCopy.site.titleHtml || localeCopy.common.titleHtml,
     };
+}
+
+/**
+ * Read the optional `from` query param and resolve it to a back-button
+ * destination relative to the current locale. Only same-locale, relative
+ * paths are accepted (no scheme, no leading slash, no '..'); anything
+ * suspicious falls back to the locale root so the back button always
+ * goes somewhere sensible.
+ *
+ * @returns {{ href: string, productId: string } | null}
+ */
+function resolveOriginContext() {
+    let raw = '';
+    try {
+        raw = new URL(window.location.href).searchParams.get('from') || '';
+    } catch (e) {
+        return null;
+    }
+    if (!raw) return null;
+
+    const decoded = (() => {
+        try { return decodeURIComponent(raw); } catch (e) { return ''; }
+    })();
+    if (!decoded) return null;
+
+    if (!/^[a-z0-9][a-z0-9\-_/]*\/$/i.test(decoded)) return null;
+    if (decoded.includes('..')) return null;
+
+    const segments = decoded.split('/').filter(Boolean);
+    const productId = segments[0] === 'products' && segments[1] ? segments[1] : '';
+    return { href: `../${decoded}`, productId };
 }
 
 function stripHtmlTags(value) {
@@ -214,6 +191,7 @@ const SUPPORTER_AVATAR_DISCORD_SIZE = 256;
 
 function getElements() {
     return {
+        navLogoLink: document.querySelector('.nav-logo'),
         donateBackLink: document.querySelector('.donate-back'),
         donateBackLabel: $('donateBackLabel'),
         donateEyebrow: $('donateEyebrow'),
@@ -481,16 +459,19 @@ function renderPaymentButtons(container, buttons, copy, locale) {
     if (!container) return;
     container.textContent = '';
 
-    const sorted = sortButtons(buttons, locale).filter((button) => Boolean(resolveButtonUrl(button.url)));
-    if (!sorted.length) {
+    const cards = sortButtons(buttons, locale)
+        .map((button) => createPaymentCard(button))
+        .filter((card) => card instanceof HTMLElement);
+    if (!cards.length) {
         container.append(createEmptyState(copy.buttonsEmpty));
         return;
     }
 
-    sorted.forEach((button) => {
-        const card = createPaymentCard(button);
-        if (card) container.append(card);
+    const fragment = document.createDocumentFragment();
+    cards.forEach((card) => {
+        fragment.append(card);
     });
+    container.append(fragment);
 }
 
 function getDonorStyle(amount, locale) {
@@ -1113,16 +1094,7 @@ function createAvatar(supporter, tier, fallbackHue) {
     const avatar = createElement('div', { className: 'donor-avatar', 'aria-hidden': 'true' });
     const src = optimizeSupportAvatarSrc(supporter.avatarUrl || '');
 
-    if (src) {
-        avatar.append(createElement('img', {
-            src,
-            alt: '',
-            loading: 'lazy',
-            decoding: 'async',
-            width: 52,
-            height: 52,
-        }));
-    } else {
+    const buildFallback = () => {
         const fallback = createElement('div', { className: 'donor-avatar-default' });
         if (tier.kind !== 'platinum') {
             fallback.style.background = `hsl(${fallbackHue},18%,22%)`;
@@ -1130,7 +1102,29 @@ function createAvatar(supporter, tier, fallbackHue) {
             fallback.classList.add('is-platinum');
         }
         fallback.textContent = initials(supporter.name);
-        avatar.append(fallback);
+        return fallback;
+    };
+
+    if (src) {
+        const img = createElement('img', {
+            src,
+            alt: '',
+            loading: 'lazy',
+            decoding: 'async',
+            fetchpriority: 'low',
+            width: 52,
+            height: 52,
+        });
+        // Graceful fallback: if remote avatar fails (CORS, 403 hotlink, CSP),
+        // swap to default initials so we never show a broken-image icon.
+        img.addEventListener('error', () => {
+            if (img.parentNode === avatar) {
+                avatar.replaceChild(buildFallback(), img);
+            }
+        }, { once: true });
+        avatar.append(img);
+    } else {
+        avatar.append(buildFallback());
     }
 
     return avatar;
@@ -1280,15 +1274,21 @@ function renderSupporters(elements, supporters, copy, locale) {
     if (!sorted.length) {
         elements.supportersGrid.append(createEmptyState(copy.supportersEmpty));
         if (elements.topSupportersSection) elements.topSupportersSection.hidden = true;
+        if (elements.topSupportersGrid) {
+            destroySupportEffects(elements.topSupportersGrid);
+            elements.topSupportersGrid.textContent = '';
+        }
         return;
     }
 
+    const supportersFragment = document.createDocumentFragment();
     sorted.forEach((supporter) => {
-        elements.supportersGrid.append(createSupportCard(supporter, {
+        supportersFragment.append(createSupportCard(supporter, {
             locale,
             effectsEnabled: !topSupporterIds.has(String(supporter?.id || '')),
         }));
     });
+    elements.supportersGrid.append(supportersFragment);
 
     if (!elements.topSupportersSection || !elements.topSupportersGrid) return;
 
@@ -1301,22 +1301,21 @@ function renderSupporters(elements, supporters, copy, locale) {
     elements.topSupportersSection.hidden = false;
     destroySupportEffects(elements.topSupportersGrid);
     elements.topSupportersGrid.textContent = '';
+    const topSupportersFragment = document.createDocumentFragment();
     topThree.forEach((supporter, index) => {
-        elements.topSupportersGrid.append(createSupportCard(supporter, {
+        topSupportersFragment.append(createSupportCard(supporter, {
             rank: index + 1,
             top: true,
             locale,
         }));
     });
+    elements.topSupportersGrid.append(topSupportersFragment);
 }
 
 function applyStaticCopy(elements, copy) {
     document.title = copy.metaTitle;
     const descriptionEl = document.querySelector('meta[name="description"]');
     if (descriptionEl) descriptionEl.setAttribute('content', copy.metaDescription);
-    if (elements.donateBackLink instanceof HTMLAnchorElement) {
-        elements.donateBackLink.href = '../';
-    }
     if (elements.donateBackLabel) elements.donateBackLabel.textContent = copy.backLabel;
     if (elements.donateEyebrow) elements.donateEyebrow.textContent = copy.eyebrow;
     if (elements.donateTitle) renderDonateTitle(elements.donateTitle, copy.titleHtml);
@@ -1331,6 +1330,31 @@ function applyStaticCopy(elements, copy) {
     if (elements.supportersTitle) elements.supportersTitle.textContent = copy.supportersTitle;
 }
 
+/**
+ * When the donate page is reached via a `?from=<locale-relative-path>` link,
+ * point the back button at that origin and replace the generic "Back to
+ * Aleph Studio" label with "Back to <product title>" if the origin maps to
+ * a known product.
+ */
+function applyOriginContext(elements, copy, siteData) {
+    const origin = resolveOriginContext();
+    if (!origin || !elements.donateBackLink) return;
+
+    elements.donateBackLink.href = origin.href;
+
+    if (!elements.donateBackLabel) return;
+    if (!origin.productId) return;
+
+    const product = (siteData.products || []).find((p) => p.id === origin.productId);
+    if (!product) return;
+
+    const productTitle = String(product.title || '').trim();
+    if (!productTitle) return;
+
+    const template = copy.backLabelTo || 'Back to {0}';
+    elements.donateBackLabel.textContent = template.replace('{0}', productTitle);
+}
+
 let booted = false;
 
 function boot() {
@@ -1340,8 +1364,7 @@ function boot() {
     const localeController = createLocaleController();
     const locale = localeController.locale;
     const siteData = localizeSiteData(getEffectiveSiteData(), locale);
-    const routeContext = getDonateRouteContext(siteData);
-    const copy = getCopy(locale, routeContext);
+    const copy = getCopy(locale);
     const elements = getElements();
     const supportPage = siteData.supportPage || { minimumAmountUsd: 2, roleName: '@Premium', buttons: [], supporters: [] };
 
@@ -1352,6 +1375,7 @@ function boot() {
     initSmoothRouteTransitions();
 
     applyStaticCopy(elements, copy);
+    applyOriginContext(elements, copy, siteData);
     localeController.applyDocumentMeta({
         title: copy.metaTitle,
         description: copy.metaDescription,

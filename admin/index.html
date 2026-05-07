@@ -3,6 +3,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+<meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Aleph Studio — Admin</title>
     <meta name="description" content="Aleph Studio admin route.">
     <meta name="robots" content="noindex,nofollow">
@@ -13,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=7">
     <link rel="icon" href="../favicon.ico" sizes="48x48">
     <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -21,6 +24,15 @@
     <script>
     window.__ALEPH_LOCALE__ = (function () {
         var supported = ['ru', 'en', 'ua'];
+        var params = new URLSearchParams(window.location.search || '');
+        var requested = (params.get('lang') || '').toLowerCase();
+        if (requested === 'uk') requested = 'ua';
+        if (supported.indexOf(requested) !== -1) return requested;
+
+        var pathLocale = (window.location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
+        if (pathLocale === 'uk') pathLocale = 'ua';
+        if (supported.indexOf(pathLocale) !== -1) return pathLocale;
+
         var raw = (navigator.languages || [navigator.language || ''])
             .map(function (l) { return l.split('-')[0].toLowerCase(); });
         for (var i = 0; i < raw.length; i++) {
@@ -79,9 +91,29 @@
                             <p id="editorAdminSubtitle">Центр управления черновиком, публикацией и быстрыми переходами по админке.</p>
                         </div>
 
-                        <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему">
-                            <span class="material-icons" id="themeIco">light_mode</span>
-                        </button>
+                        <div class="dash-header-tools">
+                            <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему" aria-pressed="false">
+                                <span class="material-icons" id="themeIco">light_mode</span>
+                            </button>
+
+                            <div id="localeSwitcher" class="locale-switcher admin-locale-switcher">
+                                <button
+                                    id="localeSwitcherTrigger"
+                                    class="locale-switcher__trigger"
+                                    type="button"
+                                    aria-haspopup="menu"
+                                    aria-expanded="false"
+                                    aria-label="Выбор языка"
+                                >
+                                    <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                                    <span id="localeSwitcherLabel">RU</span>
+                                    <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+                                        <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                                    </svg>
+                                </button>
+                                <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Сменить язык" hidden></div>
+                            </div>
+                        </div>
 
                         <div id="draftStateChip" class="dash-draft-chip is-clean">
                             <span class="dash-draft-dot"></span>
@@ -170,14 +202,14 @@
                                     <div class="dash-card-head">
                                         <div class="dash-card-head-icon is-gold"><span class="material-icons">lock</span></div>
                                         <div class="dash-card-head-copy">
-                                            <div class="dash-card-head-title">GitHub token</div>
+                                            <div class="dash-card-head-title">Пароль</div>
                                         </div>
                                     </div>
                                     <div class="dash-card-body">
                                         <div class="dash-field">
-                                            <label for="githubToken">GitHub token</label>
-                                            <input id="githubToken" type="password" placeholder="Вставьте fine-grained token">
-                                            <p class="dash-help">Нужен token с доступом <strong>Contents: Read and write</strong> к <strong>KurumaOfficial/kurumaofficial.github.io</strong> для ветки <strong>dev/v2</strong>.</p>
+                                            <label for="githubToken">Пароль</label>
+                                            <input id="githubToken" type="password" placeholder="Введите пароль для глобальной публикации">
+                                            <p class="dash-help">Пароль нужен только для глобального сохранения изменений.</p>
                                         </div>
                                     </div>
                                 </article>
@@ -206,7 +238,7 @@
                                             </div>
                                             <div class="dash-step">
                                                 <div class="dash-step-number">4</div>
-                                                <div class="dash-step-text">Когда всё готово, вставь GitHub token и нажми <strong>Сохранить Глобально</strong>.</div>
+                                                <div class="dash-step-text">Когда всё готово, введи пароль и нажми <strong>Сохранить Глобально</strong>.</div>
                                             </div>
                                         </div>
                                     </div>
@@ -258,7 +290,13 @@
                                                     <div class="dash-fg">
                                                         <div class="dash-field dash-c6"><label for="f-name">Название</label><input type="text" id="f-name"></div>
                                                         <div class="dash-field dash-c6"><label for="f-slug">ID / якорь</label><input type="text" id="f-slug"></div>
-                                                        <div class="dash-field dash-c4"><label for="f-tag">Тег</label><input type="text" id="f-tag"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-tag">Тег</label>
+                                                            <select id="f-tag">
+                                                                <option value="active">Активно</option>
+                                                                <option value="frozen">Заморожено</option>
+                                                                <option value="abandoned">Заброшено</option>
+                                                            </select>
+                                                        </div>
                                                         <div class="dash-field dash-c4"><label for="f-version">Версия</label><input type="text" id="f-version"></div>
                                                         <div class="dash-field dash-c4"><label for="f-order">Порядок</label><input type="number" id="f-order"></div>
                                                         <div class="dash-field dash-c6"><label for="f-stage">Стадия</label>
@@ -275,7 +313,13 @@
                                                                 <option value="green">Зелёный</option>
                                                             </select>
                                                         </div>
-                                                        <div class="dash-field dash-c12"><label for="f-status">Статус</label><input type="text" id="f-status"></div>
+                                                        <div class="dash-field dash-c12"><label for="f-status">Статус</label>
+                                                            <select id="f-status">
+                                                                <option value="active">Активно</option>
+                                                                <option value="frozen">Заморожено</option>
+                                                                <option value="abandoned">Заброшено</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -304,9 +348,10 @@
                                                         </div>
                                                         <div class="dash-field dash-c6"><label for="f-showcase-order">Порядок на витрине</label><input type="number" id="f-showcase-order"></div>
                                                         <div class="dash-field dash-c6"><label for="f-download">Download URL</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-download-name">Имя файла при скачивании</label><input type="text" id="f-download-name" placeholder="strange-visuals-1.5.1.jar"></div>
                                                         <div class="dash-field dash-c6"><label for="f-source">Исходный код</label><input type="text" id="f-source"></div>
                                                         <div class="dash-field dash-c12">
-                                                            <label for="f-download-file">Файл для GitHub upload</label>
+                                                            <label for="f-download-file">Файл для публикации</label>
                                                             <input type="file" id="f-download-file">
                                                             <p id="f-download-file-meta" class="dash-help">Файл не выбран.</p>
                                                             <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm">Убрать файл</button>
@@ -545,6 +590,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script type="module" src="../src/app.js"></script>
+    <script type="module" src="../src/app.js?v=20260416d"></script>
 </body>
 </html>

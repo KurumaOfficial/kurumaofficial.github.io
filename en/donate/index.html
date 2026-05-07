@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Aleph Studio — Support</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
@@ -37,8 +40,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../assets/css/support/donate.css">
-<link rel="modulepreload" href="../../src/support/donate.js">
+<link rel="stylesheet" href="../../assets/css/support/donate.css?v=12">
+<link rel="modulepreload" href="../../src/support/donate.js?v=20260416d">
 </head>
 <body>
 
@@ -50,13 +53,10 @@
     <span class="logo-text">Aleph Studio</span>
   </a>
   <div class="nav-links">
-    <a class="nav__link" href="../#products">Products</a>
-    <a class="nav__link" href="../#manifesto">Principle</a>
-    <a class="nav__link" href="../#team">Team</a>
-    <a class="nav__link is-active" href="./">Support</a>
+    <a class="nav__link" href="../products/">Products</a>
   </div>
   <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
       <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
     </button>
 
@@ -80,13 +80,14 @@
   </div>
 </nav>
 
-<main id="main" class="donate-page">
+<main id="main" class="donate-main">
   <div class="donate-page-top">
     <a class="donate-back" href="../">
       <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
       <span id="donateBackLabel">Back to Aleph Studio</span>
     </a>
   </div>
+  <div class="donate-page">
 
   <section class="donate-hero reveal">
     <div class="donate-hero-body">
@@ -127,8 +128,9 @@
     </div>
     <div class="supporters-grid" id="supportersGrid"></div>
   </section>
+  </div>
 </main>
 
-<script type="module" src="../../src/support/donate.js"></script>
+<script type="module" src="../../src/support/donate.js?v=20260416d"></script>
 </body>
 </html>

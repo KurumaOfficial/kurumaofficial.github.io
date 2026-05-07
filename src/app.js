@@ -19,7 +19,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from './core/site-shell.js';
+} from './core/site-shell.js?v=20260416c';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -68,7 +68,7 @@ function boot() {
     /* 5.1 — Admin: lazy-load editor on admin page, otherwise just
              wire up the secret key-sequence redirect. --------------- */
     if (isAdminPage) {
-        import('./admin/editor.js').then(({ createEditorController }) => {
+        import('./admin/editor.js?v=20260416d').then(({ createEditorController }) => {
             const editor = createEditorController({
                 renderSite: renderer.renderSite,
                 showToast,
@@ -87,33 +87,12 @@ function boot() {
     initReveal([document.getElementById('main')].filter(Boolean));
 
     /* 7 — Bind global UI helpers ----------------------------------- */
-    bindNavClose();
     initSkipLink();
     initSharedThemeToggle();
     initSmoothRouteTransitions();
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Minor UI helpers                                                  */
-/* ------------------------------------------------------------------ */
-
-/**
- * Close mobile nav when a nav link is clicked.
- */
-function bindNavClose() {
-    const toggle = /** @type {HTMLInputElement | null} */ (
-        document.getElementById('nav-toggle')
-    );
-    if (!toggle) return;
-
-    document.querySelectorAll('.nav__link').forEach(link => {
-        link.addEventListener('click', () => {
-            toggle.checked = false;
-        });
-    });
 }
 
 /* ------------------------------------------------------------------ */

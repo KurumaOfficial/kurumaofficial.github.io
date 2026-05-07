@@ -9,7 +9,7 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
     en: Object.freeze({
         products: Object.freeze({
             'strange-visuals': Object.freeze({
-                tag: 'Active',
+                tag: 'active',
                 status: 'active',
                 summary: 'Strange Visuals focuses on visual enhancements that do not violate server rules.',
                 instructions: Object.freeze([
@@ -19,26 +19,21 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                     'Done — you can launch it.',
                 ]),
                 note: 'The mod file is available via the button below.',
-                routeModules: Object.freeze({
-                    player: Object.freeze(['Boxes', 'Jump Circles', 'China Hat', 'Target Render', 'Hit Bubble']),
-                    world: Object.freeze(['Chams', 'Tracers', 'Projectiles', 'Particles', 'Block Overlay', 'Item Drop Render', 'Skeleton']),
-                    utils: Object.freeze(['Auto Sprint', 'Auto Tool', 'Fullbright', 'No Overlay', 'Coordinates', 'Timer']),
-                    other: Object.freeze(['Anti-Bot', 'Proxy', 'Debug Mode', 'Name Hider']),
-                    interface: Object.freeze(['Array List', 'Watermark', 'Keybinds', 'Notifications', 'Hotbar', 'Scoreboard', 'Tab List', 'Crosshair']),
-                    themes: Object.freeze(['Default', 'Minimalism', 'Neon', 'Retro']),
-                }),
+                // Per-item English names live alongside the Russian originals
+                // in DEFAULT_SITE_DATA (routeModules[*].nameEn). The renderer
+                // picks `nameEn` for the EN locale; no overlay is needed here.
             }),
             'next-release': Object.freeze({
                 title: 'Unknown',
-                tag: 'Unknown',
-                status: 'in development',
+                tag: 'frozen',
+                status: 'frozen',
                 summary: 'This slot is reserved for the next public Aleph Studio release.',
                 note: 'Details will appear later.',
             }),
             'third-project': Object.freeze({
                 title: 'Unknown',
-                tag: 'Unknown',
-                status: 'planned',
+                tag: 'abandoned',
+                status: 'abandoned',
                 summary: 'This slot is reserved for the next public Aleph Studio release.',
                 note: 'Details will appear later.',
             }),
@@ -77,8 +72,8 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
     ua: Object.freeze({
         products: Object.freeze({
             'strange-visuals': Object.freeze({
-                tag: 'Активно',
-                status: 'активно',
+                tag: 'active',
+                status: 'active',
                 summary: 'Strange Visuals зосереджений на візуальних покращеннях, які не порушують правила серверів.',
                 instructions: Object.freeze([
                     'Встановіть Minecraft Fabric 1.21.8 у своєму лаунчері.',
@@ -87,26 +82,21 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                     'Готово — можна запускати.',
                 ]),
                 note: 'Файл мода доступний за кнопкою нижче.',
-                routeModules: Object.freeze({
-                    player: Object.freeze(['Бокси', 'Кола стрибка', 'Китайський капелюх', 'Рендер цілі', 'Хіт-бабл']),
-                    world: Object.freeze(['Чамси', 'Трейсери', 'Снаряди', 'Частинки', 'Блок-оверлей', 'Рендер дропу', 'Скелетон']),
-                    utils: Object.freeze(['Авто спринт', 'Авто тул', 'Фулбрайт', 'Ноу оверлей', 'Координати', 'Таймер']),
-                    other: Object.freeze(['Антибот', 'Проксі', 'Дебаг-режим', 'Приховувач ніку']),
-                    interface: Object.freeze(['Масив лист', 'Вотермарка', 'Кейбінди', 'Сповіщення', 'Хотбар', 'Скорборд', 'Таблист', 'Приціл']),
-                    themes: Object.freeze(['Стандарт', 'Мінімалізм', 'Неон', 'Ретро']),
-                }),
+                // Module names fall back to the Russian originals on the UA
+                // route by design — these short labels read fine in Russian
+                // and an extra translation layer would only add admin work.
             }),
             'next-release': Object.freeze({
                 title: 'Невідомо',
-                tag: 'Невідомо',
-                status: 'у розробці',
+                tag: 'frozen',
+                status: 'frozen',
                 summary: 'Цей слот зарезервовано під наступний публічний реліз Aleph Studio.',
                 note: 'Подробиці зʼявляться пізніше.',
             }),
             'third-project': Object.freeze({
                 title: 'Невідомо',
-                tag: 'Невідомо',
-                status: 'заплановано',
+                tag: 'abandoned',
+                status: 'abandoned',
                 summary: 'Цей слот зарезервовано під наступний публічний реліз Aleph Studio.',
                 note: 'Подробиці зʼявляться пізніше.',
             }),

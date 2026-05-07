@@ -38,8 +38,7 @@ export function getIconMarkup(name) {
 export function setInlineIcon(container, name, { className = '' } = {}) {
     if (!(container instanceof HTMLElement)) return;
 
-    container.classList.remove('material-icons');
-    className.split(/\s+/).filter(Boolean).forEach((token) => container.classList.add(token));
+    container.className = className.trim();
     container.setAttribute('aria-hidden', 'true');
     container.innerHTML = getIconMarkup(name);
 }

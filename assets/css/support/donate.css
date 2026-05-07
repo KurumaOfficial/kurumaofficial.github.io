@@ -1,22 +1,32 @@
+/* HTML `hidden` attribute must always beat component-level `display:`
+ * rules so JS-toggled `.hidden = true` actually hides the element. */
+[hidden] {
+  display: none !important;
+}
+
 [data-theme="dark"] {
   color-scheme: dark;
-  --bg: #111110;
-  --bg2: #1a1917;
-  --text: #e4e2dc;
-  --text-dim: #8a8780;
-  --text-muted: #4a4845;
+  --bg: #080606;
+  --bg2: #0f0b0b;
+  --text: #e8dada;
+  --text-dim: #b09c97;
+  --text-muted: #5a4a44;
   --accent: #8b1a2a;
+  --accent-light: #b52239;
   --accent-dim: rgba(139,26,42,0.12);
+  --accent-soft: rgba(139,26,42,0.06);
+  --accent-border: rgba(139,26,42,0.22);
   --green: #4caf6e;
-  --border: rgba(255,255,255,0.07);
-  --border-hi: rgba(255,255,255,0.13);
-  --surface: rgba(255,255,255,0.04);
-  --surface-h: rgba(255,255,255,0.07);
+  --border: rgba(139,26,42,0.10);
+  --border-hi: rgba(139,26,42,0.20);
+  --surface: rgba(139,26,42,0.04);
+  --surface-h: rgba(139,26,42,0.08);
   --shadow: 0 8px 48px rgba(0,0,0,0.5);
   --shadow-s: 0 2px 14px rgba(0,0,0,0.3);
+  /* Top-supporter podium accents: gold/silver/bronze remain intentionally */
   --gold: #c9a84c;
   --gold-light: #e2c47a;
-  --gold-dim: rgba(201,168,76,0.12);
+  --gold-dim: rgba(201,168,76,0.10);
   --gold-border: rgba(201,168,76,0.22);
   --gold-glow: rgba(201,168,76,0.07);
   --platinum: #9bc6ff;
@@ -28,18 +38,21 @@
 
 [data-theme="light"] {
   color-scheme: light;
-  --bg: #f3f1eb;
-  --bg2: #eae7df;
-  --text: #1a1916;
-  --text-dim: #6b6760;
-  --text-muted: #a8a49e;
+  --bg: #f5f0ee;
+  --bg2: #ede8e4;
+  --text: #2d1512;
+  --text-dim: #6b3d34;
+  --text-muted: #9a7068;
   --accent: #8b1a2a;
-  --accent-dim: rgba(139,26,42,0.1);
+  --accent-light: #b52239;
+  --accent-dim: rgba(139,26,42,0.10);
+  --accent-soft: rgba(139,26,42,0.05);
+  --accent-border: rgba(139,26,42,0.22);
   --green: #2d8a4e;
-  --border: rgba(0,0,0,0.08);
-  --border-hi: rgba(0,0,0,0.14);
-  --surface: rgba(0,0,0,0.04);
-  --surface-h: rgba(0,0,0,0.07);
+  --border: rgba(139,26,42,0.10);
+  --border-hi: rgba(139,26,42,0.20);
+  --surface: rgba(139,26,42,0.04);
+  --surface-h: rgba(139,26,42,0.08);
   --shadow: 0 8px 40px rgba(0,0,0,0.1);
   --shadow-s: 0 2px 12px rgba(0,0,0,0.07);
   --gold: #a07830;
@@ -101,8 +114,6 @@ html[data-theme-switching="true"] .donate-eyebrow,
 html[data-theme-switching="true"] .donate-title em,
 html[data-theme-switching="true"] .donate-desc,
 html[data-theme-switching="true"] .donate-section,
-html[data-theme-switching="true"] .section-head h2,
-html[data-theme-switching="true"] .section-head p,
 html[data-theme-switching="true"] .count-chip,
 html[data-theme-switching="true"] .pay-btn,
 html[data-theme-switching="true"] .pay-btn-label,
@@ -110,13 +121,9 @@ html[data-theme-switching="true"] .pay-btn-note,
 html[data-theme-switching="true"] .pay-btn-arrow,
 html[data-theme-switching="true"] .card-donor,
 html[data-theme-switching="true"] .donor-avatar-default,
-html[data-theme-switching="true"] .donor-name,
 html[data-theme-switching="true"] .donor-badge,
-html[data-theme-switching="true"] .donor-amount,
 html[data-theme-switching="true"] .empty-state,
-html[data-theme-switching="true"] footer,
-html[data-theme-switching="true"] .footer-copy,
-html[data-theme-switching="true"] .skip-link { transition:background-color .35s ease,border-color .35s ease,color .35s ease,box-shadow .35s ease; }
+html[data-theme-switching="true"] footer { transition:background-color .28s ease,border-color .28s ease,color .28s ease; }
 
 :focus-visible {
   outline:2px solid var(--accent);
@@ -428,10 +435,13 @@ button {
   color:var(--text-muted);
 }
 
+.donate-main {
+  padding-top:calc(94px + var(--safe-top));
+}
+
 .donate-page {
   max-width:1120px;
   margin:0 auto;
-  padding-top:calc(94px + var(--safe-top));
   padding-right:calc(var(--page-gutter) + var(--safe-right));
   padding-bottom:calc(96px + var(--safe-bottom));
   padding-left:calc(var(--page-gutter) + var(--safe-left));
@@ -439,27 +449,61 @@ button {
 
 .donate-page-top {
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:flex-start;
   gap:18px;
-  margin-left:calc(50% - 50vw);
-  margin-right:calc(50% - 50vw);
-  padding:10px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
-  position:relative;
-  z-index:2;
+  padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+  margin-bottom:18px;
+}
+
+/* On wide & tall desktop the back button hovers as a sticky pill above the
+ * page so it stays in reach while scrolling. On any narrower or shorter
+ * viewport (incl. high zoom levels) it falls back to a normal block element
+ * to avoid overlapping section titles. */
+@media (min-width: 1181px) and (min-height: 841px) {
+  .donate-page-top {
+    position:sticky;
+    top:calc(94px + var(--safe-top));
+    z-index:10;
+    pointer-events:none;
+    height:0;
+    margin-bottom:0;
+    overflow:visible;
+  }
+  .donate-page-top .donate-back {
+    pointer-events:auto;
+  }
 }
 
 .donate-hero {
   display:grid;
   gap:0;
   padding:0;
-  border:1px solid var(--gold-border);
+  border:1px solid var(--accent-border);
   border-radius:28px;
   background:
-    radial-gradient(circle at top left, var(--gold-dim), transparent 48%),
+    radial-gradient(circle at top left, var(--accent-dim), transparent 50%),
     linear-gradient(180deg, color-mix(in srgb, var(--surface-h) 80%, transparent), transparent 100%);
   box-shadow:var(--shadow);
   overflow:hidden;
+  position:relative;
+}
+
+.donate-hero::before {
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:2px;
+  background:linear-gradient(90deg,
+    transparent,
+    var(--accent) 30%,
+    var(--accent-light) 50%,
+    var(--accent) 70%,
+    transparent);
+  opacity:.55;
+  pointer-events:none;
 }
 
 .donate-hero-body {
@@ -472,8 +516,8 @@ button {
   display:inline-flex;
   align-items:center;
   gap:10px;
-  width:fit-content;
   min-height:42px;
+  margin-top:10px;
   padding:0 16px;
   border-radius:999px;
   border:1px solid var(--border);
@@ -484,6 +528,7 @@ button {
   font-size:11px;
   letter-spacing:.12em;
   text-transform:uppercase;
+  pointer-events:auto;
 }
 
 .donate-back:hover {
@@ -505,13 +550,13 @@ button {
   align-items:center;
   justify-content:center;
   background:
-    linear-gradient(180deg, rgba(201,168,76,0.18), rgba(201,168,76,0.08)),
-    var(--gold-dim);
-  border:1px solid var(--gold-border);
-  color:var(--gold-light);
+    linear-gradient(180deg, rgba(139,26,42,0.22), rgba(139,26,42,0.08)),
+    var(--accent-dim);
+  border:1px solid var(--accent-border);
+  color:var(--accent-light);
   box-shadow:
-    inset 0 1px 0 rgba(255,244,204,0.22),
-    0 12px 28px rgba(201,168,76,0.08);
+    inset 0 1px 0 rgba(255,220,220,0.18),
+    0 12px 28px rgba(139,26,42,0.16);
 }
 
 .donate-crown .ui-icon {
@@ -530,7 +575,19 @@ button {
 
 .donate-eyebrow {
   font-size:11px;
-  color:var(--gold);
+  color:var(--accent);
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+}
+
+.donate-eyebrow::before {
+  content:'';
+  display:inline-block;
+  width:6px;
+  height:6px;
+  background:var(--accent);
+  flex:0 0 auto;
 }
 
 .donate-title {
@@ -550,11 +607,17 @@ button {
 }
 
 .donate-desc a {
-  color:var(--gold);
+  color:var(--accent-light);
   text-decoration:none;
+  border-bottom:1px solid var(--accent-border);
+  padding-bottom:1px;
+  transition:color .2s ease, border-color .2s ease;
 }
 
-.donate-desc a:hover { color:var(--gold-light); }
+.donate-desc a:hover {
+  color:var(--accent);
+  border-bottom-color:var(--accent);
+}
 
 .donate-section {
   margin-top:28px;
@@ -562,6 +625,51 @@ button {
   border:1px solid var(--border);
   border-radius:24px;
   background:color-mix(in srgb, var(--bg2) 38%, transparent);
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+}
+
+/* Subtle ruby ambient — a thin top stripe + a soft glow at the top-left
+ * corner. Matches the main site's restrained accent treatment instead of
+ * the loud golden "pentastar" the route used to ship with. */
+.donate-section::before {
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:1px;
+  pointer-events:none;
+  z-index:0;
+  background:linear-gradient(90deg,
+    transparent,
+    var(--accent-border) 30%,
+    var(--accent) 50%,
+    var(--accent-border) 70%,
+    transparent);
+  opacity:.45;
+}
+
+.donate-section::after {
+  content:'';
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(ellipse 60% 40% at 0% 0%,
+      var(--accent-soft) 0%,
+      transparent 65%);
+  opacity:1;
+}
+
+html[data-theme="light"] .donate-section::after {
+  opacity:.7;
+}
+
+.donate-section > * {
+  position:relative;
+  z-index:1;
 }
 
 .section-head {
@@ -592,9 +700,9 @@ button {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  border:1px solid var(--gold-border);
-  background:var(--gold-dim);
-  color:var(--gold-light);
+  border:1px solid var(--accent-border);
+  background:var(--accent-dim);
+  color:var(--accent-light);
   font-size:11px;
 }
 
@@ -630,14 +738,14 @@ button {
 }
 
 .pay-btn:hover {
-  border-color:var(--gold-border);
+  border-color:var(--accent-border);
   background:var(--surface-h);
   transform:translateY(-2px);
 }
 
 .pay-btn:focus-visible {
   outline:none;
-  border-color:var(--gold-border);
+  border-color:var(--accent);
   box-shadow:0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent);
 }
 
@@ -646,7 +754,7 @@ button {
   font-size:10px;
   letter-spacing:.14em;
   text-transform:uppercase;
-  color:var(--gold);
+  color:var(--accent);
 }
 
 .pay-btn-name {
@@ -670,9 +778,17 @@ button {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  border:1px solid var(--gold-border);
-  color:var(--gold-light);
-  background:var(--gold-dim);
+  border:1px solid var(--accent-border);
+  color:var(--accent-light);
+  background:var(--accent-dim);
+  transition:background .2s ease, border-color .2s ease, transform .2s ease;
+}
+
+.pay-btn:hover .pay-btn-arrow {
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+  transform:translate(2px, -2px);
 }
 
 .pay-btn-arrow .ui-icon {
@@ -901,7 +1017,7 @@ button {
   font-family:'Cormorant',serif;
   font-weight:700;
   font-size:20px;
-  color:var(--gold);
+  color:var(--text-dim);
 }
 
 .card-donor.is-platinum .donor-avatar-default,
@@ -926,11 +1042,23 @@ button {
   font-family:'JetBrains Mono',monospace;
   font-size:9px;
   letter-spacing:.5px;
-  color:var(--gold);
-  background:var(--gold-dim);
-  border:1px solid var(--gold-border);
+  color:var(--text-dim);
+  background:var(--surface);
+  border:1px solid var(--border);
   border-radius:4px;
   padding:2px 7px;
+}
+
+.card-donor.is-top .donor-badge {
+  color:var(--gold);
+  background:var(--gold-dim);
+  border-color:var(--gold-border);
+}
+
+.card-donor.is-top.is-platinum .donor-badge {
+  color:var(--platinum-light);
+  background:var(--platinum-dim);
+  border-color:var(--platinum-border);
 }
 
 .card-donor.is-platinum .donor-badge {
@@ -943,9 +1071,13 @@ button {
 .donor-amount {
   font-family:'JetBrains Mono',monospace;
   font-size:9px;
-  color:var(--gold);
+  color:var(--text-dim);
   letter-spacing:.3px;
-  opacity:.8;
+  opacity:.85;
+}
+
+.card-donor.is-top .donor-amount {
+  color:var(--gold);
 }
 
 .card-donor.is-platinum .donor-amount {
@@ -1000,6 +1132,50 @@ button {
   }
 }
 
+@media (min-width: 1181px) and (min-height: 841px) {
+  .donate-page {
+    padding-top:24px;
+  }
+}
+
+/* Tighten typography & spacing where the viewport gets shorter or narrower
+ * than “comfortable desktop”. The sticky/static behavior is decided once
+ * by the rule near the top of this file (see @media (min-width:1181px)
+ * and (min-height:841px)), so these blocks only adjust dimensions — they
+ * never re-toggle position. */
+@media (max-height: 840px) {
+  .donate-hero-body {
+    gap: 16px;
+    padding: 18px 36px 36px;
+  }
+
+  .donate-title {
+    font-size: clamp(42px, 6.2vw, 74px);
+  }
+}
+
+@media (min-width: 961px) and (max-height: 760px),
+       (min-width: 961px) and (max-width: 1400px) {
+  .donate-hero-body {
+    gap: 16px;
+    padding: 18px 30px 32px;
+  }
+
+  .donate-title {
+    font-size: clamp(46px, 7.2vw, 76px);
+  }
+
+  .donate-desc {
+    font-size: 15px;
+    line-height: 1.72;
+  }
+
+  .donate-section {
+    margin-top: 24px;
+    padding: 26px;
+  }
+}
+
 @media (max-width: 960px) {
   :root { --page-gutter: 24px; }
   .nav {
@@ -1009,13 +1185,9 @@ button {
     padding-left:calc(var(--page-gutter) + var(--safe-left));
   }
   .donate-page {
-    padding-top:calc(94px + var(--safe-top));
     padding-right:calc(var(--page-gutter) + var(--safe-right));
     padding-bottom:calc(72px + var(--safe-bottom));
     padding-left:calc(var(--page-gutter) + var(--safe-left));
-  }
-  .donate-page-top {
-    padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
   }
   .donate-hero-body {
     padding:20px 32px 36px;
@@ -1027,12 +1199,20 @@ button {
 }
 
 @media (max-width: 768px) {
-  .donate-page {
+  .donate-main {
     padding-top:calc(76px + var(--safe-top));
   }
 
-  .donate-page-top {
-    padding:16px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+  #donateBackLabel {
+    display:none;
+  }
+
+  .donate-back {
+    min-height:38px;
+    min-width:38px;
+    width:38px;
+    padding:0;
+    justify-content:center;
   }
 }
 
@@ -1045,7 +1225,6 @@ button {
     padding-left:calc(var(--page-gutter) + var(--safe-left));
   }
   .donate-page {
-    padding-top:calc(76px + var(--safe-top));
     padding-right:calc(var(--page-gutter) + var(--safe-right));
     padding-bottom:calc(56px + var(--safe-bottom));
     padding-left:calc(var(--page-gutter) + var(--safe-left));
@@ -1069,6 +1248,14 @@ button {
   .supporters-grid { grid-template-columns:1fr; }
 }
 
+@media (max-width: 480px) {
+  .donate-title     { font-size: clamp(34px, 10vw, 48px); }
+  .donate-hero-body { padding: 12px 16px 20px; }
+  .donate-section   { padding: 16px; border-radius: 16px; }
+  .pay-btn          { min-height: 140px; padding: 18px; }
+  .donate-desc      { font-size: 15px; }
+}
+
 @media (max-width: 420px) {
   .logo-text {
     display:none;
@@ -1086,5 +1273,69 @@ button {
   .donate-back {
     min-height:38px;
     padding:0 14px;
+  }
+}
+
+/* Mid-range desktop tweaks (laptop heights / 1080-1400px wide) — typography
+ * and gutters only. Position behavior is decided exclusively by the rule
+ * near the top of the file. */
+@media (min-width: 769px) and (max-height: 760px),
+       (min-width: 769px) and (max-width: 1400px) {
+  :root {
+    --page-gutter: 32px;
+  }
+
+  .donate-page {
+    max-width: 1040px;
+  }
+
+  .donate-hero-body {
+    gap: 16px;
+    padding: 18px 30px 32px;
+  }
+
+  .donate-crown {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+  }
+
+  .donate-crown .ui-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .donate-title {
+    font-size: clamp(46px, 6.4vw, 74px);
+  }
+
+  .donate-desc {
+    font-size: 15px;
+    line-height: 1.72;
+    max-width: 54ch;
+  }
+
+  .donate-section {
+    margin-top: 24px;
+    padding: 26px;
+  }
+}
+
+@media (min-width: 769px) and (max-height: 620px),
+       (min-width: 769px) and (max-width: 1180px) {
+  :root {
+    --page-gutter: 24px;
+  }
+
+  .donate-hero-body {
+    padding: 16px 26px 28px;
+  }
+
+  .donate-title {
+    font-size: clamp(42px, 5.8vw, 62px);
+  }
+
+  .donate-section {
+    padding: 24px;
   }
 }
