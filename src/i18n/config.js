@@ -95,16 +95,6 @@ export function buildLocalizedRoutePath(locale, pathname = window.location.pathn
 }
 
 /**
- * Resolve the locale-neutral home URL for the site root/base path.
- * @param {string} [origin]
- * @param {string} [pathname]
- * @returns {string}
- */
-export function getSiteRootHref(origin = window.location.origin, pathname = window.location.pathname) {
-    return new URL(getSiteBasePath(pathname), origin).toString();
-}
-
-/**
  * Map any locale-like string to a supported locale key.
  * @param {string} raw
  * @returns {string}

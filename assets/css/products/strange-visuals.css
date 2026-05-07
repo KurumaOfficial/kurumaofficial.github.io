@@ -1,3 +1,11 @@
+/* The HTML `hidden` attribute must beat component-level `display:` rules
+ * (e.g. `.hero-source-btn { display: inline-flex }`). Without this, an
+ * element rendered with `<a hidden href="">` stays visible and clicks
+ * navigate to the current route. */
+[hidden] {
+  display: none !important;
+}
+
 /* ─── THEMES ─── */
 
 [data-theme="dark"] {
@@ -151,25 +159,19 @@ html[data-theme-switching="true"] .hero-side-btn,
 html[data-theme-switching="true"] .hero-share-bg,
 html[data-theme-switching="true"] .hero-share-link,
 html[data-theme-switching="true"] .hero-meta-item,
-html[data-theme-switching="true"] .hero-meta-value,
-html[data-theme-switching="true"] .hero-meta-label,
 html[data-theme-switching="true"] .hero-info,
 html[data-theme-switching="true"] .hero-store-card,
 html[data-theme-switching="true"] .hero-breadcrumb a,
 html[data-theme-switching="true"] .feat-card,
-html[data-theme-switching="true"] .feat-card h3,
-html[data-theme-switching="true"] .feat-card p,
 html[data-theme-switching="true"] .feat-ico,
 html[data-theme-switching="true"] .mod-item,
 html[data-theme-switching="true"] .note-block,
 html[data-theme-switching="true"] .faq-item,
 html[data-theme-switching="true"] .compare-card,
 html[data-theme-switching="true"] .compare-image,
-html[data-theme-switching="true"] .compare-label,
-html[data-theme-switching="true"] .compare-slider,
 html[data-theme-switching="true"] .compare-handle,
 html[data-theme-switching="true"] footer {
-  transition:background-color .28s ease,border-color .28s ease,color .28s ease,box-shadow .28s ease;
+  transition:background-color .28s ease,border-color .28s ease,color .28s ease;
 }
 
 html[data-theme-switching="true"] .gui-w {
@@ -456,15 +458,19 @@ html[data-theme-switching="true"] .gui-w {
 }
 
 /* ─── HERO / STORE STYLE ─── */
+#main {
+  padding-top:calc(94px + var(--safe-top));
+}
+
 .hero-store {
   position:relative;
-  min-height:calc(100svh - 30px);
-  min-height:calc(100dvh - 30px);
+  min-height:calc(100svh - 176px - var(--safe-top));
+  min-height:calc(100dvh - 176px - var(--safe-top));
   display:flex;
   flex-direction:column;
-  padding-top:calc(94px + var(--safe-top));
+  padding-top:0;
   isolation:isolate;
-  overflow:hidden;
+  overflow:clip;
 }
 
 .hero-store::before {
@@ -487,50 +493,57 @@ html[data-theme-switching="true"] .gui-w {
   pointer-events:none;
 }
 
+/* Soft directional studio glow seeping in from the upper-left.
+   Three layered radial gradients give a natural light fall-off without
+   hard polygon edges. Theme-aware: warm cream highlights on dark,
+   sun-through-window white on light. */
 .hero-left-fog {
   position:absolute;
-  left:-140px;
-  top:40px;
-  width:560px;
-  height:90vh;
+  inset:0 auto 0 0;
+  width:clamp(360px, 52vw, 820px);
+  max-width:80%;
   z-index:0;
   pointer-events:none;
-  opacity:.22;
-  filter:blur(90px);
+  opacity:.92;
   background:
-    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 60%),
-    radial-gradient(circle at 10% 70%, rgba(255,255,255,0.04), transparent 55%);
+    radial-gradient(ellipse 30% 28% at 16% 22%,
+      rgba(255, 246, 224, 0.18) 0%,
+      rgba(255, 246, 224, 0.06) 38%,
+      transparent 78%),
+    radial-gradient(ellipse 60% 52% at 24% 38%,
+      rgba(255, 246, 224, 0.06) 0%,
+      transparent 72%),
+    radial-gradient(ellipse 50% 44% at 8% 78%,
+      rgba(201, 168, 76, 0.06) 0%,
+      transparent 76%);
   mix-blend-mode:screen;
+  filter:blur(10px);
+  transform:translateZ(0);
 }
 
-.hero-left-shade {
-  position:absolute;
-  left:-50px;
-  top:120px;
-  width:460px;
-  height:720px;
-  z-index:0;
-  pointer-events:none;
-  opacity:.18;
+html[data-theme="light"] .hero-left-fog {
+  opacity:.85;
+  mix-blend-mode:multiply;
+  filter:blur(14px);
   background:
-    linear-gradient(90deg,
-      rgba(255,255,255,0.05) 0%,
-      rgba(255,255,255,0.03) 28%,
-      rgba(255,255,255,0.015) 58%,
-      rgba(255,255,255,0) 100%);
-  clip-path: polygon(
-    0 0,
-    62% 0,
-    82% 16%,
-    88% 40%,
-    82% 62%,
-    68% 84%,
-    44% 100%,
-    0 100%
-  );
+    radial-gradient(ellipse 30% 28% at 16% 22%,
+      rgba(58, 50, 40, 0.10) 0%,
+      rgba(58, 50, 40, 0.04) 40%,
+      transparent 78%),
+    radial-gradient(ellipse 60% 52% at 24% 38%,
+      rgba(58, 50, 40, 0.05) 0%,
+      transparent 72%),
+    radial-gradient(ellipse 50% 44% at 8% 78%,
+      rgba(139, 26, 42, 0.05) 0%,
+      transparent 76%);
 }
 
-.hero-store-top,
+/* Legacy shade element kept in markup for compatibility but visually retired
+   the polygon-clipped strip caused visible hard edges at certain zoom levels. */
+.hero-left-shade {
+  display:none;
+}
+
 .hero-store-content {
   position:relative;
   z-index:2;
@@ -538,10 +551,16 @@ html[data-theme-switching="true"] .gui-w {
 
 .hero-store-top {
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   justify-content:space-between;
   gap:18px;
-  padding:10px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+  padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+  position:sticky;
+  top:calc(94px + var(--safe-top));
+  z-index:10;
+  pointer-events:none;
+  height:0;
+  overflow:visible;
 }
 
 .hero-store-back {
@@ -549,14 +568,23 @@ html[data-theme-switching="true"] .gui-w {
   align-items:center;
   gap:10px;
   min-height:42px;
+  margin-top:10px;
   padding:0 16px;
   color:var(--text-dim);
   text-decoration:none;
   border-radius:999px;
   border:1px solid var(--border);
-  background:rgba(0,0,0,0.04);
+  background:color-mix(in srgb, var(--bg2) 70%, transparent);
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  box-shadow:0 6px 18px rgba(0,0,0,0.18);
+  pointer-events:auto;
 }
-.hero-store-back:hover { color:var(--text); border-color:var(--border-hi); background:var(--surface); }
+.hero-store-back:hover {
+  color:var(--text);
+  border-color:var(--border-hi);
+  background:color-mix(in srgb, var(--bg2) 86%, transparent);
+}
 
 .hero-store-back-label {
   font-family:'JetBrains Mono',monospace;
@@ -568,9 +596,15 @@ html[data-theme-switching="true"] .gui-w {
 
 .hero-store-actions {
   margin-left:auto;
+  margin-top:10px;
   display:flex;
   gap:14px;
   align-items:center;
+  pointer-events:auto;
+}
+
+.hero-store-actions:empty {
+  display:none;
 }
 
 .hero-store-back .ui-icon {
@@ -596,13 +630,16 @@ html[data-theme-switching="true"] .gui-w {
   flex:1;
   display:flex;
   align-items:flex-end;
-  padding:36px calc(var(--page-gutter) + var(--safe-right)) calc(100px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left));
+  padding-top:clamp(24px, 3.5vw, 56px);
+  padding-right:calc(var(--page-gutter) + var(--safe-right));
+  padding-bottom:calc(clamp(64px, 7vw, 120px) + var(--safe-bottom));
+  padding-left:calc(var(--page-gutter) + var(--safe-left));
 }
 
 .hero-store-card {
   width:100%;
   display:flex;
-  gap:54px;
+  gap:clamp(24px, 3.6vw, 54px);
   align-items:flex-end;
   animation:fadeUp .75s ease both;
 }
@@ -610,7 +647,7 @@ html[data-theme-switching="true"] .gui-w {
 .hero-icon-wrap {
   flex-shrink:0;
   position:relative;
-  transform:translateY(-212px);
+  transform:translateY(clamp(-212px, -13.5vw, -110px));
     text-decoration:none;
     display:inline-flex;
     align-items:center;
@@ -650,18 +687,21 @@ html[data-theme-switching="true"] .gui-w {
   flex-direction:column;
   gap:10px;
   position:relative;
-  transform:translateY(-212px);
+  transform:translateY(clamp(-212px, -13.5vw, -110px));
 }
 
 .hero-app-name {
   font-family:'Cormorant',serif;
   font-weight:700;
-  font-size:clamp(60px,11vw,116px);
+  font-size:clamp(56px, 9.5vw, 116px);
   line-height:.93;
-  letter-spacing:-3.5px;
+  letter-spacing:-0.03em;
   color:var(--text);
   margin:0;
+  width:100%;
   max-width:760px;
+  word-break:break-word;
+  overflow-wrap:break-word;
 }
 
 .hero-app-name em {
@@ -1379,7 +1419,6 @@ html[data-theme-switching="true"] .gui-w {
   border:1px solid var(--gui-bdr);
   box-shadow:var(--shadow);
   animation:guiFloat 5.5s ease-in-out infinite;
-  will-change:transform;
 }
 
 @keyframes guiFloat {
@@ -1572,31 +1611,14 @@ html[data-theme-switching="true"] .gui-w {
 }
 
 .gw-theme-card {
-  appearance:none;
-  -webkit-appearance:none;
   width:100%;
   border:1px solid var(--gui-bdr);
   border-radius:10px;
-  padding:0;
   background:var(--gui-item);
   color:var(--gui-name);
   text-align:left;
-  cursor:pointer;
   overflow:hidden;
-  transition:border-color .18s ease, background .18s ease, transform .18s ease, box-shadow .18s ease;
-}
-
-.gw-theme-card:hover {
-  background:var(--gui-item-h);
-}
-
-.gw-theme-card:focus-visible {
-  outline:none;
-  box-shadow:0 0 0 2px var(--accent);
-}
-
-.gw-theme-card:active {
-  transform:scale(.985);
+  transition:border-color .18s ease, box-shadow .18s ease;
 }
 
 .gw-theme-card.is-active {
@@ -1858,11 +1880,201 @@ footer {
 }
 
 /* ─── RESPONSIVE ─── */
+@media(min-width:1181px) and (min-height:841px){
+  .hero-store {
+    min-height:calc(100svh - 112px - var(--safe-top));
+    min-height:calc(100dvh - 112px - var(--safe-top));
+  }
+
+  .hero-store-top {
+    position:sticky;
+    top:calc(94px + var(--safe-top));
+    height:0;
+    margin-bottom:0;
+    pointer-events:none;
+    z-index:10;
+    overflow:visible;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:10px;
+  }
+}
+
+@media(max-width:1180px){
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+}
+
+@media(max-height:840px){
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+
+  .hero-store-content {
+    padding-bottom:calc(72px + var(--safe-bottom));
+  }
+
+  .hero-icon-wrap {
+    transform:translateY(-164px);
+  }
+
+  .hero-app-icon {
+    width:288px;
+    height:288px;
+    top:-56px;
+  }
+
+  .hero-app-icon svg {
+    width:120px;
+    height:120px;
+  }
+
+  .hero-info {
+    transform:translateY(-156px);
+  }
+
+  .hero-app-name {
+    font-size:clamp(66px, 8vw, 98px);
+    line-height:.94;
+    letter-spacing:-3px;
+  }
+}
+
+@media (min-width:1181px) and (max-height:760px),
+       (min-width:1181px) and (max-width:1400px){
+  .hero-store {
+    min-height:auto;
+  }
+
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding-right:calc(var(--page-gutter) + var(--safe-right));
+    padding-left:calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+
+  .hero-store-content {
+    align-items:flex-start;
+    padding:16px calc(var(--page-gutter) + var(--safe-right)) calc(56px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left));
+  }
+
+  .hero-store-card {
+    gap:28px;
+    align-items:flex-start;
+  }
+
+  .hero-icon-wrap {
+    transform:none;
+  }
+
+  .hero-app-icon {
+    width:220px;
+    height:220px;
+    top:0;
+  }
+
+  .hero-app-icon svg {
+    width:100px;
+    height:100px;
+  }
+
+  .hero-info {
+    transform:none;
+    gap:8px;
+  }
+
+  .hero-app-name {
+    font-size:clamp(54px, 7vw, 84px);
+    line-height:.92;
+    letter-spacing:-2.8px;
+  }
+
+  .hero-dev {
+    font-size:15px;
+    margin-top:4px;
+  }
+
+  .hero-category {
+    font-size:13px;
+  }
+
+  .hero-meta {
+    margin-top:12px;
+  }
+
+  .hero-meta-item {
+    min-width:110px;
+    padding:14px 18px;
+  }
+
+  .hero-meta-value {
+    font-size:18px;
+  }
+
+  .hero-meta-label {
+    font-size:10px;
+  }
+
+  .hero-actions {
+    gap:10px;
+    margin-top:14px;
+  }
+
+  .hero-install-btn {
+    min-width:320px;
+    padding:14px 28px;
+    font-size:14px;
+  }
+
+  .hero-source-btn {
+    width:48px;
+    min-width:48px;
+    min-height:48px;
+  }
+}
+
 @media(max-width:1100px){
   .hero-store-content { padding:28px calc(var(--page-gutter) + var(--safe-right)) calc(90px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left)); }
-  .hero-store-top { padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); }
+  .hero-store-top { padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); overflow:visible; }
   .hero-store-card { gap:34px; }
   .hero-app-icon { width:260px; height:260px; top:-34px; }
+  .hero-store { min-height:calc(100svh - 166px - var(--safe-top)); min-height:calc(100dvh - 166px - var(--safe-top)); }
 }
 
 @media(max-width:920px){
@@ -1883,17 +2095,17 @@ footer {
   .preview-row      { grid-template-columns:1fr; gap:48px; }
   footer            { padding:24px 20px; flex-direction:column; text-align:center; }
 
-  .hero-left-fog    { width:380px; left:-120px; }
-  .hero-left-shade  { width:300px; height:520px; }
-
   .hero-store-card {
     flex-direction:column;
     align-items:flex-start;
   }
 
+  .hero-store-content { align-items:flex-start; }
+
   .hero-icon-wrap {
-    width:100%;
-    transform:translateY(-212px);
+    width:auto;
+    justify-content:flex-start;
+    transform:none;
   }
 
   .hero-app-icon {
@@ -1907,7 +2119,8 @@ footer {
   }
 
   .hero-info {
-    transform:translateY(-212px);
+    transform:none;
+    width:100%;
   }
 
   .hero-meta {
@@ -1945,9 +2158,20 @@ footer {
     display:none;
   }
 
-  .hero-store { padding-top:calc(76px + var(--safe-top)); min-height:auto; }
+  #main { padding-top:calc(76px + var(--safe-top)); }
+  .hero-store { padding-top:0; min-height:auto; }
   .hero-store-content { padding:24px calc(var(--page-gutter) + var(--safe-right)) calc(64px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left)); }
-  .hero-store-top { padding:16px calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left)); }
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:14px;
+    padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+    overflow:visible;
+  }
+  .hero-store-back, .hero-store-actions { margin-top:0; }
 
   .hero-store-action,
   .hero-source-btn,
@@ -1972,7 +2196,17 @@ footer {
     --share-gap:10px;
   }
 
-  .hero-store-back-label,
+  .hero-store-back-label {
+    display:none;
+  }
+
+  .hero-store-back {
+    min-width:38px;
+    width:38px;
+    padding:0;
+    justify-content:center;
+  }
+
   .hero-source-btn {
     font-size:10px;
     letter-spacing:.1em;
@@ -2056,5 +2290,193 @@ footer {
   .locale-switcher__trigger {
     min-height:36px;
     padding:6px 10px 6px 8px;
+  }
+
+  .hero-app-name {
+    font-size:clamp(32px,12vw,42px);
+    letter-spacing:-2px;
+  }
+
+  .hero-dev { font-size:13px; }
+
+  .hero-actions { gap:8px; }
+
+  .wrap { padding:48px 16px; }
+}
+
+@media (min-width:769px) and (max-height:760px),
+       (min-width:769px) and (max-width:1400px){
+  :root {
+    --page-gutter: 32px;
+  }
+
+  .hero-store {
+    min-height:auto;
+  }
+
+  /* Keep hero-store-top in normal flow at this size class so the floating
+     back / share pills don't visually clash with the hero content as the
+     user scrolls. The sticky behaviour is reserved for the wide-comfortable
+     viewport (>=1181px and tall enough). */
+  .hero-store-top {
+    position:static;
+    top:auto;
+    height:auto;
+    margin-bottom:18px;
+    padding:0 calc(var(--page-gutter) + var(--safe-right)) 0 calc(var(--page-gutter) + var(--safe-left));
+    pointer-events:auto;
+    z-index:auto;
+    overflow:visible;
+  }
+
+  .hero-store-back,
+  .hero-store-actions {
+    margin-top:0;
+  }
+
+  /* Cancel the negative translateY that lifts the card into the sticky
+     bar zone — at this size class the hero is short and the back button
+     is in normal flow, so the lift would only cause overlap. */
+  .hero-icon-wrap,
+  .hero-info {
+    transform:none;
+  }
+
+  .hero-store-action,
+  .hero-source-btn,
+  .hero-share-toggle,
+  .hero-share-link,
+  .hero-share-dock,
+  .hero-share-bg {
+    min-height:38px;
+    min-width:38px;
+    width:38px;
+    height:38px;
+    padding:0;
+  }
+
+  .hero-share-dock {
+    --share-btn-size:38px;
+    --share-gap:10px;
+  }
+
+  .hero-source-btn .ui-icon {
+    width:18px;
+    height:18px;
+  }
+
+  .hero-store-content {
+    align-items:flex-start;
+    padding:68px calc(var(--page-gutter) + var(--safe-right)) calc(56px + var(--safe-bottom)) calc(var(--page-gutter) + var(--safe-left));
+  }
+
+  .hero-store-card {
+    gap:24px;
+    align-items:flex-start;
+  }
+
+  .hero-icon-wrap {
+    transform:none;
+  }
+
+  .hero-app-icon {
+    width:196px;
+    height:196px;
+    top:0;
+  }
+
+  .hero-app-icon svg {
+    width:88px;
+    height:88px;
+  }
+
+  .hero-info {
+    transform:none;
+    gap:8px;
+    max-width:min(100%, 760px);
+  }
+
+  .hero-app-name {
+    font-size:clamp(48px, 6.2vw, 72px);
+    line-height:.92;
+    letter-spacing:-2.4px;
+  }
+
+  .hero-dev {
+    margin-top:4px;
+    font-size:15px;
+  }
+
+  .hero-category {
+    font-size:13px;
+    line-height:1.5;
+  }
+
+  .hero-meta {
+    margin-top:12px;
+  }
+
+  .hero-meta-item {
+    min-width:96px;
+    padding:14px 16px;
+  }
+
+  .hero-meta-value {
+    font-size:18px;
+  }
+
+  .hero-meta-label {
+    font-size:10px;
+  }
+
+  .hero-actions {
+    gap:10px;
+    margin-top:14px;
+  }
+
+  .hero-install-btn {
+    min-width:min(100%, 360px);
+    padding:14px 26px;
+    font-size:14px;
+  }
+}
+
+@media (min-width:769px) and (max-height:620px),
+       (min-width:769px) and (max-width:1180px){
+  :root {
+    --page-gutter: 24px;
+  }
+
+  .hero-store-content {
+    padding-top:64px;
+    padding-bottom:calc(48px + var(--safe-bottom));
+  }
+
+  .hero-store-card {
+    gap:20px;
+  }
+
+  .hero-app-icon {
+    width:176px;
+    height:176px;
+  }
+
+  .hero-app-icon svg {
+    width:78px;
+    height:78px;
+  }
+
+  .hero-app-name {
+    font-size:clamp(42px, 5.8vw, 62px);
+    letter-spacing:-2px;
+  }
+
+  .hero-meta-item {
+    min-width:88px;
+    padding:12px 14px;
+  }
+
+  .hero-install-btn {
+    min-width:min(100%, 320px);
   }
 }

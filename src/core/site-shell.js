@@ -10,11 +10,14 @@ const THEME_TRANSITION_MS = 260;
 const ROUTE_TRANSITION_MS = 210;
 const ROUTE_ENTER_MS = 320;
 const SHARED_MOTION_STYLE_ID = 'aleph-shared-motion';
+const NORMALIZED_DEFAULT_SITE_DATA = normalizeData(DEFAULT_SITE_DATA);
 
 let navigationLocked = false;
 let routeEnterTimer = 0;
 let themeSwitchTimer = 0;
 let navigationRecoveryTimer = 0;
+let cachedStoredSiteDataRaw = null;
+let cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
 
 function isEditableTarget() {
     const tag = document.activeElement?.tagName?.toLowerCase();
@@ -51,10 +54,23 @@ function normalizeComparablePath(pathname) {
 function getStoredSiteData() {
     try {
         const raw = window.localStorage.getItem(LOCAL_DATA_KEY);
-        if (!raw) return normalizeData(DEFAULT_SITE_DATA);
-        return normalizeData(JSON.parse(raw));
+        if (!raw) {
+            cachedStoredSiteDataRaw = null;
+            cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
+            return cachedStoredSiteData;
+        }
+
+        if (raw === cachedStoredSiteDataRaw) {
+            return cachedStoredSiteData;
+        }
+
+        cachedStoredSiteDataRaw = raw;
+        cachedStoredSiteData = normalizeData(JSON.parse(raw));
+        return cachedStoredSiteData;
     } catch {
-        return normalizeData(DEFAULT_SITE_DATA);
+        cachedStoredSiteDataRaw = null;
+        cachedStoredSiteData = NORMALIZED_DEFAULT_SITE_DATA;
+        return cachedStoredSiteData;
     }
 }
 
@@ -292,16 +308,32 @@ export function initSkipLink() {
 }
 
 export function getAdminHref(pathname = window.location.pathname) {
-    return buildSiteHref('admin/', pathname);
+    const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
+    return buildSiteHref(`${localePrefix}admin/`, pathname);
 }
 
 export function getEffectiveSiteData() {
     return getStoredSiteData();
 }
 
+export function getLocaleDonateHref(pathname = window.location.pathname) {
+    const localePrefix = getLocalePath(detectLocaleFromPath(pathname)).replace(/^\//, '');
+    return buildSiteHref(`${localePrefix}donate/`, pathname);
+}
+
+function isAutoRouteRedirectImmunePath(pathname = window.location.pathname) {
+    const normalizedPath = normalizeComparablePath(pathname);
+    return /\/(?:ru|en|ua)\/donate\/?$/i.test(normalizedPath);
+}
+
 export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathname = window.location.pathname) {
     const locale = detectLocaleFromPath(pathname);
-    const redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
+    let redirectProduct = (siteData.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
+    // Respect locally stored payloads in localStorage — only fall back to the
+    // embedded default data when there is no local stored payload.
+    if (!redirectProduct && !cachedStoredSiteDataRaw) {
+        redirectProduct = (NORMALIZED_DEFAULT_SITE_DATA.products || []).find((product) => product.autoRouteRedirect && product.detailUrl);
+    }
     if (!redirectProduct) return null;
 
     const localePrefix = getLocalePath(locale).replace(/^\//, '');
@@ -316,6 +348,7 @@ export function getAutoRouteRedirectTarget(siteData = getStoredSiteData(), pathn
 export function applyGlobalRouteRedirect(siteData = getStoredSiteData()) {
     const pathname = getNormalizedPathname(window.location.pathname);
     if (/\/admin\/?$/i.test(pathname) || document.body.dataset.adminPage === 'true') return false;
+    if (isAutoRouteRedirectImmunePath(pathname)) return false;
 
     const targetHref = getAutoRouteRedirectTarget(siteData, pathname);
     if (!targetHref) return false;

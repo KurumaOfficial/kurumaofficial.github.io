@@ -15,12 +15,11 @@ import {
     getCanonicalHref,
     getLocaleMeta,
     getLocaleOptions,
-    getSiteRootHref,
     normalizeLocale,
     resolveRouteRelativePath,
 } from './config.js';
 import { MESSAGES } from './messages.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260416c';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/products/strange-visuals/after.webp';
 const DEFAULT_SOCIAL_IMAGE_WIDTH = '1919';
@@ -149,7 +148,7 @@ export function createLocaleController() {
 
         /* x-default alternate */
         const xDefault = ensureHeadLink('siteAltDefault', 'alternate', { hreflang: 'x-default' });
-        xDefault.href = getSiteRootHref(window.location.origin, window.location.pathname);
+        xDefault.href = getCanonicalHref(DEFAULT_LOCALE, window.location.origin, window.location.pathname);
 
         /* per-locale alternates */
         for (const { routeLocale, hreflang } of [

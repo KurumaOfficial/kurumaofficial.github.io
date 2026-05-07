@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
+from html import unescape
 from pathlib import Path
 from typing import Iterable
 from xml.etree import ElementTree
@@ -15,6 +17,10 @@ HTML_ATTR_RE = re.compile(r'''(?:href|src)=['\"]([^'\"]+)['\"]''', re.IGNORECASE
 EXTERNAL_RE = re.compile(r'^(?:https?:)?//', re.IGNORECASE)
 IGNORED_LOCAL_PREFIXES = ('#', 'data:', 'mailto:', 'tel:', 'javascript:')
 PUBLIC_LOCALES = ('ru', 'en', 'ua')
+ROUTE_MODULE_KEYS = ('player', 'world', 'utils', 'other', 'interface', 'themes')
+DETAIL_VERSION_RE = re.compile(r'<[^>]+\bid=["\']heroProductVersion["\'][^>]*>(.*?)</[^>]+>', re.IGNORECASE | re.DOTALL)
+INSTALL_HREF_RE = re.compile(r'<a[^>]+\bid=["\']installBtn["\'][^>]+\bhref=["\']([^"\']+)["\']', re.IGNORECASE)
+SOURCE_HREF_RE = re.compile(r'<a[^>]+\bid=["\']sourceBtn["\'][^>]+\bhref=["\']([^"\']+)["\']', re.IGNORECASE)
 
 
 def extract_default_site_data() -> dict:
@@ -110,9 +116,93 @@ def validate_site_data(site_data: dict, errors: list[str]) -> None:
                     errors.append(f'products: missing detail route for {product_id!r}: {detail_index.relative_to(ROOT)}')
 
         if download_url and not EXTERNAL_RE.match(download_url):
-            asset_path = ROOT / download_url.replace('./', '').replace('/', '\\')
+            relative_download = download_url.replace('./', '').lstrip('/')
+            asset_path = ROOT.joinpath(*relative_download.split('/')) if relative_download else ROOT
             if not asset_path.exists():
                 errors.append(f'products: missing download asset for {product_id!r}: {download_url}')
+
+
+def build_expected_detail_href(detail_index: Path, raw_target: str) -> str:
+    target = str(raw_target or '').strip()
+    if not target:
+        return ''
+    if EXTERNAL_RE.match(target) or target.startswith('#'):
+        return target
+
+    relative_target = target.replace('./', '').replace('\\', '/').lstrip('/')
+    absolute_target = ROOT / relative_target.replace('/', os.sep)
+    return os.path.relpath(absolute_target, start=detail_index.parent).replace('\\', '/')
+
+
+def extract_tag_text(pattern: re.Pattern[str], text: str) -> str:
+    match = pattern.search(text)
+    if not match:
+        return ''
+    normalized = re.sub(r'\s+', ' ', unescape(match.group(1) or '')).strip()
+    return normalized
+
+
+def extract_href(pattern: re.Pattern[str], text: str) -> str:
+    match = pattern.search(text)
+    return (match.group(1) or '').strip() if match else ''
+
+
+def count_route_module_items(route_modules: dict | None) -> int:
+    modules = route_modules or {}
+    return sum(
+        len(items) for key in ROUTE_MODULE_KEYS
+        for items in [modules.get(key) if isinstance(modules.get(key), list) else []]
+    )
+
+
+def validate_detail_route_pages(site_data: dict, errors: list[str]) -> None:
+    for product in site_data.get('products', []):
+        product_id = str(product.get('id', '')).strip() or '<unknown>'
+        detail_url = str(product.get('detailUrl', '')).strip()
+        if not detail_url:
+            continue
+
+        route = detail_url.replace('./', '').strip('/')
+        route_modules_count = count_route_module_items(product.get('routeModules'))
+        expected_install_href = str(product.get('downloadUrl', '')).strip()
+        expected_source_href = str(product.get('sourceUrl', '')).strip()
+        expected_version = str(product.get('version', '')).strip()
+
+        for locale in PUBLIC_LOCALES:
+            detail_index = ROOT / locale / route / 'index.html'
+            if not detail_index.exists():
+                continue
+
+            text = detail_index.read_text(encoding='utf-8')
+            has_route_ui = 'id="gwTabs"' in text or "id='gwTabs'" in text or 'id="modGrid"' in text or "id='modGrid'" in text
+            if has_route_ui and route_modules_count == 0:
+                errors.append(f'products: detail route UI expects routeModules for {product_id!r} but none are defined')
+
+            if expected_version:
+                html_version = extract_tag_text(DETAIL_VERSION_RE, text)
+                if html_version and html_version != expected_version:
+                    errors.append(
+                        f'products: stale hero version on {detail_index.relative_to(ROOT)} '
+                        f'(html={html_version!r}, data={expected_version!r})'
+                    )
+
+            if expected_install_href:
+                html_install_href = extract_href(INSTALL_HREF_RE, text)
+                expected_href = build_expected_detail_href(detail_index, expected_install_href)
+                if html_install_href and expected_href and html_install_href != expected_href:
+                    errors.append(
+                        f'products: stale install href on {detail_index.relative_to(ROOT)} '
+                        f'(html={html_install_href!r}, data={expected_href!r})'
+                    )
+
+            if expected_source_href:
+                html_source_href = extract_href(SOURCE_HREF_RE, text)
+                expected_href = build_expected_detail_href(detail_index, expected_source_href)
+                if html_source_href and expected_href and html_source_href != expected_href:
+                    errors.append(
+                        f'products: stale source href on {detail_index.relative_to(ROOT)} '
+                        f'(html={html_source_href!r}, data={expected_href!r})'
+                    )
 
 
 def validate_html_references(errors: list[str]) -> None:
@@ -165,24 +255,30 @@ def validate_sitemap(site_data: dict, errors: list[str]) -> None:
         route = str(product.get('detailUrl', '')).replace('./', '').strip('/')
         if not route:
             continue
-        expected |= {
-            f'https://www.aleph.icu/{locale}/{route}/'
-            for locale in PUBLIC_LOCALES
-        }
-        expected |= {
-            f'https://www.aleph.icu/{locale}/{route}/donate/'
-            for locale in PUBLIC_LOCALES
-        }
+        for locale in PUBLIC_LOCALES:
+            detail_index = ROOT / locale / route.replace('/', os.sep) / 'index.html'
+            if detail_index.exists():
+                expected.add(f'https://www.aleph.icu/{locale}/{route}/')
 
     missing = sorted(expected - locs)
     for loc in missing:
         errors.append(f'sitemap: missing route {loc}')
+
+    # Detect entries that point to nothing on disk so we never advertise 404s.
+    for loc in sorted(locs):
+        relative = loc.replace('https://www.aleph.icu/', '').strip('/')
+        if not relative:
+            continue
+        candidate_index = ROOT.joinpath(*relative.split('/')) / 'index.html'
+        if not candidate_index.exists():
+            errors.append(f'sitemap: route does not resolve to a static page: {loc}')
 
 
 def main() -> int:
     errors: list[str] = []
     site_data = extract_default_site_data()
     validate_site_data(site_data, errors)
+    validate_detail_route_pages(site_data, errors)
     validate_html_references(errors)
     validate_sitemap(site_data, errors)
 
