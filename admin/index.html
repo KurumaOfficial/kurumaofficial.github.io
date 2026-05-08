@@ -1,0 +1,556 @@
+<!doctype html>
+<html lang="ru" dir="ltr" data-theme="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Aleph Studio — Admin</title>
+    <meta name="description" content="Aleph Studio admin route.">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="theme-color" content="#0e0d0c">
+    <meta name="color-scheme" content="dark light">
+    <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=7">
+    <link rel="icon" href="../favicon.ico" sizes="48x48">
+    <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+    <script>
+    window.__ALEPH_LOCALE__ = (function () {
+        var supported = ['ru', 'en', 'ua'];
+        var params = new URLSearchParams(window.location.search || '');
+        var requested = (params.get('lang') || '').toLowerCase();
+        if (requested === 'uk') requested = 'ua';
+        if (supported.indexOf(requested) !== -1) return requested;
+
+        var pathLocale = (window.location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
+        if (pathLocale === 'uk') pathLocale = 'ua';
+        if (supported.indexOf(pathLocale) !== -1) return pathLocale;
+
+        var raw = (navigator.languages || [navigator.language || ''])
+            .map(function (l) { return l.split('-')[0].toLowerCase(); });
+        for (var i = 0; i < raw.length; i++) {
+            if (raw[i] === 'uk') return 'ua';
+            if (supported.indexOf(raw[i]) !== -1) return raw[i];
+        }
+        return 'ru';
+    })();
+    document.documentElement.lang = window.__ALEPH_LOCALE__ === 'ua' ? 'uk' : window.__ALEPH_LOCALE__;
+    </script>
+</head>
+<body data-admin-page="true">
+    <div id="editorOverlay" class="editor-overlay" aria-hidden="true">
+        <div class="editor-backdrop" data-close-editor></div>
+        <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
+            <div class="dash-layout">
+                <aside class="dash-sidebar">
+                    <a class="dash-brand" href="../ru/" target="_blank" rel="noopener noreferrer" aria-label="Aleph Studio">
+                        <span class="logo-sq" aria-hidden="true"></span>
+                        <div class="dash-brand-copy">
+                            <span class="logo-text">Aleph Studio</span>
+                            <span class="dash-brand-sub" data-admin-i18n="sidebarBrandSub">Admin Route</span>
+                        </div>
+                    </a>
+
+                    <nav class="dash-nav">
+                        <div class="dash-nav-section"></div>
+                        <a href="#" class="dash-nav-link active" data-admin-view="home">
+                            <span class="material-icons">home</span>
+                            <span class="dash-nav-label"></span>
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="products">
+                            <span class="material-icons">inventory_2</span>
+                            <span class="dash-nav-label"></span>
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="support">
+                            <span class="material-icons">favorite</span>
+                            <span class="dash-nav-label"></span>
+                        </a>
+                        <a href="#" class="dash-nav-link" data-admin-view="misc">
+                            <span class="material-icons">tune</span>
+                            <span class="dash-nav-label"></span>
+                        </a>
+                    </nav>
+
+                    <div class="dash-sidebar-footer">
+                        <p>Aleph Studio © 2026</p>
+                    </div>
+                </aside>
+
+                <main class="dash-main">
+                    <header class="dash-header">
+                        <div class="dash-title-wrap">
+                            <span class="section-label dash-header-label" data-admin-i18n="headerLabel">Admin route</span>
+                            <h1 id="editorAdminTitle" class="dash-header-title">Главная</h1>
+                            <p id="editorAdminSubtitle">Центр управления черновиком, публикацией и быстрыми переходами по админке.</p>
+                        </div>
+
+                        <div class="dash-header-tools">
+                            <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему" aria-pressed="false">
+                                <span class="material-icons" id="themeIco">light_mode</span>
+                            </button>
+
+                            <div id="localeSwitcher" class="locale-switcher admin-locale-switcher">
+                                <button
+                                    id="localeSwitcherTrigger"
+                                    class="locale-switcher__trigger"
+                                    type="button"
+                                    aria-haspopup="menu"
+                                    aria-expanded="false"
+                                    aria-label="Выбор языка"
+                                >
+                                    <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                                    <span id="localeSwitcherLabel">RU</span>
+                                    <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+                                        <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                                    </svg>
+                                </button>
+                                <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Сменить язык" hidden></div>
+                            </div>
+                        </div>
+
+                        <div id="draftStateChip" class="dash-draft-chip is-clean">
+                            <span class="dash-draft-dot"></span>
+                            <span id="draftStateText"></span>
+                        </div>
+
+                        <div class="dash-actions">
+                            <button id="exportJsonBtn" type="button" class="dash-btn">
+                                <span class="material-icons">download</span>
+                                JSON
+                            </button>
+                            <button id="importJsonBtn" type="button" class="dash-btn">
+                                <span class="material-icons">upload</span>
+                                Импорт
+                            </button>
+                            <button id="discardDraftBtn" type="button" class="dash-btn">
+                                <span class="material-icons">undo</span>
+                                Откатить
+                            </button>
+                            <button id="applyDraftBtn" type="button" class="dash-btn dash-primary">
+                                <span class="material-icons">check</span>
+                                Применить
+                            </button>
+                            <button type="button" class="dash-btn-icon" data-close-editor aria-label="Закрыть">
+                                <span class="material-icons">close</span>
+                            </button>
+                        </div>
+                    </header>
+
+                    <section class="dash-content">
+                        <input id="importJsonInput" class="hidden-file-input" type="file" accept="application/json">
+
+                        <div id="homeView" class="dash-view active">
+                            <div class="dash-metrics-grid">
+                                <article class="dash-metric-card">
+                                    <strong id="homeProductsCount">0</strong>
+                                    <span data-admin-i18n="homeMetricProducts">Продукты</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeFeaturedCount">0</strong>
+                                    <span data-admin-i18n="homeMetricFeatured">Витрина</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeTeamCount">0</strong>
+                                    <span data-admin-i18n="homeMetricTeam">Команда</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeSocialCount">0</strong>
+                                    <span data-admin-i18n="homeMetricSocial">Соц. ссылки</span>
+                                </article>
+                                <article class="dash-metric-card">
+                                    <strong id="homeUploadsCount">0</strong>
+                                    <span data-admin-i18n="homeMetricUploads">Upload очередь</span>
+                                </article>
+                            </div>
+
+                            <div class="dash-home-grid">
+                                <article class="dash-card dash-status-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-red"><span class="material-icons">radio_button_checked</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title" data-admin-i18n="statusCardTitle">Статус черновика</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="statusCardSub">Синхронизация, публикация и очередь загрузок</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div id="homeDraftSummary" class="dash-status-grid"></div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card dash-publish-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-gold"><span class="material-icons">cloud_upload</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title" data-admin-i18n="publishCardTitle">Глобальная публикация</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="publishCardSub">Введите пароль и опубликуйте черновик для всех пользователей</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div class="dash-publish-row">
+                                            <div class="dash-field dash-publish-field">
+                                                <label for="githubToken" data-admin-i18n="publishPasswordLabel">Пароль</label>
+                                                <input id="githubToken" type="password" data-admin-i18n-placeholder="publishPasswordPlaceholder" placeholder="Введите пароль для глобальной публикации">
+                                            </div>
+                                            <button id="saveGithubBtn" type="button" class="dash-btn dash-blue dash-publish-btn">
+                                                <span class="material-icons">cloud_upload</span>
+                                                <span data-admin-i18n="publishBtn">Сохранить глобально</span>
+                                            </button>
+                                        </div>
+                                        <p class="dash-help" data-admin-i18n="publishHelp">Apply сохраняет изменения локально в этом браузере. Сохранить глобально публикует данные для всех посетителей сайта (нужен пароль).</p>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div id="productsView" class="dash-view">
+                            <div class="dash-products-layout">
+                                <aside class="dash-products-sidebar">
+                                    <div class="dash-products-toolbar">
+                                        <span class="dash-chip"><span data-admin-i18n="productsTotal">Всего:</span> <strong id="editorTotalCount">0</strong></span>
+                                        <span class="dash-chip"><span data-admin-i18n="productsShowcase">Витрина:</span> <strong id="editorShowcaseCount">0</strong></span>
+                                        <input id="editorSearchInput" class="dash-search" type="text" data-admin-i18n-placeholder="productsSearchPlaceholder" placeholder="Поиск…">
+                                        <button id="addProductBtn" type="button" class="dash-btn dash-primary" data-admin-i18n-aria="productsAddAria" aria-label="Добавить продукт">
+                                            <span class="material-icons">add</span>
+                                        </button>
+                                    </div>
+                                    <div id="editorProductGrid" class="dash-product-grid"></div>
+                                </aside>
+
+                                <div class="dash-products-editor">
+                                    <div id="editorEmptyState" class="dash-editor-empty">
+                                        <span class="material-icons">edit_note</span>
+                                        <p data-admin-i18n="editorEmptyTitle">Выбери продукт слева, чтобы открыть редактор.</p>
+                                    </div>
+
+                                    <div id="editor" class="dash-editor">
+                                        <div class="dash-editor-header">
+                                            <div class="dash-editor-header-copy">
+                                                <h2 id="editorTitle" data-admin-i18n="editorTitle">Редактирование</h2>
+                                                <p data-admin-i18n="editorSubtitle">Поля ниже меняют черновик и обновляют карточку продукта в каталоге.</p>
+                                            </div>
+                                            <button id="closeProductEditorBtn" type="button" class="dash-btn-icon" data-admin-i18n-aria="editorCloseAria" aria-label="Закрыть редактор продукта">
+                                                <span class="material-icons">close</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="dash-tab-bar">
+                                            <button type="button" class="dash-tab-btn active" data-tab="tab-main" data-admin-i18n="tabMain">Основное</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-content" data-admin-i18n="tabContent">Контент</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-publish" data-admin-i18n="tabPublish">Публикация</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-route" data-admin-i18n="tabRoute">Route</button>
+                                        </div>
+
+                                        <div class="dash-editor-body">
+                                            <div class="dash-tab-panel active" data-panel="tab-main">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6"><label for="f-name" data-admin-i18n="fieldName">Название</label><input type="text" id="f-name"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-slug" data-admin-i18n="fieldSlug">ID / якорь</label><input type="text" id="f-slug"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-tag" data-admin-i18n="fieldTag">Тег</label>
+                                                            <select id="f-tag">
+                                                                <option value="active">Активно</option>
+                                                                <option value="frozen">Заморожено</option>
+                                                                <option value="abandoned">Заброшено</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="dash-field dash-c4"><label for="f-version" data-admin-i18n="fieldVersion">Версия</label><input type="text" id="f-version"></div>
+                                                        <div class="dash-field dash-c4"><label for="f-order" data-admin-i18n="fieldOrder">Порядок</label><input type="number" id="f-order"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-stage" data-admin-i18n="fieldStage">Стадия</label>
+                                                            <select id="f-stage">
+                                                                <option value="" data-admin-i18n="fieldStageNone">Без флага</option>
+                                                                <option value="alpha">Alpha</option>
+                                                                <option value="beta">Beta</option>
+                                                                <option value="release">Release</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="dash-field dash-c6"><label for="f-tone" data-admin-i18n="fieldTone">Цвет карточки</label>
+                                                            <select id="f-tone">
+                                                                <option value="red" data-admin-i18n="fieldToneRed">Красный</option>
+                                                                <option value="green" data-admin-i18n="fieldToneGreen">Зелёный</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="dash-field dash-c12"><label for="f-status" data-admin-i18n="fieldStatus">Статус</label>
+                                                            <select id="f-status">
+                                                                <option value="active">Активно</option>
+                                                                <option value="frozen">Заморожено</option>
+                                                                <option value="abandoned">Заброшено</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-content">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-field dash-c12"><label for="f-desc" data-admin-i18n="fieldDesc">Краткое описание</label><textarea id="f-desc"></textarea></div>
+                                                </div>
+                                                <div class="dash-form-section">
+                                                    <div class="dash-field dash-c12"><label for="f-instructions" data-admin-i18n="fieldInstructions">Инструкция (каждый пункт с новой строки)</label><textarea id="f-instructions"></textarea></div>
+                                                </div>
+                                                <div class="dash-form-section">
+                                                    <div class="dash-field dash-c12"><label for="f-note" data-admin-i18n="fieldNote">Примечание</label><textarea id="f-note"></textarea></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-publish">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6">
+                                                            <label data-admin-i18n="fieldShowcase">Витрина</label>
+                                                            <label class="dash-inline-check">
+                                                                <input type="checkbox" id="f-showcase">
+                                                                <span data-admin-i18n="fieldShowcaseToggle">Показывать на витрине</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="dash-field dash-c6"><label for="f-showcase-order" data-admin-i18n="fieldShowcaseOrder">Порядок на витрине</label><input type="number" id="f-showcase-order"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-download" data-admin-i18n="fieldDownload">Download URL</label><input type="text" id="f-download" placeholder="./assets/files/example.jar"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-download-name" data-admin-i18n="fieldDownloadName">Имя файла при скачивании</label><input type="text" id="f-download-name" placeholder="strange-visuals-1.5.1.jar"></div>
+                                                        <div class="dash-field dash-c6"><label for="f-source" data-admin-i18n="fieldSource">Исходный код</label><input type="text" id="f-source"></div>
+                                                        <div class="dash-field dash-c12">
+                                                            <label for="f-download-file" data-admin-i18n="fieldDownloadFile">Файл для публикации</label>
+                                                            <input type="file" id="f-download-file">
+                                                            <p id="f-download-file-meta" class="dash-help" data-admin-i18n="fieldDownloadFileMeta">Файл не выбран.</p>
+                                                            <button id="clearDownloadFileBtn" type="button" class="dash-btn dash-sm" data-admin-i18n="fieldDownloadFileClear">Убрать файл</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-route">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c12">
+                                                            <label class="dash-inline-check">
+                                                                <input type="checkbox" id="f-auto-route-redirect">
+                                                                <span data-admin-i18n="fieldAutoRedirect">Авто-redirect на этот route</span>
+                                                            </label>
+                                                            <p class="dash-help" data-admin-i18n="fieldAutoRedirectHelp">Если включено, сайт сразу открывает этот продуктовый route.</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="dash-form-section dash-form-section--spaced">
+                                                    <h4 data-admin-i18n="fieldRouteModulesTitle">Модули</h4>
+                                                    <div class="dash-route-toolbar">
+                                                        <div class="dash-field">
+                                                            <label for="route-module-category" data-admin-i18n="fieldRouteCategory">Категория</label>
+                                                            <select id="route-module-category">
+                                                                <option value="player" data-admin-i18n="fieldRouteCategoryPlayer">На игроке</option>
+                                                                <option value="world" data-admin-i18n="fieldRouteCategoryWorld">В мире</option>
+                                                                <option value="utils" data-admin-i18n="fieldRouteCategoryUtils">Утилиты</option>
+                                                                <option value="other" data-admin-i18n="fieldRouteCategoryOther">Остальное</option>
+                                                                <option value="interface" data-admin-i18n="fieldRouteCategoryInterface">Интерфейс</option>
+                                                                <option value="themes" data-admin-i18n="fieldRouteCategoryThemes">Темы</option>
+                                                            </select>
+                                                        </div>
+                                                        <button id="addRouteModuleBtn" type="button" class="dash-btn dash-primary">
+                                                            <span class="material-icons">add</span>
+                                                            <span data-admin-i18n="fieldRouteAddBtn">Функция</span>
+                                                        </button>
+                                                    </div>
+                                                    <div id="routeModuleList" class="dash-route-list"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dash-editor-footer">
+                                            <button id="deleteProductBtn" type="button" class="dash-btn dash-danger dash-sm">
+                                                <span class="material-icons">delete</span>
+                                                <span data-admin-i18n="editorDeleteBtn">Удалить</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="supportView" class="dash-view">
+                            <div class="dash-support-metrics">
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportSummaryMinAmount">$0</strong>
+                                    <span data-admin-i18n="supportMetricMin">Мин. донат</span>
+                                </article>
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportSummaryRoleName">@Premium</strong>
+                                    <span data-admin-i18n="supportMetricRole">Роль Discord</span>
+                                </article>
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportButtonsCount">0</strong>
+                                    <span data-admin-i18n="supportMetricMethods">Методов оплаты</span>
+                                </article>
+                                <article class="dash-metric-card dash-metric-card--support">
+                                    <strong id="supportSupportersCount">0</strong>
+                                    <span data-admin-i18n="supportMetricSupporters">Поддержавших</span>
+                                </article>
+                            </div>
+
+                            <article class="dash-card dash-support-settings-card">
+                                <div class="dash-card-head">
+                                    <div class="dash-card-head-icon is-gold"><span class="material-icons">settings</span></div>
+                                    <div class="dash-card-head-copy">
+                                        <div class="dash-card-head-title" data-admin-i18n="supportSettingsTitle">Базовые настройки</div>
+                                        <div class="dash-card-head-sub" data-admin-i18n="supportSettingsSub">Параметры публичной donate-страницы</div>
+                                    </div>
+                                </div>
+                                <div class="dash-card-body">
+                                    <div class="dash-support-settings-grid">
+                                        <div class="dash-field">
+                                            <label for="supportMinAmount" data-admin-i18n="supportMinAmountLabel">Минимальная сумма (USD)</label>
+                                            <input id="supportMinAmount" type="number" min="0" step="0.01">
+                                        </div>
+                                        <div class="dash-field">
+                                            <label for="supportRoleName" data-admin-i18n="supportRoleLabel">Название роли</label>
+                                            <input id="supportRoleName" type="text" placeholder="@Premium">
+                                        </div>
+                                    </div>
+                                </div>
+                            </article>
+
+                            <div class="dash-support-layout">
+                                <article class="dash-support-column">
+                                    <div class="dash-support-column-head">
+                                        <span class="dash-support-column-title" data-admin-i18n="supportButtonsColumn">Способы поддержки</span>
+                                        <button id="addSupportButtonBtn" type="button" class="dash-btn dash-primary dash-sm">
+                                            <span class="material-icons">add</span>
+                                            <span data-admin-i18n="supportAddMethod">Добавить</span>
+                                        </button>
+                                    </div>
+                                    <div id="supportButtonsList" class="dash-support-list"></div>
+                                </article>
+
+                                <article class="dash-support-column">
+                                    <div class="dash-support-column-head">
+                                        <span class="dash-support-column-title" data-admin-i18n="supportSupportersColumn">Поддержавшие</span>
+                                        <button id="addSupporterBtn" type="button" class="dash-btn dash-primary dash-sm">
+                                            <span class="material-icons">person_add</span>
+                                            <span data-admin-i18n="supportAddSupporter">Участник</span>
+                                        </button>
+                                    </div>
+                                    <div id="supportersAdminList" class="dash-support-list"></div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <div id="miscView" class="dash-view">
+                            <div class="dash-misc-layout">
+                                <article class="dash-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-blue"><span class="material-icons">link</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title" data-admin-i18n="miscSocialsTitle">Социальные ссылки</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="miscSocialsSub">Показываются в футере и под витриной продуктов</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div class="dash-social-item">
+                                            <div class="dash-social-icon youtube"><span class="material-icons">play_circle</span></div>
+                                            <div class="dash-social-input">
+                                                <label for="socialYoutube">YouTube</label>
+                                                <input id="socialYoutube" type="url" placeholder="https://youtube.com/...">
+                                            </div>
+                                        </div>
+                                        <div class="dash-social-item">
+                                            <div class="dash-social-icon discord"><span class="material-icons">forum</span></div>
+                                            <div class="dash-social-input">
+                                                <label for="socialDiscord">Discord</label>
+                                                <input id="socialDiscord" type="url" placeholder="https://discord.gg/...">
+                                            </div>
+                                        </div>
+                                        <div class="dash-social-item">
+                                            <div class="dash-social-icon telegram"><span class="material-icons">send</span></div>
+                                            <div class="dash-social-input">
+                                                <label for="socialTelegram">Telegram</label>
+                                                <input id="socialTelegram" type="url" placeholder="https://t.me/...">
+                                            </div>
+                                        </div>
+                                        <div class="dash-divider"></div>
+                                        <div class="dash-field">
+                                            <label data-admin-i18n="miscSocialsPreview">Превью кнопок</label>
+                                            <div id="editorSocialPreview" class="dash-social-preview"></div>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card dash-team-editor-shell">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-red"><span class="material-icons">edit</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title" data-admin-i18n="miscTeamEditorTitle">Редактор участника</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="miscTeamEditorSub">Заполняет публичную карточку команды на сайте</div>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div id="teamEditorEmpty" class="dash-team-editor-empty" data-admin-i18n="miscTeamEmpty">Выбери участника слева или создай новую карточку кнопкой «Участник».</div>
+
+                                        <div id="teamEditor" class="dash-team-editor" hidden>
+                                            <div class="dash-editor-header dash-editor-header--nested">
+                                                <div class="dash-editor-header-copy">
+                                                    <h2 id="teamEditorTitle" data-admin-i18n="miscTeamMember">Участник</h2>
+                                                    <p data-admin-i18n="miscTeamSubtitle">Поля ниже сразу редактируют командный блок в черновике.</p>
+                                                </div>
+                                                <button id="closeTeamEditorBtn" type="button" class="dash-btn-icon" data-admin-i18n-aria="miscTeamCloseAria" aria-label="Закрыть редактор участника">
+                                                    <span class="material-icons">close</span>
+                                                </button>
+                                            </div>
+                                            <div class="dash-editor-body dash-editor-body--nested">
+                                                <div class="dash-form-section">
+                                                    <div class="dash-fg">
+                                                        <div class="dash-field dash-c6"><label for="team-name" data-admin-i18n="miscTeamFieldName">Имя</label><input type="text" id="team-name"></div>
+                                                        <div class="dash-field dash-c6"><label for="team-role" data-admin-i18n="miscTeamFieldRole">Роль</label><input type="text" id="team-role"></div>
+                                                        <div class="dash-field dash-c9"><label for="team-avatar" data-admin-i18n="miscTeamFieldAvatar">Ссылка на аватар</label><input type="text" id="team-avatar"></div>
+                                                        <div class="dash-field dash-c3"><label for="team-order" data-admin-i18n="miscTeamFieldOrder">Порядок</label><input type="number" id="team-order"></div>
+                                                        <div class="dash-field dash-c12"><label for="team-bio" data-admin-i18n="miscTeamFieldBio">Описание</label><textarea id="team-bio"></textarea></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="dash-editor-footer">
+                                                <div class="note" data-admin-i18n="miscTeamFooterNote">Карточка обновляет общий черновик витрины и команды.</div>
+                                                <div class="btns">
+                                                    <button id="deleteTeamMemberBtn" type="button" class="dash-btn dash-danger dash-sm">
+                                                        <span class="material-icons">delete</span>
+                                                        <span data-admin-i18n="editorDeleteBtn">Удалить</span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card dash-team-list-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-gold"><span class="material-icons">group</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title" data-admin-i18n="miscTeamListTitle">Команда</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="miscTeamListSub">Карточки участников, порядок и краткие описания</div>
+                                        </div>
+                                        <div class="dash-card-head-actions">
+                                            <div class="dash-chip"><span data-admin-i18n="miscTeamCardsCount">Карточек:</span> <strong id="teamMemberCount">0</strong></div>
+                                            <button id="addTeamMemberBtn" type="button" class="dash-btn dash-primary dash-sm" hidden>
+                                                <span class="material-icons">add</span>
+                                                <span data-admin-i18n="miscTeamMember">Участник</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        <div id="teamGrid" class="dash-team-grid"></div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+
+    <script type="module" src="../src/app.js?v=20260507a"></script>
+</body>
+</html>

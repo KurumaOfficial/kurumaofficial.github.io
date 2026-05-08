@@ -1,0 +1,342 @@
+/* ── Products catalog page (`/{locale}/products/`) ────────── *
+ * Loaded after main.css. Inherits the shared header / footer
+ * styling from there and only owns the page-specific layout.
+ */
+
+.plist-page {
+    --plist-gap: clamp(20px, 2.6vw, 32px);
+    --plist-card-bg: var(--color-bg-elevated, var(--surface, #181012));
+    --plist-card-border: var(--border-default, var(--border, rgba(255,255,255,0.08)));
+    --plist-card-border-hi: var(--border-hi, rgba(255,255,255,0.18));
+    --plist-card-accent: var(--color-ruby, var(--accent, #8b1a2a));
+    --plist-text-strong: var(--color-text-heading, var(--text, #f5efe6));
+    --plist-text-body: var(--color-text-muted, var(--text-dim, rgba(245,239,230,0.72)));
+    --plist-bg: transparent;
+    padding: 0 calc(var(--page-gutter, 24px) + var(--safe-right, 0px))
+             0 calc(var(--page-gutter, 24px) + var(--safe-left, 0px));
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.plist-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 0 8px;
+}
+
+.plist-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--plist-card-border);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.04);
+    color: var(--plist-text-body);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color .2s ease, border-color .2s ease, background .2s ease;
+    line-height: 1;
+}
+.plist-back:hover {
+    color: var(--plist-text-strong);
+    border-color: var(--plist-card-border-hi);
+    background: var(--surface, rgba(0, 0, 0, 0.06));
+}
+.plist-back svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.plist-hero {
+    padding: clamp(24px, 4vw, 56px) 0 clamp(24px, 3vw, 36px);
+    border-bottom: 1px solid var(--plist-card-border);
+    margin-bottom: clamp(20px, 3vw, 32px);
+}
+.plist-eyebrow {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--plist-card-accent);
+    margin: 0 0 14px;
+}
+.plist-title {
+    font-family: var(--font-display, 'Cormorant Garamond', serif);
+    font-weight: 400;
+    font-size: clamp(40px, 7vw, 96px);
+    line-height: 0.98;
+    letter-spacing: -0.025em;
+    color: var(--plist-text-strong);
+    margin: 0 0 20px;
+}
+.plist-desc {
+    max-width: 56ch;
+    color: var(--plist-text-body);
+    font-size: clamp(15px, 1.4vw, 17px);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ── Toolbar (filters + sort) ────────────────────────────── */
+.plist-toolbar {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 18px 0;
+    border-top: 1px solid var(--plist-card-border);
+    border-bottom: 1px solid var(--plist-card-border);
+    margin-bottom: clamp(20px, 3vw, 32px);
+}
+@media (min-width: 900px) {
+    .plist-toolbar {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        align-items: center;
+    }
+}
+
+.plist-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+.plist-filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--plist-card-accent);
+    min-width: 64px;
+}
+
+.plist-chip {
+    appearance: none;
+    border: 1px solid var(--plist-card-border);
+    background: transparent;
+    color: var(--plist-text-body);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 7px 14px;
+    border-radius: 0;
+    cursor: pointer;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+}
+.plist-chip:hover {
+    color: var(--plist-text-strong);
+    border-color: var(--plist-card-border-hi);
+    background: rgba(255, 255, 255, 0.03);
+}
+.plist-chip.is-active {
+    color: var(--plist-card-accent);
+    border-color: var(--plist-card-accent);
+    background: color-mix(in srgb, var(--plist-card-accent) 12%, transparent);
+}
+
+.plist-sort {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: end;
+}
+.plist-sort-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--plist-card-accent);
+}
+.plist-sort select {
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid var(--plist-card-border);
+    background: var(--plist-card-bg);
+    color: var(--plist-text-strong);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    padding: 8px 32px 8px 14px;
+    border-radius: 0;
+    background-image:
+        linear-gradient(45deg, transparent 50%, currentColor 50%),
+        linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%;
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    transition: border-color .18s ease, color .18s ease, background-color .18s ease;
+}
+.plist-sort select:hover {
+    border-color: var(--plist-card-border-hi);
+}
+.plist-sort select:focus-visible {
+    outline: 2px solid var(--plist-card-accent);
+    outline-offset: 2px;
+}
+
+.plist-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--plist-text-body);
+    text-transform: uppercase;
+    margin: 0 0 16px;
+}
+.plist-meta strong {
+    color: var(--plist-text-strong);
+    font-weight: 600;
+}
+
+/* ── Grid ────────────────────────────────────────────────── */
+.plist-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    margin: 0 0 clamp(40px, 6vw, 80px);
+    border: 1px solid var(--plist-card-border);
+    background: var(--plist-card-border);
+}
+@media (min-width: 720px) {
+    .plist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1100px) {
+    .plist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+.plist-card {
+    position: relative;
+    background: var(--plist-card-bg);
+    padding: clamp(20px, 2.4vw, 28px) clamp(20px, 2.6vw, 32px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: background .2s ease;
+}
+.plist-card:hover {
+    background: var(--color-bg-hover, var(--surface-h, #1f1518));
+}
+.plist-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--plist-card-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .35s var(--ease-default, cubic-bezier(.22, 1, .36, 1));
+    pointer-events: none;
+}
+.plist-card:hover::before { transform: scaleX(1); }
+
+.plist-card-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--plist-card-accent);
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+.plist-card-title {
+    font-family: var(--font-display, 'Cormorant Garamond', serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--plist-text-strong);
+    margin: 0 0 6px;
+    letter-spacing: -0.015em;
+}
+.plist-card-version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: color-mix(in srgb, var(--plist-card-accent) 65%, transparent);
+    margin: 0 0 14px;
+}
+.plist-card-desc {
+    font-size: 14px;
+    color: var(--plist-text-body);
+    line-height: 1.6;
+    margin: 0 0 20px;
+    flex: 1;
+}
+.plist-card-foot {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+.plist-cta {
+    appearance: none;
+    border: 1px solid var(--plist-card-border);
+    background: transparent;
+    color: var(--plist-text-strong);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 0;
+    cursor: pointer;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+}
+.plist-cta:hover {
+    color: var(--plist-card-accent);
+    border-color: var(--plist-card-accent);
+    background: color-mix(in srgb, var(--plist-card-accent) 8%, transparent);
+}
+.plist-cta.is-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.plist-empty {
+    border: 1px dashed var(--plist-card-border);
+    padding: 48px 24px;
+    text-align: center;
+    color: var(--plist-text-body);
+    margin-bottom: clamp(40px, 6vw, 80px);
+}
+.plist-empty[hidden] { display: none; }
+.plist-empty p {
+    margin: 0 0 14px;
+    font-size: 15px;
+}
+.plist-empty button {
+    appearance: none;
+    border: 1px solid var(--plist-card-border);
+    background: transparent;
+    color: var(--plist-text-strong);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 0;
+    transition: color .18s ease, border-color .18s ease, background .18s ease;
+}
+.plist-empty button:hover {
+    color: var(--plist-card-accent);
+    border-color: var(--plist-card-accent);
+}
