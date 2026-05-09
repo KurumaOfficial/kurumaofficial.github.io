@@ -560,6 +560,8 @@ html[data-theme-switching="true"] .gui-w {
   align-items:center;
   gap:10px;
   min-height:42px;
+  min-width:0;
+  max-width:100%;
   margin-top:10px;
   padding:0 16px;
   color:var(--text-dim);
@@ -568,6 +570,7 @@ html[data-theme-switching="true"] .gui-w {
   border:1px solid var(--border);
   background:var(--bg);
   pointer-events:auto;
+  box-sizing:border-box;
 }
 .hero-store-back:hover { color:var(--text); border-color:var(--border-hi); background:var(--surface); }
 
@@ -577,6 +580,10 @@ html[data-theme-switching="true"] .gui-w {
   letter-spacing:.12em;
   text-transform:uppercase;
   color:inherit;
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .hero-store-actions {
@@ -595,6 +602,7 @@ html[data-theme-switching="true"] .gui-w {
 .hero-store-back .ui-icon {
   width:22px;
   height:22px;
+  flex-shrink:0;
 }
 
 .hero-store-action {
@@ -1386,11 +1394,17 @@ html[data-theme-switching="true"] .gui-w {
   border:1px solid var(--border); border-radius:5px; padding:3px 9px;
 }
 
-.gui-outer { display:flex; justify-content:center; }
+.gui-outer { display:flex; justify-content:center; min-width:0; max-width:100%; }
 
 /* ─── GUI WIDGET ─── */
 .gui-w {
   width:100%; max-width:400px; height:490px;
+  /* Allow the widget to shrink inside narrow viewports so it never causes
+     horizontal scroll on phones <400px wide. Internal scrollables (.gw-tabs,
+     .gw-scroll) handle their own overflow. */
+  min-width:0;
+  box-sizing:border-box;
+  overflow:hidden;
   border-radius:16px; padding:20px 18px 16px;
   display:flex; flex-direction:column;
   background:var(--gui-bg);
@@ -1529,6 +1543,10 @@ html[data-theme-switching="true"] .gui-w {
   display:flex; gap:14px; margin-top:14px;
   padding:0 4px 10px; font-size:11px;
   flex-wrap:nowrap; flex-shrink:0;
+  /* Let the tab strip respect the parent's width so it doesn't push the
+     widget wider than its container. Tabs themselves scroll horizontally. */
+  min-width:0;
+  width:100%;
   border-bottom:1px solid var(--border);
   overflow-x:auto;
   overflow-y:hidden;
@@ -1563,7 +1581,7 @@ html[data-theme-switching="true"] .gui-w {
   border-bottom-color:var(--gui-tab-a);
 }
 
-.gw-body { display:flex; flex-direction:column; flex:1; min-height:0; }
+.gw-body { display:flex; flex-direction:column; flex:1; min-height:0; min-width:0; }
 .gw-body.fout { opacity:0; transform:translateY(7px); }
 .gw-body.fin  { opacity:1; transform:translateY(0); }
 .gw-body[data-mode="themes"] .gw-scroll { padding-right:0; }
@@ -1573,7 +1591,7 @@ html[data-theme-switching="true"] .gui-w {
   font-size:13px; font-weight:700; color:var(--gui-sec); flex-shrink:0;
 }
 
-.gw-scroll { flex:1; overflow-y:auto; overflow-x:hidden; padding-right:4px; }
+.gw-scroll { flex:1; min-width:0; overflow-y:auto; overflow-x:hidden; padding-right:4px; }
 .gw-scroll::-webkit-scrollbar { width:3px; }
 .gw-scroll::-webkit-scrollbar-track { background:transparent; }
 .gw-scroll::-webkit-scrollbar-thumb { background:var(--gui-scrl); border-radius:4px; }

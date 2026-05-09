@@ -1,5 +1,5 @@
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
+import { GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import {
     deepClone,
     formatBytes,
@@ -118,12 +118,43 @@ const ADMIN_MESSAGES = Object.freeze({
         toastLocalClearFailed: 'Не удалось очистить localStorage в этом браузере.',
         statusCardTitle: 'Статус черновика',
         statusCardSub: 'Синхронизация, публикация и очередь загрузок',
+        syncpubCardTitle: 'Публикация и синхронизация',
+        syncpubCardSub: 'Состояние черновика, очередь файлов и ключ глобальной публикации',
         publishCardTitle: 'Глобальная публикация',
         publishCardSub: 'Введите пароль и опубликуйте черновик для всех пользователей',
         publishPasswordLabel: 'Пароль',
         publishPasswordPlaceholder: 'Введите пароль для глобальной публикации',
         publishBtn: 'Сохранить глобально',
         publishHelp: 'Apply сохраняет изменения локально в этом браузере (включая после перезагрузки). Сохранить глобально публикует данные для всех посетителей сайта (требуется пароль).',
+        analyticsCardTitle: 'Аналитика сайта',
+        analyticsCardSub: 'Посещения и содержимое сайта',
+        analyticsRefreshAria: 'Обновить аналитику',
+        analyticsVisitsHeading: 'Посещения',
+        analyticsContentHeading: 'Содержимое сайта',
+        analyticsVisitsToday: 'Сегодня',
+        analyticsVisitsYesterday: 'Вчера',
+        analyticsVisitsWeek: '7 дней',
+        analyticsVisitsTotal: 'Всего',
+        analyticsVisitsHint: 'Счётчик обновляется при каждом заходе посетителя на сайт. Данные публичные, без бэкенда.',
+        analyticsVisitsLoading: 'Загружаем счётчик посещений…',
+        analyticsVisitsFailed: 'Не удалось загрузить счётчик. Возможно, провайдер недоступен — попробуйте позже.',
+        analyticsVisitsOffline: 'Сеть недоступна — счётчик появится после восстановления соединения.',
+        analyticsLocales: 'Локалей',
+        analyticsRoutes: 'Маршрутов',
+        analyticsActiveProducts: 'Активных продуктов',
+        analyticsPendingUploads: 'В очереди',
+        analyticsLocalesList: 'Языки',
+        analyticsRoutesList: 'Маршруты',
+        analyticsLastDraft: 'Последняя правка',
+        analyticsLastDraftNone: 'Без изменений',
+        analyticsLastDraftAgo: '{0} назад',
+        analyticsUpdated: 'Обновлено: {0}',
+        analyticsRefreshed: 'Аналитика обновлена.',
+        envSecondsShort: '{0} с',
+        envMinutesShort: '{0} мин',
+        envHoursShort: '{0} ч',
+        envDaysShort: '{0} д',
+        envJustNow: 'только что',
         navHomeLabel: 'Главная',
         navProductsLabel: 'Продукты',
         navSupportLabel: 'Поддержка',
@@ -294,12 +325,43 @@ const ADMIN_MESSAGES = Object.freeze({
         toastLocalClearFailed: 'Could not clear localStorage in this browser.',
         statusCardTitle: 'Draft status',
         statusCardSub: 'Sync, publication and upload queue',
+        syncpubCardTitle: 'Publication & sync',
+        syncpubCardSub: 'Draft state, upload queue and global publish key',
         publishCardTitle: 'Global publication',
         publishCardSub: 'Enter the password and publish the draft for every visitor',
         publishPasswordLabel: 'Password',
         publishPasswordPlaceholder: 'Password for global publication',
         publishBtn: 'Save globally',
         publishHelp: 'Apply persists changes locally in this browser (including across reloads). Save globally publishes data for every site visitor (password required).',
+        analyticsCardTitle: 'Site analytics',
+        analyticsCardSub: 'Visits and content overview',
+        analyticsRefreshAria: 'Refresh analytics',
+        analyticsVisitsHeading: 'Visits',
+        analyticsContentHeading: 'Site content',
+        analyticsVisitsToday: 'Today',
+        analyticsVisitsYesterday: 'Yesterday',
+        analyticsVisitsWeek: '7 days',
+        analyticsVisitsTotal: 'All-time',
+        analyticsVisitsHint: 'The counter updates whenever a visitor opens the site. Public, no backend.',
+        analyticsVisitsLoading: 'Loading visit counter…',
+        analyticsVisitsFailed: 'Could not load the counter. The provider may be down — try again later.',
+        analyticsVisitsOffline: 'No network — counter will appear once you are back online.',
+        analyticsLocales: 'Locales',
+        analyticsRoutes: 'Routes',
+        analyticsActiveProducts: 'Active products',
+        analyticsPendingUploads: 'Queued uploads',
+        analyticsLocalesList: 'Languages',
+        analyticsRoutesList: 'Routes',
+        analyticsLastDraft: 'Last edit',
+        analyticsLastDraftNone: 'No changes',
+        analyticsLastDraftAgo: '{0} ago',
+        analyticsUpdated: 'Updated: {0}',
+        analyticsRefreshed: 'Analytics refreshed.',
+        envSecondsShort: '{0}s',
+        envMinutesShort: '{0}m',
+        envHoursShort: '{0}h',
+        envDaysShort: '{0}d',
+        envJustNow: 'just now',
         navHomeLabel: 'Home',
         navProductsLabel: 'Products',
         navSupportLabel: 'Support',
@@ -470,12 +532,43 @@ const ADMIN_MESSAGES = Object.freeze({
         toastLocalClearFailed: 'Не вдалося очистити localStorage у цьому браузері.',
         statusCardTitle: 'Статус чернетки',
         statusCardSub: 'Синхронізація, публікація та черга завантажень',
+        syncpubCardTitle: 'Публікація та синхронізація',
+        syncpubCardSub: 'Стан чернетки, черга файлів і ключ глобальної публікації',
         publishCardTitle: 'Глобальна публікація',
         publishCardSub: 'Введіть пароль і опублікуйте чернетку для всіх відвідувачів',
         publishPasswordLabel: 'Пароль',
         publishPasswordPlaceholder: 'Пароль для глобальної публікації',
         publishBtn: 'Зберегти глобально',
         publishHelp: 'Apply зберігає зміни локально в цьому браузері (включно після перезавантаження). Зберегти глобально публікує дані для всіх відвідувачів сайту (потрібен пароль).',
+        analyticsCardTitle: 'Аналітика сайту',
+        analyticsCardSub: 'Відвідування та вміст сайту',
+        analyticsRefreshAria: 'Оновити аналітику',
+        analyticsVisitsHeading: 'Відвідування',
+        analyticsContentHeading: 'Вміст сайту',
+        analyticsVisitsToday: 'Сьогодні',
+        analyticsVisitsYesterday: 'Учора',
+        analyticsVisitsWeek: '7 днів',
+        analyticsVisitsTotal: 'Усього',
+        analyticsVisitsHint: 'Лічильник оновлюється з кожним заходом відвідувача. Дані публічні, без бекенду.',
+        analyticsVisitsLoading: 'Завантажуємо лічильник відвідувань…',
+        analyticsVisitsFailed: 'Не вдалося завантажити лічильник. Можливо, провайдер недоступний — спробуйте пізніше.',
+        analyticsVisitsOffline: 'Мережа недоступна — лічильник зʼявиться після відновлення зʼєднання.',
+        analyticsLocales: 'Локалей',
+        analyticsRoutes: 'Маршрутів',
+        analyticsActiveProducts: 'Активних продуктів',
+        analyticsPendingUploads: 'У черзі',
+        analyticsLocalesList: 'Мови',
+        analyticsRoutesList: 'Маршрути',
+        analyticsLastDraft: 'Остання правка',
+        analyticsLastDraftNone: 'Без змін',
+        analyticsLastDraftAgo: '{0} тому',
+        analyticsUpdated: 'Оновлено: {0}',
+        analyticsRefreshed: 'Аналітику оновлено.',
+        envSecondsShort: '{0} с',
+        envMinutesShort: '{0} хв',
+        envHoursShort: '{0} год',
+        envDaysShort: '{0} д',
+        envJustNow: 'щойно',
         navHomeLabel: 'Головна',
         navProductsLabel: 'Продукти',
         navSupportLabel: 'Підтримка',
@@ -761,6 +854,20 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const discardDraftBtnEl = document.getElementById('discardDraftBtn');
     const homeApplyDraftBtnEl = document.getElementById('homeApplyDraftBtn');
     const homeDiscardDraftBtnEl = document.getElementById('homeDiscardDraftBtn');
+    const refreshAnalyticsBtnEl = document.getElementById('refreshAnalyticsBtn');
+    const analyticsVisitsTodayEl = document.getElementById('analyticsVisitsToday');
+    const analyticsVisitsYesterdayEl = document.getElementById('analyticsVisitsYesterday');
+    const analyticsVisitsWeekEl = document.getElementById('analyticsVisitsWeek');
+    const analyticsVisitsTotalEl = document.getElementById('analyticsVisitsTotal');
+    const analyticsVisitsHintEl = document.getElementById('analyticsVisitsHint');
+    const analyticsLocalesEl = document.getElementById('analyticsLocales');
+    const analyticsRoutesEl = document.getElementById('analyticsRoutes');
+    const analyticsActiveProductsEl = document.getElementById('analyticsActiveProducts');
+    const analyticsPendingUploadsEl = document.getElementById('analyticsPendingUploads');
+    const analyticsLocalesListEl = document.getElementById('analyticsLocalesList');
+    const analyticsRoutesListEl = document.getElementById('analyticsRoutesList');
+    const analyticsLastDraftEl = document.getElementById('analyticsLastDraft');
+    const analyticsUpdatedEl = document.getElementById('analyticsUpdated');
     const closeProductEditorBtnEl = document.getElementById('closeProductEditorBtn');
     const deleteProductBtnEl = document.getElementById('deleteProductBtn');
     const editorFieldNameEl = document.getElementById('f-name');
@@ -1063,6 +1170,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     let _draftStateCache = null;
     let _draftStateCacheRaf = 0;
     let _syncDraftRaf = 0;
+    let _draftEditingArmed = false;
 
     function scheduleSyncDraftControls() {
         if (!_syncDraftRaf) {
@@ -1079,6 +1187,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             cancelAnimationFrame(_draftStateCacheRaf);
             _draftStateCacheRaf = 0;
         }
+        if (_draftEditingArmed) setLastDraftEditTime();
     }
 
     function computeDraftState() {
@@ -1158,6 +1267,260 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 <span class="dash-status-tag ${row.tagClass}">${escapeHtml(row.tag)}</span>
             </div>
         `).join('');
+
+        renderContentOverview();
+    }
+
+    const SITE_LOCALES = Object.freeze(['en', 'ru', 'ua']);
+    const SITE_ROUTES = Object.freeze(['/', '/donate/', '/products/', '/products/strange-visuals/']);
+    const VISIT_COUNTER_NAMESPACE = 'aleph-icu';
+    const VISIT_COUNTER_HOSTS = Object.freeze([
+        'https://abacus.jasoncameron.dev',
+    ]);
+    const VISIT_DAILY_KEY = 'aleph_visits_daily_v1';
+    const VISIT_CACHE_KEY = 'aleph_admin_visits_cache_v1';
+    const VISIT_CACHE_TTL = 60 * 1000;
+    const DRAFT_LAST_EDIT_KEY = 'aleph_admin_draft_last_edit_v1';
+    let analyticsVisitsInflight = null;
+
+    function formatRelativeTime(timestamp, { withSuffix = true } = {}) {
+        if (!Number.isFinite(timestamp)) return '—';
+        const diffSeconds = Math.max(0, Math.round((Date.now() - timestamp) / 1000));
+        if (diffSeconds < 5) return msg('envJustNow');
+        let value;
+        if (diffSeconds < 60) value = msg('envSecondsShort', diffSeconds);
+        else {
+            const diffMinutes = Math.round(diffSeconds / 60);
+            if (diffMinutes < 60) value = msg('envMinutesShort', diffMinutes);
+            else {
+                const diffHours = Math.round(diffMinutes / 60);
+                if (diffHours < 48) value = msg('envHoursShort', diffHours);
+                else {
+                    const diffDays = Math.round(diffHours / 24);
+                    value = msg('envDaysShort', diffDays);
+                }
+            }
+        }
+        return withSuffix ? msg('analyticsLastDraftAgo', value) : value;
+    }
+
+    function formatExactTime(timestamp) {
+        if (!Number.isFinite(timestamp)) return '—';
+        try {
+            const localeTag = normalizedLocale === 'ua' ? 'uk' : normalizedLocale;
+            return new Date(timestamp).toLocaleString(localeTag, {
+                year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+            });
+        } catch {
+            return new Date(timestamp).toISOString();
+        }
+    }
+
+    function setAnalyticsValue(el, value) {
+        if (!el) return;
+        el.textContent = value === null || value === undefined ? '—' : String(value);
+    }
+
+    function formatNumberCompact(n) {
+        if (!Number.isFinite(n)) return '—';
+        if (n < 1000) return String(n);
+        try {
+            const localeTag = normalizedLocale === 'ua' ? 'uk' : normalizedLocale;
+            return new Intl.NumberFormat(localeTag, { notation: 'compact', maximumFractionDigits: 1 }).format(n);
+        } catch {
+            return String(n);
+        }
+    }
+
+    function setAnalyticsHint(text) {
+        if (analyticsVisitsHintEl) analyticsVisitsHintEl.textContent = text;
+    }
+
+    function setAnalyticsUpdated(timestamp) {
+        if (!analyticsUpdatedEl) return;
+        if (!Number.isFinite(timestamp)) {
+            analyticsUpdatedEl.hidden = true;
+            return;
+        }
+        analyticsUpdatedEl.hidden = false;
+        analyticsUpdatedEl.textContent = msg('analyticsUpdated', formatExactTime(timestamp));
+    }
+
+    async function fetchJson(url, options) {
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const error = new Error(`HTTP ${response.status}`);
+            error.status = response.status;
+            throw error;
+        }
+        return response.json();
+    }
+
+    function pad2(n) { return n < 10 ? `0${n}` : String(n); }
+
+    function isoDayKey(date = new Date()) {
+        return `${date.getUTCFullYear()}-${pad2(date.getUTCMonth() + 1)}-${pad2(date.getUTCDate())}`;
+    }
+
+    function readVisitDaily() {
+        try {
+            const raw = storageGet(VISIT_DAILY_KEY);
+            if (!raw) return {};
+            const parsed = JSON.parse(raw);
+            return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch {
+            return {};
+        }
+    }
+
+    function sumLastNDays(daily, days) {
+        const ordered = Object.keys(daily).sort();
+        const window = ordered.slice(-days);
+        return window.reduce((acc, k) => {
+            const v = Number(daily[k]);
+            return Number.isFinite(v) ? acc + v : acc;
+        }, 0);
+    }
+
+    function renderVisitMetrics({ today, yesterday, week, total } = {}) {
+        setAnalyticsValue(analyticsVisitsTodayEl, Number.isFinite(today) ? formatNumberCompact(today) : '—');
+        setAnalyticsValue(analyticsVisitsYesterdayEl, Number.isFinite(yesterday) ? formatNumberCompact(yesterday) : '—');
+        setAnalyticsValue(analyticsVisitsWeekEl, Number.isFinite(week) ? formatNumberCompact(week) : '—');
+        setAnalyticsValue(analyticsVisitsTotalEl, Number.isFinite(total) ? formatNumberCompact(total) : '—');
+    }
+
+    function computeVisitStats(total) {
+        const daily = readVisitDaily();
+        const todayKey = isoDayKey();
+        const yDate = new Date();
+        yDate.setUTCDate(yDate.getUTCDate() - 1);
+        const yKey = isoDayKey(yDate);
+        return {
+            today: Number.isFinite(daily[todayKey]) ? Number(daily[todayKey]) : 0,
+            yesterday: Number.isFinite(daily[yKey]) ? Number(daily[yKey]) : 0,
+            week: sumLastNDays(daily, 7),
+            total: Number.isFinite(total) ? total : NaN,
+        };
+    }
+
+    async function fetchVisitMetrics({ force = false } = {}) {
+        if (analyticsVisitsInflight) return analyticsVisitsInflight;
+        if (!force) {
+            try {
+                const cached = JSON.parse(storageGet(VISIT_CACHE_KEY) || 'null');
+                if (cached && cached.fetchedAt && (Date.now() - cached.fetchedAt) < VISIT_CACHE_TTL) {
+                    renderVisitMetrics(cached.stats);
+                    setAnalyticsHint(msg('analyticsVisitsHint'));
+                    setAnalyticsUpdated(cached.fetchedAt);
+                    return cached.stats;
+                }
+            } catch { /* ignore */ }
+        }
+
+        if (!navigator.onLine) {
+            const stats = computeVisitStats(NaN);
+            renderVisitMetrics(stats);
+            setAnalyticsHint(msg('analyticsVisitsOffline'));
+            return stats;
+        }
+
+        setAnalyticsHint(msg('analyticsVisitsLoading'));
+        analyticsVisitsInflight = (async () => {
+            let total = NaN;
+            for (const host of VISIT_COUNTER_HOSTS) {
+                try {
+                    const url = `${host}/get/${encodeURIComponent(VISIT_COUNTER_NAMESPACE)}/site`;
+                    const response = await fetch(url, { method: 'GET', mode: 'cors', credentials: 'omit', referrerPolicy: 'no-referrer' });
+                    if (response.status === 404) { total = 0; break; }
+                    if (!response.ok) continue;
+                    const data = await response.json();
+                    const value = Number(data?.value);
+                    if (Number.isFinite(value)) {
+                        total = value;
+                        break;
+                    }
+                } catch { /* try next provider */ }
+            }
+            const stats = computeVisitStats(total);
+            renderVisitMetrics(stats);
+            if (Number.isFinite(total)) {
+                setAnalyticsHint(msg('analyticsVisitsHint'));
+                try { storageSet(VISIT_CACHE_KEY, JSON.stringify({ stats, fetchedAt: Date.now() })); } catch { /* quota */ }
+            } else {
+                setAnalyticsHint(msg('analyticsVisitsFailed'));
+            }
+            return stats;
+        })().finally(() => { analyticsVisitsInflight = null; });
+        return analyticsVisitsInflight;
+    }
+
+    function getActiveProductsCount() {
+        const products = Array.isArray(editorData?.products) ? editorData.products : [];
+        return products.filter((p) => {
+            const lc = String(p?.lifecycle || 'active').toLowerCase();
+            return lc !== 'frozen' && lc !== 'abandoned';
+        }).length;
+    }
+
+    function getLastDraftEditTime() {
+        try {
+            const raw = storageGet(DRAFT_LAST_EDIT_KEY);
+            const value = Number(raw);
+            return Number.isFinite(value) && value > 0 ? value : NaN;
+        } catch {
+            return NaN;
+        }
+    }
+
+    function setLastDraftEditTime(ts = Date.now()) {
+        try { storageSet(DRAFT_LAST_EDIT_KEY, String(ts)); } catch { /* ignore */ }
+    }
+
+    function renderContentOverview() {
+        const localesCount = SITE_LOCALES.length;
+        const routesCount = SITE_ROUTES.length * SITE_LOCALES.length;
+        const activeProducts = getActiveProductsCount();
+        const queued = pendingProductUploads.size;
+        setAnalyticsValue(analyticsLocalesEl, formatNumberCompact(localesCount));
+        setAnalyticsValue(analyticsRoutesEl, formatNumberCompact(routesCount));
+        setAnalyticsValue(analyticsActiveProductsEl, formatNumberCompact(activeProducts));
+        setAnalyticsValue(analyticsPendingUploadsEl, formatNumberCompact(queued));
+        if (analyticsLocalesListEl) {
+            analyticsLocalesListEl.textContent = SITE_LOCALES.map((l) => l.toUpperCase()).join(', ');
+        }
+        if (analyticsRoutesListEl) {
+            analyticsRoutesListEl.textContent = SITE_ROUTES.join(' · ');
+        }
+        if (analyticsLastDraftEl) {
+            const lastEdit = getLastDraftEditTime();
+            if (Number.isFinite(lastEdit)) {
+                analyticsLastDraftEl.textContent = formatRelativeTime(lastEdit);
+                analyticsLastDraftEl.title = formatExactTime(lastEdit);
+            } else {
+                analyticsLastDraftEl.textContent = msg('analyticsLastDraftNone');
+                analyticsLastDraftEl.removeAttribute('title');
+            }
+        }
+    }
+
+    async function refreshAnalytics({ trigger = 'manual' } = {}) {
+        if (refreshAnalyticsBtnEl) {
+            refreshAnalyticsBtnEl.disabled = true;
+            refreshAnalyticsBtnEl.classList.add('is-loading');
+        }
+        try {
+            renderContentOverview();
+            await fetchVisitMetrics({ force: trigger === 'manual' });
+            setAnalyticsUpdated(Date.now());
+            if (trigger === 'manual') emitToast(msg('analyticsRefreshed'));
+        } catch {
+            setAnalyticsHint(msg('analyticsVisitsFailed'));
+        } finally {
+            if (refreshAnalyticsBtnEl) {
+                refreshAnalyticsBtnEl.disabled = false;
+                refreshAnalyticsBtnEl.classList.remove('is-loading');
+            }
+        }
     }
 
     function syncDraftControls() {
@@ -1210,6 +1573,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         editorData = deepClone(savedSiteData);
         renderSite(siteData);
         syncDraftControls();
+        _draftEditingArmed = true;
     }
 
     function applyEditorDataToPreview() {
@@ -1761,6 +2125,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
         syncProductEditorState();
         renderHomeDashboard();
+        if (editorActiveView === 'home' && !analyticsVisitsInflight) {
+            void refreshAnalytics({ trigger: 'auto' });
+        }
     }
 
     function setAdminView(view) {
@@ -2740,6 +3107,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     closeTeamEditorBtnEl?.addEventListener('click', () => closeTeamEditor());
     deleteTeamMemberBtnEl?.addEventListener('click', deleteTeamMember);
     saveGithubBtnEl?.addEventListener('click', () => { void handleSaveGithub(); });
+    refreshAnalyticsBtnEl?.addEventListener('click', () => { void refreshAnalytics({ trigger: 'manual' }); });
+
+    window.addEventListener('online', () => { if (editorActiveView === 'home') refreshAnalytics({ trigger: 'auto' }); });
+    window.addEventListener('offline', () => { if (editorActiveView === 'home') renderContentOverview(); });
 
     window.addEventListener('beforeunload', (event) => {
         if (editorOverlayEl.classList.contains('open') && hasUnsavedDraftChanges()) {
