@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com https://abacus.jasoncameron.dev; base-uri 'self'; form-action 'self'; object-src 'none';">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
 <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Aleph Studio — Admin</title>
@@ -16,7 +16,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Karla:wght@300;400;500;600&family=Unbounded:wght@200;400;500&display=swap">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="../assets/css/admin.css?v=7">
+    <link rel="stylesheet" href="../assets/css/admin.css?v=10">
     <link rel="icon" href="../favicon.ico" sizes="48x48">
     <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
     <link rel="icon" href="../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
@@ -171,32 +171,21 @@
                             </div>
 
                             <div class="dash-home-grid">
-                                <article class="dash-card dash-status-card">
+                                <article class="dash-card dash-syncpub-card">
                                     <div class="dash-card-head">
-                                        <div class="dash-card-head-icon is-red"><span class="material-icons">radio_button_checked</span></div>
+                                        <div class="dash-card-head-icon is-red"><span class="material-icons">cloud_sync</span></div>
                                         <div class="dash-card-head-copy">
-                                            <div class="dash-card-head-title" data-admin-i18n="statusCardTitle">Статус черновика</div>
-                                            <div class="dash-card-head-sub" data-admin-i18n="statusCardSub">Синхронизация, публикация и очередь загрузок</div>
+                                            <div class="dash-card-head-title" data-admin-i18n="syncpubCardTitle">Публикация и синхронизация</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="syncpubCardSub">Состояние черновика, очередь файлов и ключ глобальной публикации</div>
                                         </div>
                                     </div>
-                                    <div class="dash-card-body">
-                                        <div id="homeDraftSummary" class="dash-status-grid"></div>
-                                    </div>
-                                </article>
-
-                                <article class="dash-card dash-publish-card">
-                                    <div class="dash-card-head">
-                                        <div class="dash-card-head-icon is-gold"><span class="material-icons">cloud_upload</span></div>
-                                        <div class="dash-card-head-copy">
-                                            <div class="dash-card-head-title" data-admin-i18n="publishCardTitle">Глобальная публикация</div>
-                                            <div class="dash-card-head-sub" data-admin-i18n="publishCardSub">Введите пароль и опубликуйте черновик для всех пользователей</div>
-                                        </div>
-                                    </div>
-                                    <div class="dash-card-body">
+                                    <div class="dash-card-body dash-syncpub-body">
+                                        <div id="homeDraftSummary" class="dash-syncpub-status"></div>
+                                        <div class="dash-syncpub-divider" aria-hidden="true"></div>
                                         <div class="dash-publish-row">
                                             <div class="dash-field dash-publish-field">
                                                 <label for="githubToken" data-admin-i18n="publishPasswordLabel">Пароль</label>
-                                                <input id="githubToken" type="password" data-admin-i18n-placeholder="publishPasswordPlaceholder" placeholder="Введите пароль для глобальной публикации">
+                                                <input id="githubToken" type="password" autocomplete="current-password" data-admin-i18n-placeholder="publishPasswordPlaceholder" placeholder="Введите пароль для глобальной публикации">
                                             </div>
                                             <button id="saveGithubBtn" type="button" class="dash-btn dash-blue dash-publish-btn">
                                                 <span class="material-icons">cloud_upload</span>
@@ -204,6 +193,91 @@
                                             </button>
                                         </div>
                                         <p class="dash-help" data-admin-i18n="publishHelp">Apply сохраняет изменения локально в этом браузере. Сохранить глобально публикует данные для всех посетителей сайта (нужен пароль).</p>
+                                    </div>
+                                </article>
+
+                                <article class="dash-card dash-analytics-card">
+                                    <div class="dash-card-head">
+                                        <div class="dash-card-head-icon is-blue"><span class="material-icons">insights</span></div>
+                                        <div class="dash-card-head-copy">
+                                            <div class="dash-card-head-title" data-admin-i18n="analyticsCardTitle">Аналитика сайта</div>
+                                            <div class="dash-card-head-sub" data-admin-i18n="analyticsCardSub">Посещения и содержимое сайта</div>
+                                        </div>
+                                        <div class="dash-card-head-actions">
+                                            <button id="refreshAnalyticsBtn" type="button" class="dash-btn-icon dash-analytics-refresh" data-admin-i18n-aria="analyticsRefreshAria" aria-label="Обновить аналитику">
+                                                <span class="material-icons">refresh</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="dash-card-body dash-analytics-body">
+                                        <section class="dash-analytics-section" aria-labelledby="analyticsVisitsHeading">
+                                            <h4 id="analyticsVisitsHeading" class="dash-analytics-heading" data-admin-i18n="analyticsVisitsHeading">Посещения</h4>
+                                            <div class="dash-analytics-grid" role="list">
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">today</span>
+                                                    <strong id="analyticsVisitsToday" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsVisitsToday">Сегодня</span>
+                                                </div>
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">date_range</span>
+                                                    <strong id="analyticsVisitsYesterday" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsVisitsYesterday">Вчера</span>
+                                                </div>
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">trending_up</span>
+                                                    <strong id="analyticsVisitsWeek" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsVisitsWeek">7 дней</span>
+                                                </div>
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">all_inclusive</span>
+                                                    <strong id="analyticsVisitsTotal" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsVisitsTotal">Всего</span>
+                                                </div>
+                                            </div>
+                                            <p id="analyticsVisitsHint" class="dash-help dash-analytics-hint" data-admin-i18n="analyticsVisitsHint">Счётчик публичный, обновляется при каждом заходе посетителя на сайт.</p>
+                                        </section>
+
+                                        <section class="dash-analytics-section" aria-labelledby="analyticsContentHeading">
+                                            <h4 id="analyticsContentHeading" class="dash-analytics-heading" data-admin-i18n="analyticsContentHeading">Содержимое сайта</h4>
+                                            <div class="dash-analytics-grid" role="list">
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">translate</span>
+                                                    <strong id="analyticsLocales" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsLocales">Локалей</span>
+                                                </div>
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">share_location</span>
+                                                    <strong id="analyticsRoutes" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsRoutes">Маршрутов</span>
+                                                </div>
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">grid_view</span>
+                                                    <strong id="analyticsActiveProducts" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsActiveProducts">Активных продуктов</span>
+                                                </div>
+                                                <div class="dash-analytics-stat" role="listitem">
+                                                    <span class="dash-analytics-stat-icon material-icons" aria-hidden="true">cloud_upload</span>
+                                                    <strong id="analyticsPendingUploads" class="dash-analytics-stat-value">—</strong>
+                                                    <span class="dash-analytics-stat-label" data-admin-i18n="analyticsPendingUploads">В очереди</span>
+                                                </div>
+                                            </div>
+                                            <div class="dash-analytics-meta">
+                                                <div class="dash-analytics-meta-row">
+                                                    <span class="dash-analytics-meta-key" data-admin-i18n="analyticsLocalesList">Языки</span>
+                                                    <span id="analyticsLocalesList" class="dash-analytics-meta-val">—</span>
+                                                </div>
+                                                <div class="dash-analytics-meta-row">
+                                                    <span class="dash-analytics-meta-key" data-admin-i18n="analyticsRoutesList">Маршруты</span>
+                                                    <span id="analyticsRoutesList" class="dash-analytics-meta-val">—</span>
+                                                </div>
+                                                <div class="dash-analytics-meta-row">
+                                                    <span class="dash-analytics-meta-key" data-admin-i18n="analyticsLastDraft">Последняя правка</span>
+                                                    <span id="analyticsLastDraft" class="dash-analytics-meta-val">—</span>
+                                                </div>
+                                            </div>
+                                        </section>
+
+                                        <p id="analyticsUpdated" class="dash-analytics-updated" hidden></p>
                                     </div>
                                 </article>
                             </div>
@@ -551,6 +625,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script type="module" src="../src/app.js?v=20260507a"></script>
+    <script type="module" src="../src/app.js?v=20260509a"></script>
 </body>
 </html>

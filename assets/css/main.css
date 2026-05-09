@@ -236,6 +236,10 @@ ul, ol { list-style: none; }
 
 /* ── §3 Noise Overlay ─────────────────────────────────────── */
 
+/* Edge-only film grain. The texture is masked to fade out across the
+   centre of the viewport so it doesn't sit on top of headlines, hero
+   imagery or product cards — only the outer page gutters keep their
+   subtle noise. This matches the donate route's grain-on-edges rule. */
 body::before {
     content: '';
     position: fixed;
@@ -243,29 +247,51 @@ body::before {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: var(--z-base);
-    opacity: 0.5;
+    opacity: 0.55;
+    -webkit-mask-image: radial-gradient(
+        ellipse 60% 60% at 50% 50%,
+        transparent 0%,
+        transparent 35%,
+        #000 95%
+    );
+    mask-image: radial-gradient(
+        ellipse 60% 60% at 50% 50%,
+        transparent 0%,
+        transparent 35%,
+        #000 95%
+    );
 }
 
-/* Background ruby ambience — subtle red wash that lifts the manifesto/
-   principle areas above pure black without losing the noise texture
-   from body::before (this layer sits behind it). */
+/* Background ruby ambience — a quiet vertical fade that prevents the
+   page gutters from going flat black, without painting bright red
+   corner lights. The two corner radial-gradients that used to live
+   here were too aggressive on routes outside the styled product
+   pages, so they were removed in favour of this restrained vignette.
+   Styled product routes (e.g. `/strange-visuals`) keep their richer
+   own-page ambience in their dedicated stylesheets. */
 body::after {
     content: '';
     position: fixed;
     inset: 0;
     pointer-events: none;
     z-index: 0;
-    background:
-        radial-gradient(
-            60% 50% at 80% 20%,
-            rgba(139, 26, 42, 0.10) 0%,
-            transparent 60%
-        ),
-        radial-gradient(
-            70% 60% at 10% 90%,
-            rgba(139, 26, 42, 0.07) 0%,
-            transparent 55%
-        );
+    background: linear-gradient(
+        180deg,
+        rgba(20, 8, 8, 0.22) 0%,
+        transparent 38%,
+        transparent 62%,
+        rgba(20, 8, 8, 0.22) 100%
+    );
+}
+
+[data-theme="light"] body::after {
+    background: linear-gradient(
+        180deg,
+        rgba(20, 8, 8, 0.04) 0%,
+        transparent 40%,
+        transparent 60%,
+        rgba(20, 8, 8, 0.04) 100%
+    );
 }
 
 
