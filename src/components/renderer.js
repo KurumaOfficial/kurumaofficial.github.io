@@ -12,7 +12,8 @@ import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260416c';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
+import { resolveLocaleRootRelativePath } from '../i18n/config.js';
 
 // ── Factory ─────────────────────────────────────────────────
 
@@ -167,8 +168,11 @@ export function createRenderer({ localeController }) {
 
             /* Card with detail page link */
             if (product.detailUrl) {
-                /* detailUrl is locale-relative, resolve against current directory */
-                const href = product.detailUrl.replace(/^\.?\//, './');
+                /* `detailUrl` is authored relative to the locale root
+                 * (e.g. "products/strange-visuals/"). Anchor it to
+                 * `/<base>/<locale>/...` so navigation works the same way
+                 * from `/ru/`, `/ru/products/`, and any other depth. */
+                const href = resolveLocaleRootRelativePath(product.detailUrl);
                 const cardAttrs = product.autoRouteRedirect
                     ? ` data-detail-card="${escapeHtml(href)}" tabindex="0" role="link" aria-label="${escapeHtml(product.title)}"`
                     : '';

@@ -284,7 +284,7 @@ html[data-theme="light"] .nav {
 .theme-btn {
   width:36px;
   height:36px;
-  border-radius:6px;
+  border-radius:0;
   border:1px solid var(--border);
   background:transparent;
   display:flex;

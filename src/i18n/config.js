@@ -160,6 +160,34 @@ export function resolveRouteRelativePath(path, pathname = window.location.pathna
 }
 
 /**
+ * Resolve a path that is relative to the *locale root* (e.g. `products/strange-visuals/`).
+ * Always returns an absolute path anchored at `/<base>/<locale>/<path>`, regardless of
+ * how deep the current route is. Absolute URLs and fragments pass through untouched.
+ *
+ * Use this for `detailUrl` and any other site-data paths that are authored
+ * relative to a locale's root directory, so navigation works correctly from
+ * `/<locale>/`, `/<locale>/products/`, `/<locale>/products/<slug>/`, etc.
+ *
+ * @param {string} path
+ * @param {string} [pathname]
+ * @returns {string}
+ */
+export function resolveLocaleRootRelativePath(path, pathname = window.location.pathname) {
+    const value = String(path || '').trim();
+    if (!value) return value;
+    if (value.startsWith('#') || /^(?:https?:)?\/\//i.test(value)) return value;
+    const externalHref = normalizeBareWebUrl(value);
+    if (externalHref) return externalHref;
+    if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return '';
+
+    const cleaned = value.replace(/^\.\//, '').replace(/^\/+/, '');
+    const locale = detectLocaleFromPath(pathname);
+    const basePath = getSiteBasePath(pathname);
+    const base = basePath.endsWith('/') ? basePath : `${basePath}/`;
+    return `${base}${locale}/${cleaned}`;
+}
+
+/**
  * Build the canonical URL for a given locale and current route.
  * @param {string} locale
  * @param {string} [origin]

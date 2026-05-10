@@ -18,7 +18,8 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js?v=20260507c';
+} from '../core/site-shell.js?v=20260510a';
+import { resolveLocaleRootRelativePath } from '../i18n/config.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
 import { escapeHtml, linkify } from '../core/dom.js';
@@ -177,7 +178,12 @@ function boot() {
 
     function ctaForProduct(product) {
         if (product.detailUrl) {
-            const href = product.detailUrl.replace(/^\.?\//, './');
+            /* detailUrl is authored relative to the locale root (e.g.
+             * "products/strange-visuals/"), so anchor it there. Without this
+             * the link is treated as relative to the *current* directory and
+             * navigating from /<locale>/products/ produces the buggy double
+             * "/products/products/" path. */
+            const href = resolveLocaleRootRelativePath(product.detailUrl);
             return `<a class="plist-cta" href="${escapeHtml(href)}" data-detail-nav>${escapeHtml(lc.t('productsPage.cardOpen', 'Open'))}</a>`;
         }
         if (product.downloadUrl) {

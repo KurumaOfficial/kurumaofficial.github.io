@@ -181,10 +181,13 @@ html[data-theme-switching="true"] .team-name,
 html[data-theme-switching="true"] .team-bio,
 html[data-theme-switching="true"] .social-link,
 html[data-theme-switching="true"] footer,
-html[data-theme-switching="true"] .footer-name,
-html[data-theme-switching="true"] .footer-desc,
-html[data-theme-switching="true"] .footer-links a,
-html[data-theme-switching="true"] .footer-copy,
+html[data-theme-switching="true"] .site-footer__main,
+html[data-theme-switching="true"] .site-footer__bottom,
+html[data-theme-switching="true"] .site-footer__name,
+html[data-theme-switching="true"] .site-footer__tagline,
+html[data-theme-switching="true"] .site-footer__nav a,
+html[data-theme-switching="true"] .site-footer__divider,
+html[data-theme-switching="true"] .site-footer__nav-sep,
 html[data-theme-switching="true"] .toast,
 html[data-theme-switching="true"] .skip-link {
     transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
@@ -198,8 +201,8 @@ html[data-theme-switching="true"] .skip-link {
 .principle,
 .principle-visual,
 .manifesto-item,
-.footer-logo,
-.footer-links a,
+.site-footer__logo,
+.site-footer__nav a,
 .nav,
 .nav-logo,
 .locale-switcher__trigger,
@@ -236,10 +239,13 @@ ul, ol { list-style: none; }
 
 /* ── §3 Noise Overlay ─────────────────────────────────────── */
 
-/* Edge-only film grain. The texture is masked to fade out across the
-   centre of the viewport so it doesn't sit on top of headlines, hero
-   imagery or product cards — only the outer page gutters keep their
-   subtle noise. This matches the donate route's grain-on-edges rule. */
+/* Full-bleed film grain. An SVG fractal-noise tile is rendered over
+   the entire viewport at low opacity to give surfaces a subtle
+   organic texture. The grain sits *behind* foreground content via
+   `z-index: var(--z-base)` and stays pointer-event transparent so it
+   never interferes with hover/click. The dev/v2 layout used a global
+   grain (no centre-fade mask), and we keep that look while leaving
+   the warm vertical vignette in `body::after` intact. */
 body::before {
     content: '';
     position: fixed;
@@ -247,19 +253,11 @@ body::before {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
     pointer-events: none;
     z-index: var(--z-base);
-    opacity: 0.55;
-    -webkit-mask-image: radial-gradient(
-        ellipse 60% 60% at 50% 50%,
-        transparent 0%,
-        transparent 35%,
-        #000 95%
-    );
-    mask-image: radial-gradient(
-        ellipse 60% 60% at 50% 50%,
-        transparent 0%,
-        transparent 35%,
-        #000 95%
-    );
+    opacity: 0.4;
+}
+
+[data-theme="light"] body::before {
+    opacity: 0.16;
 }
 
 /* Background ruby ambience — a quiet vertical fade that prevents the
@@ -418,7 +416,7 @@ body::after {
 .theme-btn {
     width: 36px;
     height: 36px;
-    border-radius: 6px;
+    border-radius: 0;
     background: transparent;
     border: 1px solid var(--border-subtle);
     display: flex;
@@ -1290,85 +1288,165 @@ body.route-ready {
 
 /* ── §17 Footer ───────────────────────────────────────────── */
 
+/* Compact horizontal footer.
+ *
+ * Layout:
+ *   ┌────────────────────────────────────────────────────────────┐
+ *   │ [logo · name | tagline]   [nav links · sep · donate]   [▣]│ ← --row-pad-y
+ *   ├────────────────────────────────────────────────────────────┤
+ *   │  © 2026 Aleph Studio · WeTTeA          GPL Licensed · OSS │ ← --bottom-pad-y
+ *   └────────────────────────────────────────────────────────────┘
+ *
+ * Uses a low-noise 1px ruby-dim divider between the two rows and a 1px
+ * accent border on top to match the rest of the site. Mobile/narrow
+ * widths collapse the rows into stacked groups via the §28 media block.
+ */
+
 footer {
-    padding: var(--page-gutter);
     border-top: 1px solid var(--border-accent);
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: var(--space-10);
-    align-items: start;
+    background: rgba(15, 11, 11, 0.65);
 }
 
-.footer-brand {
+.site-footer__main {
     display: flex;
-    flex-direction: column;
-    gap: var(--space-4);
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-8);
+    padding: 22px var(--page-gutter);
+    border-bottom: 1px solid var(--border-subtle);
+    flex-wrap: wrap;
 }
 
-.footer-logo {
+.site-footer__left {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+    flex-shrink: 0;
+}
+
+.site-footer__logo {
     display: flex;
     align-items: center;
     gap: var(--space-3);
+    text-decoration: none;
+    color: inherit;
 }
 
-.footer-sq {
-    width: 16px;
-    height: 16px;
+.site-footer__logo:hover .site-footer__sq {
+    border-color: var(--color-ruby-light);
+}
+
+.site-footer__sq {
+    width: 14px;
+    height: 14px;
     border: 2px solid var(--color-ruby);
+    flex-shrink: 0;
+    transition: border-color var(--duration-base) var(--ease-default);
 }
 
-.footer-name {
+.site-footer__name {
     font-family: var(--font-display);
-    font-size: 12px;
+    font-size: 11px;
     font-weight: 200;
     letter-spacing: 0.25em;
     color: var(--color-text-heading);
     text-transform: uppercase;
 }
 
-.footer-desc {
-    font-size: 13px;
-    color: var(--color-text-muted);
-    line-height: 1.7;
-    max-width: 260px;
+.site-footer__divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(139, 26, 42, 0.3);
+    flex-shrink: 0;
 }
 
-.footer-links h4 {
+[data-theme="light"] .site-footer__divider {
+    background: rgba(139, 26, 42, 0.18);
+}
+
+.site-footer__tagline {
     font-family: var(--font-mono);
     font-size: 10px;
-    letter-spacing: 0.25em;
-    color: var(--color-ruby);
-    text-transform: uppercase;
-    margin-bottom: var(--space-5);
-}
-
-.footer-links ul {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.footer-links a {
-    font-size: 14px;
+    letter-spacing: 0.1em;
     color: var(--color-text-muted);
-    text-decoration: none;
-    transition: color var(--duration-base) var(--ease-default);
+    text-transform: uppercase;
+    white-space: nowrap;
 }
 
-.footer-links a:hover {
-    color: var(--color-text-heading);
+.site-footer__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+    row-gap: var(--space-3);
 }
 
-.footer-copy {
+.site-footer__nav a {
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.15em;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color var(--duration-base) var(--ease-default);
+}
+
+.site-footer__nav a:hover {
+    color: var(--color-text-heading);
+}
+
+.site-footer__nav-sep {
+    width: 1px;
+    height: 12px;
+    background: rgba(139, 26, 42, 0.25);
+    flex-shrink: 0;
+}
+
+[data-theme="light"] .site-footer__nav-sep {
+    background: rgba(139, 26, 42, 0.16);
+}
+
+.site-footer__socials {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    flex-shrink: 0;
+}
+
+/* Compact social pills inside the footer rail. */
+.site-footer__socials .social-link {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--border-accent);
+}
+
+.site-footer__socials .social-link svg {
+    width: 14px;
+    height: 14px;
+}
+
+.site-footer__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: 12px var(--page-gutter);
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
     color: var(--color-ruby-dim);
     text-transform: uppercase;
-    margin-top: var(--space-12);
-    grid-column: 1 / -1;
-    border-top: 1px solid var(--border-subtle);
-    padding-top: var(--space-6);
+    flex-wrap: wrap;
+}
+
+[data-theme="light"] .site-footer__bottom {
+    color: var(--color-text-muted);
+}
+
+.site-footer__copy,
+.site-footer__license {
+    display: inline-block;
 }
 
 
@@ -1767,9 +1845,27 @@ footer {
     .products-grid { grid-template-columns: 1fr; }
     .manifesto-items { grid-template-columns: 1fr; }
 
-    footer {
-        grid-template-columns: 1fr;
-        padding: var(--space-10) var(--page-gutter);
+    .site-footer__main {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-5);
+        padding: var(--space-7) var(--page-gutter);
+    }
+    .site-footer__left {
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+    .site-footer__nav {
+        order: 1;
+        gap: var(--space-6);
+    }
+    .site-footer__socials {
+        order: 2;
+    }
+    .site-footer__bottom {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-2);
     }
 
     .team-grid { flex-wrap: wrap; }
@@ -1834,9 +1930,9 @@ footer {
     .product-card    { padding: var(--space-6) var(--space-5); }
     .catalog-item    { padding: var(--space-3) var(--space-5); flex-wrap: wrap; }
 
-    footer .footer-copy {
-        margin-top: var(--space-6);
-        padding-top: var(--space-4);
+    .site-footer__nav {
+        gap: var(--space-4);
+        row-gap: var(--space-3);
     }
 }
 
