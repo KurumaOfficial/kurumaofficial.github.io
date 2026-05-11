@@ -18,6 +18,48 @@ import {
 
 const CATEGORY_ORDER = Object.freeze(['player', 'world', 'utils', 'other', 'interface', 'themes']);
 
+/** localStorage key prefix for per-visitor GUI demo toggle state. */
+const GUI_STATE_KEY_PREFIX = 'aleph.gui.state';
+
+function getGuiStateKey(productId) {
+    return `${GUI_STATE_KEY_PREFIX}::${String(productId || 'strange-visuals')}`;
+}
+
+function readGuiState(productId) {
+    try {
+        const raw = window.localStorage.getItem(getGuiStateKey(productId));
+        if (!raw) return {};
+        const parsed = JSON.parse(raw);
+        return parsed && typeof parsed === 'object' ? parsed : {};
+    } catch {
+        return {};
+    }
+}
+
+function writeGuiToggle(productId, tabKey, index, enabled) {
+    if (!productId || !tabKey || !Number.isInteger(index)) return;
+    try {
+        const current = readGuiState(productId);
+        const tabState = current[tabKey] && typeof current[tabKey] === 'object' ? current[tabKey] : {};
+        tabState[String(index)] = Boolean(enabled);
+        current[tabKey] = tabState;
+        window.localStorage.setItem(getGuiStateKey(productId), JSON.stringify(current));
+    } catch {
+        /* Storage may be unavailable; toggles will just not survive reload. */
+    }
+}
+
+function applyStoredGuiState(productId, tabKey, items) {
+    const state = readGuiState(productId);
+    const tabState = state[tabKey];
+    if (!tabState || typeof tabState !== 'object' || !Array.isArray(items)) return items;
+    return items.map((item, index) => {
+        const stored = tabState[String(index)];
+        if (typeof stored !== 'boolean') return item;
+        return { ...item, enabled: stored };
+    });
+}
+
 const ROUTE_CATEGORY_META = Object.freeze({
   ru: {
     player: { title: 'На игроке', icon: 'person' },
@@ -657,7 +699,7 @@ function initActionButtons(elements, routeProduct) {
   syncExternalLinkBehavior(elements.sourceBtn, sourceUrl);
 }
 
-function toggleGwItem(itemEl, localeMeta) {
+function toggleGwItem(itemEl, localeMeta, previewState) {
   const statusEl = itemEl.querySelector('.gw-status');
   if (!(statusEl instanceof HTMLElement)) return;
 
@@ -671,6 +713,12 @@ function toggleGwItem(itemEl, localeMeta) {
   statusEl.classList.toggle('off', !nextEnabled);
   statusEl.textContent = nextEnabled ? localeMeta.enabled : localeMeta.disabled;
   itemEl.setAttribute('aria-pressed', String(nextEnabled));
+
+  const tabKey = itemEl.dataset.gwTab || previewState?.tab || '';
+  const indexRaw = Number(itemEl.dataset.gwIndex);
+  if (previewState?.productId && tabKey && Number.isInteger(indexRaw)) {
+    writeGuiToggle(previewState.productId, tabKey, indexRaw, nextEnabled);
+  }
 }
 
 let guiBuildTimer = 0;
@@ -687,7 +735,7 @@ function bindGuiInteractions(elements, previewContexts, previewState) {
 
     if (target.hasAttribute('data-gw-toggle')) {
       const previewContext = previewContexts[previewState.locale] || previewContexts.ru;
-      toggleGwItem(target, previewContext.localeMeta);
+      toggleGwItem(target, previewContext.localeMeta, previewState);
       return;
     }
 
@@ -731,11 +779,12 @@ function bindGuiTabs(elements, previewContexts, previewState) {
   });
 }
 
-function buildGuiList(elements, tabs, localeMeta, key, locale) {
+function buildGuiList(elements, tabs, localeMeta, key, locale, productId) {
   if (!elements.gwBodyEl || !elements.gwSecEl || !elements.gwItemsEl) return;
 
   const meta = localeMeta[key] || localeMeta.player;
-  const items = Array.isArray(tabs[key]) ? tabs[key] : [];
+  const rawItems = Array.isArray(tabs[key]) ? tabs[key] : [];
+  const items = applyStoredGuiState(productId, key, rawItems);
   const scrollEl = elements.gwBodyEl.querySelector('.gw-scroll');
 
   elements.gwBodyEl.style.transition = 'opacity .18s ease, transform .18s ease';
@@ -747,11 +796,13 @@ function buildGuiList(elements, tabs, localeMeta, key, locale) {
     elements.gwItemsEl.className = 'gw-items';
     elements.gwItemsEl.textContent = '';
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       const itemEl = document.createElement('button');
       itemEl.type = 'button';
       itemEl.className = 'gw-item';
       itemEl.dataset.gwToggle = 'true';
+      itemEl.dataset.gwTab = key;
+      itemEl.dataset.gwIndex = String(index);
       itemEl.setAttribute('aria-pressed', String(Boolean(item.enabled)));
       itemEl.innerHTML = `
         <div class="gw-av">${iconHtml(meta.icon, 'ui-icon')}</div>
@@ -865,7 +916,7 @@ function renderGuiPreview(elements, previewContexts, previewState) {
     return;
   }
 
-  buildGuiList(elements, previewContext.tabs, previewContext.localeMeta, previewState.tab, previewContext.locale);
+  buildGuiList(elements, previewContext.tabs, previewContext.localeMeta, previewState.tab, previewContext.locale, previewState.productId);
 }
 
 function renderModuleList(elements, tabKeys, tabs, localeMeta, locale) {
@@ -994,6 +1045,7 @@ function boot() {
     languageOptions: getGuiPreviewLanguageOptions(localeController.locale),
     themeKey: getGuiPreviewThemeFromDocument(),
     tab: tabKeys[0] || 'player',
+    productId: String(routeProduct?.id || 'strange-visuals'),
   };
 
   syncRouteIcons(elements);

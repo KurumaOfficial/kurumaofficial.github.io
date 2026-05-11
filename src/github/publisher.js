@@ -1,5 +1,14 @@
-import { GITHUB_CONFIG, DATA_MARKERS } from '../core/constants.js';
+import { GITHUB_CONFIG, DATA_MARKERS, ADMIN_PUBLISH_BRANCH_KEY } from '../core/constants.js';
 import { normalizeData } from '../core/data-utils.js';
+
+function readBranchOverride() {
+    try {
+        const raw = window?.localStorage?.getItem(ADMIN_PUBLISH_BRANCH_KEY);
+        return typeof raw === 'string' ? raw.trim() : '';
+    } catch {
+        return '';
+    }
+}
 
 const HTML_PATH_PATTERN = /\.html?$/i;
 const JS_PATH_PATTERN = /\.js$/i;
@@ -15,10 +24,12 @@ function buildRepoAssetPath(relativePath) {
 }
 
 function resolveGitHubConfig() {
+    const override = readBranchOverride();
+    const defaultBranch = String(GITHUB_CONFIG.branch || 'main').trim() || 'main';
     return {
         owner: String(GITHUB_CONFIG.owner || '').trim(),
         repo: String(GITHUB_CONFIG.repo || '').trim(),
-        branch: String(GITHUB_CONFIG.branch || 'main').trim() || 'main',
+        branch: override || defaultBranch,
         path: String(GITHUB_CONFIG.dataPath || 'src/data/site-data.js').trim().replace(/\\/g, '/'),
     };
 }

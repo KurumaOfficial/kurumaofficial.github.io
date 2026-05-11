@@ -1,5 +1,5 @@
 import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
+import { ADMIN_PUBLISH_BRANCH_KEY, GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import {
     deepClone,
     formatBytes,
@@ -124,6 +124,9 @@ const ADMIN_MESSAGES = Object.freeze({
         publishCardSub: 'Введите пароль и опубликуйте черновик для всех пользователей',
         publishPasswordLabel: 'Пароль',
         publishPasswordPlaceholder: 'Введите пароль для глобальной публикации',
+        publishBranchLabel: 'Ветка',
+        publishBranchPlaceholder: 'Ветка для публикации (по умолчанию main)',
+        publishTargetLoading: 'Цель публикации загружается…',
         publishBtn: 'Сохранить глобально',
         publishHelp: 'Apply сохраняет изменения локально в этом браузере (включая после перезагрузки). Сохранить глобально публикует данные для всех посетителей сайта (требуется пароль).',
         analyticsCardTitle: 'Аналитика сайта',
@@ -331,6 +334,9 @@ const ADMIN_MESSAGES = Object.freeze({
         publishCardSub: 'Enter the password and publish the draft for every visitor',
         publishPasswordLabel: 'Password',
         publishPasswordPlaceholder: 'Password for global publication',
+        publishBranchLabel: 'Branch',
+        publishBranchPlaceholder: 'Publish target branch (defaults to main)',
+        publishTargetLoading: 'Resolving publish target…',
         publishBtn: 'Save globally',
         publishHelp: 'Apply persists changes locally in this browser (including across reloads). Save globally publishes data for every site visitor (password required).',
         analyticsCardTitle: 'Site analytics',
@@ -538,6 +544,9 @@ const ADMIN_MESSAGES = Object.freeze({
         publishCardSub: 'Введіть пароль і опублікуйте чернетку для всіх відвідувачів',
         publishPasswordLabel: 'Пароль',
         publishPasswordPlaceholder: 'Пароль для глобальної публікації',
+        publishBranchLabel: 'Гілка',
+        publishBranchPlaceholder: 'Гілка для публікації (за замовчуванням main)',
+        publishTargetLoading: 'Ціль публікації завантажується…',
         publishBtn: 'Зберегти глобально',
         publishHelp: 'Apply зберігає зміни локально в цьому браузері (включно після перезавантаження). Зберегти глобально публікує дані для всіх відвідувачів сайту (потрібен пароль).',
         analyticsCardTitle: 'Аналітика сайту',
@@ -923,6 +932,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const importJsonBtnEl = document.getElementById('importJsonBtn');
     const importJsonInputEl = document.getElementById('importJsonInput');
     const saveGithubBtnEl = document.getElementById('saveGithubBtn');
+    const githubBranchInputEl = document.getElementById('githubBranch');
     const localeSwitcherEl = document.getElementById('localeSwitcher');
     const localeSwitcherTriggerEl = document.getElementById('localeSwitcherTrigger');
     const localeSwitcherFlagEl = document.getElementById('localeSwitcherFlag');
@@ -2777,9 +2787,23 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         _savingToGithub = true;
         if (saveGithubBtnEl) saveGithubBtnEl.disabled = true;
         commitAllEditorState();
+
+        // Always persist the latest edits locally *before* the GitHub push so the
+        // user's work survives reload if the remote publish fails (bad token,
+        // wrong branch, offline, etc.). Pending file uploads are stripped from
+        // the local snapshot — those download URLs would point to files that
+        // only exist after a successful remote commit.
+        const previewNormalized = applyEditorDataToPreview();
+        const localSafeData = stripPendingUploadLinks(previewNormalized);
+        persistEditorData(localSafeData);
+        // After persistEditorData, editorData was replaced with localSafeData
+        // (without pending upload hrefs). Restore pending upload hrefs on the
+        // *editor* copy so the GitHub push still records `./<relativePath>`
+        // download URLs alongside the file blobs.
+        editorData = deepClone(previewNormalized);
+
         try {
-            const normalized = applyEditorDataToPreview();
-            const savedData = await saveToGitHub(normalized);
+            const savedData = await saveToGitHub(previewNormalized);
             persistEditorData(savedData);
             const githubTokenEl = document.getElementById('githubToken');
             if (githubTokenEl) githubTokenEl.value = '';
@@ -2789,7 +2813,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 'success',
             );
         } catch (error) {
-            syncDraftControls();
+            refreshAdminAfterSave();
             emitToast(error?.message || msg('toastGithubFailed'), 'error');
         } finally {
             _savingToGithub = false;
@@ -3107,6 +3131,38 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     closeTeamEditorBtnEl?.addEventListener('click', () => closeTeamEditor());
     deleteTeamMemberBtnEl?.addEventListener('click', deleteTeamMember);
     saveGithubBtnEl?.addEventListener('click', () => { void handleSaveGithub(); });
+
+    function persistBranchOverride(rawValue) {
+        const next = String(rawValue || '').trim();
+        try {
+            if (next && next !== String(GITHUB_CONFIG.branch || '').trim()) {
+                window.localStorage.setItem(ADMIN_PUBLISH_BRANCH_KEY, next);
+            } else {
+                window.localStorage.removeItem(ADMIN_PUBLISH_BRANCH_KEY);
+            }
+        } catch {
+            /* localStorage may be unavailable; the default branch will be used. */
+        }
+        renderGitHubSyncTarget();
+    }
+
+    if (githubBranchInputEl) {
+        try {
+            const storedOverride = window.localStorage.getItem(ADMIN_PUBLISH_BRANCH_KEY);
+            githubBranchInputEl.value = storedOverride || String(GITHUB_CONFIG.branch || 'main');
+        } catch {
+            githubBranchInputEl.value = String(GITHUB_CONFIG.branch || 'main');
+        }
+        githubBranchInputEl.addEventListener('input', (event) => {
+            persistBranchOverride(event.target.value);
+        });
+        githubBranchInputEl.addEventListener('blur', () => {
+            if (!githubBranchInputEl.value.trim()) {
+                githubBranchInputEl.value = String(GITHUB_CONFIG.branch || 'main');
+                persistBranchOverride(githubBranchInputEl.value);
+            }
+        });
+    }
     refreshAnalyticsBtnEl?.addEventListener('click', () => { void refreshAnalytics({ trigger: 'manual' }); });
 
     window.addEventListener('online', () => { if (editorActiveView === 'home') refreshAnalytics({ trigger: 'auto' }); });

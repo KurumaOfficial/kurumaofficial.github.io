@@ -4,13 +4,18 @@
  * @module core/constants
  */
 
-/** GitHub repository configuration for data sync. */
+/** GitHub repository configuration for data sync.
+ *  `branch` is the *default* publication target. Admins can override it at
+ *  runtime in the editor UI (`#githubBranch`) without redeploying. */
 export const GITHUB_CONFIG = Object.freeze({
     owner: 'KurumaOfficial',
     repo: 'kurumaofficial.github.io',
-    branch: 'dev/v2',
+    branch: 'main',
     dataPath: 'src/data/site-data.js',
 });
+
+/** localStorage key for the admin-selected publish branch override. */
+export const ADMIN_PUBLISH_BRANCH_KEY = 'ALEPH_ADMIN_PUBLISH_BRANCH';
 
 /** Site data file markers for programmatic edits. */
 export const DATA_MARKERS = Object.freeze({
