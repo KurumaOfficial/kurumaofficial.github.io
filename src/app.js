@@ -19,7 +19,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from './core/site-shell.js?v=20260416c';
+} from './core/site-shell.js?v=20260510a';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -68,7 +68,7 @@ function boot() {
     /* 5.1 — Admin: lazy-load editor on admin page, otherwise just
              wire up the secret key-sequence redirect. --------------- */
     if (isAdminPage) {
-        import('./admin/editor.js?v=20260416d').then(({ createEditorController }) => {
+        import('./admin/editor.js?v=20260510b').then(({ createEditorController }) => {
             const editor = createEditorController({
                 renderSite: renderer.renderSite,
                 showToast,
@@ -94,6 +94,60 @@ function boot() {
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
+
+    /* 9 — Public visit counter (fire-and-forget, GitHub Pages safe) -- */
+    if (!isAdminPage) trackPublicVisit();
+}
+
+/* ------------------------------------------------------------------ */
+/*  Visit counter                                                     */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Pings a public counter API once per session and records today's hit
+ * locally so the admin dashboard can surface today/yesterday/7d totals
+ * without any backend. Silent on errors — never blocks the page.
+ */
+function trackPublicVisit() {
+    if (typeof window === 'undefined') return;
+    if (window.location.protocol === 'file:') return;
+    try {
+        const sessionFlag = 'aleph_visit_session_v1';
+        if (window.sessionStorage?.getItem(sessionFlag)) return;
+        window.sessionStorage?.setItem(sessionFlag, '1');
+
+        const today = new Date();
+        const dayKey = `${today.getUTCFullYear()}-${String(today.getUTCMonth() + 1).padStart(2, '0')}-${String(today.getUTCDate()).padStart(2, '0')}`;
+        const dailyKey = 'aleph_visits_daily_v1';
+        const raw = window.localStorage?.getItem(dailyKey);
+        let daily = {};
+        if (raw) {
+            try {
+                const parsed = JSON.parse(raw);
+                if (parsed && typeof parsed === 'object') daily = parsed;
+            } catch { /* ignore */ }
+        }
+        daily[dayKey] = (Number(daily[dayKey]) || 0) + 1;
+
+        const ordered = Object.keys(daily).sort();
+        if (ordered.length > 60) {
+            const trimmed = {};
+            ordered.slice(-60).forEach((k) => { trimmed[k] = daily[k]; });
+            daily = trimmed;
+        }
+        try { window.localStorage?.setItem(dailyKey, JSON.stringify(daily)); } catch { /* quota */ }
+
+        if (!navigator.onLine) return;
+        fetch('https://abacus.jasoncameron.dev/hit/aleph-icu/site', {
+            method: 'GET',
+            mode: 'cors',
+            credentials: 'omit',
+            referrerPolicy: 'no-referrer',
+            keepalive: true,
+        }).catch(() => { /* silent — counter is best-effort */ });
+    } catch {
+        /* localStorage / sessionStorage may be unavailable in private mode */
+    }
 }
 
 /* ------------------------------------------------------------------ */

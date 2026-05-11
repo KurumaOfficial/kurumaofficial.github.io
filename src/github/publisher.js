@@ -15,10 +15,11 @@ function buildRepoAssetPath(relativePath) {
 }
 
 function resolveGitHubConfig() {
+    const branch = String(GITHUB_CONFIG.branch || '').trim();
     return {
         owner: String(GITHUB_CONFIG.owner || '').trim(),
         repo: String(GITHUB_CONFIG.repo || '').trim(),
-        branch: String(GITHUB_CONFIG.branch || 'main').trim() || 'main',
+        branch,
         path: String(GITHUB_CONFIG.dataPath || 'src/data/site-data.js').trim().replace(/\\/g, '/'),
     };
 }

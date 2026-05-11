@@ -4,11 +4,15 @@
  * @module core/constants
  */
 
-/** GitHub repository configuration for data sync. */
+/** GitHub repository configuration for data sync.
+ *  The admin "Save globally" flow always publishes to this branch — the same
+ *  branch that GitHub Pages serves the live site from. Hard-coded by design:
+ *  there is no UI to override it, so editors never accidentally publish to a
+ *  branch that visitors will not see. */
 export const GITHUB_CONFIG = Object.freeze({
     owner: 'KurumaOfficial',
     repo: 'kurumaofficial.github.io',
-    branch: 'dev/v2',
+    branch: 'temp-root',
     dataPath: 'src/data/site-data.js',
 });
 

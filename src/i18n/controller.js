@@ -19,7 +19,7 @@ import {
     resolveRouteRelativePath,
 } from './config.js';
 import { MESSAGES } from './messages.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260416c';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/products/strange-visuals/after.webp';
 const DEFAULT_SOCIAL_IMAGE_WIDTH = '1919';
@@ -210,7 +210,10 @@ export function createLocaleController() {
         ['footerDesc',       'footer.desc'],
         ['footerNavHeading', 'footer.navHeading'],
         ['footerWetteaHeading', 'footer.wetteaHeading'],
+        ['footerTagline',    'footer.tagline'],
+        ['footerDonateLink', 'footer.donate'],
         ['footerCopyright',  'footer.copyright'],
+        ['footerLicense',    'footer.license'],
     ];
 
     /** @type {ReadonlyArray<[string, string]>} */
@@ -236,6 +239,12 @@ export function createLocaleController() {
 
         const skipLink = document.getElementById('skipLink');
         if (skipLink) skipLink.textContent = t('skipLink', skipLink.textContent ?? '');
+
+        const footerNav = document.getElementById('footerNav');
+        if (footerNav) footerNav.setAttribute('aria-label', t('footer.navAria', footerNav.getAttribute('aria-label') ?? ''));
+
+        const footerSocialLinks = document.getElementById('footerSocialLinks');
+        if (footerSocialLinks) footerSocialLinks.setAttribute('aria-label', t('footer.socialsAria', footerSocialLinks.getAttribute('aria-label') ?? ''));
     }
 
     // ── Language switcher ───────────────────────────────────

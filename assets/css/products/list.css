@@ -200,7 +200,11 @@
     font-weight: 600;
 }
 
-/* ── Grid ────────────────────────────────────────────────── */
+/* ── Grid ────────────────────────────────────────────────── *
+ * Cards sit on a 1px hairline grid — the wrapper paints the
+ * divider colour and the gap between cards reveals it. zero
+ * border-radius keeps the catalog feeling like an editorial
+ * index rather than a chunky tile board. */
 .plist-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -216,17 +220,25 @@
     .plist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
 
+/* ── Card ────────────────────────────────────────────────── *
+ * A vertical poster: status eyebrow → serif title → mono
+ * version line → divider → summary → foot row (lifecycle tag
+ * + CTA). Two pseudo-elements drive the hover state:
+ *   ::before — the top index rule (2px ruby, scales-in on hover)
+ *   ::after  — a soft inner-corner ruby glow that warms the
+ *              card without competing with the headline. */
 .plist-card {
     position: relative;
+    isolation: isolate;
     background: var(--plist-card-bg);
-    padding: clamp(20px, 2.4vw, 28px) clamp(20px, 2.6vw, 32px);
+    padding: clamp(22px, 2.6vw, 32px) clamp(22px, 2.8vw, 36px) clamp(20px, 2.4vw, 28px);
     display: flex;
     flex-direction: column;
+    min-height: 280px;
     overflow: hidden;
-    transition: background .2s ease;
-}
-.plist-card:hover {
-    background: var(--color-bg-hover, var(--surface-h, #1f1518));
+    transition:
+        background .25s var(--ease-default, cubic-bezier(.22, 1, .36, 1)),
+        transform .25s var(--ease-default, cubic-bezier(.22, 1, .36, 1));
 }
 .plist-card::before {
     content: '';
@@ -235,79 +247,185 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: var(--plist-card-accent);
+    background: linear-gradient(90deg,
+        transparent,
+        var(--plist-card-accent) 30%,
+        var(--plist-card-accent) 70%,
+        transparent);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform .35s var(--ease-default, cubic-bezier(.22, 1, .36, 1));
+    transition: transform .4s var(--ease-default, cubic-bezier(.22, 1, .36, 1));
     pointer-events: none;
+    z-index: 1;
 }
-.plist-card:hover::before { transform: scaleX(1); }
+.plist-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        ellipse 60% 45% at 0% 0%,
+        color-mix(in srgb, var(--plist-card-accent) 10%, transparent) 0%,
+        transparent 70%);
+    opacity: 0;
+    transition: opacity .3s ease;
+    pointer-events: none;
+    z-index: 0;
+}
+.plist-card > * { position: relative; z-index: 1; }
+.plist-card:hover,
+.plist-card:focus-within {
+    background: var(--color-bg-hover, var(--surface-h, #1f1518));
+}
+.plist-card:hover::before,
+.plist-card:focus-within::before { transform: scaleX(1); }
+.plist-card:hover::after,
+.plist-card:focus-within::after { opacity: 1; }
 
+/* Status row — lifecycle dot + label + (optional) flag pill. */
 .plist-card-status {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 10px;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--plist-card-accent);
-    margin-bottom: 14px;
+    margin: 0 0 18px;
     flex-wrap: wrap;
+    min-height: 18px;
 }
+.plist-card-status .status-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--plist-card-accent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--plist-card-accent) 18%, transparent);
+    flex: 0 0 auto;
+}
+.plist-card-status .status-dot.inactive {
+    background: color-mix(in srgb, var(--plist-text-body) 60%, transparent);
+    box-shadow: none;
+    opacity: 0.7;
+}
+
+/* Title — primary anchor of the card. Uses display serif to
+ * match the homepage hero typography. */
 .plist-card-title {
     font-family: var(--font-display, 'Cormorant Garamond', serif);
-    font-size: 22px;
-    font-weight: 400;
+    font-size: clamp(24px, 2vw, 30px);
+    font-weight: 500;
     color: var(--plist-text-strong);
-    margin: 0 0 6px;
-    letter-spacing: -0.015em;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+    transition: color .2s ease;
 }
+.plist-card:hover .plist-card-title,
+.plist-card:focus-within .plist-card-title {
+    color: color-mix(in srgb, var(--plist-text-strong) 88%, var(--plist-card-accent) 12%);
+}
+
+/* Version — monospaced dim ruby, the typographic sub-rule. */
 .plist-card-version {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.12em;
-    color: color-mix(in srgb, var(--plist-card-accent) 65%, transparent);
-    margin: 0 0 14px;
+    letter-spacing: 0.14em;
+    color: color-mix(in srgb, var(--plist-card-accent) 70%, transparent);
+    margin: 0 0 16px;
+    text-transform: uppercase;
 }
+
+/* Description body w/ short hairline above mirroring the
+ * editorial rhythm used elsewhere in the design system. */
 .plist-card-desc {
+    position: relative;
     font-size: 14px;
     color: var(--plist-text-body);
-    line-height: 1.6;
-    margin: 0 0 20px;
+    line-height: 1.65;
+    margin: 0 0 24px;
+    padding-top: 16px;
     flex: 1;
 }
+.plist-card-desc::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 28px;
+    height: 1px;
+    background: var(--plist-card-accent);
+    opacity: 0.65;
+}
+
+/* Foot — lifecycle tag (left) + action button (right). */
 .plist-card-foot {
     margin-top: auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
+    gap: 14px;
+    padding-top: 8px;
 }
+.plist-card-foot .product-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--plist-text-body);
+    opacity: 0.85;
+}
+
 .plist-cta {
+    --cta-color: var(--plist-text-strong);
+    --cta-border: var(--plist-card-border-hi);
     appearance: none;
-    border: 1px solid var(--plist-card-border);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--cta-border);
     background: transparent;
-    color: var(--plist-text-strong);
+    color: var(--cta-color);
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    padding: 8px 16px;
+    padding: 9px 16px;
     text-decoration: none;
     border-radius: 0;
     cursor: pointer;
-    transition: color .18s ease, border-color .18s ease, background .18s ease;
+    transition:
+        color .2s ease,
+        border-color .2s ease,
+        background .2s ease,
+        transform .2s ease;
+    line-height: 1;
+}
+.plist-cta::after {
+    content: '→';
+    font-size: 13px;
+    letter-spacing: 0;
+    transition: transform .2s ease;
+    margin-left: 2px;
 }
 .plist-cta:hover {
-    color: var(--plist-card-accent);
-    border-color: var(--plist-card-accent);
-    background: color-mix(in srgb, var(--plist-card-accent) 8%, transparent);
+    --cta-color: var(--plist-card-accent);
+    --cta-border: var(--plist-card-accent);
+    background: color-mix(in srgb, var(--plist-card-accent) 10%, transparent);
+}
+.plist-cta:hover::after { transform: translateX(3px); }
+.plist-cta:focus-visible {
+    outline: 2px solid var(--plist-card-accent);
+    outline-offset: 3px;
+    --cta-color: var(--plist-card-accent);
+    --cta-border: var(--plist-card-accent);
 }
 .plist-cta.is-disabled {
     opacity: 0.4;
     cursor: not-allowed;
+    pointer-events: none;
 }
+.plist-cta.is-disabled::after { display: none; }
 
 /* ── Empty state ─────────────────────────────────────────── */
 .plist-empty {

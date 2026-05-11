@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com https://abacus.jasoncameron.dev; base-uri 'self'; form-action 'self'; object-src 'none';">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
@@ -37,9 +37,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 
-    <link rel="stylesheet" href="../../assets/css/main.css?v=9">
-    <link rel="stylesheet" href="../../assets/css/products/list.css?v=1">
-    <link rel="modulepreload" href="../../src/products/list.js?v=20260507a">
+    <link rel="stylesheet" href="../../assets/css/main.css?v=12">
+    <link rel="stylesheet" href="../../assets/css/products/list.css?v=3">
+    <link rel="modulepreload" href="../../src/products/list.js?v=20260510a">
 
 </head>
 <body>
@@ -53,7 +53,7 @@
         </a>
 
         <div class="nav-links">
-            <a id="navLinkProducts" class="nav__link" href="../#products">Продукты</a>
+            <a id="navLinkProducts" class="nav__link" href="./">Продукты</a>
             <a id="navLinkManifesto" class="nav__link" href="../#manifesto">Принцип</a>
             <a id="navLinkTeam" class="nav__link" href="../#team">Команда</a>
         </div>
@@ -137,37 +137,41 @@
 
     </main>
 
-    <footer role="contentinfo">
-        <div class="footer-brand">
-            <div class="footer-logo" aria-hidden="true">
-                <span class="footer-sq"></span>
-                <span class="footer-name">Aleph Studio</span>
+    <footer role="contentinfo" class="site-footer">
+        <div class="site-footer__main">
+            <div class="site-footer__left">
+                <a class="site-footer__logo" href="../">
+                    <span class="site-footer__sq" aria-hidden="true"></span>
+                    <span class="site-footer__name">Aleph Studio</span>
+                </a>
+                <span class="site-footer__divider" aria-hidden="true"></span>
+                <span id="footerTagline" class="site-footer__tagline">Дочерний проект WeTTeA</span>
             </div>
-            <p id="footerDesc" class="footer-desc">Дочерний проект WeTTeA. Игровые разработки с открытым исходным кодом.</p>
-            <div id="footerSocialLinks" class="social-hub" aria-label="Социальные ссылки"></div>
+
+            <nav id="footerNav" class="site-footer__nav" aria-label="Подвал — навигация">
+                <a href="../products/">Продукты</a>
+                <a href="../#manifesto">Принцип</a>
+                <a href="../#team">Команда</a>
+                <span class="site-footer__nav-sep" aria-hidden="true"></span>
+                <a id="footerDonateLink" href="../donate/">Поддержать</a>
+            </nav>
+
+            <div id="footerSocialLinks" class="site-footer__socials" aria-label="Социальные сети"></div>
         </div>
 
-        <div class="footer-links">
-            <h4 id="footerNavHeading">Навигация</h4>
-            <ul>
-                <li><a class="nav__link" href="../#products">Продукты</a></li>
-                <li><a class="nav__link" href="../#manifesto">Принцип</a></li>
-                <li><a class="nav__link" href="../#team">Команда</a></li>
-            </ul>
+        <div class="site-footer__bottom">
+            <span id="footerCopyright" class="site-footer__copy">© 2026 Aleph Studio · Дочерний проект WeTTeA</span>
+            <span id="footerLicense" class="site-footer__license">Лицензия GPL · Open Source</span>
         </div>
 
-        <div class="footer-links">
-            <h4 id="footerWetteaHeading">Ссылки</h4>
-            <ul>
-                <li><a href="../donate/">Поддержать</a></li>
-            </ul>
-        </div>
-
-        <p id="footerCopyright" class="footer-copy">© 2026 Aleph Studio · Дочерний проект WeTTeA · Лицензия GPL</p>
+        <!-- Hidden i18n placeholders so legacy translation bindings still resolve. -->
+        <span id="footerDesc" hidden></span>
+        <span id="footerNavHeading" hidden></span>
+        <span id="footerWetteaHeading" hidden></span>
     </footer>
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script type="module" src="../../src/products/list.js?v=20260507a"></script>
+    <script type="module" src="../../src/products/list.js?v=20260510a"></script>
 </body>
 </html>

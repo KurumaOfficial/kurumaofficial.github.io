@@ -70,7 +70,11 @@
 }
 
 :root {
-  --page-gutter: 52px;
+  /* Match the main page's outer page gutter (64px) so the navigation bar
+   * lines up with the homepage edge-to-edge. The donate route used 52px
+   * which made the logo + locale switcher visibly narrower than the rest
+   * of the site. */
+  --page-gutter: 64px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -91,9 +95,12 @@ body {
   position:relative;
 }
 
-/* Fixed-position grain texture above content, exactly like the main
- * site — keeps page edges textured even when the centered .donate-page
- * column doesn't reach them. */
+/* Fixed-position grain texture, masked so it only shows along the
+ * outer edges of the viewport. The user's brief was: "the grain belongs
+ * on the edges, not in the middle". A radial gradient mask fades the
+ * noise to fully transparent in the centre and pushes it back up to
+ * full strength near the corners — the centred donate column stays
+ * visually clean while the page gutters still feel textured. */
 body::after {
   content:'';
   position:fixed;
@@ -101,29 +108,27 @@ body::after {
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
   pointer-events:none;
   z-index:9999;
-  opacity:.5;
+  opacity:.55;
+  -webkit-mask-image:radial-gradient(ellipse 60% 60% at 50% 50%, transparent 0%, transparent 35%, #000 95%);
+  mask-image:radial-gradient(ellipse 60% 60% at 50% 50%, transparent 0%, transparent 35%, #000 95%);
 }
 
-/* Ambient ruby wash on the full viewport. Sits *behind* content so the
- * grain still shows, but lifts the empty side gutters above pure black
- * — the user's bug report ("sides are flat black, no grain") was driven
- * by the bare body background. This matches the homepage approach. */
+/* Quiet vignette behind content. Previously this layer painted two
+ * bright ruby radial-gradients on the corners which the user called out
+ * as "too bright red light" — unwanted on a non-product route. The
+ * gradients are gone; only a soft vertical fade remains so the edges
+ * read as restful dark instead of flat black. */
 body::before {
   content:'';
   position:fixed;
   inset:0;
   pointer-events:none;
   z-index:0;
-  background:
-    radial-gradient(58% 46% at 82% 22%, rgba(139,26,42,0.055) 0%, transparent 64%),
-    radial-gradient(68% 56% at 12% 92%, rgba(139,26,42,0.038) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(20,8,8,0.30) 0%, transparent 40%, transparent 60%, rgba(20,8,8,0.30) 100%);
+  background:linear-gradient(180deg, rgba(20,8,8,0.22) 0%, transparent 38%, transparent 62%, rgba(20,8,8,0.22) 100%);
 }
 
 html[data-theme="light"] body::before {
-  background:
-    radial-gradient(58% 46% at 82% 22%, rgba(139,26,42,0.025) 0%, transparent 64%),
-    radial-gradient(68% 56% at 12% 92%, rgba(139,26,42,0.018) 0%, transparent 60%);
+  background:linear-gradient(180deg, rgba(20,8,8,0.04) 0%, transparent 40%, transparent 60%, rgba(20,8,8,0.04) 100%);
 }
 
 .nav,
@@ -197,6 +202,8 @@ button {
   -webkit-appearance:none;
 }
 
+/* Header values mirror the homepage `.nav` rule in `assets/css/main.css`
+ * so the donate route is visually 1 : 1 with the rest of the site. */
 .nav {
   position:fixed;
   top:0;
@@ -212,9 +219,14 @@ button {
   padding-left:calc(var(--page-gutter) + var(--safe-left));
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
-  background:color-mix(in srgb, var(--bg2) 82%, transparent);
-  border-bottom:1px solid var(--border);
+  background:rgba(8, 6, 6, 0.75);
+  border-bottom:1px solid rgba(139, 26, 42, 0.10);
   overflow:visible;
+}
+
+html[data-theme="light"] .nav {
+  background:rgba(245, 240, 238, 0.88);
+  border-bottom-color:rgba(139, 26, 42, 0.07);
 }
 
 .nav-logo {
@@ -272,7 +284,7 @@ button {
 .theme-btn {
   width:36px;
   height:36px;
-  border-radius:6px;
+  border-radius:0;
   border:1px solid var(--border);
   background:transparent;
   display:flex;
@@ -555,11 +567,18 @@ button {
   align-items:center;
   gap:10px;
   min-height:42px;
+  min-width:0;
+  max-width:100%;
   margin-top:10px;
   padding:0 16px;
   border-radius:0;
   border:1px solid var(--border);
-  background:rgba(0,0,0,0.04);
+  /* Solid backdrop so the button never bleeds into content below — the
+     parent .donate-page-top can become sticky and float above sections,
+     so the surface must read as opaque rather than translucent. */
+  background:var(--bg);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
   color:var(--text-dim);
   text-decoration:none;
   font-family:'JetBrains Mono',monospace;
@@ -567,7 +586,15 @@ button {
   letter-spacing:.12em;
   text-transform:uppercase;
   pointer-events:auto;
+  box-sizing:border-box;
   transition:color .2s ease, border-color .2s ease, background .2s ease;
+}
+
+#donateBackLabel {
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
 .donate-back:hover {
@@ -579,6 +606,7 @@ button {
 .donate-back .ui-icon {
   width:22px;
   height:22px;
+  flex-shrink:0;
 }
 
 .donate-crown {
