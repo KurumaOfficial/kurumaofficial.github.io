@@ -5,17 +5,16 @@
  */
 
 /** GitHub repository configuration for data sync.
- *  `branch` is the *default* publication target. Admins can override it at
- *  runtime in the editor UI (`#githubBranch`) without redeploying. */
+ *  The admin "Save globally" flow always publishes to this branch — the same
+ *  branch that GitHub Pages serves the live site from. Hard-coded by design:
+ *  there is no UI to override it, so editors never accidentally publish to a
+ *  branch that visitors will not see. */
 export const GITHUB_CONFIG = Object.freeze({
     owner: 'KurumaOfficial',
     repo: 'kurumaofficial.github.io',
-    branch: 'main',
+    branch: 'temp-root',
     dataPath: 'src/data/site-data.js',
 });
-
-/** localStorage key for the admin-selected publish branch override. */
-export const ADMIN_PUBLISH_BRANCH_KEY = 'ALEPH_ADMIN_PUBLISH_BRANCH';
 
 /** Site data file markers for programmatic edits. */
 export const DATA_MARKERS = Object.freeze({
