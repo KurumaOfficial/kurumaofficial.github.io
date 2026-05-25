@@ -1460,7 +1460,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function getActiveProductsCount() {
         const products = Array.isArray(editorData?.products) ? editorData.products : [];
         return products.filter((p) => {
-            const lc = String(p?.lifecycle || 'active').toLowerCase();
+            const lc = String(p?.status || p?.tag || 'active').toLowerCase();
             return lc !== 'frozen' && lc !== 'abandoned';
         }).length;
     }
