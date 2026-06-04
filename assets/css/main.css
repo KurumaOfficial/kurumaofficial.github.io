@@ -47,6 +47,7 @@
     --space-4:   16px;
     --space-5:   20px;
     --space-6:   24px;
+    --space-7:   28px;
     --space-8:   32px;
     --space-10:  40px;
     --space-12:  48px;
@@ -469,8 +470,10 @@ body::after {
 }
 
 /* Subtle parallax — reacts to cursor via --hero-mx/--hero-my variables
-   set from JS. Falls back to a soft breathing animation when there's
-   no pointer (touch devices, reduced motion). */
+   set from JS. The parallax offset is applied via a CSS custom property
+   so it doesn't conflict with the base translateY(-50%) centering.
+   Falls back to a soft breathing animation when there's no pointer
+   (touch devices, reduced motion). */
 .hero-bg-sq {
     position: absolute;
     top: 50%;
@@ -479,11 +482,13 @@ body::after {
     height: 520px;
     border: 1px solid rgba(139, 26, 42, 0.22);
     pointer-events: none;
-    transform: translate3d(
-        calc(var(--hero-mx, 0) * -22px),
-        calc(-50% + var(--hero-my, 0) * -18px),
-        0
-    );
+    will-change: transform, opacity;
+    transform: translateY(-50%)
+               translate3d(
+                   calc(var(--hero-mx, 0) * -22px),
+                   calc(var(--hero-my, 0) * -18px),
+                   0
+               );
     transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
     animation: sq-breathe 6s ease-in-out infinite;
 }
@@ -706,6 +711,7 @@ body::after {
     gap: var(--space-20);
     animation: marquee 22s linear infinite;
     white-space: nowrap;
+    will-change: transform;
 }
 
 .marquee-item {
@@ -1229,6 +1235,7 @@ body.route-ready {
     display: flex;
     gap: 2px;
     animation: marquee 28s linear infinite;
+    will-change: transform;
 }
 
 .team-marquee-wrap:hover .team-marquee-track,
@@ -1250,10 +1257,6 @@ body.route-ready {
     margin-top: var(--space-12);
 }
 
-#featuredSocialLinks {
-    margin-top: calc(-1 * var(--space-10));
-    padding: 0 var(--page-gutter);
-}
 
 .social-link {
     width: 40px;
@@ -1714,8 +1717,8 @@ footer {
 }
 
 @keyframes sq-breathe {
-    0%, 100% { transform: translateY(-50%) scale(1);    opacity: 0.5; }
-    50%      { transform: translateY(-50%) scale(1.02); opacity: 1; }
+    0%, 100% { opacity: 0.5; }
+    50%      { opacity: 1; }
 }
 
 @keyframes sq-rotate {
@@ -1752,6 +1755,7 @@ footer {
     .marquee-track,
     .team-marquee-track {
         will-change: auto;
+        animation: none !important;
     }
 
     .reveal {
@@ -1783,12 +1787,11 @@ footer {
 }
 
 
-/* ── §27 Responsive — Tablet (≤ 960px) ────────────────────── */
+/* ── §27 Responsive — Medium screens (961px – 1400px) ──────── */
 
-@media (min-width: 481px) and (max-height: 760px),
-       (min-width: 481px) and (max-width: 1400px) {
+@media (min-width: 961px) and (max-width: 1400px) {
     :root {
-        --page-gutter:   clamp(20px, 2.2vw, 32px);
+        --page-gutter:   clamp(32px, 3.2vw, 64px);
         --section-block: 96px;
         --nav-height:    84px;
     }
@@ -1801,7 +1804,7 @@ footer {
     }
 
     .nav-links {
-        gap: 20px;
+        gap: 28px;
     }
 
     .hero {
@@ -1812,7 +1815,7 @@ footer {
     }
 
     .hero-title {
-        font-size: clamp(68px, 8.6vw, 112px);
+        font-size: clamp(68px, 8.6vw, 130px);
     }
 
     .hero-sub {
