@@ -51,6 +51,21 @@ function normalizeComparablePath(pathname) {
     return getNormalizedPathname(pathname).replace(/index\.html\/?$/i, '');
 }
 
+function mergeDefaultProducts(stored) {
+    try {
+        const defaultIds = new Set(NORMALIZED_DEFAULT_SITE_DATA.products.map((p) => p.id));
+        const storedIds  = new Set((stored.products || []).map((p) => p.id));
+        const missing = NORMALIZED_DEFAULT_SITE_DATA.products.filter((p) => !storedIds.has(p.id));
+        if (!missing.length) return stored;
+        const merged = { ...stored, products: [...(stored.products || []), ...missing] };
+        /* Persist so subsequent reads are already up to date */
+        try { window.localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(merged)); } catch { /* quota */ }
+        return merged;
+    } catch {
+        return stored;
+    }
+}
+
 function getStoredSiteData() {
     try {
         const raw = window.localStorage.getItem(LOCAL_DATA_KEY);
@@ -65,7 +80,11 @@ function getStoredSiteData() {
         }
 
         cachedStoredSiteDataRaw = raw;
-        cachedStoredSiteData = normalizeData(JSON.parse(raw));
+        const parsed = normalizeData(JSON.parse(raw));
+        const merged = mergeDefaultProducts(parsed);
+        cachedStoredSiteData = merged === parsed ? parsed : normalizeData(merged);
+        /* Update raw cache if we wrote merged data back */
+        cachedStoredSiteDataRaw = window.localStorage.getItem(LOCAL_DATA_KEY) ?? raw;
         return cachedStoredSiteData;
     } catch {
         cachedStoredSiteDataRaw = null;

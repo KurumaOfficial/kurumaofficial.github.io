@@ -40,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css?v=20">
+<link rel="stylesheet" href="../../../assets/css/products/strange-visuals.css?v=19">
 <link rel="modulepreload" href="../../../src/products/strange-visuals.js?v=20260510b">
 </head>
 <body>
@@ -82,7 +82,7 @@
 
 <main id="main">
 <div class="hero-store-top">
-  <a href="../" class="hero-store-back" aria-label="Назад к списку продуктов">
+  <a href="../../" class="hero-store-back" aria-label="Назад к списку продуктов">
     <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     <span class="hero-store-back-label">НАЗАД К СПИСКУ ПРОДУКТОВ</span>
   </a>
@@ -175,6 +175,58 @@
   </div>
 </section>
 
+<div class="wrap" id="compare">
+  <div class="compare-section-head reveal">
+    <div>
+      <div class="eyebrow">Скриншоты</div>
+      <h2 class="s-title">Галерея</h2>
+    </div>
+    <p class="s-desc">Скриншоты и видео мода в действии.</p>
+  </div>
+
+  <div class="gallery-wrap reveal">
+    <div class="gallery-stage">
+      <div class="gallery-scroll" role="list" id="galleryScroll">
+
+        <div class="gallery-item gallery-item--video" role="listitem" aria-label="Видео-трейлер мода">
+          <video class="gallery-video" src="../../../assets/files/test-trailer.mp4" preload="metadata" loop playsinline aria-label="Трейлер мода"></video>
+          <div class="gallery-video-overlay" id="galleryVideoOverlay">
+            <div class="gallery-play">
+              <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 5.5 18.5 12 7 18.5V5.5Z" fill="currentColor"/></svg></span>
+            </div>
+            <span class="gallery-play-label">Трейлер</span>
+          </div>
+        </div>
+
+        <div class="gallery-item" role="listitem">
+          <img src="../../../assets/images/products/strange-visuals/after.webp" alt="Strange Visuals с модом" loading="lazy" decoding="async" width="1919" height="1054">
+        </div>
+
+        <div class="gallery-item" role="listitem">
+          <img src="../../../assets/images/products/strange-visuals/before.webp" alt="Strange Visuals без мода" loading="lazy" decoding="async" width="1919" height="1054">
+        </div>
+
+        <div class="gallery-item" role="listitem">
+          <img src="../../../assets/images/products/strange-visuals/after.webp" alt="Strange Visuals крупным планом" loading="lazy" decoding="async" width="1919" height="1054">
+        </div>
+
+      </div>
+    </div>
+    <button class="gallery-arrow gallery-arrow--prev" id="galleryPrev" aria-label="Предыдущий слайд" type="button">
+      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>
+    <button class="gallery-arrow gallery-arrow--next" id="galleryNext" aria-label="Следующий слайд" type="button">
+      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>
+    <div class="gallery-dots" aria-hidden="true" id="galleryDots">
+      <div class="gallery-dot active"></div>
+      <div class="gallery-dot"></div>
+      <div class="gallery-dot"></div>
+      <div class="gallery-dot"></div>
+    </div>
+  </div>
+</div>
+
 <div class="wrap" id="features">
   <div class="feat-head reveal">
     <div>
@@ -223,50 +275,6 @@
       <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.5 20 18.5H4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4.4M12 16.4h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
       <h3>Проблемы</h3>
       <p>Если у вас возникли проблемы с запуском или вы нашли баг, вы можете сообщить об этом на нашем <a id="supportDiscordLink" href="https://discord.gg/3YxB2R6eqQ" target="_blank" rel="noopener noreferrer">Discord</a> сервере.</p>
-    </div>
-  </div>
-</div>
-
-<div class="wrap" id="compare">
-  <div class="compare-section-head reveal">
-    <div>
-      <div class="eyebrow">До / После</div>
-      <h2 class="s-title">Сравнение<br>визуала</h2>
-    </div>
-    <p class="s-desc">Наглядная разница игры с нашим модом и без него. Также на изображениях не применялась дополнительная обработка, которую используют некоторые.</p>
-  </div>
-
-  <div class="compare-card reveal">
-    <div class="compare-stage" id="compareStage">
-      <div class="compare-label before">До</div>
-      <div class="compare-label after">После</div>
-
-      <div class="compare-image compare-before">
-        <img id="compareBeforeImage" src="../../../assets/images/products/strange-visuals/before.webp" alt="Strange Visuals до применения мода" loading="lazy" decoding="async" width="1919" height="1054">
-      </div>
-
-      <div class="compare-after-wrap" id="compareAfterWrap">
-        <div class="compare-image compare-after">
-          <img id="compareAfterImage" src="../../../assets/images/products/strange-visuals/after.webp" alt="Strange Visuals после применения мода" loading="lazy" decoding="async" width="1919" height="1054">
-        </div>
-      </div>
-
-      <div class="compare-divider" id="compareDivider"></div>
-      <div class="compare-handle" id="compareHandle">
-        <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="7" r="1.3" fill="currentColor"/><circle cx="15" cy="7" r="1.3" fill="currentColor"/><circle cx="9" cy="12" r="1.3" fill="currentColor"/><circle cx="15" cy="12" r="1.3" fill="currentColor"/><circle cx="9" cy="17" r="1.3" fill="currentColor"/><circle cx="15" cy="17" r="1.3" fill="currentColor"/></svg></span>
-      </div>
-
-      <input
-        type="range"
-        min="0"
-        max="100"
-        value="50"
-        class="compare-slider"
-        id="compareSlider"
-        aria-label="Сравнение до и после"
-      >
-
-      <div class="compare-slot" id="compareSlot">Наглядная разница игры с нашим модом и без него. Также на изображениях не применялась дополнительная обработка, которую используют некоторые.</div>
     </div>
   </div>
 </div>
@@ -415,5 +423,57 @@
 
 
 <script type="module" src="../../../src/products/strange-visuals.js?v=20260510b"></script>
+<script>
+(function () {
+  var videoEl   = document.querySelector('.gallery-video');
+  var overlayEl = document.getElementById('galleryVideoOverlay');
+  function stopVideo() {
+    if (!videoEl) return;
+    videoEl.pause();
+    if (overlayEl) overlayEl.classList.remove('is-playing');
+  }
+  if (videoEl && overlayEl) {
+    overlayEl.addEventListener('click', function () {
+      if (videoEl.paused) { videoEl.play(); overlayEl.classList.add('is-playing'); }
+      else { videoEl.pause(); overlayEl.classList.remove('is-playing'); }
+    });
+    videoEl.addEventListener('ended', function () { overlayEl.classList.remove('is-playing'); });
+  }
+  var scroll = document.getElementById('galleryScroll');
+  var dots   = document.getElementById('galleryDots');
+  var prev   = document.getElementById('galleryPrev');
+  var next   = document.getElementById('galleryNext');
+  if (!scroll) return;
+  var dotEls = dots ? Array.from(dots.querySelectorAll('.gallery-dot')) : [];
+  var total  = scroll.children.length;
+  var autoTimer = 0, idleTimer = 0, lastIndex = 0;
+  function currentIndex() { return Math.round(scroll.scrollLeft / scroll.clientWidth); }
+  function goTo(index) {
+    var i = ((index % total) + total) % total;
+    scroll.scrollTo({ left: i * scroll.clientWidth, behavior: 'smooth' });
+  }
+  function updateDots() {
+    var i = currentIndex();
+    dotEls.forEach(function (d, idx) { d.classList.toggle('active', idx === i); });
+    if (i !== 0 && lastIndex === 0) stopVideo();
+    lastIndex = i;
+  }
+  function startAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(function () { goTo(currentIndex() + 1); }, 30000);
+  }
+  function resetIdle() {
+    clearTimeout(idleTimer); clearInterval(autoTimer);
+    idleTimer = setTimeout(startAuto, 30000);
+  }
+  scroll.addEventListener('scroll', updateDots, { passive: true });
+  if (prev) prev.addEventListener('click', function () { goTo(currentIndex() - 1); resetIdle(); });
+  if (next) next.addEventListener('click', function () { goTo(currentIndex() + 1); resetIdle(); });
+  ['mousedown','touchstart','keydown'].forEach(function (ev) {
+    scroll.addEventListener(ev, resetIdle, { passive: true });
+  });
+  resetIdle();
+}());
+</script>
 </body>
 </html>

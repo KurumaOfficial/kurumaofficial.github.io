@@ -1,9 +1,5 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /tools/
-Disallow: /ru/admin/
-Disallow: /en/admin/
-Disallow: /ua/admin/
 
 Sitemap: https://www.aleph.icu/sitemap.xml

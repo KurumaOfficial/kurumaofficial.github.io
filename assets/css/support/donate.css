@@ -487,8 +487,7 @@ html[data-theme="light"] .nav {
   max-width:1120px;
   margin:0 auto;
   padding-right:calc(var(--page-gutter) + var(--safe-right));
-  /* Reduced since the footer now provides its own spacing at the bottom */
-  padding-bottom:calc(48px + var(--safe-bottom));
+  padding-bottom:calc(96px + var(--safe-bottom));
   padding-left:calc(var(--page-gutter) + var(--safe-left));
 }
 
@@ -790,22 +789,17 @@ html[data-theme="light"] .donate-section::after {
 .pay-grid { grid-template-columns:repeat(2, minmax(0,1fr)); gap:18px; }
 .top-grid {
   grid-template-columns:repeat(3, minmax(0,1fr));
-  gap:16px;
-  /* Enough headroom so cards lifting 4-5px on hover are never clipped
-   * by the section header or the grid's own edge. */
-  padding-top:8px;
-  padding-bottom:8px;
-  /* Ensure the grid itself doesn't clip its children on any axis */
-  overflow:visible;
+  gap:24px;
+  /* Headroom so cards lifting on hover don't get visually clipped by
+   * the section header above. */
+  padding-top:6px;
 }
 .supporters-grid {
-  grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
-  gap:12px;
+  grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
+  gap:24px;
   content-visibility:auto;
   contain-intrinsic-size:auto 500px;
-  padding-top:8px;
-  padding-bottom:8px;
-  overflow:visible;
+  padding-top:6px;
 }
 
 .pay-btn,
@@ -889,159 +883,28 @@ html[data-theme="light"] .donate-section::after {
 
 /* Dead .support-card system removed — JS uses .card-donor exclusively */
 
-/* ── Donor card — reworked design ──────────────────────────── *
- * Key changes vs old design:
- *  • Fixed height (160px) instead of 1:1 aspect-ratio — more
- *    predictable on narrow grids and doesn't leave huge empty
- *    space for short names.
- *  • Pill-shaped avatar (still circle internally) with a subtle
- *    outer rim that inherits tier colour via CSS var.
- *  • Top-line accent bar uses the same gradient as before but
- *    now always renders — thickness scales by tier intensity.
- *  • Name is wider (full card width minus padding) so long names
- *    are less likely to be truncated.
- *  • Amount badge moved to bottom-right corner so it doesn't
- *    compete with the name visually.
- * ─────────────────────────────────────────────────────────── */
-
 .card-donor {
   display:flex;
   flex-direction:column;
   align-items:center;
-  justify-content:flex-start;
-  gap:9px;
-  padding:20px 14px 14px;
+  justify-content:center;
+  gap:10px;
+  padding:22px 14px;
   background:var(--surface);
   border:1px solid var(--border);
-  border-radius:4px;
+  border-radius:0;
   cursor:default;
   position:relative;
   overflow:hidden;
   isolation:isolate;
-  min-height:160px;
+  /* Square aspect ratio so each card in the “Supported us” grid is a
+   * perfect square regardless of its content height. Min-height is the
+   * fallback for very narrow widths where aspect-ratio could leave
+   * content cramped. */
+  aspect-ratio:1 / 1;
+  min-height:190px;
   --g-alpha:0;
-  transition:background .18s, transform .15s cubic-bezier(.2,.8,.2,1),
-             box-shadow .22s, border-color .18s, opacity .2s;
-}
-
-/* Top accent bar — always 2px, opacity driven by --g-alpha */
-.card-donor::before {
-  content:'';
-  position:absolute;
-  top:0; left:0; right:0;
-  height:2px;
-  background:linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(220,90,110,calc(var(--g-alpha) * .7)) 20%,
-    rgba(255,180,195,calc(var(--g-alpha) * 1.2)) 50%,
-    rgba(220,90,110,calc(var(--g-alpha) * .7)) 80%,
-    transparent 100%
-  );
-  pointer-events:none;
-  z-index:2;
-}
-
-/* Bottom ambient glow line */
-.card-donor::after {
-  content:'';
-  position:absolute;
-  bottom:0; left:10%; right:10%;
-  height:1px;
-  background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(220,90,110,calc(var(--g-alpha) * .4)),
-    transparent
-  );
-  pointer-events:none;
-  z-index:2;
-}
-
-.card-donor:hover {
-  transform:translateY(-4px) scale(1.015);
-  background:color-mix(in srgb, var(--surface) 60%, var(--bg2) 40%);
-}
-
-/* ── Top supporter highlight ───────────────────────────────── *
- * Ruby palette — three ranks differ in brightness and glow
- * radius: #1 hottest red, #2 deeper magenta, #3 dark burgundy.
- * ─────────────────────────────────────────────────────────── */
-
-.card-donor.is-top {
-  border-color:rgba(220,90,110,.30);
-  box-shadow:0 0 18px rgba(220,90,110,.10), 0 0 36px rgba(220,90,110,.05);
-  padding-bottom:22px;
-  min-height:175px;
-}
-
-.card-donor.is-top:hover {
-  transform:translateY(-5px) scale(1.018);
-  box-shadow:0 0 26px rgba(220,90,110,.18), 0 0 50px rgba(220,90,110,.09);
-}
-
-/* Bottom glow bar for top cards */
-.card-donor.is-top::after {
-  left:16px; right:16px;
-  bottom:9px;
-  height:5px;
-  border-radius:2px;
-  filter:blur(8px);
-  opacity:.92;
-}
-
-.card-donor.is-top[data-rank="1"] {
-  border-color:rgba(230,90,110,.42);
-  box-shadow:0 0 24px rgba(230,90,110,.16), 0 0 52px rgba(230,90,110,.08);
-}
-.card-donor.is-top[data-rank="1"]::before {
-  background:linear-gradient(90deg, transparent, rgba(230,90,110,.75) 25%, rgba(255,200,210,1) 50%, rgba(230,90,110,.75) 75%, transparent);
-}
-.card-donor.is-top[data-rank="1"]::after {
-  background:linear-gradient(90deg, rgba(230,90,110,0), rgba(230,90,110,.70) 24%, rgba(255,200,210,.96) 50%, rgba(230,90,110,.70) 76%, rgba(230,90,110,0));
-}
-
-.card-donor.is-top[data-rank="2"] {
-  border-color:rgba(180,40,70,.34);
-  box-shadow:0 0 20px rgba(180,40,70,.12), 0 0 44px rgba(180,40,70,.06);
-}
-.card-donor.is-top[data-rank="2"]::before {
-  background:linear-gradient(90deg, transparent, rgba(180,40,70,.65) 25%, rgba(225,140,160,.94) 50%, rgba(180,40,70,.65) 75%, transparent);
-}
-.card-donor.is-top[data-rank="2"]::after {
-  background:linear-gradient(90deg, rgba(180,40,70,0), rgba(180,40,70,.66) 24%, rgba(225,140,160,.94) 50%, rgba(180,40,70,.66) 76%, rgba(180,40,70,0));
-}
-
-.card-donor.is-top[data-rank="3"] {
-  border-color:rgba(130,30,50,.28);
-  box-shadow:0 0 18px rgba(130,30,50,.10), 0 0 38px rgba(130,30,50,.05);
-}
-.card-donor.is-top[data-rank="3"]::before {
-  background:linear-gradient(90deg, transparent, rgba(130,30,50,.60) 25%, rgba(190,90,110,.90) 50%, rgba(130,30,50,.60) 75%, transparent);
-}
-.card-donor.is-top[data-rank="3"]::after {
-  background:linear-gradient(90deg, rgba(130,30,50,0), rgba(130,30,50,.62) 24%, rgba(190,90,110,.92) 50%, rgba(130,30,50,.62) 76%, rgba(130,30,50,0));
-}
-
-/* Platinum overrides */
-.card-donor.is-platinum::before {
-  background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(145,190,255,calc(var(--g-alpha) * .8)),
-    rgba(215,236,255,calc(var(--g-alpha) * 1.4)),
-    rgba(145,190,255,calc(var(--g-alpha) * .8)),
-    transparent
-  );
-}
-
-.card-donor.is-platinum::after {
-  background:linear-gradient(
-    90deg,
-    transparent,
-    rgba(145,190,255,calc(var(--g-alpha) * .5)),
-    transparent
-  );
+  transition:background .15s,transform .12s,box-shadow .2s,border-color .15s,opacity .2s;
 }
 
 .card-donor::before {
@@ -1206,7 +1069,6 @@ html[data-theme="light"] .donate-section::after {
   height:16px;
 }
 
-/* ── Card children: z-index baseline ── */
 .donor-avatar,
 .donor-name,
 .donor-badge,
@@ -1215,16 +1077,13 @@ html[data-theme="light"] .donate-section::after {
   z-index:1;
 }
 
-/* ── Avatar ── */
 .donor-avatar {
-  width:56px;
-  height:56px;
+  width:52px;
+  height:52px;
   border-radius:50%;
   overflow:hidden;
   flex-shrink:0;
   position:relative;
-  margin-bottom:2px;
-  box-shadow:0 2px 10px rgba(0,0,0,.22);
 }
 
 .donor-avatar img {
@@ -1246,24 +1105,22 @@ html[data-theme="light"] .donate-section::after {
   width:100%;
   height:100%;
   border-radius:50%;
-  background:color-mix(in srgb, var(--bg2) 85%, var(--accent-dim));
+  background:var(--bg2);
   display:flex;
   align-items:center;
   justify-content:center;
   font-family:'Cormorant',serif;
   font-weight:700;
-  font-size:22px;
+  font-size:20px;
   color:var(--text-dim);
-  letter-spacing:-.5px;
 }
 
 .card-donor.is-platinum .donor-avatar-default,
 .donor-avatar-default.is-platinum {
   color:var(--platinum-light);
-  background:linear-gradient(135deg, rgba(32,40,58,0.96), rgba(16,22,36,0.98));
+  background:linear-gradient(135deg, rgba(32,40,58,0.95), rgba(16,22,36,0.95));
 }
 
-/* ── Name ── */
 .donor-name {
   font-size:13px;
   font-weight:500;
@@ -1273,23 +1130,18 @@ html[data-theme="light"] .donate-section::after {
   overflow:hidden;
   text-overflow:ellipsis;
   white-space:nowrap;
-  /* Use full available width minus padding — old 120px was too narrow */
-  max-width:calc(100% - 8px);
-  width:100%;
+  max-width:120px;
 }
 
-/* ── Tier badge ── */
 .donor-badge {
   font-family:'JetBrains Mono',monospace;
   font-size:9px;
-  letter-spacing:.45px;
-  text-transform:uppercase;
+  letter-spacing:.5px;
   color:var(--text-dim);
   background:var(--surface);
   border:1px solid var(--border);
-  border-radius:2px;
-  padding:2px 8px;
-  transition:color .2s, background .2s, border-color .2s;
+  border-radius:0;
+  padding:2px 7px;
 }
 
 .card-donor.is-top .donor-badge {
@@ -1308,32 +1160,25 @@ html[data-theme="light"] .donate-section::after {
   color:var(--platinum-light);
   background:var(--platinum-dim);
   border-color:var(--platinum-border);
-  box-shadow:0 0 14px rgba(110,165,255,0.08);
+  box-shadow:0 0 16px rgba(110,165,255,0.1);
 }
 
-/* ── Amount — pinned to bottom-right corner ── */
 .donor-amount {
-  position:absolute;
-  bottom:8px;
-  right:10px;
-  z-index:3;
   font-family:'JetBrains Mono',monospace;
   font-size:9px;
-  color:var(--text-muted);
-  letter-spacing:.25px;
-  opacity:.75;
-  line-height:1;
+  color:var(--text-dim);
+  letter-spacing:.3px;
+  opacity:.85;
 }
 
 .card-donor.is-top .donor-amount {
   color:var(--gold);
-  opacity:.9;
 }
 
 .card-donor.is-platinum .donor-amount {
   color:var(--platinum-light);
-  opacity:.88;
-  text-shadow:0 0 12px rgba(170,210,255,0.22);
+  opacity:.95;
+  text-shadow:0 0 14px rgba(170,210,255,0.26);
 }
 
 .empty-state {
@@ -1445,7 +1290,7 @@ html[data-theme="light"] .donate-section::after {
   .nav-links { display:none; }
   .pay-grid,
   .top-grid { grid-template-columns:repeat(2, minmax(0,1fr)); }
-  .supporters-grid { grid-template-columns:repeat(auto-fill, minmax(130px,1fr)); gap:10px; }
+  .supporters-grid { grid-template-columns:repeat(auto-fill, minmax(140px,1fr)); }
 }
 
 @media (max-width: 768px) {
@@ -1590,188 +1435,5 @@ html[data-theme="light"] .donate-section::after {
 
   .donate-section {
     padding: 24px;
-  }
-}
-
-/* ── Footer (donate route) ─────────────────────────────────── *
- * Mirrors main.css §17 exactly so the footer looks identical
- * across all routes. Only the variables differ (donate.css uses
- * its own token set that maps to the same visual values).
- * ─────────────────────────────────────────────────────────── */
-
-.site-footer {
-  border-top: 1px solid var(--accent-border);
-  background: rgba(15, 11, 11, 0.65);
-  position: relative;
-  z-index: 1;
-}
-
-.site-footer__main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 32px;
-  padding: 22px var(--page-gutter);
-  border-bottom: 1px solid var(--border);
-  flex-wrap: wrap;
-}
-
-.site-footer__left {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-shrink: 0;
-}
-
-.site-footer__logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: inherit;
-}
-
-.site-footer__sq {
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--accent);
-  flex-shrink: 0;
-  transition: border-color .3s ease;
-}
-
-.site-footer__logo:hover .site-footer__sq {
-  border-color: color-mix(in srgb, var(--accent) 60%, white);
-}
-
-.site-footer__name {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 11px;
-  font-weight: 200;
-  letter-spacing: .25em;
-  color: var(--text);
-  text-transform: uppercase;
-}
-
-.site-footer__divider {
-  width: 1px;
-  height: 16px;
-  background: rgba(139, 26, 42, .28);
-  flex-shrink: 0;
-}
-
-.site-footer__tagline {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .1em;
-  color: var(--text-dim);
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.site-footer__nav {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  flex-wrap: wrap;
-  row-gap: 12px;
-}
-
-.site-footer__nav a {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
-  letter-spacing: .15em;
-  color: var(--text-dim);
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: color .2s ease;
-}
-
-.site-footer__nav a:hover {
-  color: var(--text);
-}
-
-.site-footer__socials {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* Compact social pills inside the footer rail — mirrors main.css */
-.site-footer__socials .social-link {
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--accent-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-dim);
-  text-decoration: none;
-  transition: border-color .2s ease, color .2s ease;
-}
-
-.site-footer__socials .social-link:hover {
-  border-color: var(--accent);
-  color: var(--text);
-}
-
-.site-footer__socials .social-link svg {
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
-  display: block;
-}
-
-.site-footer__socials .social-link[aria-disabled="true"] {
-  opacity: .3;
-  pointer-events: none;
-}
-
-.site-footer__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 12px var(--page-gutter);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px;
-  letter-spacing: .15em;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  flex-wrap: wrap;
-}
-
-.site-footer__copy {
-  display: inline-block;
-}
-
-/* Responsive footer on donate */
-@media (max-width: 960px) {
-  .site-footer__main {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px var(--page-gutter);
-  }
-
-  .site-footer__left {
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .site-footer__nav {
-    gap: 24px;
-  }
-
-  .site-footer__bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-  }
-}
-
-@media (max-width: 640px) {
-  .site-footer__main {
-    padding: 16px var(--page-gutter);
   }
 }
