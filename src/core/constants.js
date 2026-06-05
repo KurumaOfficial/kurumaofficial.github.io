@@ -12,7 +12,7 @@
 export const GITHUB_CONFIG = Object.freeze({
     owner: 'KurumaOfficial',
     repo: 'kurumaofficial.github.io',
-    branch: 'main',
+    branch: 'temp-root',
     dataPath: 'src/data/site-data.js',
 });
 
