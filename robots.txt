@@ -2,6 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 Disallow: /tools/
+Disallow: /test/
 Disallow: /ru/admin/
 Disallow: /en/admin/
 Disallow: /ua/admin/
