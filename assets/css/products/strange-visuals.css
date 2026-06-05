@@ -1110,7 +1110,15 @@ html[data-theme-switching="true"] .gui-w {
 
 .feat-card { background:var(--bg); padding:28px 22px; }
 .feat-card:hover { background:var(--surface); }
-.feat-card.w2 { grid-column:span 2; }
+/* Force an explicit row-separator on the wide card.
+   The gap:1px / background trick works for same-height rows but can
+   disappear when locale text makes row 1 taller than the gap strip.
+   box-shadow inset on top draws a crisp 1px line without affecting
+   grid layout or overflow-hidden clipping. */
+.feat-card.w2 {
+  grid-column:span 2;
+  box-shadow:inset 0 1px 0 var(--border);
+}
 
 .feat-ico {
   width:34px; height:34px; border-radius:8px; background:var(--accent-dim);
