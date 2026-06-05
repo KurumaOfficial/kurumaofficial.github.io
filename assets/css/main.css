@@ -1452,6 +1452,10 @@ footer {
     display: inline-block;
 }
 
+.site-footer__license:empty {
+    display: none;
+}
+
 
 /* ── §18 Inline Links ─────────────────────────────────────── */
 

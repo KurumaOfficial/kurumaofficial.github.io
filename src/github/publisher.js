@@ -95,9 +95,33 @@ function injectEmbeddedSiteData(content, data, format) {
 
 function describeGitHubTokenAccessError(status, errorText, config) {
     const text = String(errorText || '');
-    if (status === 403 && /Resource not accessible by personal access token/i.test(text)) {
-        return 'The provided password does not have permission to publish to the remote target. Check the access settings and try again.';
+
+    if (status === 401) {
+        return 'The provided password is invalid or has expired. Generate a new GitHub personal access token with "Contents: Read and write" permission and try again.';
     }
+
+    if (status === 403) {
+        if (/Resource not accessible by personal access token/i.test(text)) {
+            return 'The provided password does not have permission to publish to the remote target. Make sure the token has "Contents: Read and write" repository permission.';
+        }
+        if (/rate limit/i.test(text)) {
+            return 'GitHub API rate limit exceeded. Wait a few minutes and try again.';
+        }
+        return 'Access denied by GitHub. Check that the token has "Contents: Read and write" permission for this repository.';
+    }
+
+    if (status === 404) {
+        return `Repository or branch not found. Verify that "${config?.owner}/${config?.repo}" exists and the token has access to it.`;
+    }
+
+    if (status === 409) {
+        return 'Publish conflict: the remote branch was updated since the last fetch. Reload the admin panel and retry.';
+    }
+
+    if (status === 422) {
+        return `Validation failed: ${text || 'the commit data was rejected by GitHub.'}`;
+    }
+
     return null;
 }
 

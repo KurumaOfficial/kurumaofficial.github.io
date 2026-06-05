@@ -487,7 +487,8 @@ html[data-theme="light"] .nav {
   max-width:1120px;
   margin:0 auto;
   padding-right:calc(var(--page-gutter) + var(--safe-right));
-  padding-bottom:calc(96px + var(--safe-bottom));
+  /* Reduced since the footer now provides its own spacing at the bottom */
+  padding-bottom:calc(48px + var(--safe-bottom));
   padding-left:calc(var(--page-gutter) + var(--safe-left));
 }
 
@@ -790,16 +791,21 @@ html[data-theme="light"] .donate-section::after {
 .top-grid {
   grid-template-columns:repeat(3, minmax(0,1fr));
   gap:16px;
-  /* Headroom so cards lifting on hover don't get visually clipped by
-   * the section header above. */
-  padding-top:6px;
+  /* Enough headroom so cards lifting 4-5px on hover are never clipped
+   * by the section header or the grid's own edge. */
+  padding-top:8px;
+  padding-bottom:8px;
+  /* Ensure the grid itself doesn't clip its children on any axis */
+  overflow:visible;
 }
 .supporters-grid {
   grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
   gap:12px;
   content-visibility:auto;
   contain-intrinsic-size:auto 500px;
-  padding-top:6px;
+  padding-top:8px;
+  padding-bottom:8px;
+  overflow:visible;
 }
 
 .pay-btn,
@@ -1584,5 +1590,188 @@ html[data-theme="light"] .donate-section::after {
 
   .donate-section {
     padding: 24px;
+  }
+}
+
+/* ── Footer (donate route) ─────────────────────────────────── *
+ * Mirrors main.css §17 exactly so the footer looks identical
+ * across all routes. Only the variables differ (donate.css uses
+ * its own token set that maps to the same visual values).
+ * ─────────────────────────────────────────────────────────── */
+
+.site-footer {
+  border-top: 1px solid var(--accent-border);
+  background: rgba(15, 11, 11, 0.65);
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer__main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 22px var(--page-gutter);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.site-footer__left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
+.site-footer__logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.site-footer__sq {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--accent);
+  flex-shrink: 0;
+  transition: border-color .3s ease;
+}
+
+.site-footer__logo:hover .site-footer__sq {
+  border-color: color-mix(in srgb, var(--accent) 60%, white);
+}
+
+.site-footer__name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  font-weight: 200;
+  letter-spacing: .25em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+
+.site-footer__divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(139, 26, 42, .28);
+  flex-shrink: 0;
+}
+
+.site-footer__tagline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.site-footer__nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+  row-gap: 12px;
+}
+
+.site-footer__nav a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .15em;
+  color: var(--text-dim);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color .2s ease;
+}
+
+.site-footer__nav a:hover {
+  color: var(--text);
+}
+
+.site-footer__socials {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Compact social pills inside the footer rail — mirrors main.css */
+.site-footer__socials .social-link {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--accent-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: border-color .2s ease, color .2s ease;
+}
+
+.site-footer__socials .social-link:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.site-footer__socials .social-link svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  display: block;
+}
+
+.site-footer__socials .social-link[aria-disabled="true"] {
+  opacity: .3;
+  pointer-events: none;
+}
+
+.site-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px var(--page-gutter);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .15em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  flex-wrap: wrap;
+}
+
+.site-footer__copy {
+  display: inline-block;
+}
+
+/* Responsive footer on donate */
+@media (max-width: 960px) {
+  .site-footer__main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px var(--page-gutter);
+  }
+
+  .site-footer__left {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .site-footer__nav {
+    gap: 24px;
+  }
+
+  .site-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-footer__main {
+    padding: 16px var(--page-gutter);
   }
 }
