@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Aleph Studio - Главная</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+    --bg:#080606;
+    --bg-elevated:#0f0b0b;
+    --bg-hover:#110a0a;
+    
+    --ruby:#8b1a2a;
+    --ruby-light:#b52239;
+    --ruby-dim:#5c1019;
+    
+    --text-primary:#e8dada;
+    --text-heading:#d4c4bb;
+    --text-muted:#5a4a44;
+    
+    --border-subtle:rgba(139,26,42,0.10);
+    --border-default:rgba(139,26,42,0.15);
+    --border-strong:rgba(139,26,42,0.25);
+}
+html,body{
+    width:100%;
+    min-height:100vh;
+    background:var(--bg);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    color:var(--text-primary);
+    overflow-x:hidden;
+}
+body{
+    display:flex;
+    flex-direction:column;
+}
+
+/* Navigation */
+.nav{
+    display:flex;
+    align-items:center;
+    padding:24px 64px;
+    background:var(--bg);
+    border-bottom:1px solid var(--border-default);
+}
+.nav-logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:var(--text-heading);
+    font-weight:700;
+    font-size:18px;
+}
+.logo-sq{
+    width:32px;
+    height:32px;
+    background:var(--ruby);
+    border:2px solid var(--ruby-light);
+}
+.nav-links{
+    display:flex;
+    gap:32px;
+    margin-left:48px;
+}
+.nav-link{
+    text-decoration:none;
+    color:var(--text-muted);
+    font-size:14px;
+    font-weight:500;
+    transition:color 0.2s;
+}
+.nav-link:hover{
+    color:var(--text-primary);
+}
+.nav-link.active{
+    color:var(--ruby-light);
+}
+
+/* Hero Section */
+.hero{
+    padding:120px 64px;
+    text-align:center;
+    position:relative;
+}
+.hero::before{
+    content:'';
+    position:absolute;
+    top:0;
+    left:50%;
+    transform:translateX(-50%);
+    width:400px;
+    height:400px;
+    background:radial-gradient(circle,rgba(139,26,42,0.15),transparent 70%);
+    pointer-events:none;
+}
+.hero-tag{
+    display:inline-block;
+    padding:6px 16px;
+    background:var(--bg-elevated);
+    border:1px solid var(--border-default);
+    font-size:12px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin-bottom:24px;
+}
+.hero-title{
+    font-size:72px;
+    font-weight:700;
+    color:var(--text-heading);
+    margin-bottom:24px;
+    line-height:1.1;
+}
+.hero-title span{
+    color:var(--ruby-light);
+}
+.hero-sub{
+    font-size:20px;
+    color:var(--text-muted);
+    max-width:800px;
+    margin:0 auto 48px;
+    line-height:1.7;
+}
+.hero-actions{
+    display:flex;
+    gap:16px;
+    justify-content:center;
+}
+.btn-primary{
+    padding:16px 32px;
+    background:var(--ruby);
+    color:#fff;
+    text-decoration:none;
+    font-weight:600;
+    font-size:16px;
+    border:2px solid var(--ruby);
+    transition:all 0.2s;
+}
+.btn-primary:hover{
+    background:var(--ruby-light);
+    border-color:var(--ruby-light);
+}
+.btn-ghost{
+    padding:16px 32px;
+    background:transparent;
+    color:var(--text-primary);
+    text-decoration:none;
+    font-weight:600;
+    font-size:16px;
+    border:2px solid var(--border-strong);
+    transition:all 0.2s;
+}
+.btn-ghost:hover{
+    border-color:var(--ruby);
+    color:var(--ruby-light);
+}
+
+/* Section */
+.section{
+    padding:80px 64px;
+}
+.section-label{
+    display:block;
+    font-size:12px;
+    letter-spacing:0.15em;
+    text-transform:uppercase;
+    color:var(--text-muted);
+    margin-bottom:16px;
+}
+.section-title{
+    font-size:48px;
+    font-weight:700;
+    color:var(--text-heading);
+    margin-bottom:48px;
+}
+
+/* Products Grid */
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:24px;
+}
+.product-card{
+    background:var(--bg-elevated);
+    border:1px solid var(--border-default);
+    padding:32px;
+    transition:all 0.2s;
+}
+.product-card:hover{
+    border-color:var(--ruby);
+    transform:translateY(-4px);
+}
+.product-icon{
+    width:64px;
+    height:64px;
+    background:var(--ruby-dim);
+    border:2px solid var(--ruby);
+    margin-bottom:24px;
+}
+.product-name{
+    font-size:24px;
+    font-weight:700;
+    color:var(--text-heading);
+    margin-bottom:12px;
+}
+.product-desc{
+    font-size:16px;
+    color:var(--text-muted);
+    line-height:1.6;
+    margin-bottom:24px;
+}
+.product-status{
+    display:inline-block;
+    padding:4px 12px;
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+}
+.status-stable{
+    background:rgba(80,176,80,0.15);
+    color:#50b050;
+    border:1px solid rgba(80,176,80,0.3);
+}
+.status-beta{
+    background:rgba(192,122,48,0.15);
+    color:#c07a30;
+    border:1px solid rgba(192,122,48,0.3);
+}
+.status-dev{
+    background:rgba(112,144,200,0.15);
+    color:#7090c8;
+    border:1px solid rgba(112,144,200,0.3);
+}
+
+/* Donate Section */
+.donate-hero{
+    padding:120px 64px;
+    text-align:center;
+    background:linear-gradient(180deg,var(--bg) 0%,var(--bg-elevated) 100%);
+}
+.donate-options{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:24px;
+    max-width:1200px;
+    margin:0 auto;
+}
+.donate-card{
+    background:var(--bg-elevated);
+    border:2px solid var(--border-default);
+    padding:40px;
+    text-align:center;
+    transition:all 0.2s;
+}
+.donate-card:hover{
+    border-color:var(--ruby);
+}
+.donate-amount{
+    font-size:48px;
+    font-weight:700;
+    color:var(--ruby-light);
+    margin-bottom:16px;
+}
+.donate-desc{
+    font-size:16px;
+    color:var(--text-muted);
+    margin-bottom:32px;
+    line-height:1.6;
+}
+.donate-btn{
+    width:100%;
+    padding:16px;
+    background:var(--ruby);
+    color:#fff;
+    border:none;
+    font-weight:600;
+    font-size:16px;
+    cursor:pointer;
+    transition:all 0.2s;
+}
+.donate-btn:hover{
+    background:var(--ruby-light);
+}
+
+/* Footer */
+.footer{
+    margin-top:auto;
+    padding:48px 64px;
+    border-top:1px solid var(--border-default);
+    background:var(--bg-elevated);
+}
+.footer-content{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+.footer-logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    text-decoration:none;
+    color:var(--text-heading);
+    font-weight:700;
+}
+.footer-links{
+    display:flex;
+    gap:32px;
+}
+.footer-link{
+    text-decoration:none;
+    color:var(--text-muted);
+    font-size:14px;
+    transition:color 0.2s;
+}
+.footer-link:hover{
+    color:var(--text-primary);
+}
+.footer-copy{
+    text-align:center;
+    margin-top:32px;
+    font-size:14px;
+    color:var(--text-muted);
+}
+
+/* Launcher Styles */
+.launcher-section{
+    background:var(--bg-elevated);
+    border:1px solid var(--border-default);
+    padding:24px;
+    margin:24px 64px;
+}
+.launcher-preview{
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    border:1px solid var(--border-strong);
+    overflow:hidden;
+}
+
+/* Page Container */
+.page{
+    display:none;
+}
+.page.active{
+    display:block;
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="nav">
+    <a href="#" class="nav-logo" onclick="showPage('home')">
+        <span class="logo-sq"></span>
+        <span>Aleph Studio</span>
+    </a>
+    <div class="nav-links">
+        <a href="#" class="nav-link active" onclick="showPage('home')">Главная</a>
+        <a href="#" class="nav-link" onclick="showPage('products')">Продукты</a>
+        <a href="#" class="nav-link" onclick="showPage('donate')">Поддержать</a>
+        <a href="#" class="nav-link" onclick="showPage('launcher')">Лаунчер</a>
+    </div>
+</nav>
+
+<!-- Home Page -->
+<div id="page-home" class="page active">
+    <section class="hero">
+        <span class="hero-tag">Разработка игр</span>
+        <h1 class="hero-title">Aleph<span>Studio</span></h1>
+        <p class="hero-sub">
+            Игровые проекты с открытым исходным кодом. Моды, игры, DLC — всё, что мы делаем, ты можешь изучить, изменить и запустить сам.
+        </p>
+        <div class="hero-actions">
+            <a href="#" class="btn-primary" onclick="showPage('products')">Смотреть продукты</a>
+            <a href="#" class="btn-ghost">Наш принцип</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <span class="section-label">Релизы</span>
+        <h2 class="section-title">Главные релизы</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Strange Visuals</h3>
+                <p class="product-desc">Графический мод для улучшения визуального опыта с реалистичными эффектами освещения и текстур.</p>
+                <span class="product-status status-stable">Стабильная</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Kuruma Engine</h3>
+                <p class="product-desc">Игровой движок с открытым исходным кодом для создания 2D и 3D игр на базе современных технологий.</p>
+                <span class="product-status status-beta">Бета</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Aleph Launcher</h3>
+                <p class="product-desc">Современный лаунчер для Minecraft с поддержкой модов, версий и удобным интерфейсом управления.</p>
+                <span class="product-status status-dev">В разработке</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Products Page -->
+<div id="page-products" class="page">
+    <section class="section">
+        <span class="section-label">Каталог</span>
+        <h2 class="section-title">Все продукты</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Strange Visuals</h3>
+                <p class="product-desc">Графический мод для улучшения визуального опыта с реалистичными эффектами освещения и текстур.</p>
+                <span class="product-status status-stable">Стабильная</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Kuruma Engine</h3>
+                <p class="product-desc">Игровой движок с открытым исходным кодом для создания 2D и 3D игр.</p>
+                <span class="product-status status-beta">Бета</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Aleph Launcher</h3>
+                <p class="product-desc">Современный лаунчер для Minecraft с поддержкой модов и версий.</p>
+                <span class="product-status status-dev">В разработке</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Reality Pack</h3>
+                <p class="product-desc">Пакет текстур высокого разрешения для Minecraft с реалистичными материалами.</p>
+                <span class="product-status status-stable">Стабильная</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Audio Overhaul</h3>
+                <p class="product-desc">Полная замена звуковых эффектов с пространственным аудио.</p>
+                <span class="product-status status-beta">Бета</span>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">World Generator</h3>
+                <p class="product-desc">Улучшенный генератор миров с новыми биомами и структурами.</p>
+                <span class="product-status status-dev">В разработке</span>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Donate Page -->
+<div id="page-donate" class="page">
+    <section class="donate-hero">
+        <span class="hero-tag">Поддержка</span>
+        <h1 class="hero-title">Поддержать<span>проект</span></h1>
+        <p class="hero-sub">
+            Ваша поддержка помогает нам продолжать разработку открытых проектов и создавать качественные продукты для сообщества.
+        </p>
+    </section>
+
+    <section class="section">
+        <div class="donate-options">
+            <div class="donate-card">
+                <div class="donate-amount">100₽</div>
+                <p class="donate-desc">Базовая поддержка проекта. Помогает покрыть расходы на хостинг и инструменты разработки.</p>
+                <button class="donate-btn">Поддержать</button>
+            </div>
+            <div class="donate-card">
+                <div class="donate-amount">500₽</div>
+                <p class="donate-desc">Средняя поддержка. Позволяет быстрее выпускать обновления и добавлять новые функции.</p>
+                <button class="donate-btn">Поддержать</button>
+            </div>
+            <div class="donate-card">
+                <div class="donate-amount">1000₽</div>
+                <p class="donate-desc">Премиум поддержка. Ваше имя в списке спонсоров и приоритетная техподдержка.</p>
+                <button class="donate-btn">Поддержать</button>
+            </div>
+            <div class="donate-card">
+                <div class="donate-amount">Своя сумма</div>
+                <p class="donate-desc">Любая сумма помогает проекту развиваться. Каждый вклад важен для нас.</p>
+                <button class="donate-btn">Поддержать</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background:var(--bg-elevated);margin:0 64px;padding:48px;border:1px solid var(--border-default);">
+        <h3 class="section-title" style="font-size:32px;text-align:center;margin-bottom:24px;">Другие способы поддержки</h3>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:32px;max-width:900px;margin:0 auto;">
+            <div style="text-align:center;">
+                <div style="width:64px;height:64px;background:var(--ruby-dim);border:2px solid var(--ruby);margin:0 auto 16px;"></div>
+                <h4 style="font-size:20px;color:var(--text-heading);margin-bottom:12px;">GitHub Sponsors</h4>
+                <p style="color:var(--text-muted);font-size:14px;">Поддержите разработку напрямую через GitHub</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="width:64px;height:64px;background:var(--ruby-dim);border:2px solid var(--ruby);margin:0 auto 16px;"></div>
+                <h4 style="font-size:20px;color:var(--text-heading);margin-bottom:12px;">Boosty</h4>
+                <p style="color:var(--text-muted);font-size:14px;">Подписка с эксклюзивным контентом</p>
+            </div>
+            <div style="text-align:center;">
+                <div style="width:64px;height:64px;background:var(--ruby-dim);border:2px solid var(--ruby);margin:0 auto 16px;"></div>
+                <h4 style="font-size:20px;color:var(--text-heading);margin-bottom:12px;">Криптовалюта</h4>
+                <p style="color:var(--text-muted);font-size:14px;">BTC, ETH и другие криптовалюты</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Launcher Page -->
+<div id="page-launcher" class="page">
+    <section class="section">
+        <span class="section-label">Инструменты</span>
+        <h2 class="section-title">Aleph Launcher</h2>
+        <p style="color:var(--text-muted);font-size:18px;margin-bottom:48px;max-width:800px;">
+            Современный лаунчер для Minecraft с чистым интерфейсом, поддержкой всех версий игры и удобным управлением модами.
+        </p>
+    </section>
+
+    <div class="launcher-section">
+        <div class="launcher-preview">
+            <iframe src="aleph-launcher.html" style="width:100%;height:800px;border:none;display:block;"></iframe>
+        </div>
+    </div>
+
+    <section class="section">
+        <h3 class="section-title" style="font-size:32px;">Особенности</h3>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Все версии Minecraft</h3>
+                <p class="product-desc">Поддержка релизов, снапшотов, бета и альфа версий с 2009 года.</p>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Управление модами</h3>
+                <p class="product-desc">Установка и настройка модов через удобный интерфейс.</p>
+            </div>
+            <div class="product-card">
+                <div class="product-icon"></div>
+                <h3 class="product-name">Профили игроков</h3>
+                <p class="product-desc">Поддержка нескольких аккаунтов с быстрым переключением.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-content">
+        <a href="#" class="footer-logo" onclick="showPage('home')">
+            <span class="logo-sq"></span>
+            <span>Aleph Studio</span>
+        </a>
+        <div class="footer-links">
+            <a href="#" class="footer-link" onclick="showPage('products')">Продукты</a>
+            <a href="#" class="footer-link" onclick="showPage('donate')">Поддержать</a>
+            <a href="https://github.com/KurumaOfficial" class="footer-link" target="_blank">GitHub</a>
+        </div>
+    </div>
+    <div class="footer-copy">© 2026 Aleph Studio. Дочерний проект WeTTeA.</div>
+</footer>
+
+<script>
+function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Show selected page
+    document.getElementById('page-' + pageId).classList.add('active');
+    
+    // Update nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    event.target.classList.add('active');
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
