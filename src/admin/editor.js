@@ -1460,7 +1460,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function getActiveProductsCount() {
         const products = Array.isArray(editorData?.products) ? editorData.products : [];
         return products.filter((p) => {
-            const lc = String(p?.status || p?.tag || 'active').toLowerCase();
+            const lc = String(p?.lifecycle || 'active').toLowerCase();
             return lc !== 'frozen' && lc !== 'abandoned';
         }).length;
     }
@@ -1569,9 +1569,37 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
     }
 
+    /**
+     * Merge any products present in DEFAULT_SITE_DATA but missing from the
+     * locally-stored snapshot. This ensures newly added products appear in
+     * the admin panel even when the user already has a saved payload in
+     * localStorage from an older session.
+     */
+    function mergeDefaultProducts(localData) {
+        if (!localData) return localData;
+        try {
+            const defaults = normalizeData(DEFAULT_SITE_DATA);
+            const localIds = new Set((localData.products || []).map((p) => p.id));
+            const missing = (defaults.products || []).filter((p) => !localIds.has(p.id));
+            if (!missing.length) return localData;
+            return {
+                ...localData,
+                products: [...(localData.products || []), ...missing],
+            };
+        } catch {
+            return localData;
+        }
+    }
+
     async function initializeData() {
         const localData = loadLocalData();
-        savedSiteData = localData || normalizeData(DEFAULT_SITE_DATA);
+        const merged = mergeDefaultProducts(localData);
+        /* If new default products were merged in, persist them immediately so
+         * the public site (which reads localStorage directly) also sees them. */
+        if (merged && localData && merged.products.length !== (localData.products || []).length) {
+            try { storageSet(LOCAL_DATA_KEY, JSON.stringify(normalizeData(merged))); } catch { /* quota */ }
+        }
+        savedSiteData = normalizeData(merged || DEFAULT_SITE_DATA);
         siteData = deepClone(savedSiteData);
         editorData = deepClone(savedSiteData);
         renderSite(siteData);
