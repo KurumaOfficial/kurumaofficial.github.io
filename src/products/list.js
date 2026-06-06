@@ -73,10 +73,7 @@ function boot() {
     if (eyebrowEl) eyebrowEl.textContent = lc.t('productsPage.heroEyebrow', 'Catalog');
     if (titleEl) titleEl.textContent = lc.t('productsPage.heroTitle', 'All products');
     if (descEl) descEl.textContent = lc.t('productsPage.heroDesc', '');
-    /* Update only the text span inside the back link, not the whole element
-     * (which also contains the arrow SVG). */
-    const backLabelSpan = backEl?.querySelector('span') || backEl;
-    if (backLabelSpan) backLabelSpan.textContent = lc.t('productsPage.backToHome', 'Back');
+    if (backEl) backEl.textContent = lc.t('productsPage.backToHome', 'Back');
     if (filterStatusLabelEl) filterStatusLabelEl.textContent = lc.t('productsPage.filterStatus', 'Status');
     if (filterFlagLabelEl) filterFlagLabelEl.textContent = lc.t('productsPage.filterFlag', 'Label');
     if (sortLabelEl) sortLabelEl.textContent = lc.t('productsPage.sortLabel', 'Sort');

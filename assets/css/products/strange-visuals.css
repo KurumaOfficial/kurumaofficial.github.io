@@ -1081,6 +1081,108 @@ html[data-theme-switching="true"] .gui-w {
   background:var(--accent-dim);
 }
 
+/* ─── MEDIA GALLERY (Play Market стиль, используется на /test) ─── */
+.pm-gallery-section {
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+  padding:28px 0;
+  overflow:hidden;
+}
+
+.pm-gallery-inner {
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 52px;
+}
+
+.pm-gallery-eyebrow {
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--text-muted);
+  margin-bottom:14px;
+}
+
+.pm-gallery-scroll {
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:12px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border-hi) transparent;
+  scroll-snap-type:x mandatory;
+  -webkit-overflow-scrolling:touch;
+}
+.pm-gallery-scroll::-webkit-scrollbar { height:4px; }
+.pm-gallery-scroll::-webkit-scrollbar-track { background:transparent; }
+.pm-gallery-scroll::-webkit-scrollbar-thumb { background:var(--border-hi); border-radius:2px; }
+
+.pm-gallery-item {
+  flex:0 0 auto;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  scroll-snap-align:start;
+  background:var(--surface);
+  position:relative;
+  cursor:pointer;
+  transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.pm-gallery-item:hover {
+  border-color:var(--border-hi);
+  box-shadow:0 8px 24px rgba(0,0,0,0.18);
+  transform:translateY(-2px);
+}
+
+.pm-gallery-item--screenshot { width:380px; aspect-ratio:16/9; }
+.pm-gallery-item--video      { width:420px; aspect-ratio:16/9; }
+
+.pm-gallery-item img {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center;
+  display:block;
+}
+
+.pm-video-placeholder {
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:12px;
+  background:linear-gradient(135deg, var(--hero-grad-1), var(--hero-grad-3));
+}
+
+.pm-video-play {
+  width:56px; height:56px; border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  border:2px solid rgba(255,255,255,0.22);
+  display:flex; align-items:center; justify-content:center;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  transition:background .18s ease, transform .18s ease;
+}
+.pm-gallery-item:hover .pm-video-play {
+  background:rgba(255,255,255,0.2);
+  transform:scale(1.08);
+}
+.pm-video-play .ui-icon { width:22px; height:22px; color:rgba(255,255,255,0.9); margin-left:3px; }
+
+.pm-video-label {
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+}
+
+@media(max-width:920px) {
+  .pm-gallery-inner { padding:0 20px; }
+  .pm-gallery-item--screenshot { width:280px; }
+  .pm-gallery-item--video      { width:300px; }
+}
+@media(max-width:768px) {
+  .pm-gallery-inner { padding:0 16px; }
+  .pm-gallery-item--screenshot { width:240px; }
+  .pm-gallery-item--video      { width:260px; }
+}
+
 /* ─── LAYOUT ─── */
 .wrap { max-width:1080px; margin:0 auto; padding:100px 52px; }
 .wrap + .wrap { padding-top:20px; }
@@ -1104,21 +1206,39 @@ html[data-theme-switching="true"] .gui-w {
 
 .feat-grid {
   display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; background:var(--border);
+  gap:0; background:var(--bg);
   border:1px solid var(--border); border-radius:14px; overflow:hidden;
 }
 
-.feat-card { background:var(--bg); padding:28px 22px; }
-.feat-card:hover { background:var(--surface); }
-/* Force an explicit row-separator on the wide card.
-   The gap:1px / background trick works for same-height rows but can
-   disappear when locale text makes row 1 taller than the gap strip.
-   box-shadow inset on top draws a crisp 1px line without affecting
-   grid layout or overflow-hidden clipping. */
-.feat-card.w2 {
-  grid-column:span 2;
-  box-shadow:inset 0 1px 0 var(--border);
+/*
+ * Each cell draws its own right and bottom border.
+ * Cells on the last visual column and last row skip the extra border
+ * to avoid doubling up with the grid's outer border.
+ *
+ * Grid layout (3 cols):
+ *  Row 1: [1:Установка] [2:Совместимость] [3:Открытый код]
+ *  Row 2: [4:Мультисерверность w2 ‑ cols 1–2] [5:Поддержка]
+ *  Row 3: [6:Версия MC] [7:Fabric API] [8:Проблемы]
+ */
+.feat-card {
+  background:var(--bg); padding:28px 22px;
+  border-right:1px solid var(--border);
+  border-bottom:1px solid var(--border);
 }
+
+/* Cards 3, 5, 8 sit in column 3 — no right border needed */
+.feat-card:nth-child(3),   /* Открытый код */
+.feat-card.w2 + .feat-card, /* Поддержка (after the span-2 card) */
+.feat-card:nth-child(8)    /* Проблемы */
+  { border-right:none; }
+
+/* Last-row cards — no bottom border needed */
+.feat-card:nth-last-child(-n+3) { border-bottom:none; }
+
+/* span-2 card */
+.feat-card.w2 { grid-column:span 2; }
+
+.feat-card:hover { background:var(--surface); }
 
 .feat-ico {
   width:34px; height:34px; border-radius:8px; background:var(--accent-dim);
@@ -1155,6 +1275,165 @@ html[data-theme-switching="true"] .gui-w {
 .feat-inline-link:hover {
   color:var(--accent);
   border-bottom-color:var(--accent);
+}
+
+/* ─── GALLERY (используется на /test вместо compare) ─── */
+/* Обёртка — точная копия .compare-card */
+.gallery-wrap {
+  position:relative;
+  width:100%;
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  background:var(--bg);
+}
+.gallery-wrap:hover { box-shadow:var(--shadow-s); }
+
+/* Блочный div с aspect-ratio — точная копия .compare-stage */
+.gallery-stage {
+  position:relative;
+  width:100%;
+  aspect-ratio:1919/1054;
+  height:auto;
+}
+
+/* Скролл абсолютно заполняет gallery-stage */
+.gallery-scroll {
+  position:absolute;
+  inset:0;
+  display:flex;
+  overflow-x:scroll;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.gallery-scroll::-webkit-scrollbar { display:none; }
+
+.gallery-item {
+  flex:0 0 100%;
+  min-width:100%;
+  position:relative;
+  scroll-snap-align:start;
+}
+.gallery-item img {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+}
+.gallery-item--video { cursor:pointer; }
+
+.gallery-video {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.gallery-video-overlay {
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  background:rgba(0,0,0,0.32);
+  transition:background .2s ease;
+}
+
+.gallery-video-overlay.is-playing {
+  background:transparent;
+}
+
+.gallery-video-overlay.is-playing .gallery-play,
+.gallery-video-overlay.is-playing .gallery-play-label {
+  opacity:0;
+}
+
+/* старый placeholder больше не используется, но оставляем на случай отсутствия видео */
+.gallery-video-placeholder {
+  width:100%; height:100%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:14px;
+  background:linear-gradient(135deg, var(--hero-grad-1), var(--hero-grad-3));
+}
+.gallery-play {
+  width:60px; height:60px; border-radius:50%;
+  background:rgba(255,255,255,0.12);
+  border:2px solid rgba(255,255,255,0.2);
+  display:flex; align-items:center; justify-content:center;
+  transition:background .18s ease, transform .18s ease;
+}
+.gallery-item--video:hover .gallery-play {
+  background:rgba(255,255,255,0.2);
+  transform:scale(1.08);
+}
+.gallery-play .ui-icon { width:22px; height:22px; color:rgba(255,255,255,0.88); }
+.gallery-play-label {
+  font-family:'JetBrains Mono',monospace;
+  font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+}
+
+/* Стрелки */
+.gallery-arrow {
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:5;
+  width:40px; height:40px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,0.18);
+  background:rgba(0,0,0,0.38);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer;
+  transition:background .18s ease, border-color .18s ease, transform .18s ease;
+  padding:0;
+  line-height:0;
+}
+.gallery-arrow:hover {
+  background:rgba(0,0,0,0.62);
+  border-color:rgba(255,255,255,0.36);
+  transform:translateY(-50%) scale(1.08);
+}
+.gallery-arrow--prev { left:14px; }
+.gallery-arrow--next { right:14px; }
+.gallery-arrow .ui-icon { width:20px; height:20px; }
+
+/* Точки-индикаторы */
+.gallery-dots {
+  position:absolute;
+  bottom:14px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:6px;
+  z-index:4;
+  pointer-events:none;
+}
+.gallery-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:rgba(255,255,255,0.35);
+  transition:background .2s ease, transform .2s ease;
+}
+.gallery-dot.active {
+  background:rgba(255,255,255,0.9);
+  transform:scale(1.25);
+}
+
+@media(max-width:768px) {
+  .gallery-wrap { aspect-ratio:1919/1054; }
 }
 
 /* ─── BEFORE / AFTER ─── */
@@ -2096,6 +2375,16 @@ footer {
   .compare-section-head { grid-template-columns:1fr; gap:20px; }
   .feat-grid        { grid-template-columns:1fr; }
   .feat-card.w2     { grid-column:span 1; }
+  /* Single-column: no right border on any card; bottom border on all except last */
+  .feat-card,
+  .feat-card:nth-child(3),
+  .feat-card.w2 + .feat-card,
+  .feat-card:nth-child(8),
+  .feat-card:nth-last-child(-n+3) {
+    border-right:none;
+    border-bottom:1px solid var(--border);
+  }
+  .feat-card:last-child { border-bottom:none; }
   .mod-grid         { grid-template-columns:1fr; }
   .preview-row      { grid-template-columns:1fr; gap:48px; }
   footer            { padding:24px 20px; flex-direction:column; text-align:center; }
