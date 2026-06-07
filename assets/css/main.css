@@ -1524,7 +1524,9 @@ footer {
     min-height: 40px;
     padding: 7px 14px 7px 10px;
     border-radius: 0;
+    background: var(--color-bg-elevated);           /* fallback: Firefox < 113, Safari < 16.2 */
     background: color-mix(in srgb, var(--color-bg-elevated) 86%, transparent);
+    border: 1px solid var(--border-default);         /* fallback */
     border: 1px solid color-mix(in srgb, var(--color-ruby) 18%, var(--border-default) 82%);
     color: var(--color-text-muted);
     font-family: var(--font-mono);
@@ -1582,6 +1584,7 @@ footer {
     top: calc(100% + 10px);
     right: 0;
     padding: 8px;
+    background: var(--color-bg-elevated);           /* fallback */
     background: color-mix(in srgb, var(--color-bg-elevated) 94%, black 6%);
     border: 1px solid var(--border-default);
     border-radius: 0;

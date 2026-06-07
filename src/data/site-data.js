@@ -240,7 +240,7 @@ export const DEFAULT_SITE_DATA = {
             "tone": "green",
             "summary": "Лаунчер для Minecraft от Aleph Studio. Открытый исходный код, бесплатно. В разработке.",
             "instructions": [],
-            "sourceUrl": "",
+            "sourceUrl": "https://github.com/KurumaOfficial",
             "downloadUrl": "",
             "downloadName": "",
             "detailUrl": "products/aleph-launcher/",
