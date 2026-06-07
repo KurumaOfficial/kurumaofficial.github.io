@@ -32,7 +32,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=12">
 <link rel="stylesheet" href="../../../assets/css/products/product-page.css?v=3">
-<link rel="modulepreload" href="../../../src/products/strange-visuals.js?v=20260510b">
+<link rel="modulepreload" href="../../../src/products/strange-visuals.js?v=20260606b">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
@@ -41,10 +41,8 @@
     <span class="logo-sq" aria-hidden="true"></span>
     <span class="logo-text">Aleph Studio</span>
   </a>
-  <div class="nav-links">
-    <a id="navLinkProducts" class="nav__link" href="../">Продукты</a>
-    <a id="navLinkManifesto" class="nav__link" href="../../#manifesto">Принцип</a>
-    <a id="navLinkTeam" class="nav__link" href="../../#team">Команда</a>
+    <div class="nav-links">
+    <a class="nav__link" href="../../donate/" data-donate-link>Поддержать</a>
   </div>
   <div class="nav-right">
     <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему" aria-pressed="false">
@@ -62,7 +60,7 @@
 </nav>
 <main id="main">
 <div class="hero-store-top">
-  <a href="../../" class="hero-store-back" aria-label="Назад к списку продуктов">
+  <a href="../" class="hero-store-back" aria-label="Назад к списку продуктов">
     <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     <span class="hero-store-back-label">НАЗАД К СПИСКУ ПРОДУКТОВ</span>
   </a>
@@ -75,23 +73,11 @@
     <div class="hero-store-card">
       <div class="hero-icon-wrap" id="heroIconWrap">
         <div class="hero-app-icon">
-          <svg viewBox="0 0 300 300" fill="currentColor">
-            <rect x="40" y="60" width="220" height="180" rx="0"/>
-            <rect x="40" y="60" width="220" height="36" rx="0"/>
-            <rect x="40" y="82" width="220" height="14"/>
-            <circle cx="68" cy="78" r="7" fill="var(--color-bg)" opacity=".4"/>
-            <circle cx="92" cy="78" r="7" fill="var(--color-bg)" opacity=".28"/>
-            <circle cx="116" cy="78" r="7" fill="var(--color-bg)" opacity=".2"/>
-            <rect x="60" y="118" width="80" height="8" fill="var(--color-bg)" opacity=".3"/>
-            <rect x="60" y="136" width="120" height="6" fill="var(--color-bg)" opacity=".2"/>
-            <rect x="60" y="152" width="100" height="6" fill="var(--color-bg)" opacity=".15"/>
-            <rect x="60" y="186" width="90" height="26" fill="var(--color-bg)" opacity=".32"/>
-            <rect x="164" y="186" width="76" height="26" fill="var(--color-bg)" opacity=".2"/>
-          </svg>
+          <canvas id="alephLauncherIcon" style="display:block;border-radius:0;" aria-hidden="true"></canvas>
         </div>
       </div>
       <div class="hero-info" id="heroInfo">
-        <h1 class="hero-app-name">Aleph <em>Launcher</em></h1>
+        <h1 class="hero-app-name"><em class="accent-letter">A</em>Launcher</h1>
         <a href="../../" class="hero-dev">
           Aleph Studio
           <span class="hero-verified"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
@@ -99,25 +85,25 @@
         <div class="hero-category">Лаунчер · Minecraft · Бесплатно · Открытый код</div>
         <div class="hero-meta">
           <div class="hero-meta-item">
+            <div class="hero-meta-value">4.8 <span class="hero-star">★</span></div>
+            <div class="hero-meta-label">рейтинг</div>
+          </div>
+          <div class="hero-meta-item">
             <div class="hero-meta-value" id="heroProductVersion">0.1.0</div>
             <div class="hero-meta-label">версия</div>
           </div>
           <div class="hero-meta-item">
-            <div class="hero-meta-value">Анонс</div>
-            <div class="hero-meta-label">статус</div>
+            <div class="hero-meta-value">Java</div>
+            <div class="hero-meta-label">платформа</div>
           </div>
           <div class="hero-meta-item">
             <div class="hero-meta-value">GPL</div>
             <div class="hero-meta-label">лицензия</div>
           </div>
-          <div class="hero-meta-item">
-            <div class="hero-meta-value">Бесплатно</div>
-            <div class="hero-meta-label">цена</div>
-          </div>
         </div>
         <div class="hero-actions">
-          <a class="hero-install-btn" id="installBtn" href="../../donate/" data-donate-link style="opacity:.42;pointer-events:none;">СКОРО</a>
-          <a class="hero-source-btn" id="sourceBtn" hidden href="#"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+          <a class="hero-install-btn" id="installBtn" href="#" aria-disabled="true" style="opacity:.42;pointer-events:none;cursor:default;">СКОРО</a>
+          <a class="hero-source-btn" id="sourceBtn" href="https://github.com/KurumaOfficial" target="_blank" rel="noopener noreferrer" title="Открыть исходный код" aria-label="Открыть исходный код"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
           <div class="hero-share-dock" id="shareDock">
             <div class="hero-share-bg" aria-hidden="true"></div>
             <button class="hero-side-btn hero-share-toggle" id="shareBtn" type="button" title="Поделиться" aria-label="Открыть меню ссылок" aria-controls="shareMenu" aria-expanded="false">
@@ -207,7 +193,143 @@
   </div>
 </div>
 </main>
-<script>(function(){var s=document.getElementById('galleryScroll'),d=document.getElementById('galleryDots'),p=document.getElementById('galleryPrev'),n=document.getElementById('galleryNext');if(!s)return;var ds=d?Array.from(d.querySelectorAll('.gallery-dot')):[];var t=s.children.length;function i(){return Math.round(s.scrollLeft/s.clientWidth);}function g(x){s.scrollTo({left:((x%t+t)%t)*s.clientWidth,behavior:'smooth'});}s.addEventListener('scroll',function(){var x=i();ds.forEach(function(dd,j){dd.classList.toggle('active',j===x);});},{passive:true});if(p)p.addEventListener('click',function(){g(i()-1);});if(n)n.addEventListener('click',function(){g(i()+1);});}());</script>
-<script type="module" src="../../../src/products/strange-visuals.js?v=20260510b"></script>
-</body>
+<script type="module" src="../../../src/products/strange-visuals.js?v=20260606b"></script>
+<script>
+(function () {
+  /* Aleph Studio palette */
+  /* Top face — ruby red tones */
+  var TOP = [
+    [0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x9e1e30,0x7d1726],
+    [0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a],
+    [0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30,0x8b1a2a,0x8b1a2a,0x9e1e30,0x8b1a2a,0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30],
+    [0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x9e1e30,0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a],
+    [0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x8b1a2a,0x7d1726,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726],
+    [0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a],
+    [0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30],
+    [0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726],
+    [0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30],
+    [0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a],
+    [0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x8b1a2a,0x8b1a2a,0x9e1e30,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726],
+    [0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30],
+    [0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a],
+    [0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726],
+    [0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x9e1e30],
+    [0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x7d1726,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x7d1726,0x8b1a2a,0x9e1e30,0x8b1a2a],
+  ];
+
+  /* Side top 4 rows — slightly darker ruby */
+  var SIDE_TOP = [
+    [0x6e1422,0x7d1726,0x6e1422,0x8b1a2a,0x7d1726,0x6e1422,0x8b1a2a,0x6e1422,0x7d1726,0x8b1a2a,0x6e1422,0x7d1726,0x6e1422,0x8b1a2a,0x7d1726,0x6e1422],
+    [0x7d1726,0x6e1422,0x8b1a2a,0x6e1422,0x8b1a2a,0x7d1726,0x6e1422,0x7d1726,0x6e1422,0x7d1726,0x8b1a2a,0x6e1422,0x7d1726,0x6e1422,0x8b1a2a,0x7d1726],
+    [0x6e1422,0x8b1a2a,0x6e1422,0x7d1726,0x6e1422,0x6e1422,0x8b1a2a,0x6e1422,0x8b1a2a,0x6e1422,0x6e1422,0x8b1a2a,0x6e1422,0x7d1726,0x6e1422,0x6e1422],
+    [0x8b1a2a,0x6e1422,0x7d1726,0x8b1a2a,0x7d1726,0x8b1a2a,0x6e1422,0x8b1a2a,0x7d1726,0x8b1a2a,0x7d1726,0x6e1422,0x8b1a2a,0x6e1422,0x7d1726,0x8b1a2a],
+  ];
+
+  /* Side bottom 12 rows — dark charcoal (Aleph bg) */
+  var DARK = [
+    [0x1a1816,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210],
+    [0x141210,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c],
+    [0x201e1c,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816],
+    [0x1a1816,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210],
+    [0x141210,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c],
+    [0x201e1c,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816],
+    [0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210],
+    [0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c],
+    [0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816],
+    [0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x1a1816,0x141210,0x201e1c,0x1a1816,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210],
+    [0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x141210,0x201e1c,0x1a1816,0x141210,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c],
+    [0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x201e1c,0x1a1816,0x141210,0x201e1c,0x1a1816,0x201e1c,0x141210,0x1a1816,0x201e1c,0x141210,0x1a1816],
+  ];
+
+  function sideTex(row, col) {
+    return row < 4 ? SIDE_TOP[row][col] : DARK[row - 4][col];
+  }
+
+  function shadeHex(h, f) {
+    var r = Math.min(255, Math.round(((h >> 16) & 0xff) * f));
+    var g = Math.min(255, Math.round(((h >> 8) & 0xff) * f));
+    var b = Math.min(255, Math.round((h & 0xff) * f));
+    return 'rgb(' + r + ',' + g + ',' + b + ')';
+  }
+
+  function pt(a, b, c, d, u, v) {
+    return [
+      (1-u)*(1-v)*a[0] + u*(1-v)*b[0] + u*v*c[0] + (1-u)*v*d[0],
+      (1-u)*(1-v)*a[1] + u*(1-v)*b[1] + u*v*c[1] + (1-u)*v*d[1],
+    ];
+  }
+
+  function drawFace(ctx, a, b, c, d, getTex, shade, N) {
+    for (var row = 0; row < N; row++) {
+      for (var col = 0; col < N; col++) {
+        var u0 = col / N, u1 = (col + 1.02) / N;
+        var v0 = row / N, v1 = (row + 1.02) / N;
+        var p0 = pt(a,b,c,d,u0,v0), p1 = pt(a,b,c,d,u1,v0);
+        var p2 = pt(a,b,c,d,u1,v1), p3 = pt(a,b,c,d,u0,v1);
+        ctx.fillStyle = shadeHex(getTex(row, col), shade);
+        ctx.beginPath();
+        ctx.moveTo(p0[0],p0[1]); ctx.lineTo(p1[0],p1[1]);
+        ctx.lineTo(p2[0],p2[1]); ctx.lineTo(p3[0],p3[1]);
+        ctx.closePath(); ctx.fill();
+      }
+    }
+  }
+
+  function render() {
+    var canvas = document.getElementById('alephLauncherIcon');
+    if (!canvas) return;
+
+    /* Scale block to fit inside .hero-app-icon at any CSS size */
+    var wrap = canvas.closest('.hero-app-icon');
+    var boxSize = wrap ? Math.min(wrap.clientWidth, wrap.clientHeight) : 226;
+    var N = 16;
+    /* S = pixels per texel; block total width = 2*N*S, height = 1.5*N*S.
+     * Fit into boxSize with a small margin. */
+    var S = Math.max(2, Math.floor(boxSize / (2 * N + 8)));
+
+    var hw = N * S, rh = (N * S) / 2, bh = N * S * 1.2;
+    var W = 2 * hw + 2, H = Math.ceil(rh * 2 + bh) + 2;
+    var cx = hw + 1, top_y = 1;
+
+    canvas.width  = W;
+    canvas.height = H;
+    /* Let CSS centre the canvas inside the frame */
+    canvas.style.maxWidth  = '100%';
+    canvas.style.maxHeight = '100%';
+
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, W, H);
+
+    var T   = [cx,      top_y];
+    var ML  = [cx - hw, top_y + rh];
+    var MR  = [cx + hw, top_y + rh];
+    var BM  = [cx,      top_y + rh * 2];
+    var BL  = [cx - hw, top_y + rh + bh];
+    var BR  = [cx + hw, top_y + rh + bh];
+    var BOT = [cx,      top_y + rh * 2 + bh];
+
+    /* Left face — darkest */
+    drawFace(ctx, ML, BM, BOT, BL, function(r,c){ return sideTex(r,c); }, 0.62, N);
+    /* Right face — medium */
+    drawFace(ctx, BM, MR, BR, BOT, function(r,c){ return sideTex(r,N-1-c); }, 0.82, N);
+    /* Top face — brightest */
+    drawFace(ctx, T, MR, BM, ML, function(r,c){ return TOP[r][c]; }, 1.0, N);
+  }
+
+  function init() {
+    render();
+    /* Re-render when the icon container changes size (breakpoint / zoom) */
+    var wrap = document.querySelector('.hero-app-icon');
+    if (wrap && typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(function() { render(); }).observe(wrap);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+}());
+</script></body>
 </html>

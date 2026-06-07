@@ -53,12 +53,23 @@ function normalizeComparablePath(pathname) {
 
 function mergeDefaultProducts(stored) {
     try {
-        const defaultIds = new Set(NORMALIZED_DEFAULT_SITE_DATA.products.map((p) => p.id));
-        const storedIds  = new Set((stored.products || []).map((p) => p.id));
-        const missing = NORMALIZED_DEFAULT_SITE_DATA.products.filter((p) => !storedIds.has(p.id));
-        if (!missing.length) return stored;
-        const merged = { ...stored, products: [...(stored.products || []), ...missing] };
-        /* Persist so subsequent reads are already up to date */
+        const defaultProducts = NORMALIZED_DEFAULT_SITE_DATA.products;
+        const defaultIds = new Set(defaultProducts.map((p) => p.id));
+        const storedProducts = stored.products || [];
+        const storedIds = new Set(storedProducts.map((p) => p.id));
+
+        /* Add products present in defaults but missing from stored snapshot */
+        const missing = defaultProducts.filter((p) => !storedIds.has(p.id));
+
+        /* Remove products that no longer exist in defaults —
+         * e.g. old placeholder slots ("next-release", "third-project") that
+         * were deleted from site-data.js but are still in a user's localStorage. */
+        const filtered = storedProducts.filter((p) => defaultIds.has(p.id));
+
+        const changed = missing.length > 0 || filtered.length !== storedProducts.length;
+        if (!changed) return stored;
+
+        const merged = { ...stored, products: [...filtered, ...missing] };
         try { window.localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(merged)); } catch { /* quota */ }
         return merged;
     } catch {
