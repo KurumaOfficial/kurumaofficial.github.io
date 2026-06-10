@@ -2039,32 +2039,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         mediaGalleryListEl.innerHTML = galleryHtml;
     }
 
-        const images = media.filter(item => item.type === 'image');
-        if (!images.length) {
-            mediaGalleryListEl.innerHTML = '<p class="dash-help">Изображения не загружены. Загрузите первое изображение выше.</p>';
-            return;
-        }
-
-        mediaGalleryListEl.innerHTML = images.map((item, index) => `
-            <div class="dash-media-item" draggable="true" data-media-index="${index}" data-media-type="image">
-                <img src="${escapeHtml(item.dataUrl || item.url)}" alt="${escapeHtml(item.alt || '')}" loading="lazy">
-                <div class="dash-media-item-actions">
-                    <button type="button" class="dash-btn-icon" data-media-delete="${index}" title="Удалить">
-                        <span class="material-icons">delete</span>
-                    </button>
-                    <button type="button" class="dash-btn-icon" data-media-edit-alt="${index}" title="Изменить описание">
-                        <span class="material-icons">edit</span>
-                    </button>
-                </div>
-                <div class="dash-media-item-handle" title="Перетащите для изменения порядка">
-                    <span class="material-icons">drag_indicator</span>
-                </div>
-            </div>
-        `).join('');
-
-        setupMediaDragDrop();
-    }
-
     function renderMediaVideo() {
         if (!mediaVideoListEl) return;
         const media = getSelectedProductMedia();
