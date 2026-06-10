@@ -926,10 +926,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const clearDownloadFileBtnEl = document.getElementById('clearDownloadFileBtn');
     const editorFieldSourceEl = document.getElementById('f-source');
     const editorFieldAutoRouteRedirectEl = document.getElementById('f-auto-route-redirect');
-    const mediaImageInputEl = document.getElementById('f-media-image');
-    const mediaVideoInputEl = document.getElementById('f-media-video');
-    const mediaGalleryListEl = document.getElementById('mediaGalleryList');
-    const mediaVideoListEl = document.getElementById('mediaVideoList');
     const routeModuleCategoryEl = document.getElementById('route-module-category');
     const routeModuleListEl = document.getElementById('routeModuleList');
     const addRouteModuleBtnEl = document.getElementById('addRouteModuleBtn');
@@ -1813,171 +1809,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             return file; // Return original file if conversion fails
         }
     }
-
-    /* ── Media Gallery Functions ────────────────────────── */
-    
-    function ensureProductMedia() {
-        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return null;
-        const product = editorData.products[editorSelectedIndex];
-        if (!product.media || typeof product.media !== 'object') {
-            product.media = { images: [], videos: [] };
-        }
-        if (!Array.isArray(product.media.images)) product.media.images = [];
-        if (!Array.isArray(product.media.videos)) product.media.videos = [];
-        return product.media;
-    }
-
-    async function addMediaImage(file) {
-        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
-            emitToast(msg('promptSelectFirst'), 'error');
-            if (mediaImageInputEl) mediaImageInputEl.value = '';
-            return;
-        }
-
-        if (!file) return;
-
-        if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
-            emitToast(msg('toastFileTooLarge'), 'error');
-            if (mediaImageInputEl) mediaImageInputEl.value = '';
-            return;
-        }
-
-        const processedFile = await convertImageToWebP(file);
-        const media = ensureProductMedia();
-        if (!media) return;
-
-        const dataUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = () => resolve('');
-            reader.readAsDataURL(processedFile);
-        });
-
-        media.images.push({
-            id: `img-${Date.now()}-${++_editorIdSeq}`,
-            file: processedFile,
-            fileName: processedFile.name,
-            dataUrl,
-            type: 'image'
-        });
-
-        if (mediaImageInputEl) mediaImageInputEl.value = '';
-        renderMediaGallery();
-        syncDraftControls();
-        emitToast(msg('toastFileQueued'), 'success');
-    }
-
-    function removeMediaImage(index) {
-        const media = ensureProductMedia();
-        if (!media || !isValidListIndex(media.images, index)) return;
-        media.images.splice(index, 1);
-        renderMediaGallery();
-        syncDraftControls();
-    }
-
-    function moveMediaImage(fromIndex, toIndex) {
-        const media = ensureProductMedia();
-        if (!media || !isValidListIndex(media.images, fromIndex)) return;
-        if (toIndex < 0 || toIndex >= media.images.length) return;
-        const [item] = media.images.splice(fromIndex, 1);
-        media.images.splice(toIndex, 0, item);
-        renderMediaGallery();
-        syncDraftControls();
-    }
-
-    function renderMediaGallery() {
-        if (!mediaGalleryListEl) return;
-        const media = ensureProductMedia();
-        
-        if (!media || !media.images.length) {
-            mediaGalleryListEl.innerHTML = `<p class="dash-help" data-admin-i18n="mediaNoImages">${msg('mediaNoImages')}</p>`;
-            return;
-        }
-
-        mediaGalleryListEl.innerHTML = media.images.map((item, index) => `
-            <div class="dash-media-item" draggable="true" data-media-image-index="${index}">
-                <div class="dash-media-thumb">
-                    <img src="${escapeHtml(item.dataUrl)}" alt="${escapeHtml(item.fileName)}" loading="lazy" decoding="async">
-                </div>
-                <div class="dash-media-actions">
-                    <span class="dash-media-type">${escapeHtml(item.fileName.split('.').pop() || 'img')}</span>
-                    <button type="button" class="dash-media-remove" data-remove-media-image="${index}" aria-label="Remove image">✕</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    async function addMediaVideo(file) {
-        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
-            emitToast(msg('promptSelectFirst'), 'error');
-            if (mediaVideoInputEl) mediaVideoInputEl.value = '';
-            return;
-        }
-
-        if (!file) return;
-
-        if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
-            emitToast(msg('toastFileTooLarge'), 'error');
-            if (mediaVideoInputEl) mediaVideoInputEl.value = '';
-            return;
-        }
-
-        const media = ensureProductMedia();
-        if (!media) return;
-
-        const dataUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = () => resolve('');
-            reader.readAsDataURL(file);
-        });
-
-        media.videos.push({
-            id: `vid-${Date.now()}-${++_editorIdSeq}`,
-            file,
-            fileName: file.name,
-            dataUrl,
-            type: 'video'
-        });
-
-        if (mediaVideoInputEl) mediaVideoInputEl.value = '';
-        renderMediaVideoList();
-        syncDraftControls();
-        emitToast(msg('toastFileQueued'), 'success');
-    }
-
-    function removeMediaVideo(index) {
-        const media = ensureProductMedia();
-        if (!media || !isValidListIndex(media.videos, index)) return;
-        media.videos.splice(index, 1);
-        renderMediaVideoList();
-        syncDraftControls();
-    }
-
-    function renderMediaVideoList() {
-        if (!mediaVideoListEl) return;
-        const media = ensureProductMedia();
-        
-        if (!media || !media.videos.length) {
-            mediaVideoListEl.innerHTML = `<p class="dash-help" data-admin-i18n="mediaNoVideos">${msg('mediaNoVideos')}</p>`;
-            return;
-        }
-
-        mediaVideoListEl.innerHTML = media.videos.map((item, index) => `
-            <div class="dash-media-video-item">
-                <div class="dash-media-video-thumb">
-                    <video src="${escapeHtml(item.dataUrl)}" muted></video>
-                </div>
-                <div class="dash-media-video-info">
-                    <div class="dash-media-video-name">${escapeHtml(item.fileName)}</div>
-                    <div class="dash-media-video-meta">${formatBytes(item.file.size)}</div>
-                </div>
-                <button type="button" class="dash-media-remove" data-remove-media-video="${index}" aria-label="Remove video">✕</button>
-            </div>
-        `).join('');
-    }
-
-    /* ── End Media Gallery Functions ────────────────────────── */
 
     async function stageProductDownloadFile(file) {
         if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
@@ -2939,7 +2770,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderRouteModuleEditor();
         renderProductUploadMeta();
         renderMediaGallery();
-        renderMediaVideoList();
+        renderMediaVideo();
         syncEditorTabs();
     }
 
@@ -3755,65 +3586,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     deleteTeamMemberBtnEl?.addEventListener('click', deleteTeamMember);
     saveGithubBtnEl?.addEventListener('click', () => { void handleSaveGithub(); });
     refreshAnalyticsBtnEl?.addEventListener('click', () => { void refreshAnalytics({ trigger: 'manual' }); });
-
-    /* ── Media Tab Event Listeners ────────────────────────── */
-    
-    mediaImageInputEl?.addEventListener('change', async (event) => {
-        const input = event.target;
-        const file = input instanceof HTMLInputElement ? input.files?.[0] || null : null;
-        if (file) await addMediaImage(file);
-    });
-
-    mediaVideoInputEl?.addEventListener('change', async (event) => {
-        const input = event.target;
-        const file = input instanceof HTMLInputElement ? input.files?.[0] || null : null;
-        if (file) await addMediaVideo(file);
-    });
-
-    mediaGalleryListEl?.addEventListener('click', (event) => {
-        const target = event.target instanceof Element ? event.target.closest('[data-remove-media-image]') : null;
-        if (!target) return;
-        const index = Number(target.getAttribute('data-remove-media-image'));
-        removeMediaImage(index);
-        emitToast(msg('toastFileRemoved'), 'info');
-    });
-
-    mediaVideoListEl?.addEventListener('click', (event) => {
-        const target = event.target instanceof Element ? event.target.closest('[data-remove-media-video]') : null;
-        if (!target) return;
-        const index = Number(target.getAttribute('data-remove-media-video'));
-        removeMediaVideo(index);
-        emitToast(msg('toastFileRemoved'), 'info');
-    });
-
-    // Drag and drop for image reordering
-    let draggedImageIndex = null;
-
-    mediaGalleryListEl?.addEventListener('dragstart', (event) => {
-        const item = event.target instanceof Element ? event.target.closest('[data-media-image-index]') : null;
-        if (!item) return;
-        draggedImageIndex = Number(item.getAttribute('data-media-image-index'));
-        item.classList.add('dragging');
-    });
-
-    mediaGalleryListEl?.addEventListener('dragend', (event) => {
-        const item = event.target instanceof Element ? event.target.closest('[data-media-image-index]') : null;
-        if (item) item.classList.remove('dragging');
-        draggedImageIndex = null;
-    });
-
-    mediaGalleryListEl?.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        const item = event.target instanceof Element ? event.target.closest('[data-media-image-index]') : null;
-        if (!item || draggedImageIndex === null) return;
-        const targetIndex = Number(item.getAttribute('data-media-image-index'));
-        if (draggedImageIndex !== targetIndex) {
-            moveMediaImage(draggedImageIndex, targetIndex);
-            draggedImageIndex = targetIndex;
-        }
-    });
-
-    /* ── End Media Tab Event Listeners ────────────────────────── */
 
     window.addEventListener('online', () => { if (editorActiveView === 'home') refreshAnalytics({ trigger: 'auto' }); });
     window.addEventListener('offline', () => { if (editorActiveView === 'home') renderContentOverview(); });
