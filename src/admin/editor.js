@@ -1730,7 +1730,48 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         syncDraftControls();
     }
 
-    function stageProductDownloadFile(file) {
+    async function convertImageToWebP(file) {
+        // Check if the file is an image that should be converted
+        const isImage = /\.(jpg|jpeg|png)$/i.test(file.name);
+        if (!isImage) {
+            return file; // Return original file if not an image
+        }
+
+        try {
+            // Create image element
+            const img = new Image();
+            const bitmap = await createImageBitmap(file);
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = bitmap.width;
+            canvas.height = bitmap.height;
+            
+            // Draw image on canvas
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(bitmap, 0, 0);
+            
+            // Convert to WebP blob with 90% quality
+            const webpBlob = await new Promise((resolve) => {
+                canvas.toBlob(resolve, 'image/webp', 0.9);
+            });
+            
+            if (!webpBlob) {
+                return file; // Return original if conversion failed
+            }
+            
+            // Create new File object with .webp extension
+            const webpFileName = file.name.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+            const webpFile = new File([webpBlob], webpFileName, { type: 'image/webp' });
+            
+            return webpFile;
+        } catch (error) {
+            console.warn('WebP conversion failed, using original file:', error);
+            return file; // Return original file if conversion fails
+        }
+    }
+
+    async function stageProductDownloadFile(file) {
         if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) {
             emitToast(msg('promptSelectFirst'), 'error');
             if (editorFieldDownloadFileEl) editorFieldDownloadFileEl.value = '';
@@ -1748,6 +1789,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             return;
         }
 
+        // Convert image to WebP if it's JPG/JPEG/PNG
+        const processedFile = await convertImageToWebP(file);
+
         syncSelectedProductFromForm();
         const product = editorData.products[editorSelectedIndex];
         const currentDownloadUrl = String(product.downloadUrl || '').trim();
@@ -1758,10 +1802,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const isManualPath = isLocalPath;
         const relativePath = isManualPath
             ? currentDownloadUrl.slice(2)
-            : buildProductUploadRelativePath(product, file.name);
+            : buildProductUploadRelativePath(product, processedFile.name);
         const existingUpload = getPendingProductUpload(product.id);
         const previousDownloadUrl = existingUpload?.previousDownloadUrl ?? String(product.downloadUrl || '').trim();
-        pendingProductUploads.set(product.id, { file, originalName: file.name, relativePath, isManualPath, previousDownloadUrl });
+        pendingProductUploads.set(product.id, { file: processedFile, originalName: processedFile.name, relativePath, isManualPath, previousDownloadUrl });
         if (editorFieldDownloadEl) editorFieldDownloadEl.value = `./${relativePath}`;
         syncSelectedProductFromForm();
         renderProductUploadMeta();
