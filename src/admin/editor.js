@@ -966,6 +966,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const localeSwitcherMenuEl = document.getElementById('localeSwitcherMenu');
     const mediaImageInputEl = document.getElementById('f-media-image');
     const mediaVideoInputEl = document.getElementById('f-media-video');
+    const mediaVideoUrlInputEl = document.getElementById('f-media-video-url');
+    const mediaVideoUrlBtnEl = document.getElementById('f-media-video-url-btn');
     const mediaGalleryListEl = document.getElementById('mediaGalleryList');
     const mediaVideoListEl = document.getElementById('mediaVideoList');
 
@@ -2169,6 +2171,32 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         emitToast('Видео добавлено в очередь загрузки', 'success');
     }
 
+    function addMediaVideoUrl(url) {
+        const media = getSelectedProductMedia();
+        if (!media) {
+            emitToast('Сначала выберите продукт', 'error');
+            return;
+        }
+
+        const trimmedUrl = url.trim();
+        if (!trimmedUrl) {
+            emitToast('Введите ссылку на видео', 'error');
+            return;
+        }
+
+        media.push({
+            type: 'video',
+            url: trimmedUrl,
+            uploadKey: null
+        });
+
+        syncDraftControls();
+        renderMediaVideo();
+        emitToast('Видео добавлено', 'success');
+        
+        if (mediaVideoUrlInputEl) mediaVideoUrlInputEl.value = '';
+    }
+
     function deleteMediaImage(index) {
         const media = getSelectedProductMedia();
         if (!media) return;
@@ -3276,6 +3304,19 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             await addMediaVideo(file);
         }
         input.value = '';
+    });
+
+    mediaVideoUrlBtnEl?.addEventListener('click', () => {
+        const url = mediaVideoUrlInputEl?.value || '';
+        addMediaVideoUrl(url);
+    });
+
+    mediaVideoUrlInputEl?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            const url = mediaVideoUrlInputEl?.value || '';
+            addMediaVideoUrl(url);
+        }
     });
 
     // Media gallery click handlers
