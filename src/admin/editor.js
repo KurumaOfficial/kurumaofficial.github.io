@@ -1990,11 +1990,54 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function renderMediaGallery() {
         if (!mediaGalleryListEl) return;
-        const media = getSelectedProductMedia();
-        if (!media) {
-            mediaGalleryListEl.innerHTML = '<p class="dash-help">Выберите продукт для загрузки медиа.</p>';
+
+        const product = editorData.products[editorSelectedIndex];
+        if (!product) {
+            mediaGalleryListEl.innerHTML = '';
             return;
         }
+
+        const media = product.media || [];
+        const images = media.filter(item => item.type === 'image');
+
+        if (images.length === 0) {
+            mediaGalleryListEl.innerHTML = '<p class="dash-media-empty">Нет изображений</p>';
+            return;
+        }
+
+        const galleryHtml = images.map((item, index) => {
+            const src = item.dataUrl || item.url;
+            const draggable = item.dataUrl ? 'true' : 'false';
+            return `
+                <div class="dash-media-item" 
+                     draggable="${draggable}" 
+                     data-media-index="${index}"
+                     data-upload-key="${item.uploadKey}">
+                    <div class="dash-media-thumb">
+                        <img src="${src}" 
+                             alt="${escapeHtml(item.alt || '')}" 
+                             loading="lazy">
+                    </div>
+                    <div class="dash-media-actions">
+                        <button type="button" 
+                                class="dash-media-edit-alt" 
+                                data-action="edit-alt"
+                                aria-label="Редактировать alt">
+                            <span class="material-icons">edit</span>
+                        </button>
+                        <button type="button" 
+                                class="dash-media-delete" 
+                                data-action="delete"
+                                aria-label="Удалить">
+                            <span class="material-icons">delete</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        mediaGalleryListEl.innerHTML = galleryHtml;
+    }
 
         const images = media.filter(item => item.type === 'image');
         if (!images.length) {
@@ -2004,7 +2047,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         mediaGalleryListEl.innerHTML = images.map((item, index) => `
             <div class="dash-media-item" draggable="true" data-media-index="${index}" data-media-type="image">
-                <img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt || '')}" loading="lazy">
+                <img src="${escapeHtml(item.dataUrl || item.url)}" alt="${escapeHtml(item.alt || '')}" loading="lazy">
                 <div class="dash-media-item-actions">
                     <button type="button" class="dash-btn-icon" data-media-delete="${index}" title="Удалить">
                         <span class="material-icons">delete</span>
@@ -2094,11 +2137,49 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     async function addMediaImage(file) {
-        const media = getSelectedProductMedia();
-        if (!media) {
-            emitToast('Сначала выберите продукт', 'error');
+        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return;
+
+        const product = editorData.products[editorSelectedIndex];
+        if (!product.media) product.media = [];
+
+        const webpBlob = await convertImageToWebP(file);
+        const webpFileName = file.name.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+        const safeFileName = sanitizeFileName(webpFileName);
+        const uploadKey = `media_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const relativePath = `assets/media/${product.id}/${safeFileName}`;
+
+        const dataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(webpBlob);
+        });
+
+        if (!dataUrl) {
+            showToast('Ошибка чтения файла', 'error');
             return;
         }
+
+        const mediaItem = {
+            type: 'image',
+            url: `./${relativePath}`,
+            dataUrl: dataUrl,
+            fileName: webpFileName,
+            uploadKey: uploadKey
+        };
+
+        product.media.push(mediaItem);
+
+        pendingProductUploads.set(uploadKey, {
+            blob: webpBlob,
+            type: 'image',
+            path: relativePath
+        });
+
+        syncDraftControls();
+        renderMediaGallery();
+        showToast(`Изображение добавлено: ${webpFileName}`, 'success');
+    }
 
         if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
             emitToast(msg('toastFileTooLarge'), 'error');
@@ -2108,6 +2189,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         // Convert to WebP
         const processedFile = await convertImageToWebP(file);
         
+        // Create dataURL for instant preview
+        const dataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = () => resolve('');
+            reader.readAsDataURL(processedFile);
+        });
+
         // Create upload entry
         const product = editorData.products[editorSelectedIndex];
         const safeFileName = sanitizeFileSegment(processedFile.name, 'media-image');
@@ -2122,10 +2211,11 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             previousDownloadUrl: ''
         });
 
-        // Add to media array
+        // Add to media array with dataUrl for instant preview
         media.push({
             type: 'image',
             url: `./${relativePath}`,
+            dataUrl,
             alt: '',
             uploadKey
         });
