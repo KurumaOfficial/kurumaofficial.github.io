@@ -2111,23 +2111,15 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     async function addMediaImage(file) {
-        const media = getSelectedProductMedia();
-        if (!media) {
-            emitToast('Сначала выберите продукт', 'error');
-            return;
-        }
+        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return;
 
-        if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
-            emitToast(msg('toastFileTooLarge'), 'error');
-            return;
-        }
+        const product = editorData.products[editorSelectedIndex];
+        if (!product.media) product.media = [];
 
         const webpBlob = await convertImageToWebP(file);
         const webpFileName = file.name.replace(/\.(png|jpg|jpeg)$/i, '.webp');
-        const safeFileName = sanitizeFileSegment(webpFileName, 'media-image');
+        const safeFileName = sanitizeFileName(webpFileName);
         const uploadKey = `media_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-        const product = editorData.products[editorSelectedIndex];
         const relativePath = `assets/media/${product.id}/${safeFileName}`;
 
         const dataUrl = await new Promise((resolve) => {
@@ -2138,18 +2130,19 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
 
         if (!dataUrl) {
-            emitToast('Ошибка чтения файла', 'error');
+            showToast('Ошибка чтения файла', 'error');
             return;
         }
 
-        media.push({
+        const mediaItem = {
             type: 'image',
             url: `./${relativePath}`,
             dataUrl: dataUrl,
             fileName: webpFileName,
-            alt: '',
             uploadKey: uploadKey
-        });
+        };
+
+        product.media.push(mediaItem);
 
         pendingProductUploads.set(uploadKey, {
             blob: webpBlob,
@@ -2159,7 +2152,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         syncDraftControls();
         renderMediaGallery();
-        emitToast(`Изображение добавлено: ${webpFileName}`, 'success');
+        showToast(`Изображение добавлено: ${webpFileName}`, 'success');
     }
 
     async function addMediaVideo(file) {
