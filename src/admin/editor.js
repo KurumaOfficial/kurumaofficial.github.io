@@ -964,6 +964,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     const localeSwitcherFlagEl = document.getElementById('localeSwitcherFlag');
     const localeSwitcherLabelEl = document.getElementById('localeSwitcherLabel');
     const localeSwitcherMenuEl = document.getElementById('localeSwitcherMenu');
+    const mediaImageInputEl = document.getElementById('f-media-image');
+    const mediaVideoInputEl = document.getElementById('f-media-video');
+    const mediaGalleryListEl = document.getElementById('mediaGalleryList');
+    const mediaVideoListEl = document.getElementById('mediaVideoList');
 
     if (!editorOverlayEl || !editorAdminTitleEl || !editorAdminSubtitleEl || !editorProductGridEl || !editorPanelEl) {
         return {
@@ -1909,6 +1913,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (routeModuleCategoryEl) routeModuleCategoryEl.value = 'player';
         renderRouteModuleEditor();
         renderProductUploadMeta();
+        renderMediaGallery();
+        renderMediaVideo();
     }
 
     function syncProductEditorState() {
@@ -1968,6 +1974,261 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             </div>
         `).join('');
     }
+
+    // ────────────────────────────────────────────────────────────────────────────────
+    // Media Editor
+    // ────────────────────────────────────────────────────────────────────────────────
+
+    function getSelectedProductMedia() {
+        if (editorSelectedIndex < 0 || !editorData.products[editorSelectedIndex]) return null;
+        const product = editorData.products[editorSelectedIndex];
+        if (!Array.isArray(product.media)) product.media = [];
+        return product.media;
+    }
+
+    function renderMediaGallery() {
+        if (!mediaGalleryListEl) return;
+        const media = getSelectedProductMedia();
+        if (!media) {
+            mediaGalleryListEl.innerHTML = '<p class="dash-help">Выберите продукт для загрузки медиа.</p>';
+            return;
+        }
+
+        const images = media.filter(item => item.type === 'image');
+        if (!images.length) {
+            mediaGalleryListEl.innerHTML = '<p class="dash-help">Изображения не загружены. Загрузите первое изображение выше.</p>';
+            return;
+        }
+
+        mediaGalleryListEl.innerHTML = images.map((item, index) => `
+            <div class="dash-media-item" draggable="true" data-media-index="${index}" data-media-type="image">
+                <img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt || '')}" loading="lazy">
+                <div class="dash-media-item-actions">
+                    <button type="button" class="dash-btn-icon" data-media-delete="${index}" title="Удалить">
+                        <span class="material-icons">delete</span>
+                    </button>
+                    <button type="button" class="dash-btn-icon" data-media-edit-alt="${index}" title="Изменить описание">
+                        <span class="material-icons">edit</span>
+                    </button>
+                </div>
+                <div class="dash-media-item-handle" title="Перетащите для изменения порядка">
+                    <span class="material-icons">drag_indicator</span>
+                </div>
+            </div>
+        `).join('');
+
+        setupMediaDragDrop();
+    }
+
+    function renderMediaVideo() {
+        if (!mediaVideoListEl) return;
+        const media = getSelectedProductMedia();
+        if (!media) {
+            mediaVideoListEl.innerHTML = '<p class="dash-help">Выберите продукт для загрузки медиа.</p>';
+            return;
+        }
+
+        const videos = media.filter(item => item.type === 'video');
+        if (!videos.length) {
+            mediaVideoListEl.innerHTML = '<p class="dash-help">Видео не загружены.</p>';
+            return;
+        }
+
+        mediaVideoListEl.innerHTML = videos.map((item, index) => `
+            <div class="dash-media-video-item" data-video-index="${index}">
+                <video src="${escapeHtml(item.url)}" controls preload="metadata" style="max-width:100%;height:auto;"></video>
+                <div class="dash-media-video-actions">
+                    <button type="button" class="dash-btn dash-sm dash-danger" data-video-delete="${index}">
+                        <span class="material-icons">delete</span>
+                        Удалить видео
+                    </button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function setupMediaDragDrop() {
+        if (!mediaGalleryListEl) return;
+        let draggedIndex = -1;
+
+        mediaGalleryListEl.querySelectorAll('[data-media-index]').forEach(el => {
+            el.addEventListener('dragstart', (e) => {
+                draggedIndex = Number(el.dataset.mediaIndex);
+                el.classList.add('dragging');
+            });
+
+            el.addEventListener('dragend', () => {
+                el.classList.remove('dragging');
+                mediaGalleryListEl.querySelectorAll('.drag-over').forEach(e => e.classList.remove('drag-over'));
+            });
+
+            el.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                mediaGalleryListEl.querySelectorAll('.drag-over').forEach(e => e.classList.remove('drag-over'));
+                el.classList.add('drag-over');
+            });
+
+            el.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const dropIndex = Number(el.dataset.mediaIndex);
+                if (draggedIndex === dropIndex || draggedIndex < 0) return;
+
+                const media = getSelectedProductMedia();
+                if (!media) return;
+
+                const images = media.filter(item => item.type === 'image');
+                const [moved] = images.splice(draggedIndex, 1);
+                images.splice(dropIndex, 0, moved);
+
+                // Update media array with reordered images
+                const videos = media.filter(item => item.type === 'video');
+                const product = editorData.products[editorSelectedIndex];
+                product.media = [...images, ...videos];
+
+                syncDraftControls();
+                renderMediaGallery();
+            });
+        });
+    }
+
+    async function addMediaImage(file) {
+        const media = getSelectedProductMedia();
+        if (!media) {
+            emitToast('Сначала выберите продукт', 'error');
+            return;
+        }
+
+        if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
+            emitToast(msg('toastFileTooLarge'), 'error');
+            return;
+        }
+
+        // Convert to WebP
+        const processedFile = await convertImageToWebP(file);
+        
+        // Create upload entry
+        const product = editorData.products[editorSelectedIndex];
+        const safeFileName = sanitizeFileSegment(processedFile.name, 'media-image');
+        const relativePath = `assets/media/${product.id}/${safeFileName}`;
+        const uploadKey = `${product.id}::media::${relativePath}`;
+        
+        pendingProductUploads.set(uploadKey, {
+            file: processedFile,
+            originalName: processedFile.name,
+            relativePath,
+            isManualPath: false,
+            previousDownloadUrl: ''
+        });
+
+        // Add to media array
+        media.push({
+            type: 'image',
+            url: `./${relativePath}`,
+            alt: '',
+            uploadKey
+        });
+
+        syncDraftControls();
+        renderMediaGallery();
+        emitToast('Изображение добавлено в очередь загрузки', 'success');
+    }
+
+    async function addMediaVideo(file) {
+        const media = getSelectedProductMedia();
+        if (!media) {
+            emitToast('Сначала выберите продукт', 'error');
+            return;
+        }
+
+        if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
+            emitToast(msg('toastFileTooLarge'), 'error');
+            return;
+        }
+
+        const product = editorData.products[editorSelectedIndex];
+        const safeFileName = sanitizeFileSegment(file.name, 'media-video');
+        const relativePath = `assets/media/${product.id}/${safeFileName}`;
+        const uploadKey = `${product.id}::media::${relativePath}`;
+        
+        pendingProductUploads.set(uploadKey, {
+            file,
+            originalName: file.name,
+            relativePath,
+            isManualPath: false,
+            previousDownloadUrl: ''
+        });
+
+        media.push({
+            type: 'video',
+            url: `./${relativePath}`,
+            uploadKey
+        });
+
+        syncDraftControls();
+        renderMediaVideo();
+        emitToast('Видео добавлено в очередь загрузки', 'success');
+    }
+
+    function deleteMediaImage(index) {
+        const media = getSelectedProductMedia();
+        if (!media) return;
+
+        const images = media.filter(item => item.type === 'image');
+        const imageToDelete = images[index];
+        
+        if (imageToDelete && imageToDelete.uploadKey) {
+            pendingProductUploads.delete(imageToDelete.uploadKey);
+        }
+
+        // Remove from media array
+        const allMediaIndex = media.findIndex(item => item === imageToDelete);
+        if (allMediaIndex >= 0) {
+            media.splice(allMediaIndex, 1);
+        }
+
+        syncDraftControls();
+        renderMediaGallery();
+        emitToast('Изображение удалено', 'info');
+    }
+
+    function deleteMediaVideo(index) {
+        const media = getSelectedProductMedia();
+        if (!media) return;
+
+        const videos = media.filter(item => item.type === 'video');
+        const videoToDelete = videos[index];
+        
+        if (videoToDelete && videoToDelete.uploadKey) {
+            pendingProductUploads.delete(videoToDelete.uploadKey);
+        }
+
+        const allMediaIndex = media.findIndex(item => item === videoToDelete);
+        if (allMediaIndex >= 0) {
+            media.splice(allMediaIndex, 1);
+        }
+
+        syncDraftControls();
+        renderMediaVideo();
+        emitToast('Видео удалено', 'info');
+    }
+
+    function editMediaAlt(index) {
+        const media = getSelectedProductMedia();
+        if (!media) return;
+
+        const images = media.filter(item => item.type === 'image');
+        const image = images[index];
+        if (!image) return;
+
+        const newAlt = window.prompt('Введите описание изображения (alt-текст):', image.alt || '');
+        if (newAlt !== null) {
+            image.alt = newAlt.trim();
+            syncDraftControls();
+            renderMediaGallery();
+        }
+    }
+
+    // ────────────────────────────────────────────────────────────────────────────────
 
     function fillSocialInputs() {
         const socials = editorData.socials || normalizeSocials({});
@@ -2480,6 +2741,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (routeModuleCategoryEl && !routeModuleCategoryEl.value) routeModuleCategoryEl.value = 'player';
         renderRouteModuleEditor();
         renderProductUploadMeta();
+        renderMediaGallery();
+        renderMediaVideo();
         syncEditorTabs();
     }
 
@@ -2995,6 +3258,58 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         clearStagedProductDownloadFile();
         emitToast(msg('toastFileRemoved'), 'info');
     });
+
+    // Media input handlers
+    mediaImageInputEl?.addEventListener('change', async (event) => {
+        const input = event.target;
+        const files = input instanceof HTMLInputElement ? Array.from(input.files || []) : [];
+        for (const file of files) {
+            await addMediaImage(file);
+        }
+        input.value = '';
+    });
+
+    mediaVideoInputEl?.addEventListener('change', async (event) => {
+        const input = event.target;
+        const file = input instanceof HTMLInputElement ? input.files?.[0] || null : null;
+        if (file) {
+            await addMediaVideo(file);
+        }
+        input.value = '';
+    });
+
+    // Media gallery click handlers
+    if (mediaGalleryListEl) {
+        mediaGalleryListEl.addEventListener('click', (e) => {
+            const target = e.target instanceof Element ? e.target.closest('[data-media-delete], [data-media-edit-alt]') : null;
+            if (!target) return;
+
+            if (target.hasAttribute('data-media-delete')) {
+                const index = Number(target.getAttribute('data-media-delete'));
+                if (window.confirm('Удалить это изображение?')) {
+                    deleteMediaImage(index);
+                }
+            } else if (target.hasAttribute('data-media-edit-alt')) {
+                const index = Number(target.getAttribute('data-media-edit-alt'));
+                editMediaAlt(index);
+            }
+        });
+    }
+
+    // Video list click handlers
+    if (mediaVideoListEl) {
+        mediaVideoListEl.addEventListener('click', (e) => {
+            const target = e.target instanceof Element ? e.target.closest('[data-video-delete]') : null;
+            if (!target) return;
+
+            if (target.hasAttribute('data-video-delete')) {
+                const index = Number(target.getAttribute('data-video-delete'));
+                if (window.confirm('Удалить это видео?')) {
+                    deleteMediaVideo(index);
+                }
+            }
+        });
+    }
 
     exportJsonBtnEl?.addEventListener('click', () => {
         commitAllEditorState();
