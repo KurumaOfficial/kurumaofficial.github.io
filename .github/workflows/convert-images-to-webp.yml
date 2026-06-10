@@ -1,0 +1,87 @@
+name: Convert Images to WebP
+
+on:
+  push:
+    paths:
+      - 'assets/images/**/*.jpg'
+      - 'assets/images/**/*.jpeg'
+      - 'assets/images/**/*.png'
+      - 'assets/files/**/*.jpg'
+      - 'assets/files/**/*.jpeg'
+      - 'assets/files/**/*.png'
+
+jobs:
+  convert-to-webp:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Install WebP tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y webp
+      
+      - name: Convert images to WebP
+        run: |
+          echo "🔄 Converting images to WebP format..."
+          
+          # Find all JPG, JPEG, PNG files in assets
+          find assets/images assets/files -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) 2>/dev/null | while read img; do
+            # Skip if WebP version already exists
+            webp_file="${img%.*}.webp"
+            if [ -f "$webp_file" ]; then
+              echo "⏭️  Skipping $img (WebP already exists)"
+              continue
+            fi
+            
+            echo "🖼️  Converting: $img → $webp_file"
+            
+            # Convert with high quality (90)
+            cwebp -q 90 "$img" -o "$webp_file"
+            
+            if [ $? -eq 0 ]; then
+              echo "✅ Successfully converted: $webp_file"
+              
+              # Get file sizes for comparison
+              original_size=$(stat -f%z "$img" 2>/dev/null || stat -c%s "$img")
+              webp_size=$(stat -f%z "$webp_file" 2>/dev/null || stat -c%s "$webp_file")
+              
+              # Calculate size reduction
+              reduction=$(echo "scale=1; (1 - $webp_size / $original_size) * 100" | bc)
+              echo "📊 Size: $(numfmt --to=iec $original_size) → $(numfmt --to=iec $webp_size) (${reduction}% smaller)"
+            else
+              echo "❌ Failed to convert: $img"
+            fi
+          done
+          
+          echo "✨ Conversion complete!"
+      
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "📝 New WebP files created"
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  No new images to convert"
+          fi
+      
+      - name: Commit and push WebP files
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add assets/**/*.webp
+          git commit -m "chore: auto-convert images to WebP format
+
+- Automated conversion via GitHub Actions
+- Quality: 90%
+- Optimized for web performance"
+          git push
