@@ -318,6 +318,7 @@
                                         <div class="dash-tab-bar">
                                             <button type="button" class="dash-tab-btn active" data-tab="tab-main" data-admin-i18n="tabMain">Основное</button>
                                             <button type="button" class="dash-tab-btn" data-tab="tab-content" data-admin-i18n="tabContent">Контент</button>
+                                            <button type="button" class="dash-tab-btn" data-tab="tab-media" data-admin-i18n="tabMedia">Медиа</button>
                                             <button type="button" class="dash-tab-btn" data-tab="tab-publish" data-admin-i18n="tabPublish">Публикация</button>
                                             <button type="button" class="dash-tab-btn" data-tab="tab-route" data-admin-i18n="tabRoute">Route</button>
                                         </div>
@@ -371,6 +372,38 @@
                                                 </div>
                                                 <div class="dash-form-section">
                                                     <div class="dash-field dash-c12"><label for="f-note" data-admin-i18n="fieldNote">Примечание</label><textarea id="f-note"></textarea></div>
+                                                </div>
+                                            </div>
+
+                                            <div class="dash-tab-panel" data-panel="tab-media">
+                                                <div class="dash-form-section">
+                                                    <h4 data-admin-i18n="mediaGalleryTitle">Галерея изображений</h4>
+                                                    <p class="dash-help" data-admin-i18n="mediaGalleryHelp">Загружайте скриншоты и изображения продукта. Файлы автоматически конвертируются в WebP.</p>
+                                                    
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="f-media-image" data-admin-i18n="mediaImageUpload">Добавить изображение</label>
+                                                        <input type="file" id="f-media-image" accept="image/jpeg,image/jpg,image/png,image/webp">
+                                                        <p class="dash-help" data-admin-i18n="mediaImageHelp">JPG, PNG или WebP до 100MB</p>
+                                                    </div>
+                                                    
+                                                    <div id="mediaGalleryList" class="dash-media-gallery">
+                                                        <p class="dash-help" data-admin-i18n="mediaNoImages">Изображения не загружены. Загрузите первое изображение выше.</p>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="dash-form-section">
+                                                    <h4 data-admin-i18n="mediaVideoTitle">Видео</h4>
+                                                    <p class="dash-help" data-admin-i18n="mediaVideoHelp">Загружайте видео-трейлеры и демонстрации продукта.</p>
+                                                    
+                                                    <div class="dash-field dash-c12">
+                                                        <label for="f-media-video" data-admin-i18n="mediaVideoUpload">Добавить видео</label>
+                                                        <input type="file" id="f-media-video" accept="video/mp4,video/webm">
+                                                        <p class="dash-help" data-admin-i18n="mediaVideoFileHelp">MP4 или WebM до 100MB</p>
+                                                    </div>
+                                                    
+                                                    <div id="mediaVideoList" class="dash-media-video-list">
+                                                        <p class="dash-help" data-admin-i18n="mediaNoVideos">Видео не загружены.</p>
+                                                    </div>
                                                 </div>
                                             </div>
 
