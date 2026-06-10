@@ -2155,50 +2155,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         showToast(`Изображение добавлено: ${webpFileName}`, 'success');
     }
 
-        if (file.size > GITHUB_CONTENTS_MAX_FILE_BYTES) {
-            emitToast(msg('toastFileTooLarge'), 'error');
-            return;
-        }
-
-        // Convert to WebP
-        const processedFile = await convertImageToWebP(file);
-        
-        // Create dataURL for instant preview
-        const dataUrl = await new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (e) => resolve(e.target.result);
-            reader.onerror = () => resolve('');
-            reader.readAsDataURL(processedFile);
-        });
-
-        // Create upload entry
-        const product = editorData.products[editorSelectedIndex];
-        const safeFileName = sanitizeFileSegment(processedFile.name, 'media-image');
-        const relativePath = `assets/media/${product.id}/${safeFileName}`;
-        const uploadKey = `${product.id}::media::${relativePath}`;
-        
-        pendingProductUploads.set(uploadKey, {
-            file: processedFile,
-            originalName: processedFile.name,
-            relativePath,
-            isManualPath: false,
-            previousDownloadUrl: ''
-        });
-
-        // Add to media array with dataUrl for instant preview
-        media.push({
-            type: 'image',
-            url: `./${relativePath}`,
-            dataUrl,
-            alt: '',
-            uploadKey
-        });
-
-        syncDraftControls();
-        renderMediaGallery();
-        emitToast('Изображение добавлено в очередь загрузки', 'success');
-    }
-
     async function addMediaVideo(file) {
         const media = getSelectedProductMedia();
         if (!media) {
