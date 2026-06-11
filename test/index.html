@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="ru" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>TEST · Donor Cards Gallery</title>
+<meta name="description" content="Временная тестовая страница — галерея всех карточек донаторов. Будет удалена после проверки.">
+<style>
+  /* ── Токены (копия donate.css) ─────────────────────────────── */
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #080606;
+    --bg2: #0f0b0b;
+    --bg3: #181212;
+    --text: #e8dada;
+    --text-dim: #b09c97;
+    --text-muted: #5a4a44;
+    --accent: #8b1a2a;
+    --accent-light: #b52239;
+    --accent-dim: rgba(139,26,42,0.12);
+    --accent-border: rgba(139,26,42,0.22);
+    --border: rgba(139,26,42,0.10);
+    --border-hi: rgba(139,26,42,0.20);
+    --surface: rgba(139,26,42,0.04);
+    --surface-h: rgba(139,26,42,0.08);
+    --shadow: 0 8px 48px rgba(0,0,0,0.5);
+    --shadow-s: 0 2px 14px rgba(0,0,0,0.3);
+    --gold: #d97286;
+    --gold-light: #ffb3c0;
+    --platinum: #9bc6ff;
+    --platinum-light: #d9ecff;
+    --platinum-dim: rgba(120,170,255,0.12);
+    --platinum-border: rgba(130,180,255,0.28);
+  }
+  [data-theme="light"] {
+    color-scheme: light;
+    --bg: #f5f0ee;
+    --bg2: #ede8e4;
+    --bg3: #e5dedb;
+    --text: #2d1512;
+    --text-dim: #6b3d34;
+    --text-muted: #9a7068;
+    --accent: #8b1a2a;
+    --accent-light: #b52239;
+    --accent-dim: rgba(139,26,42,0.10);
+    --accent-border: rgba(139,26,42,0.22);
+    --border: rgba(139,26,42,0.10);
+    --border-hi: rgba(139,26,42,0.20);
+    --surface: rgba(139,26,42,0.04);
+    --surface-h: rgba(139,26,42,0.08);
+    --shadow: 0 8px 40px rgba(0,0,0,0.1);
+    --shadow-s: 0 2px 12px rgba(0,0,0,0.07);
+    --gold: #8b1a2a;
+    --gold-light: #b52239;
+    --platinum: #5e8ecc;
+    --platinum-light: #9fc0e9;
+    --platinum-dim: rgba(94,142,204,0.1);
+    --platinum-border: rgba(94,142,204,0.25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Karla', system-ui, -apple-system, sans-serif;
+    padding: 2rem;
+  }
+  a { color: inherit; }
+
+  .page { max-width: 1280px; margin: 0 auto; }
+  .page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .page-header .tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    margin-left: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    border-radius: 0;
+  }
+  .page-header button {
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .page-header button:hover {
+    background: var(--surface-h);
+    border-color: var(--border-hi);
+  }
+
+  .section {
+    margin-bottom: 3.5rem;
+  }
+  .section h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--accent-light);
+    letter-spacing: 0.05em;
+  }
+  .section .desc {
+    margin: 0 0 1.5rem 0;
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    max-width: 70ch;
+  }
+  .section code {
+    padding: 0.1rem 0.4rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--accent-light);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* ── Сами карточки — полная копия donate.css (кроме эффектов canvas) ── */
+  .card-donor {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 22px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    aspect-ratio: 1 / 1;
+    min-height: 190px;
+    --g-alpha: 0;
+    transition: transform .12s ease, box-shadow .2s ease, border-color .15s ease;
+  }
+  .card-donor::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent,
+      rgba(220,90,110,var(--g-alpha)),
+      rgba(255,180,195,calc(var(--g-alpha) * 1.4)),
+      rgba(220,90,110,var(--g-alpha)), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .card-donor::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent,
+      rgba(220,90,110,calc(var(--g-alpha) * .5)), transparent);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .card-donor:hover { transform: translateY(-3px); }
+
+  .card-donor.is-top {
+    border-color: rgba(220,90,110,.35);
+    box-shadow: 0 0 22px rgba(220,90,110,.14), 0 0 44px rgba(220,90,110,.07);
+    padding-bottom: 26px;
+  }
+  .card-donor.is-top:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 28px rgba(220,90,110,.20), 0 0 50px rgba(220,90,110,.10);
+  }
+  .card-donor.is-top::after {
+    left: 14px; right: 14px;
+    bottom: 10px;
+    height: 6px;
+    filter: blur(9px);
+    opacity: .98;
+  }
+  .card-donor.is-top[data-rank="1"] {
+    border-color: rgba(230,90,110,.40);
+    box-shadow: 0 0 24px rgba(230,90,110,.18), 0 0 52px rgba(230,90,110,.09);
+  }
+  .card-donor.is-top[data-rank="1"]::after {
+    background: linear-gradient(90deg, rgba(230,90,110,0), rgba(230,90,110,.72) 24%, rgba(255,200,210,.98) 50%, rgba(230,90,110,.72) 76%, rgba(230,90,110,0));
+  }
+  .card-donor.is-top[data-rank="2"] {
+    border-color: rgba(180,40,70,.32);
+    box-shadow: 0 0 22px rgba(180,40,70,.14), 0 0 46px rgba(180,40,70,.07);
+  }
+  .card-donor.is-top[data-rank="2"]::after {
+    background: linear-gradient(90deg, rgba(180,40,70,0), rgba(180,40,70,.68) 24%, rgba(225,140,160,.96) 50%, rgba(180,40,70,.68) 76%, rgba(180,40,70,0));
+  }
+  .card-donor.is-top[data-rank="3"] {
+    border-color: rgba(130,30,50,.30);
+    box-shadow: 0 0 22px rgba(130,30,50,.13), 0 0 44px rgba(130,30,50,.06);
+  }
+  .card-donor.is-top[data-rank="3"]::after {
+    background: linear-gradient(90deg, rgba(130,30,50,0), rgba(130,30,50,.64) 24%, rgba(190,90,110,.94) 50%, rgba(130,30,50,.64) 76%, rgba(130,30,50,0));
+  }
+
+  .card-donor.is-platinum::before {
+    background: linear-gradient(90deg, transparent,
+      rgba(145,190,255,var(--g-alpha)),
+      rgba(215,236,255,calc(var(--g-alpha) * 1.5)),
+      rgba(145,190,255,var(--g-alpha)), transparent);
+  }
+  .card-donor.is-platinum::after {
+    background: linear-gradient(90deg, transparent,
+      rgba(145,190,255,calc(var(--g-alpha) * .6)), transparent);
+  }
+
+  .tier-mark {
+    position: absolute;
+    top: 8px; right: 8px;
+    z-index: 3;
+    min-width: 28px; height: 28px;
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .tier-mark.gold {
+    color: var(--gold-light);
+    background: rgba(220,90,110,0.12);
+    border: 1px solid rgba(220,90,110,0.32);
+    box-shadow: 0 0 20px rgba(220,90,110,0.22);
+  }
+  .tier-mark.platinum {
+    color: var(--platinum-light);
+    background: var(--platinum-dim);
+    border: 1px solid var(--platinum-border);
+    box-shadow: 0 0 24px rgba(110,165,255,0.28);
+  }
+
+  .donor-avatar,
+  .donor-name,
+  .donor-badge,
+  .donor-amount {
+    position: relative;
+    z-index: 1;
+  }
+  .donor-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .donor-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .avatar-fallback {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    background: var(--bg2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant', serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-dim);
+  }
+  .avatar-fallback.is-platinum {
+    color: var(--platinum-light);
+    background: linear-gradient(135deg, rgba(32,40,58,0.95), rgba(16,22,36,0.95));
+  }
+  .donor-avatar-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .donor-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 160px;
+  }
+  .donor-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.5px;
+    color: var(--text-dim);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+  }
+  .card-donor.is-top .donor-badge {
+    color: var(--gold);
+    background: rgba(220,90,110,0.12);
+    border-color: rgba(220,90,110,0.28);
+  }
+  .card-donor.is-platinum .donor-badge {
+    color: var(--platinum-light);
+    background: var(--platinum-dim);
+    border-color: var(--platinum-border);
+  }
+
+  .donor-amount {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    letter-spacing: 0.3px;
+    opacity: 0.85;
+  }
+  .card-donor.is-top .donor-amount { color: var(--gold); }
+  .card-donor.is-platinum .donor-amount {
+    color: var(--platinum-light);
+    opacity: 0.95;
+    text-shadow: 0 0 14px rgba(170,210,255,0.26);
+  }
+
+  .note {
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    background: var(--bg2);
+    border-left: 3px solid var(--accent);
+    font-size: 0.85rem;
+    color: var(--text-dim);
+  }
+  .note strong { color: var(--accent-light); }
+
+  @media (max-width: 640px) {
+    body { padding: 1rem; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem; }
+    .card-donor { min-height: 160px; padding: 16px 10px; }
+    .donor-avatar { width: 42px; height: 42px; }
+    .donor-name { font-size: 12px; max-width: 120px; }
+  }
+</style>
+</head>
+<body>
+  <div class="page">
+    <header class="page-header">
+      <h1>Галерея карточек донаторов <span class="tag">TEST</span></h1>
+      <button id="themeBtn" type="button">Переключить тему</button>
+    </header>
+
+    <section class="section">
+      <h2>Standard tier · $1 – $99</h2>
+      <p class="desc">Базовые карточки без специальных эффектов. Цвет — прозрачный с лёгким ruby-оттенком. Бордер: <code>rgba(180, 50, 70, 0.12)</code>.</p>
+      <div class="grid" id="grid-standard"></div>
+    </section>
+
+    <section class="section">
+      <h2>Gold tier · $100 – $499</h2>
+      <p class="desc">Ruby-свечение, интенсивность растёт с суммой. Формула <code>glow = (amount − 100) / 400</code>. Чем больше донат, тем ярче аура вокруг карточки.</p>
+      <div class="grid" id="grid-gold"></div>
+    </section>
+
+    <section class="section">
+      <h2>Platinum tier · $500+</h2>
+      <p class="desc">Голубое «платиновое» свечение с металлическим градиентом. Бордер <code>rgba(130, 180, 255, 0.34)</code>, радиальный фон.</p>
+      <div class="grid" id="grid-platinum"></div>
+    </section>
+
+    <section class="section">
+      <h2>Top 3 · специальные ранги</h2>
+      <p class="desc">Три лучшие карточки помечаются рангом <code>data-rank="1|2|3"</code> — получают усиленные ruby-эффекты: #1 ярче всех, #3 самый мягкий.</p>
+      <div class="grid" id="grid-top"></div>
+    </section>
+
+    <section class="section">
+      <h2>Специальные случаи</h2>
+      <p class="desc">Длинные имена (должны быть обрезаны многоточием), пустое имя (fallback-аватар без инициала), нулевая сумма, минимальный донат.</p>
+      <div class="grid" id="grid-special"></div>
+    </section>
+
+    <div class="note">
+      <strong>Зачем эта страница:</strong> визуальная проверка стилей карточек донаторов перед деплоем. Все стили синхронизированы с <code>assets/css/support/donate.css</code> на момент коммита. Страница будет удалена после подтверждения корректности.
+    </div>
+  </div>
+
+<script type="module">
+  // ── Логика определения tier (копия donate.js → getDonorStyle) ──
+  function getDonorStyle(amountUsd) {
+    const amount = Number(amountUsd) || 0;
+    if (amount >= 500) {
+      return { kind: 'platinum', title: 'Platinum', icon: '◆', showMark: true };
+    }
+    if (amount >= 100) {
+      const glow = Math.min(1, (amount - 100) / 400);
+      return {
+        kind: 'gold',
+        title: amount >= 250 ? 'Gold+' : 'Gold',
+        icon: '★',
+        showMark: true,
+        glow,
+        aura: 0.05 + glow * 0.09,
+        goldCount: 1,
+      };
+    }
+    return { kind: 'standard', title: 'Supporter', icon: '', showMark: false };
+  }
+
+  function createCard(donor, { rank = 0, top = false } = {}) {
+    const amount = Number(donor.amountUsd || 0);
+    const tier = getDonorStyle(amount);
+    const hue = hashHue(donor.id || donor.name || 'x');
+
+    const card = document.createElement('article');
+    card.className = 'card-donor';
+    if (tier.kind === 'platinum') card.classList.add('is-platinum');
+    if (top) card.classList.add('is-top');
+    if (rank > 0) card.dataset.rank = String(rank);
+
+    // — стили карточки —
+    if (tier.kind === 'platinum') {
+      card.style.cssText = `
+        --g-alpha: .88;
+        border-color: rgba(130, 180, 255, 0.34);
+        box-shadow: 0 0 16px rgba(110,165,255,0.18),
+                    0 0 34px rgba(110,165,255,0.16),
+                    0 0 70px rgba(70,120,230,0.16),
+                    inset 0 0 20px rgba(190,225,255,0.06);
+        background: radial-gradient(circle at 50% 0%, rgba(110,165,255,0.16), transparent 58%),
+                    linear-gradient(135deg, rgba(18,24,38,0.96), rgba(10,14,24,0.98) 55%, rgba(18,34,66,0.92));
+      `;
+    } else if (tier.kind === 'gold') {
+      const g = tier.glow;
+      const borderAlpha = 0.12 + g * 0.78;
+      card.style.cssText = `
+        --g-alpha: ${(0.15 + g * 0.85).toFixed(3)};
+        border-color: rgba(180,50,70,${borderAlpha.toFixed(3)});
+        box-shadow: 0 0 ${8 + g * 24}px rgba(180,50,70,${(0.06 + g * 0.22).toFixed(3)}),
+                    0 0 ${16 + g * 36}px rgba(180,50,70,${(0.04 + g * 0.14).toFixed(3)}),
+                    0 0 ${24 + g * 58}px rgba(180,50,70,${(0.025 + g * 0.08).toFixed(3)}),
+                    inset 0 0 ${6 + g * 16}px rgba(230,90,110,${(g * 0.10).toFixed(3)});
+        background: rgba(180,50,70,${(tier.aura * 0.55).toFixed(4)});
+      `;
+    } else {
+      card.style.cssText = `
+        --g-alpha: 0.15;
+        border-color: rgba(180,50,70,0.12);
+        box-shadow: 0 0 8px rgba(180,50,70,0.05),
+                    0 0 16px rgba(180,50,70,0.03),
+                    0 0 24px rgba(180,50,70,0.02),
+                    inset 0 0 6px rgba(230,90,110,0);
+        background: rgba(180,50,70,0);
+      `;
+    }
+
+    // — tier mark —
+    if (tier.showMark) {
+      const mark = document.createElement('div');
+      mark.className = `tier-mark ${tier.kind}`;
+      mark.textContent = tier.icon;
+      card.appendChild(mark);
+    }
+
+    // — avatar —
+    const avatar = document.createElement('div');
+    avatar.className = 'donor-avatar';
+    const ringAlpha = tier.kind === 'platinum'
+      ? 0.92
+      : tier.kind === 'gold'
+        ? (0.15 + tier.glow * 0.85)
+        : 0.15;
+    const ringGlow = tier.kind === 'platinum'
+      ? '0 0 18px rgba(145,190,255,0.55), 0 0 34px rgba(90,145,245,0.26)'
+      : `0 0 ${4 + (tier.glow || 0) * 14}px rgba(180,50,70,${(tier.glow || 0) * 0.7})`;
+    const ringWidth = tier.kind === 'platinum'
+      ? 2.6
+      : tier.kind === 'gold'
+        ? (1 + tier.glow * 2.5)
+        : 1;
+    const ringColor = tier.kind === 'platinum'
+      ? `rgba(190,225,255,${ringAlpha.toFixed(3)})`
+      : `rgba(230,90,110,${ringAlpha.toFixed(3)})`;
+
+    if (donor.avatar) {
+      const img = document.createElement('img');
+      img.src = donor.avatar;
+      img.alt = donor.name || 'Аватар';
+      img.loading = 'lazy';
+      img.onerror = () => {
+        const fb = document.createElement('div');
+        fb.className = 'avatar-fallback' + (tier.kind === 'platinum' ? ' is-platinum' : '');
+        fb.style.background = `hsl(${hue},18%,22%)`;
+        fb.textContent = (donor.name || 'N').charAt(0).toUpperCase();
+        avatar.replaceChild(fb, img);
+      };
+      avatar.appendChild(img);
+    } else {
+      const fb = document.createElement('div');
+      fb.className = 'avatar-fallback' + (tier.kind === 'platinum' ? ' is-platinum' : '');
+      if (tier.kind !== 'platinum') fb.style.background = `hsl(${hue},18%,22%)`;
+      fb.textContent = donor.name && donor.name.trim() ? donor.name.charAt(0).toUpperCase() : '';
+      avatar.appendChild(fb);
+    }
+    const ring = document.createElement('div');
+    ring.className = 'donor-avatar-ring';
+    ring.style.cssText = `box-shadow:${ringGlow};border:${ringWidth.toFixed(1)}px solid ${ringColor};`;
+    avatar.appendChild(ring);
+    card.appendChild(avatar);
+
+    // — name —
+    const nameEl = document.createElement('span');
+    nameEl.className = 'donor-name';
+    nameEl.textContent = donor.name || '';
+    card.appendChild(nameEl);
+
+    // — badge —
+    const badge = document.createElement('span');
+    badge.className = 'donor-badge';
+    badge.textContent = tier.title;
+    card.appendChild(badge);
+
+    // — amount —
+    const amountEl = document.createElement('span');
+    amountEl.className = 'donor-amount';
+    amountEl.textContent = '$' + amount.toLocaleString('en-US');
+    card.appendChild(amountEl);
+
+    return card;
+  }
+
+  function hashHue(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return h % 360;
+  }
+
+  function render(containerId, donors, opts = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    donors.forEach((d, i) => {
+      const o = { ...opts };
+      if (opts.top) o.rank = i + 1;
+      container.appendChild(createCard(d, o));
+    });
+  }
+
+  // ── Тестовые данные ──
+  render('grid-standard', [
+    { id: 'std1', name: 'Александр',   amountUsd: 5   },
+    { id: 'std2', name: 'Мария',       amountUsd: 10  },
+    { id: 'std3', name: 'Дмитрий',     amountUsd: 25  },
+    { id: 'std4', name: 'Елена',       amountUsd: 50  },
+    { id: 'std5', name: 'Виктор',      amountUsd: 75  },
+  ]);
+
+  render('grid-gold', [
+    { id: 'g1', name: 'Николай',      amountUsd: 100 },
+    { id: 'g2', name: 'Анна',         amountUsd: 150 },
+    { id: 'g3', name: 'Сергей',       amountUsd: 250 },
+    { id: 'g4', name: 'Ольга',        amountUsd: 350 },
+    { id: 'g5', name: 'Павел',        amountUsd: 450 },
+  ]);
+
+  render('grid-platinum', [
+    { id: 'p1', name: 'Александр В.', amountUsd: 500  },
+    { id: 'p2', name: 'Мария З.',     amountUsd: 750  },
+    { id: 'p3', name: 'Дмитрий П.',   amountUsd: 1000 },
+    { id: 'p4', name: 'Елена Б.',     amountUsd: 2500 },
+    { id: 'p5', name: 'Виктор М.',    amountUsd: 5000 },
+  ]);
+
+  render('grid-top', [
+    { id: 't1', name: 'Виктор М.',    amountUsd: 5000 },
+    { id: 't2', name: 'Елена Б.',     amountUsd: 2500 },
+    { id: 't3', name: 'Дмитрий П.',   amountUsd: 1000 },
+  ], { top: true });
+
+  render('grid-special', [
+    { id: 'sp1', name: 'Очень длинное имя которое точно не поместится в карточку', amountUsd: 50 },
+    { id: 'sp2', name: '',           amountUsd: 100 },
+    { id: 'sp3', name: 'Без суммы',  amountUsd: 0   },
+    { id: 'sp4', name: 'Микро-донат',amountUsd: 1   },
+    { id: 'sp5', name: 'Аватар с ошибкой', avatar: 'https://invalid-host.example/broken.png', amountUsd: 42 },
+    { id: 'sp6', name: 'Plat без аватара', amountUsd: 700 },
+  ]);
+
+  // ── Переключатель темы ──
+  const themeBtn = document.getElementById('themeBtn');
+  themeBtn?.addEventListener('click', () => {
+    const html = document.documentElement;
+    const next = html.dataset.theme === 'dark' ? 'light' : 'dark';
+    html.dataset.theme = next;
+    try { localStorage.setItem('aleph-test-theme', next); } catch {}
+  });
+  try {
+    const saved = localStorage.getItem('aleph-test-theme');
+    if (saved) document.documentElement.dataset.theme = saved;
+  } catch {}
+</script>
+</body>
+</html>

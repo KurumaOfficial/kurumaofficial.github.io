@@ -45,6 +45,11 @@
     </script>
 </head>
 <body data-admin-page="true">
+    <button id="clearLocalBtn" type="button" class="dash-btn dash-float-clear-local" aria-label="Очистить локальный кеш" title="Очистить localStorage и загрузить актуальные данные с GitHub">
+        <span class="material-icons">delete_sweep</span>
+        Очистить local
+    </button>
+
     <div id="editorOverlay" class="editor-overlay" aria-hidden="true">
         <div class="editor-backdrop" data-close-editor></div>
         <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorAdminTitle">
@@ -136,10 +141,6 @@
                             <button id="applyDraftBtn" type="button" class="dash-btn dash-primary">
                                 <span class="material-icons">check</span>
                                 Применить
-                            </button>
-                            <button id="clearLocalBtn" type="button" class="dash-btn" data-admin-i18n-aria="clearLocalAria" aria-label="Очистить локальный кеш">
-                                <span class="material-icons">delete_sweep</span>
-                                Очистить local
                             </button>
                             <button type="button" class="dash-btn-icon" data-close-editor aria-label="Закрыть">
                                 <span class="material-icons">close</span>
