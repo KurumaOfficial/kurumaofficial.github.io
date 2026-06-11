@@ -208,21 +208,24 @@
 <footer class="site-footer">
     <div class="site-footer__main">
         <div class="site-footer__left">
-            <a class="site-footer__logo" href="../../../ua/">
+            <a class="site-footer__logo" href="../../">
                 <span class="site-footer__sq" aria-hidden="true"></span>
                 <span class="site-footer__name">Aleph Studio</span>
             </a>
             <span class="site-footer__divider" aria-hidden="true"></span>
-            <span class="site-footer__tagline">Дочірній проєкт WeTTeA</span>
+            <span id="footerTagline" class="site-footer__tagline">Дочірній проєкт WeTTeA</span>
         </div>
-        <nav class="site-footer__nav" aria-label="Підвал — навігація">
-            <a href="../../../ua/products/">Продукти</a>
-            <a href="../../../ua/donate/">Підтримати</a>
+        <nav id="footerNav" class="site-footer__nav" aria-label="Підвал — навігація">
+            <a href="../">Продукти</a>
+            <a href="../../#manifesto">Принцип</a>
+            <a href="../../#team">Команда</a>
+            <span class="site-footer__nav-sep" aria-hidden="true"></span>
+            <a id="footerDonateLink" href="../../donate/" data-donate-link>Підтримати</a>
         </nav>
-        <div class="site-footer__socials" aria-label="Соціальні мережі"></div>
+        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Соціальні мережі"></div>
     </div>
     <div class="site-footer__bottom">
-        <span class="site-footer__copy">© 2026. Все права защищены.</span>
+        <span id="footerCopyright" class="site-footer__copy">© 2026. Усі права захищено.</span>
     </div>
 </footer>
 <script type="module" src="../../../src/products/strange-visuals.js?v=20260606b"></script>

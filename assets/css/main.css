@@ -1444,8 +1444,7 @@ footer {
     color: var(--color-text-muted);
 }
 
-.site-footer__copy,
-.site-footer__license {
+.site-footer__copy {
     display: inline-block;
 }
 
