@@ -35,161 +35,161 @@ export const DEFAULT_SITE_DATA = {
             "routeModules": {
                 "player": [
                     {
-                        "name": "Боксы",
-                        "nameEn": "Boxes",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Джампики",
-                        "nameEn": "Jump Circles",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Китайская шляпа",
-                        "nameEn": "China Hat",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Таргет рендер",
-                        "nameEn": "Target Render",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Хит бабл",
-                        "nameEn": "Hit Bubble",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     }
                 ],
                 "world": [
                     {
-                        "name": "Чамсы",
-                        "nameEn": "Chams",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Трейсеры",
-                        "nameEn": "Tracers",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Снаряды",
-                        "nameEn": "Projectiles",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Частицы",
-                        "nameEn": "Particles",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Блок оверлей",
-                        "nameEn": "Block Overlay",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Дроп рендер",
-                        "nameEn": "Item Drop Render",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Скелетон",
-                        "nameEn": "Skeleton",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     }
                 ],
                 "utils": [
                     {
-                        "name": "Авто спринт",
-                        "nameEn": "Auto Sprint",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Авто тул",
-                        "nameEn": "Auto Tool",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Фуллбрайт",
-                        "nameEn": "Fullbright",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Ноу оверлей",
-                        "nameEn": "No Overlay",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Координаты",
-                        "nameEn": "Coordinates",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Таймер",
-                        "nameEn": "Timer",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     }
                 ],
                 "other": [
                     {
-                        "name": "Антибот",
-                        "nameEn": "Anti-Bot",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Прокси",
-                        "nameEn": "Proxy",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Дебаг режим",
-                        "nameEn": "Debug Mode",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Ник хайдер",
-                        "nameEn": "Name Hider",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     }
                 ],
                 "interface": [
                     {
-                        "name": "Массив лист",
-                        "nameEn": "Array List",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Ватермарка",
-                        "nameEn": "Watermark",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Кейбинды",
-                        "nameEn": "Keybinds",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Нотификации",
-                        "nameEn": "Notifications",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Хотбар",
-                        "nameEn": "Hotbar",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Скорборд",
-                        "nameEn": "Scoreboard",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": false
                     },
                     {
-                        "name": "Табулист",
-                        "nameEn": "Tab List",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     },
                     {
-                        "name": "Кроссхейр",
-                        "nameEn": "Crosshair",
+                        "name": "test1",
+                        "nameEn": "test1",
                         "enabled": true
                     }
                 ],
