@@ -1,434 +1,254 @@
-<!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<!doctype html>
+<html lang="ru" dir="ltr" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тест карточек донатеров - Aleph Studio</title>
-    <link rel="stylesheet" href="../assets/css/main.css">
-    <link rel="stylesheet" href="../assets/css/support/donate.css">
-    <style>
-        body {
-            padding: 120px 20px 60px;
-            background: #080606;
-            color: #e8dada;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .test-section {
-            max-width: 1200px;
-            margin: 0 auto 80px;
-        }
-        .test-section h2 {
-            font-family: 'Unbounded', sans-serif;
-            font-size: 32px;
-            font-weight: 200;
-            margin-bottom: 40px;
-            margin-top: 80px;
-            color: #e8dada;
-            border-bottom: 1px solid rgba(139, 26, 42, 0.3);
-            padding-bottom: 20px;
-        }
-        .test-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 32px;
-            margin-bottom: 60px;
-        }
-        .tier-label {
-            grid-column: 1 / -1;
-            font-size: 14px;
-            color: rgba(139, 26, 42, 0.8);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-top: 40px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(139, 26, 42, 0.15);
-        }
-        .controls {
-            position: fixed;
-            top: 80px;
-            left: 20px;
-            z-index: 1000;
-            background: rgba(15, 11, 11, 0.95);
-            border: 1px solid rgba(139, 26, 42, 0.3);
-            padding: 20px;
-            backdrop-filter: blur(10px);
-        }
-        .controls button {
-            display: block;
-            width: 100%;
-            padding: 10px 16px;
-            margin: 8px 0;
-            background: rgba(139, 26, 42, 0.2);
-            border: 1px solid rgba(139, 26, 42, 0.4);
-            color: #e8dada;
-            font-family: 'JetBrains Mono', monospace;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .controls button:hover {
-            background: rgba(139, 26, 42, 0.4);
-            border-color: rgba(139, 26, 42, 0.6);
-        }
-        html[data-theme="light"] body {
-            background: #f5f0ee;
-            color: #2d1512;
-        }
-        html[data-theme="light"] .test-section h2 {
-            color: #2d1512;
-            border-bottom-color: rgba(139, 26, 42, 0.4);
-        }
-        html[data-theme="light"] .tier-label {
-            color: rgba(139, 26, 42, 1);
-            border-bottom-color: rgba(139, 26, 42, 0.25);
-        }
-        html[data-theme="light"] .controls {
-            background: rgba(245, 240, 238, 0.95);
-            border-color: rgba(139, 26, 42, 0.4);
-        }
-        html[data-theme="light"] .controls button {
-            background: rgba(139, 26, 42, 0.1);
-            border-color: rgba(139, 26, 42, 0.3);
-            color: #2d1512;
-        }
-        html[data-theme="light"] .controls button:hover {
-            background: rgba(139, 26, 42, 0.2);
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>Donor cards — visual test route</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark light">
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+<link rel="icon" href="../favicon.ico" sizes="48x48">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/support/donate.css?v=18">
+<style>
+    /* Test-route chrome only. Card visuals come 1:1 from donate.css +
+     * createSupportCard() — never restyle the cards here. */
+    .test-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 48px 24px 96px;
+    }
+    .test-head {
+        margin-bottom: 40px;
+    }
+    .test-head h1 {
+        font-family: 'Unbounded', sans-serif;
+        font-size: clamp(22px, 4vw, 36px);
+        font-weight: 200;
+        color: var(--text);
+        margin-bottom: 10px;
+    }
+    .test-head p {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        color: var(--text-dim);
+    }
+    .test-section-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin: 48px 0 8px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid var(--accent-border);
+    }
+    .test-section-note {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 20px;
+    }
+    .test-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 24px;
+        padding-top: 6px;
+    }
+    .test-grid--top {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .test-controls {
+        position: fixed;
+        top: 16px;
+        right: 16px;
+        z-index: 100;
+        display: flex;
+        gap: 8px;
+    }
+    .test-controls button {
+        padding: 10px 16px;
+        border: 1px solid var(--accent-border);
+        background: var(--surface);
+        color: var(--text);
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 11px;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background .18s ease, border-color .18s ease;
+    }
+    .test-controls button:hover {
+        background: var(--surface-h);
+        border-color: var(--accent);
+    }
+    @media (max-width: 760px) {
+        .test-grid--top { grid-template-columns: 1fr; }
+    }
+</style>
 </head>
 <body>
-    <div class="controls">
-        <button id="toggleThemeBtn">Тема: Dark</button>
+<div class="test-controls">
+    <button id="toggleThemeBtn" type="button">Тема</button>
+    <button id="toggleMotionBtn" type="button">FX: вкл</button>
+</div>
+
+<main class="test-page">
+    <div class="test-head">
+        <h1>Карточки донатеров — тестовый роут</h1>
+        <p>Все карточки рендерятся реальным генератором createSupportCard() из src/support/donate.js — дизайн всегда актуален.</p>
     </div>
+    <div id="testRoot"></div>
+</main>
 
-    <div class="test-section">
-        <h2>Стандартные карточки (Standard Tier)</h2>
-        <div class="tier-label">$2 - $99 • Без эффектов</div>
-        <div class="test-grid">
-            <div class="card-donor">
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">AV</div>
-                </div>
-                <div class="donor-name">Аватарка</div>
-                <div class="donor-badge">Premium</div>
-                <div class="donor-amount">$2</div>
-            </div>
+<script type="module">
+import { createSupportCard } from '../src/support/donate.js?v=20260606a';
 
-            <div class="card-donor">
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">KS</div>
-                </div>
-                <div class="donor-name">Короткое</div>
-                <div class="donor-badge">Premium</div>
-                <div class="donor-amount">$5</div>
-            </div>
+/* ── Fixtures: every tier, state and variant the generator supports ── */
+const SECTIONS = [
+    {
+        label: 'Standard · Premium ($2–$99)',
+        note: 'Без канвас-эффектов. Метка тира появляется от $10.',
+        top: false,
+        supporters: [
+            { id: 't-std-min', name: 'Минимум', amountUsd: 2 },
+            { id: 't-std-nomark', name: 'Без метки ($9)', amountUsd: 9 },
+            { id: 't-std-mark', name: 'С меткой ($10)', amountUsd: 10 },
+            { id: 't-std-long', name: 'Очень длинное имя пользователя для теста переполнения', amountUsd: 50 },
+            { id: 't-std-avatar', name: 'С аватаром', amountUsd: 99, avatarUrl: '../assets/icons/favicon-32.png' },
+        ],
+    },
+    {
+        label: 'Gold ($100–$249)',
+        note: 'Низкий уровень свечения, золотые слитки на канвасе.',
+        top: false,
+        supporters: [
+            { id: 't-gold-1', name: 'Gold Basic', amountUsd: 100 },
+            { id: 't-gold-2', name: 'Gold Mid', amountUsd: 150, avatarUrl: '../assets/icons/favicon-32.png' },
+            { id: 't-gold-3', name: 'Gold High', amountUsd: 220 },
+        ],
+    },
+    {
+        label: 'Royal Gold ($250–$499)',
+        note: 'Средний уровень свечения.',
+        top: false,
+        supporters: [
+            { id: 't-royal-1', name: 'Royal Entry', amountUsd: 250 },
+            { id: 't-royal-2', name: 'Royal Mid', amountUsd: 350, avatarUrl: '../assets/icons/favicon-32.png' },
+            { id: 't-royal-3', name: 'Royal High', amountUsd: 480 },
+        ],
+    },
+    {
+        label: 'Mythic Gold ($500–$999)',
+        note: 'Высокий уровень свечения, кольцо вокруг карточки, иконка auto_awesome.',
+        top: false,
+        supporters: [
+            { id: 't-myth-1', name: 'Mythic Entry', amountUsd: 500 },
+            { id: 't-myth-2', name: 'Mythic Mid', amountUsd: 750, avatarUrl: '../assets/icons/favicon-32.png' },
+            { id: 't-myth-3', name: 'Mythic Max', amountUsd: 999 },
+        ],
+    },
+    {
+        label: 'Platinum ($1000+)',
+        note: 'Платиновая палитра: звёзды, кометы, синее кольцо.',
+        top: false,
+        supporters: [
+            { id: 't-plat-1', name: 'Platinum Entry', amountUsd: 1000 },
+            { id: 't-plat-2', name: 'Platinum Mid', amountUsd: 2500, avatarUrl: '../assets/icons/favicon-32.png' },
+            { id: 't-plat-3', name: 'Platinum Max', amountUsd: 10000 },
+        ],
+    },
+    {
+        label: 'Топ-3 (gold-палитра)',
+        note: 'is-top + data-rank 1–3 — состояние секции «Общий топ 3».',
+        top: true,
+        supporters: [
+            { id: 't-top-1', name: 'Топ #1', amountUsd: 900, avatarUrl: '../assets/icons/favicon-32.png' },
+            { id: 't-top-2', name: 'Топ #2', amountUsd: 400 },
+            { id: 't-top-3', name: 'Топ #3', amountUsd: 150 },
+        ],
+    },
+    {
+        label: 'Топ-3 (platinum)',
+        note: 'Платиновые лидеры — is-top + is-platinum одновременно.',
+        top: true,
+        supporters: [
+            { id: 't-ptop-1', name: 'Plat Top #1', amountUsd: 10000 },
+            { id: 't-ptop-2', name: 'Plat Top #2', amountUsd: 7500, avatarUrl: '../assets/icons/favicon-32.png' },
+            { id: 't-ptop-3', name: 'Plat Top #3', amountUsd: 1000 },
+        ],
+    },
+    {
+        label: 'Без эффектов (effectsEnabled: false)',
+        note: 'Так рендерится дубль топ-донатера в общем списке.',
+        top: false,
+        effectsEnabled: false,
+        supporters: [
+            { id: 't-noeff-1', name: 'Gold без FX', amountUsd: 500 },
+            { id: 't-noeff-2', name: 'Platinum без FX', amountUsd: 2000 },
+        ],
+    },
+];
 
-            <div class="card-donor">
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">ДН</div>
-                </div>
-                <div class="donor-name">Нормальное имя</div>
-                <div class="donor-badge">Premium</div>
-                <div class="donor-amount">$25</div>
-            </div>
+let effectsEnabled = true;
 
-            <div class="card-donor">
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">ОД</div>
-                </div>
-                <div class="donor-name">Очень длинное имя пользователя</div>
-                <div class="donor-badge">Premium</div>
-                <div class="donor-amount">$50</div>
-            </div>
+function renderAll() {
+    const root = document.getElementById('testRoot');
+    root.textContent = '';
 
-            <div class="card-donor">
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=test1" alt="">
-                </div>
-                <div class="donor-name">С аватаркой</div>
-                <div class="donor-badge">Premium</div>
-                <div class="donor-amount">$99</div>
-            </div>
-        </div>
+    for (const section of SECTIONS) {
+        const label = document.createElement('div');
+        label.className = 'test-section-label';
+        label.textContent = section.label;
+        root.append(label);
 
-        <h2>Золотые карточки (Gold Tier)</h2>
-        <div class="tier-label">$100 - $249 • Низкий уровень эффектов</div>
-        <div class="test-grid">
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 0.3;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">G1</div>
-                </div>
-                <div class="donor-name">Gold Basic</div>
-                <div class="donor-badge">Gold</div>
-                <div class="donor-amount">$100</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
+        const note = document.createElement('p');
+        note.className = 'test-section-note';
+        note.textContent = section.note;
+        root.append(note);
 
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 0.5;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=gold1" alt="">
-                </div>
-                <div class="donor-name">Gold Mid</div>
-                <div class="donor-badge">Gold</div>
-                <div class="donor-amount">$150</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 0.8;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">GH</div>
-                </div>
-                <div class="donor-name">Gold High</div>
-                <div class="donor-badge">Gold</div>
-                <div class="donor-amount">$200</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-        </div>
-
-        <div class="tier-label">$250 - $499 • Средний уровень эффектов</div>
-        <div class="test-grid">
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 0.9;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">RG</div>
-                </div>
-                <div class="donor-name">Royal Gold</div>
-                <div class="donor-badge">Royal Gold</div>
-                <div class="donor-amount">$250</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 1.2;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=royal1" alt="">
-                </div>
-                <div class="donor-name">Royal Mid</div>
-                <div class="donor-badge">Royal Gold</div>
-                <div class="donor-amount">$350</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 1.5;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">RX</div>
-                </div>
-                <div class="donor-name">Royal Elite</div>
-                <div class="donor-badge">Royal Gold</div>
-                <div class="donor-amount">$450</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-        </div>
-
-        <div class="tier-label">$500 - $999 • Высокий уровень эффектов</div>
-        <div class="test-grid">
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 1.8;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">MG</div>
-                </div>
-                <div class="donor-name">Mythic Gold</div>
-                <div class="donor-badge">Mythic Gold</div>
-                <div class="donor-amount">$500</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 2.2;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=mythic1" alt="">
-                </div>
-                <div class="donor-name">Mythic Plus</div>
-                <div class="donor-badge">Mythic Gold</div>
-                <div class="donor-amount">$750</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor" style="--card-tier: gold; --card-glow: 2.8;">
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">MX</div>
-                </div>
-                <div class="donor-name">Mythic Elite</div>
-                <div class="donor-badge">Mythic Gold</div>
-                <div class="donor-amount">$900</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-        </div>
-
-        <h2>Платиновые карточки (Platinum Tier)</h2>
-        <div class="tier-label">$1000+ • Максимальные эффекты</div>
-        <div class="test-grid">
-            <div class="card-donor is-platinum" style="--card-tier: platinum; --card-glow: 3.0;">
-                <span class="tier-mark platinum">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default" style="background: rgba(120, 170, 255, 0.15); color: rgba(145, 190, 255, 1);">PL</div>
-                </div>
-                <div class="donor-name">Platinum Basic</div>
-                <div class="donor-badge">Platinum</div>
-                <div class="donor-amount">$1000</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor is-platinum" style="--card-tier: platinum; --card-glow: 4.0;">
-                <span class="tier-mark platinum">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=plat1" alt="">
-                </div>
-                <div class="donor-name">Platinum Mid</div>
-                <div class="donor-badge">Platinum</div>
-                <div class="donor-amount">$2500</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor is-platinum" style="--card-tier: platinum; --card-glow: 5.0;">
-                <span class="tier-mark platinum">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default" style="background: rgba(120, 170, 255, 0.2); color: rgba(200, 230, 255, 1);">PX</div>
-                </div>
-                <div class="donor-name">Platinum Elite</div>
-                <div class="donor-badge">Platinum</div>
-                <div class="donor-amount">$5000</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-        </div>
-
-        <h2>Топ-3 донатеры</h2>
-        <div class="tier-label">Особый стиль для лидеров</div>
-        <div class="test-grid">
-            <div class="card-donor is-top" data-rank="1" style="--card-tier: gold; --card-glow: 2.5;">
-                <div class="top-rank">1</div>
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=top1" alt="">
-                </div>
-                <div class="donor-name">Топ Донатер #1</div>
-                <div class="donor-badge">Mythic Gold</div>
-                <div class="donor-amount">$4850</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor is-top" data-rank="2" style="--card-tier: gold; --card-glow: 2.0;">
-                <div class="top-rank">2</div>
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default">T2</div>
-                </div>
-                <div class="donor-name">Топ Донатер #2</div>
-                <div class="donor-badge">Royal Gold</div>
-                <div class="donor-amount">$2340</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor is-top" data-rank="3" style="--card-tier: gold; --card-glow: 1.7;">
-                <div class="top-rank">3</div>
-                <span class="tier-mark">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=top3" alt="">
-                </div>
-                <div class="donor-name">Топ Донатер #3</div>
-                <div class="donor-badge">Gold</div>
-                <div class="donor-amount">$1890</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-        </div>
-
-        <h2>Топ-3 с платиной</h2>
-        <div class="tier-label">Платиновые лидеры</div>
-        <div class="test-grid">
-            <div class="card-donor is-top is-platinum" data-rank="1" style="--card-tier: platinum; --card-glow: 5.0;">
-                <div class="top-rank">1</div>
-                <span class="tier-mark platinum">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default" style="background: rgba(120, 170, 255, 0.25); color: rgba(200, 230, 255, 1);">P1</div>
-                </div>
-                <div class="donor-name">Platinum Top #1</div>
-                <div class="donor-badge">Platinum</div>
-                <div class="donor-amount">$10000</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor is-top is-platinum" data-rank="2" style="--card-tier: platinum; --card-glow: 4.5;">
-                <div class="top-rank">2</div>
-                <span class="tier-mark platinum">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=plattop2" alt="">
-                </div>
-                <div class="donor-name">Platinum Top #2</div>
-                <div class="donor-badge">Platinum</div>
-                <div class="donor-amount">$7500</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-
-            <div class="card-donor is-top is-platinum" data-rank="3" style="--card-tier: platinum; --card-glow: 4.0;">
-                <div class="top-rank">3</div>
-                <span class="tier-mark platinum">
-                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </span>
-                <div class="donor-avatar">
-                    <div class="donor-avatar-default" style="background: rgba(120, 170, 255, 0.2); color: rgba(145, 190, 255, 1);">P3</div>
-                </div>
-                <div class="donor-name">Platinum Top #3</div>
-                <div class="donor-badge">Platinum</div>
-                <div class="donor-amount">$5000</div>
-                <canvas class="fx-canvas"></canvas>
-            </div>
-        </div>
-
-        <h2>Пустое состояние</h2>
-        <div class="tier-label">Когда нет донатов</div>
-        <div class="empty-state">
-            Пока никто не поддержал проект. Когда появятся первые донаты, карточки донатеров покажутся здесь.
-        </div>
-    </div>
-
-    <script>
-        const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-        const html = document.documentElement;
-        
-        toggleThemeBtn.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            toggleThemeBtn.textContent = `Тема: ${newTheme === 'dark' ? 'Dark' : 'Light'}`;
+        const grid = document.createElement('div');
+        grid.className = section.top ? 'test-grid test-grid--top top-grid' : 'test-grid supporters-grid';
+        section.supporters.forEach((supporter, index) => {
+            grid.append(createSupportCard(supporter, {
+                rank: section.top ? index + 1 : 0,
+                top: Boolean(section.top),
+                locale: 'ru',
+                effectsEnabled: effectsEnabled && section.effectsEnabled !== false,
+            }));
         });
-    </script>
+        root.append(grid);
+    }
+
+    /* Empty state */
+    const emptyLabel = document.createElement('div');
+    emptyLabel.className = 'test-section-label';
+    emptyLabel.textContent = 'Пустое состояние';
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'Пока никто не поддержал проект. Когда появятся первые донаты, карточки покажутся здесь.';
+    root.append(emptyLabel, empty);
+}
+
+document.getElementById('toggleThemeBtn').addEventListener('click', () => {
+    const html = document.documentElement;
+    const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', next);
+    html.style.colorScheme = next;
+    try { localStorage.setItem('aleph-theme', next); } catch { /* private mode */ }
+});
+
+document.getElementById('toggleMotionBtn').addEventListener('click', (event) => {
+    effectsEnabled = !effectsEnabled;
+    event.currentTarget.textContent = effectsEnabled ? 'FX: вкл' : 'FX: выкл';
+    renderAll();
+});
+
+renderAll();
+</script>
 </body>
 </html>
