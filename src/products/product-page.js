@@ -168,6 +168,88 @@ function initGallery() {
     resetIdle();
 }
 
+// ── Media Gallery Rendering ─────────────────────────────────
+
+function getProductSlugFromPath() {
+    const match = window.location.pathname.match(/\/products\/([^/]+)\/?$/);
+    return match ? match[1] : null;
+}
+
+function renderProductGallery(siteData) {
+    const slug = getProductSlugFromPath();
+    if (!slug) return;
+
+    const product = siteData.products?.find(p => p.id === slug);
+    if (!product || !Array.isArray(product.media) || product.media.length === 0) {
+        return;
+    }
+
+    const galleryScroll = document.getElementById('galleryScroll');
+    const galleryDots = document.getElementById('galleryDots');
+    if (!galleryScroll) return;
+
+    galleryScroll.innerHTML = '';
+
+    let dotIndex = 0;
+    product.media.forEach((item) => {
+        const galleryItem = document.createElement('div');
+        galleryItem.className = 'gallery-item';
+        galleryItem.setAttribute('role', 'listitem');
+
+        if (item.type === 'video') {
+            galleryItem.classList.add('gallery-item--video');
+
+            if (item.url.includes('youtube.com') || item.url.includes('youtu.be')) {
+                const videoId = extractYouTubeId(item.url);
+                if (videoId) {
+                    galleryItem.innerHTML = `
+                        <iframe 
+                            src="https://www.youtube-nocookie.com/embed/${videoId}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen
+                            aria-label="Video trailer"
+                        ></iframe>
+                    `;
+                }
+            } else if (item.dataUrl) {
+                galleryItem.innerHTML = `
+                    <video 
+                        src="${item.dataUrl}" 
+                        controls 
+                        preload="metadata" 
+                        playsinline
+                        aria-label="Video trailer"
+                    ></video>
+                `;
+            }
+            dotIndex++;
+        } else if (item.type === 'image') {
+            const src = item.dataUrl || item.url;
+            galleryItem.innerHTML = `<img src="${src}" alt="${escapeHtml(item.alt || '')}" loading="lazy" decoding="async">`;
+            dotIndex++;
+        }
+
+        if (galleryItem.innerHTML) {
+            galleryScroll.appendChild(galleryItem);
+        }
+    });
+
+    if (galleryDots && dotIndex > 0) {
+        galleryDots.innerHTML = '';
+        for (let i = 0; i < dotIndex; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+            galleryDots.appendChild(dot);
+        }
+    }
+}
+
+function extractYouTubeId(url) {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/);
+    return match ? match[1] : null;
+}
+
 // ── Boot ────────────────────────────────────────────────────
 
 let booted = false;
@@ -190,6 +272,7 @@ function boot() {
 
     syncDonateLinks();
     renderFooterSocials(siteData);
+    renderProductGallery(siteData);
     initShareDock();
     initGallery();
 

@@ -116,6 +116,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastSavedNoStorage: 'Изменения применены, но localStorage недоступен в этом браузере.',
         toastLocalCleared: 'Локальный черновик очищен. В этом браузере снова активна встроенная версия сайта.',
         toastLocalClearFailed: 'Не удалось очистить localStorage в этом браузере.',
+        toastLocalQuotaExceeded: 'Изменения применены в памяти, но не сохранены в localStorage: превышена квота или хранилище недоступно. При перезагрузке страницы изменения будут потеряны.',
         statusCardTitle: 'Статус черновика',
         statusCardSub: 'Синхронизация, публикация и очередь загрузок',
         syncpubCardTitle: 'Публикация и синхронизация',
@@ -335,6 +336,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastSavedNoStorage: 'Changes were applied but localStorage is unavailable in this browser.',
         toastLocalCleared: 'Local draft cleared. The embedded site version is active again in this browser.',
         toastLocalClearFailed: 'Could not clear localStorage in this browser.',
+        toastLocalQuotaExceeded: 'Changes were applied in memory but not saved to localStorage: quota exceeded or storage unavailable. Changes will be lost on page reload.',
         statusCardTitle: 'Draft status',
         statusCardSub: 'Sync, publication and upload queue',
         syncpubCardTitle: 'Publication & sync',
@@ -554,6 +556,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastSavedNoStorage: 'Зміни застосовані, але localStorage недоступний у цьому браузері.',
         toastLocalCleared: 'Локальну чернетку очищено. У цьому браузері знову активна вбудована версія сайту.',
         toastLocalClearFailed: 'Не вдалося очистити localStorage у цьому браузері.',
+        toastLocalQuotaExceeded: 'Зміни застосовані в пам\'яті, але не збережені в localStorage: перевищено квоту або сховище недоступне. При перезавантаженні сторінки зміни будуть втрачені.',
         statusCardTitle: 'Статус чернетки',
         statusCardSub: 'Синхронізація, публікація та черга завантажень',
         syncpubCardTitle: 'Публікація та синхронізація',
@@ -1630,20 +1633,38 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
     }
 
-    async function initializeData() {
+    function initializeData() {
         const localData = loadLocalData();
         const merged = mergeDefaultProducts(localData);
-        /* If new default products were merged in, persist them immediately so
-         * the public site (which reads localStorage directly) also sees them. */
+        const initialized = normalizeData(merged || DEFAULT_SITE_DATA);
+        
         if (merged && localData && merged.products.length !== (localData.products || []).length) {
-            try { storageSet(LOCAL_DATA_KEY, JSON.stringify(normalizeData(merged))); } catch { /* quota */ }
+            if (!saveToLocalStorage(merged)) {
+                console.warn('Failed to persist merged data to localStorage');
+            }
         }
-        savedSiteData = normalizeData(merged || DEFAULT_SITE_DATA);
-        siteData = deepClone(savedSiteData);
-        editorData = deepClone(savedSiteData);
+        
+        applyDataToState(initialized);
+        _draftEditingArmed = true;
+    }
+
+    function saveToLocalStorage(data) {
+        try {
+            const normalized = normalizeData(data);
+            const stored = storageSet(LOCAL_DATA_KEY, JSON.stringify(normalized));
+            return Boolean(stored);
+        } catch {
+            return false;
+        }
+    }
+
+    function applyDataToState(data) {
+        const normalized = normalizeData(data);
+        savedSiteData = deepClone(normalized);
+        siteData = deepClone(normalized);
+        editorData = deepClone(normalized);
         renderSite(siteData);
         syncDraftControls();
-        _draftEditingArmed = true;
     }
 
     function applyEditorDataToPreview() {
@@ -1652,17 +1673,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderSite(siteData);
         syncDraftControls();
         return normalized;
-    }
-
-    function persistEditorData(normalizedData) {
-        const normalized = normalizeData(normalizedData);
-        savedSiteData = deepClone(normalized);
-        siteData = deepClone(normalized);
-        editorData = deepClone(normalized);
-        const stored = storageSet(LOCAL_DATA_KEY, JSON.stringify(normalized));
-        renderSite(siteData);
-        syncDraftControls();
-        return stored;
     }
 
     function getPendingProductUpload(productId) {
@@ -1681,11 +1691,25 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const normalized = normalizeData(data);
         normalized.products = normalized.products.map((product) => {
             const upload = getPendingProductUpload(product.id);
-            if (!isProductUsingPendingUpload(product, upload)) return product;
-            return {
-                ...product,
-                downloadUrl: upload.previousDownloadUrl || '',
-            };
+            const next = isProductUsingPendingUpload(product, upload)
+                ? { ...product, downloadUrl: upload.previousDownloadUrl || '' }
+                : product;
+            const pendingHref = upload ? getPendingUploadHref(upload) : '';
+            if (Array.isArray(next.media) && next.media.length) {
+                const mediaPrefix = `${product.id}::media::`;
+                next.media = next.media.map((item) => {
+                    if (!item || typeof item !== 'object') return item;
+                    const key = item.uploadKey || '';
+                    if (typeof key === 'string' && key.startsWith(mediaPrefix) && pendingProductUploads.has(key)) {
+                        return { ...item, url: item.previousUrl || '' };
+                    }
+                    if (item.url && item.url === pendingHref) {
+                        return { ...item, url: '' };
+                    }
+                    return item;
+                });
+            }
+            return next;
         });
         return normalized;
     }
@@ -2209,10 +2233,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const webpBlob = await convertImageToWebP(file);
         const webpFileName = file.name.replace(/\.(png|jpg|jpeg)$/i, '.webp');
         const safeFileName = sanitizeFileSegment(webpFileName, 'media-image');
-        const uploadKey = `media_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
         const product = editorData.products[editorSelectedIndex];
         const relativePath = `assets/media/${product.id}/${safeFileName}`;
+        const uploadKey = `${product.id}::media::${relativePath}`;
 
         const dataUrl = await new Promise((resolve) => {
             const reader = new FileReader();
@@ -2236,9 +2260,11 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
 
         pendingProductUploads.set(uploadKey, {
-            blob: webpBlob,
-            type: 'image',
-            path: relativePath
+            file: webpBlob,
+            relativePath,
+            originalName: webpFileName,
+            isManualPath: false,
+            previousDownloadUrl: '',
         });
 
         syncDraftControls();
@@ -2947,8 +2973,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function resetEditorDraftToSaved() {
         pendingProductUploads.clear();
-        siteData = deepClone(savedSiteData);
         editorData = deepClone(savedSiteData);
+        siteData = deepClone(savedSiteData);
         editorSelectedIndex = -1;
         teamSelectedIndex = -1;
         editorActiveTab = 'tab-main';
@@ -3189,7 +3215,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const parsed = JSON.parse(text);
         const normalized = normalizeData(parsed);
         pendingProductUploads.clear();
-        editorData = normalized;
+        applyDataToState(normalized);
         editorSelectedIndex = -1;
         teamSelectedIndex = -1;
         editorActiveTab = 'tab-main';
@@ -3211,7 +3237,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function saveEditorDataLocally() {
         const normalized = applyEditorDataToPreview();
         const localSafeData = stripPendingUploadLinks(normalized);
-        const stored = persistEditorData(localSafeData);
+        const stored = saveToLocalStorage(localSafeData);
+        if (!stored) emitToast(msg('toastLocalQuotaExceeded'), 'warning');
+        applyDataToState(localSafeData);
         renderProductUploadMeta();
         return { normalized: localSafeData, stored };
     }
@@ -3269,23 +3297,19 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (saveGithubBtnEl) saveGithubBtnEl.disabled = true;
         commitAllEditorState();
 
-        // Always persist the latest edits locally *before* the GitHub push so the
-        // user's work survives reload if the remote publish fails (bad token,
-        // wrong branch, offline, etc.). Pending file uploads are stripped from
-        // the local snapshot — those download URLs would point to files that
-        // only exist after a successful remote commit.
         const previewNormalized = applyEditorDataToPreview();
-        const localSafeData = stripPendingUploadLinks(previewNormalized);
-        persistEditorData(localSafeData);
-        // After persistEditorData, editorData was replaced with localSafeData
-        // (without pending upload hrefs). Restore pending upload hrefs on the
-        // *editor* copy so the GitHub push still records `./<relativePath>`
-        // download URLs alongside the file blobs.
-        editorData = deepClone(previewNormalized);
+        
+        if (!saveToLocalStorage(previewNormalized)) {
+            emitToast(msg('toastLocalQuotaExceeded'), 'warning');
+        }
 
         try {
             const savedData = await saveToGitHub(previewNormalized);
-            persistEditorData(savedData);
+            if (!saveToLocalStorage(savedData)) {
+                emitToast(msg('toastLocalQuotaExceeded'), 'warning');
+            }
+            applyDataToState(savedData);
+            
             const githubTokenEl = document.getElementById('githubToken');
             if (githubTokenEl) githubTokenEl.value = '';
             refreshAdminAfterSave();
