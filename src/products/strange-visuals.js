@@ -323,7 +323,14 @@ function renderProductName(target, title) {
   target.textContent = '';
 
   if (segments.length < 2) {
-    target.textContent = nextTitle;
+    /* Single-word titles (e.g. "ALauncher") highlight the first letter
+     * with the site accent colour — mirrors the static HTML markup
+     * `<em class="accent-letter">A</em>Launcher` so the JS re-render
+     * never strips the accent. */
+    const accentLetter = document.createElement('em');
+    accentLetter.className = 'accent-letter';
+    accentLetter.textContent = nextTitle[0];
+    target.append(accentLetter, document.createTextNode(nextTitle.slice(1)));
     return;
   }
 

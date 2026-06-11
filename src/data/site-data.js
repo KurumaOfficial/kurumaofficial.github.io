@@ -271,7 +271,7 @@ export const DEFAULT_SITE_DATA = {
         },
         {
             "id": "aleph-launcher",
-            "title": "Aleph Launcher",
+            "title": "ALauncher",
             "version": "0.1.0",
             "tag": "active",
             "flag": "alpha",
