@@ -2902,3 +2902,56 @@ html[data-theme-switching="true"] .locale-option__code {
 .dash-media-yt-link:hover::after {
   background: rgba(255, 0, 0, 0.85);
 }
+
+/* ==========================================================================
+   Floating Clear Local Button
+   ========================================================================== */
+
+.dash-float-clear-local {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: var(--z-index-modal, 9999);
+  
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  
+  background: var(--color-danger, #dc3545);
+  color: white;
+  
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  
+  transition: all 0.2s ease;
+  
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dash-float-clear-local:hover {
+  background: var(--color-danger-hover, #c82333);
+  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.6);
+  transform: translateY(-2px);
+}
+
+.dash-float-clear-local:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+}
+
+.dash-float-clear-local:focus {
+  outline: 2px solid var(--color-danger, #dc3545);
+  outline-offset: 2px;
+}
+
+/* Icon inside button */
+.dash-float-clear-local::before {
+  content: "🗑";
+  font-size: 16px;
+}
