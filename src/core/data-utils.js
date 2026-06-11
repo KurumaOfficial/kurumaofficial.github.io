@@ -368,6 +368,20 @@ export function normalizeProduct(raw = {}, index = 0) {
             .filter(Boolean);
     }
 
+    const rawMedia = Array.isArray(raw.media) ? raw.media : [];
+    const normalizedMedia = rawMedia.map(item => {
+        if (typeof item !== 'object' || item === null) return null;
+        const mediaType = item.type === 'video' ? 'video' : 'image';
+        return {
+            type: mediaType,
+            url: cleanText(item.url, ''),
+            dataUrl: cleanText(item.dataUrl, ''),
+            alt: cleanText(item.alt, ''),
+            fileName: cleanText(item.fileName, ''),
+            uploadKey: cleanText(item.uploadKey, ''),
+        };
+    }).filter(Boolean);
+
     return {
         id,
         title,
@@ -388,7 +402,7 @@ export function normalizeProduct(raw = {}, index = 0) {
         note: cleanText(raw.note, ''),
         autoRouteRedirect: Boolean(raw.autoRouteRedirect),
         routeModules: normalizeRouteModules(raw.routeModules),
-        media: Array.isArray(raw.media) ? raw.media : [],
+        media: normalizedMedia,
     };
 }
 
