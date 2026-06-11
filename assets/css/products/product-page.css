@@ -243,7 +243,10 @@ body {
 }
 .hero-app-name em { font-style: italic; color: var(--accent); }
 /* ALauncher: accent letter, no italic */
-.hero-app-name em.accent-letter { font-style: normal; }
+.hero-app-name em.accent-letter {
+  font-style: normal;
+  color: var(--color-ruby);
+}
 
 .hero-dev {
     display: inline-flex; align-items: center; gap: 8px;
