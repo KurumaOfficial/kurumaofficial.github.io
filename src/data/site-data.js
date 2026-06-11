@@ -11,7 +11,7 @@ export const DEFAULT_SITE_DATA = {
         {
             "id": "strange-visuals",
             "title": "Strange Visuals",
-            "version": "1.5.1",
+            "version": "1.6.0",
             "tag": "active",
             "flag": "release",
             "status": "active",
@@ -27,11 +27,11 @@ export const DEFAULT_SITE_DATA = {
                 "Готово — можно запускать."
             ],
             "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
-            "downloadUrl": "./assets/files/strange-visuals.jar",
+            "downloadUrl": "./assets/files/strange-visuals-1.6.0.jar",
             "downloadName": "",
             "detailUrl": "products/strange-visuals/",
             "note": "Файл мода доступен по кнопке ниже.",
-            "autoRouteRedirect": true,
+            "autoRouteRedirect": false,
             "routeModules": {
                 "player": [
                     {
@@ -246,7 +246,14 @@ export const DEFAULT_SITE_DATA = {
             "detailUrl": "products/aleph-launcher/",
             "note": "Лаунчер находится в разработке.",
             "autoRouteRedirect": false,
-            "routeModules": {}
+            "routeModules": {
+                "player": [],
+                "world": [],
+                "utils": [],
+                "other": [],
+                "interface": [],
+                "themes": []
+            }
         },
         {
             "id": "aleph-trust",
@@ -267,55 +274,6 @@ export const DEFAULT_SITE_DATA = {
             "detailUrl": "products/aleph-trust/",
             "note": "Ранний концепт. Подробности появятся позже.",
             "autoRouteRedirect": false,
-            "routeModules": {}
-        },
-        {
-            "id": "next-release",
-            "title": "Неизвестно",
-            "version": "0.0.0",
-            "tag": "frozen",
-            "flag": "",
-            "status": "frozen",
-            "featured": true,
-            "featuredOrder": 4,
-            "sortOrder": 4,
-            "tone": "red",
-            "summary": "Этот слот зарезервирован под следующий публичный релиз Aleph Studio.",
-            "instructions": [],
-            "sourceUrl": "",
-            "downloadUrl": "",
-            "downloadName": "",
-            "detailUrl": "",
-            "note": "Подробности появятся позже.",
-            "autoRouteRedirect": false,
-            "routeModules": {
-                "player": [],
-                "world": [],
-                "utils": [],
-                "other": [],
-                "interface": [],
-                "themes": []
-            }
-        },
-        {
-            "id": "third-project",
-            "title": "Неизвестно",
-            "version": "x",
-            "tag": "abandoned",
-            "flag": "",
-            "status": "abandoned",
-            "featured": true,
-            "featuredOrder": 5,
-            "sortOrder": 5,
-            "tone": "red",
-            "summary": "Этот слот зарезервирован под следующий публичный релиз Aleph Studio.",
-            "instructions": [],
-            "sourceUrl": "",
-            "downloadUrl": "",
-            "downloadName": "",
-            "detailUrl": "",
-            "note": "Подробности появятся позже.",
-            "autoRouteRedirect": false,
             "routeModules": {
                 "player": [],
                 "world": [],
@@ -332,7 +290,7 @@ export const DEFAULT_SITE_DATA = {
             "name": "Kuruma",
             "role": "Основатель",
             "avatarUrl": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcm45aXN6cnFnY2toMzc3dHFucml2czYwa3licHd4OHBpd2JkazBxMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12swa4UfSd6Viw/giphy.gif",
-            "description": "Формирует направление студии, отвечает за ключевые решения и общий вектор развития проекта.",
+            "description": "молодец",
             "sortOrder": 1
         },
         {
@@ -348,15 +306,15 @@ export const DEFAULT_SITE_DATA = {
             "name": "GARAKIL",
             "role": "Разработчик",
             "avatarUrl": "",
-            "description": "Держит проект в порядке, понимает общую картину и закрывает самые сложные задачи. Техлид.",
+            "description": "просто есть",
             "sortOrder": 3
         },
         {
-            "id": "team-member-04",
-            "name": "El LetRak",
-            "role": "Мл. Разработчик",
-            "avatarUrl": "",
-            "description": "Помогает с багами, поддержкой и мелкими правками. Следит за проблемами, разбирает ошибки.",
+            "id": "team-member-1781008791243-1",
+            "name": "FiyZzy",
+            "role": "Персонал",
+            "avatarUrl": "https://media.discordapp.net/attachments/1350004590120009738/1513885502636425247/image.png?ex=6a295b3e&is=6a2809be&hm=0723360668557b8d339ff64ac79b8a3f22bb6f3568a1f1cf0e59c30160bdd7ae&=&format=webp&quality=lossless&width=218&height=315",
+            "description": "Всегда в сети",
             "sortOrder": 4
         }
     ],
