@@ -116,6 +116,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastSavedNoStorage: 'Изменения применены, но localStorage недоступен в этом браузере.',
         toastLocalCleared: 'Локальный черновик очищен. В этом браузере снова активна встроенная версия сайта.',
         toastLocalClearFailed: 'Не удалось очистить localStorage в этом браузере.',
+        toastLocalQuotaExceeded: 'Изменения применены в памяти, но не сохранены в localStorage: превышена квота или хранилище недоступно. При перезагрузке страницы изменения будут потеряны.',
         statusCardTitle: 'Статус черновика',
         statusCardSub: 'Синхронизация, публикация и очередь загрузок',
         syncpubCardTitle: 'Публикация и синхронизация',
@@ -335,6 +336,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastSavedNoStorage: 'Changes were applied but localStorage is unavailable in this browser.',
         toastLocalCleared: 'Local draft cleared. The embedded site version is active again in this browser.',
         toastLocalClearFailed: 'Could not clear localStorage in this browser.',
+        toastLocalQuotaExceeded: 'Changes were applied in memory but not saved to localStorage: quota exceeded or storage unavailable. Changes will be lost on page reload.',
         statusCardTitle: 'Draft status',
         statusCardSub: 'Sync, publication and upload queue',
         syncpubCardTitle: 'Publication & sync',
@@ -554,6 +556,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastSavedNoStorage: 'Зміни застосовані, але localStorage недоступний у цьому браузері.',
         toastLocalCleared: 'Локальну чернетку очищено. У цьому браузері знову активна вбудована версія сайту.',
         toastLocalClearFailed: 'Не вдалося очистити localStorage у цьому браузері.',
+        toastLocalQuotaExceeded: 'Зміни застосовані в пам\'яті, але не збережені в localStorage: перевищено квоту або сховище недоступне. При перезавантаженні сторінки зміни будуть втрачені.',
         statusCardTitle: 'Статус чернетки',
         statusCardSub: 'Синхронізація, публікація та черга завантажень',
         syncpubCardTitle: 'Публікація та синхронізація',
@@ -1630,20 +1633,38 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
     }
 
-    async function initializeData() {
+    function initializeData() {
         const localData = loadLocalData();
         const merged = mergeDefaultProducts(localData);
-        /* If new default products were merged in, persist them immediately so
-         * the public site (which reads localStorage directly) also sees them. */
+        const initialized = normalizeData(merged || DEFAULT_SITE_DATA);
+        
         if (merged && localData && merged.products.length !== (localData.products || []).length) {
-            try { storageSet(LOCAL_DATA_KEY, JSON.stringify(normalizeData(merged))); } catch { /* quota */ }
+            if (!saveToLocalStorage(merged)) {
+                console.warn('Failed to persist merged data to localStorage');
+            }
         }
-        savedSiteData = normalizeData(merged || DEFAULT_SITE_DATA);
-        siteData = deepClone(savedSiteData);
-        editorData = deepClone(savedSiteData);
+        
+        applyDataToState(initialized);
+        _draftEditingArmed = true;
+    }
+
+    function saveToLocalStorage(data) {
+        try {
+            const normalized = normalizeData(data);
+            const stored = storageSet(LOCAL_DATA_KEY, JSON.stringify(normalized));
+            return Boolean(stored);
+        } catch {
+            return false;
+        }
+    }
+
+    function applyDataToState(data) {
+        const normalized = normalizeData(data);
+        savedSiteData = deepClone(normalized);
+        siteData = deepClone(normalized);
+        editorData = deepClone(normalized);
         renderSite(siteData);
         syncDraftControls();
-        _draftEditingArmed = true;
     }
 
     function applyEditorDataToPreview() {
@@ -1652,17 +1673,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderSite(siteData);
         syncDraftControls();
         return normalized;
-    }
-
-    function persistEditorData(normalizedData) {
-        const normalized = normalizeData(normalizedData);
-        savedSiteData = deepClone(normalized);
-        siteData = deepClone(normalized);
-        editorData = deepClone(normalized);
-        const stored = storageSet(LOCAL_DATA_KEY, JSON.stringify(normalized));
-        renderSite(siteData);
-        syncDraftControls();
-        return stored;
     }
 
     function getPendingProductUpload(productId) {
@@ -1681,11 +1691,25 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const normalized = normalizeData(data);
         normalized.products = normalized.products.map((product) => {
             const upload = getPendingProductUpload(product.id);
-            if (!isProductUsingPendingUpload(product, upload)) return product;
-            return {
-                ...product,
-                downloadUrl: upload.previousDownloadUrl || '',
-            };
+            const next = isProductUsingPendingUpload(product, upload)
+                ? { ...product, downloadUrl: upload.previousDownloadUrl || '' }
+                : product;
+            const pendingHref = upload ? getPendingUploadHref(upload) : '';
+            if (Array.isArray(next.media) && next.media.length) {
+                const mediaPrefix = `${product.id}::media::`;
+                next.media = next.media.map((item) => {
+                    if (!item || typeof item !== 'object') return item;
+                    const key = item.uploadKey || '';
+                    if (typeof key === 'string' && key.startsWith(mediaPrefix) && pendingProductUploads.has(key)) {
+                        return { ...item, url: item.previousUrl || '' };
+                    }
+                    if (item.url && item.url === pendingHref) {
+                        return { ...item, url: '' };
+                    }
+                    return item;
+                });
+            }
+            return next;
         });
         return normalized;
     }
@@ -1988,38 +2012,96 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         return product.media;
     }
 
+    function extractYouTubeId(url) {
+        if (!url) return null;
+        const match = url.match(
+            /(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
+        );
+        return match ? match[1] : null;
+    }
+
+    function getYouTubeEmbedUrl(url) {
+        const id = extractYouTubeId(url);
+        return id ? `https://www.youtube-nocookie.com/embed/${id}` : '';
+    }
+
+    function isDirectVideoUrl(url) {
+        if (!url) return false;
+        return /\.(mp4|webm|ogg|ogv)(\?|$)/i.test(url);
+    }
+
     function renderMediaGallery() {
         if (!mediaGalleryListEl) return;
+
         const media = getSelectedProductMedia();
         if (!media) {
-            mediaGalleryListEl.innerHTML = '<p class="dash-help">Выберите продукт для загрузки медиа.</p>';
+            mediaGalleryListEl.innerHTML = '';
             return;
         }
 
-        const images = media.filter(item => item.type === 'image');
-        if (!images.length) {
-            mediaGalleryListEl.innerHTML = '<p class="dash-help">Изображения не загружены. Загрузите первое изображение выше.</p>';
+        if (!media.length) {
+            mediaGalleryListEl.innerHTML = '<p class="dash-media-empty">Добавьте изображения или видео</p>';
             return;
         }
 
-        mediaGalleryListEl.innerHTML = images.map((item, index) => `
-            <div class="dash-media-item" draggable="true" data-media-index="${index}" data-media-type="image">
-                <img src="${escapeHtml(item.url)}" alt="${escapeHtml(item.alt || '')}" loading="lazy">
-                <div class="dash-media-item-actions">
-                    <button type="button" class="dash-btn-icon" data-media-delete="${index}" title="Удалить">
-                        <span class="material-icons">delete</span>
-                    </button>
-                    <button type="button" class="dash-btn-icon" data-media-edit-alt="${index}" title="Изменить описание">
-                        <span class="material-icons">edit</span>
-                    </button>
-                </div>
-                <div class="dash-media-item-handle" title="Перетащите для изменения порядка">
-                    <span class="material-icons">drag_indicator</span>
-                </div>
-            </div>
-        `).join('');
+        const galleryHtml = media.map((item, index) => {
+            const handleClass = 'dash-media-handle';
+            if (item.type === 'image') {
+                const src = item.dataUrl || item.url || '';
+                return `
+                    <div class="dash-media-item" data-media-index="${index}" draggable="true">
+                        <div class="dash-media-thumb">
+                            <img src="${src}" alt="${item.alt || ''}" loading="lazy" decoding="async">
+                        </div>
+                        <div class="dash-media-actions">
+                            <button type="button" class="dash-media-edit-alt" data-media-edit-alt="${index}" aria-label="Редактировать alt текст">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button type="button" class="dash-media-delete" data-media-delete="${index}" aria-label="Удалить">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </div>
+                        <div class="${handleClass}">
+                            <span class="material-icons">drag_indicator</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const ytId = extractYouTubeId(item.url);
+                let videoSrc = item.url || '';
+                if (item.dataUrl && !ytId) {
+                    videoSrc = item.dataUrl;
+                }
+                const previewHtml = ytId ?
+                    `<iframe src="https://www.youtube-nocookie.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` :
+                    `<video src="${videoSrc}" controls preload="metadata" playsinline></video>`;
+                return `
+                    <div class="dash-media-item" data-media-index="${index}" draggable="true">
+                        <div class="dash-media-thumb">
+                            ${previewHtml}
+                        </div>
+                        <div class="dash-media-actions">
+                            <button type="button" class="dash-media-delete" data-media-delete="${index}" aria-label="Удалить">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </div>
+                        <div class="${handleClass}">
+                            <span class="material-icons">drag_indicator</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }).join('');
 
-        setupMediaDragDrop();
+        mediaGalleryListEl.innerHTML = galleryHtml;
+    }
+
+    function renderVideoElement(url) {
+        const ytId = extractYouTubeId(url);
+        if (ytId) {
+            return `<iframe src="https://www.youtube-nocookie.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+        }
+        return `<video src="${url}" controls preload="metadata" playsinline></video>`;
     }
 
     function renderMediaVideo() {
@@ -2036,60 +2118,103 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             return;
         }
 
-        mediaVideoListEl.innerHTML = videos.map((item, index) => `
-            <div class="dash-media-video-item" data-video-index="${index}">
-                <video src="${escapeHtml(item.url)}" controls preload="metadata" style="max-width:100%;height:auto;"></video>
-                <div class="dash-media-video-actions">
-                    <button type="button" class="dash-btn dash-sm dash-danger" data-video-delete="${index}">
-                        <span class="material-icons">delete</span>
-                        Удалить видео
-                    </button>
+        mediaVideoListEl.innerHTML = videos.map((item, index) => {
+            const src = item.dataUrl || item.url;
+            return `
+                <div class="dash-media-video-item" data-video-index="${index}">
+                    <div class="dash-media-video-wrapper">
+                        ${renderVideoElement(src)}
+                    </div>
+                    <div class="dash-media-video-actions">
+                        <button type="button" class="dash-btn dash-sm dash-danger" data-video-delete="${index}">
+                            <span class="material-icons">delete</span>
+                            Удалить видео
+                        </button>
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
     }
 
     function setupMediaDragDrop() {
         if (!mediaGalleryListEl) return;
         let draggedIndex = -1;
 
-        mediaGalleryListEl.querySelectorAll('[data-media-index]').forEach(el => {
-            el.addEventListener('dragstart', (e) => {
-                draggedIndex = Number(el.dataset.mediaIndex);
-                el.classList.add('dragging');
-            });
+        mediaGalleryListEl.addEventListener('dragstart', (e) => {
+            const item = e.target.closest('[data-media-index]');
+            if (!item) return;
+            draggedIndex = Number(item.dataset.mediaIndex);
+            item.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
 
-            el.addEventListener('dragend', () => {
-                el.classList.remove('dragging');
-                mediaGalleryListEl.querySelectorAll('.drag-over').forEach(e => e.classList.remove('drag-over'));
-            });
+        mediaGalleryListEl.addEventListener('dragend', (e) => {
+            const item = e.target.closest('[data-media-index]');
+            if (item) item.classList.remove('dragging');
+            mediaGalleryListEl.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+            draggedIndex = -1;
+        });
 
-            el.addEventListener('dragover', (e) => {
+        mediaGalleryListEl.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const item = e.target.closest('[data-media-index]');
+            if (!item) return;
+            e.dataTransfer.dropEffect = 'move';
+            mediaGalleryListEl.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+            item.classList.add('drag-over');
+        });
+
+        mediaGalleryListEl.addEventListener('dragleave', (e) => {
+            const item = e.target.closest('[data-media-index]');
+            if (item && !item.contains(e.relatedTarget)) {
+                item.classList.remove('drag-over');
+            }
+        });
+
+        mediaGalleryListEl.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const targetItem = e.target.closest('[data-media-index]');
+            if (!targetItem) return;
+            const dropIndex = Number(targetItem.dataset.mediaIndex);
+            if (draggedIndex === dropIndex || draggedIndex < 0) return;
+
+            const media = getSelectedProductMedia();
+            if (!media) return;
+
+            const [moved] = media.splice(draggedIndex, 1);
+            media.splice(dropIndex, 0, moved);
+            syncDraftControls();
+            renderMediaGallery();
+        });
+    }
+
+    function setupMediaActionsDelegation() {
+        if (!mediaGalleryListEl) return;
+
+        mediaGalleryListEl.addEventListener('click', (e) => {
+            const deleteBtn = e.target.closest('[data-media-delete]');
+            if (deleteBtn) {
                 e.preventDefault();
-                mediaGalleryListEl.querySelectorAll('.drag-over').forEach(e => e.classList.remove('drag-over'));
-                el.classList.add('drag-over');
-            });
-
-            el.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const dropIndex = Number(el.dataset.mediaIndex);
-                if (draggedIndex === dropIndex || draggedIndex < 0) return;
-
+                e.stopPropagation();
+                const index = Number(deleteBtn.dataset.mediaDelete);
                 const media = getSelectedProductMedia();
-                if (!media) return;
+                if (!media || !media[index]) return;
+                const item = media[index];
+                if (item.type === 'image') {
+                    deleteMediaImage(index);
+                } else {
+                    deleteMediaVideo(index);
+                }
+                return;
+            }
 
-                const images = media.filter(item => item.type === 'image');
-                const [moved] = images.splice(draggedIndex, 1);
-                images.splice(dropIndex, 0, moved);
-
-                // Update media array with reordered images
-                const videos = media.filter(item => item.type === 'video');
-                const product = editorData.products[editorSelectedIndex];
-                product.media = [...images, ...videos];
-
-                syncDraftControls();
-                renderMediaGallery();
-            });
+            const editBtn = e.target.closest('[data-media-edit-alt]');
+            if (editBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const index = Number(editBtn.dataset.mediaEditAlt);
+                editMediaAlt(index);
+            }
         });
     }
 
@@ -2105,34 +2230,46 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             return;
         }
 
-        // Convert to WebP
-        const processedFile = await convertImageToWebP(file);
-        
-        // Create upload entry
+        const webpBlob = await convertImageToWebP(file);
+        const webpFileName = file.name.replace(/\.(png|jpg|jpeg)$/i, '.webp');
+        const safeFileName = sanitizeFileSegment(webpFileName, 'media-image');
+
         const product = editorData.products[editorSelectedIndex];
-        const safeFileName = sanitizeFileSegment(processedFile.name, 'media-image');
         const relativePath = `assets/media/${product.id}/${safeFileName}`;
         const uploadKey = `${product.id}::media::${relativePath}`;
-        
-        pendingProductUploads.set(uploadKey, {
-            file: processedFile,
-            originalName: processedFile.name,
-            relativePath,
-            isManualPath: false,
-            previousDownloadUrl: ''
+
+        const dataUrl = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(webpBlob);
         });
 
-        // Add to media array
+        if (!dataUrl) {
+            emitToast('Ошибка чтения файла', 'error');
+            return;
+        }
+
         media.push({
             type: 'image',
             url: `./${relativePath}`,
+            dataUrl: dataUrl,
+            fileName: webpFileName,
             alt: '',
-            uploadKey
+            uploadKey: uploadKey
+        });
+
+        pendingProductUploads.set(uploadKey, {
+            file: webpBlob,
+            relativePath,
+            originalName: webpFileName,
+            isManualPath: false,
+            previousDownloadUrl: '',
         });
 
         syncDraftControls();
         renderMediaGallery();
-        emitToast('Изображение добавлено в очередь загрузки', 'success');
+        emitToast(`Изображение добавлено: ${webpFileName}`, 'success');
     }
 
     async function addMediaVideo(file) {
@@ -2199,21 +2336,12 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function deleteMediaImage(index) {
         const media = getSelectedProductMedia();
-        if (!media) return;
-
-        const images = media.filter(item => item.type === 'image');
-        const imageToDelete = images[index];
-        
-        if (imageToDelete && imageToDelete.uploadKey) {
-            pendingProductUploads.delete(imageToDelete.uploadKey);
+        if (!media || index < 0 || index >= media.length) return;
+        const item = media[index];
+        if (item && item.uploadKey) {
+            pendingProductUploads.delete(item.uploadKey);
         }
-
-        // Remove from media array
-        const allMediaIndex = media.findIndex(item => item === imageToDelete);
-        if (allMediaIndex >= 0) {
-            media.splice(allMediaIndex, 1);
-        }
-
+        media.splice(index, 1);
         syncDraftControls();
         renderMediaGallery();
         emitToast('Изображение удалено', 'info');
@@ -2221,33 +2349,23 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function deleteMediaVideo(index) {
         const media = getSelectedProductMedia();
-        if (!media) return;
-
-        const videos = media.filter(item => item.type === 'video');
-        const videoToDelete = videos[index];
-        
-        if (videoToDelete && videoToDelete.uploadKey) {
-            pendingProductUploads.delete(videoToDelete.uploadKey);
+        if (!media || index < 0 || index >= media.length) return;
+        const item = media[index];
+        if (item && item.uploadKey) {
+            pendingProductUploads.delete(item.uploadKey);
         }
-
-        const allMediaIndex = media.findIndex(item => item === videoToDelete);
-        if (allMediaIndex >= 0) {
-            media.splice(allMediaIndex, 1);
-        }
-
+        media.splice(index, 1);
         syncDraftControls();
         renderMediaVideo();
+        renderMediaGallery();
         emitToast('Видео удалено', 'info');
     }
 
     function editMediaAlt(index) {
         const media = getSelectedProductMedia();
-        if (!media) return;
-
-        const images = media.filter(item => item.type === 'image');
-        const image = images[index];
+        if (!media || index < 0 || index >= media.length) return;
+        const image = media[index];
         if (!image) return;
-
         const newAlt = window.prompt('Введите описание изображения (alt-текст):', image.alt || '');
         if (newAlt !== null) {
             image.alt = newAlt.trim();
@@ -2855,8 +2973,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
     function resetEditorDraftToSaved() {
         pendingProductUploads.clear();
-        siteData = deepClone(savedSiteData);
         editorData = deepClone(savedSiteData);
+        siteData = deepClone(savedSiteData);
         editorSelectedIndex = -1;
         teamSelectedIndex = -1;
         editorActiveTab = 'tab-main';
@@ -3097,7 +3215,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const parsed = JSON.parse(text);
         const normalized = normalizeData(parsed);
         pendingProductUploads.clear();
-        editorData = normalized;
+        applyDataToState(normalized);
         editorSelectedIndex = -1;
         teamSelectedIndex = -1;
         editorActiveTab = 'tab-main';
@@ -3119,7 +3237,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function saveEditorDataLocally() {
         const normalized = applyEditorDataToPreview();
         const localSafeData = stripPendingUploadLinks(normalized);
-        const stored = persistEditorData(localSafeData);
+        const stored = saveToLocalStorage(localSafeData);
+        if (!stored) emitToast(msg('toastLocalQuotaExceeded'), 'warning');
+        applyDataToState(localSafeData);
         renderProductUploadMeta();
         return { normalized: localSafeData, stored };
     }
@@ -3177,23 +3297,19 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         if (saveGithubBtnEl) saveGithubBtnEl.disabled = true;
         commitAllEditorState();
 
-        // Always persist the latest edits locally *before* the GitHub push so the
-        // user's work survives reload if the remote publish fails (bad token,
-        // wrong branch, offline, etc.). Pending file uploads are stripped from
-        // the local snapshot — those download URLs would point to files that
-        // only exist after a successful remote commit.
         const previewNormalized = applyEditorDataToPreview();
-        const localSafeData = stripPendingUploadLinks(previewNormalized);
-        persistEditorData(localSafeData);
-        // After persistEditorData, editorData was replaced with localSafeData
-        // (without pending upload hrefs). Restore pending upload hrefs on the
-        // *editor* copy so the GitHub push still records `./<relativePath>`
-        // download URLs alongside the file blobs.
-        editorData = deepClone(previewNormalized);
+        
+        if (!saveToLocalStorage(previewNormalized)) {
+            emitToast(msg('toastLocalQuotaExceeded'), 'warning');
+        }
 
         try {
             const savedData = await saveToGitHub(previewNormalized);
-            persistEditorData(savedData);
+            if (!saveToLocalStorage(savedData)) {
+                emitToast(msg('toastLocalQuotaExceeded'), 'warning');
+            }
+            applyDataToState(savedData);
+            
             const githubTokenEl = document.getElementById('githubToken');
             if (githubTokenEl) githubTokenEl.value = '';
             refreshAdminAfterSave();
@@ -3209,6 +3325,18 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             if (saveGithubBtnEl) saveGithubBtnEl.disabled = false;
         }
     }
+
+    const clearLocalBtnEl = document.getElementById('clearLocalBtn');
+    clearLocalBtnEl?.addEventListener('click', () => {
+        if (!window.confirm(msg('confirmClearLocal'))) return;
+        try {
+            localStorage.clear();
+            emitToast(msg('toastLocalCleared'), 'success');
+            setTimeout(() => window.location.reload(), 500);
+        } catch (error) {
+            emitToast(msg('toastLocalClearFailed'), 'error');
+        }
+    });
 
     document.addEventListener('click', (event) => {
         const closeTrigger = event.target instanceof Element
@@ -3318,39 +3446,6 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             addMediaVideoUrl(url);
         }
     });
-
-    // Media gallery click handlers
-    if (mediaGalleryListEl) {
-        mediaGalleryListEl.addEventListener('click', (e) => {
-            const target = e.target instanceof Element ? e.target.closest('[data-media-delete], [data-media-edit-alt]') : null;
-            if (!target) return;
-
-            if (target.hasAttribute('data-media-delete')) {
-                const index = Number(target.getAttribute('data-media-delete'));
-                if (window.confirm('Удалить это изображение?')) {
-                    deleteMediaImage(index);
-                }
-            } else if (target.hasAttribute('data-media-edit-alt')) {
-                const index = Number(target.getAttribute('data-media-edit-alt'));
-                editMediaAlt(index);
-            }
-        });
-    }
-
-    // Video list click handlers
-    if (mediaVideoListEl) {
-        mediaVideoListEl.addEventListener('click', (e) => {
-            const target = e.target instanceof Element ? e.target.closest('[data-video-delete]') : null;
-            if (!target) return;
-
-            if (target.hasAttribute('data-video-delete')) {
-                const index = Number(target.getAttribute('data-video-delete'));
-                if (window.confirm('Удалить это видео?')) {
-                    deleteMediaVideo(index);
-                }
-            }
-        });
-    }
 
     exportJsonBtnEl?.addEventListener('click', () => {
         commitAllEditorState();
@@ -3627,6 +3722,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         renderTeamGrid();
         renderAdminView();
         renderProductUploadMeta();
+        setupMediaDragDrop();
+        setupMediaActionsDelegation();
         syncDraftControls();
         if (isStandaloneAdminPage) openEditor();
     }

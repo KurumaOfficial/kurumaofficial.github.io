@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; connect-src 'self' https://api.github.com https://abacus.jasoncameron.dev; base-uri 'self'; form-action 'self'; object-src 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://cdn.discordapp.com https://media.discordapp.net https://*.giphy.com https://i.pinimg.com; media-src 'self' data:; connect-src 'self' https://api.github.com https://abacus.jasoncameron.dev; frame-src https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://youtube-nocookie.com; base-uri 'self'; form-action 'self'; object-src 'none';">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=()">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Aleph Trust — Плагин для Minecraft-серверов</title>
@@ -194,18 +194,38 @@
       <p>Есть предложения? Пишите нам на <a id="supportDiscordLink" href="https://discord.gg/3YxB2R6eqQ" target="_blank" rel="noopener noreferrer">Discord</a>.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2L4 7v5c0 5 3.5 9.7 8 11 4.5-1.3 8-6 8-11V7l-8-5z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>Защита данных</h3>
-      <p>Aleph Trust обеспечивает безопасное хранение данных игроков и защиту от несанкционированного доступа.</p>
+      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      <h3>Защита сервера</h3>
+      <p>Aleph Trust обеспечивает надёжную защиту от читеров и гриферов. Автоматическое обнаружение подозрительной активности.</p>
     </div>
     <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="12" cy="5" r="1.5" fill="currentColor"/><circle cx="12" cy="19" r="1.5" fill="currentColor"/><circle cx="5" cy="12" r="1.5" fill="currentColor"/><circle cx="19" cy="12" r="1.5" fill="currentColor"/></svg></span></div>
+      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
       <h3>Гибкая настройка</h3>
-      <p>Плагин позволяет настроить правила и ограничения под нужды конкретного сервера.</p>
+      <p>Полный контроль над конфигурацией плагина. Настраивайте правила, лимиты и параметры под потребности вашего сервера.</p>
     </div>
   </div>
 </div>
 </main>
+<footer class="site-footer">
+    <div class="site-footer__main">
+        <div class="site-footer__left">
+            <a class="site-footer__logo" href="../../../ru/">
+                <span class="site-footer__sq" aria-hidden="true"></span>
+                <span class="site-footer__name">Aleph Studio</span>
+            </a>
+            <span class="site-footer__divider" aria-hidden="true"></span>
+            <span class="site-footer__tagline">Дочерний проект WeTTeA</span>
+        </div>
+        <nav class="site-footer__nav" aria-label="Подвал — навигация">
+            <a href="../../../ru/products/">Продукты</a>
+            <a href="../../../ru/donate/">Поддержать</a>
+        </nav>
+        <div class="site-footer__socials" aria-label="Социальные сети"></div>
+    </div>
+    <div class="site-footer__bottom">
+        <span class="site-footer__copy">© 2026. Все права защищены.</span>
+    </div>
+</footer>
 <script type="module" src="../../../src/products/strange-visuals.js?v=20260606b"></script>
 </body>
 </html>
