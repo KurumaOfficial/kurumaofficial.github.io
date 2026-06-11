@@ -3326,6 +3326,18 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
     }
 
+    const clearLocalBtnEl = document.getElementById('clearLocalBtn');
+    clearLocalBtnEl?.addEventListener('click', () => {
+        if (!window.confirm(msg('confirmClearLocal'))) return;
+        try {
+            localStorage.clear();
+            emitToast(msg('toastLocalCleared'), 'success');
+            setTimeout(() => window.location.reload(), 500);
+        } catch (error) {
+            emitToast(msg('toastLocalClearFailed'), 'error');
+        }
+    });
+
     document.addEventListener('click', (event) => {
         const closeTrigger = event.target instanceof Element
             ? event.target.closest('[data-close-editor]')

@@ -212,10 +212,11 @@ function renderProductGallery(siteData) {
                         ></iframe>
                     `;
                 }
-            } else if (item.dataUrl) {
+            } else if (item.dataUrl || item.url) {
+                const videoSrc = item.dataUrl || item.url;
                 galleryItem.innerHTML = `
                     <video 
-                        src="${item.dataUrl}" 
+                        src="${videoSrc}" 
                         controls 
                         preload="metadata" 
                         playsinline
