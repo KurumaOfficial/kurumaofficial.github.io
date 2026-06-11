@@ -213,7 +213,6 @@ export function createLocaleController() {
         ['footerTagline',    'footer.tagline'],
         ['footerDonateLink', 'footer.donate'],
         ['footerCopyright',  'footer.copyright'],
-        ['footerLicense',    'footer.license'],
     ];
 
     /** @type {ReadonlyArray<[string, string]>} */

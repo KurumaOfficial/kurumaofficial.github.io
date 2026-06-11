@@ -104,8 +104,7 @@ export const MESSAGES = Object.freeze({
             navAria: 'Подвал — навигация',
             socialsAria: 'Социальные сети',
             donate: 'Поддержать',
-            copyright: '© 2026 Aleph Studio · Дочерний проект WeTTeA',
-            license: 'Лицензия GPL · Open Source',
+            copyright: '© 2026. Все права защищены.',
         },
     },
 
@@ -208,8 +207,7 @@ export const MESSAGES = Object.freeze({
             navAria: 'Footer — navigation',
             socialsAria: 'Social links',
             donate: 'Support',
-            copyright: '© 2026 Aleph Studio · A subsidiary of WeTTeA',
-            license: 'GPL Licensed · Open Source',
+            copyright: '© 2026. All rights reserved.',
         },
     },
 
@@ -312,8 +310,7 @@ export const MESSAGES = Object.freeze({
             navAria: 'Підвал — навігація',
             socialsAria: 'Соціальні мережі',
             donate: 'Підтримати',
-            copyright: '© 2026 Aleph Studio · Дочірній проєкт WeTTeA',
-            license: 'Ліцензія GPL · Open Source',
+            copyright: '© 2026. Усі права захищено.',
         },
     },
 });

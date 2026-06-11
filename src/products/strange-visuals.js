@@ -1,7 +1,8 @@
 import { initReveal } from '../components/reveal.js';
 import { createLocaleController } from '../i18n/controller.js';
 import { resolveRouteRelativePath } from '../i18n/config.js';
-import { escapeHtml } from '../core/dom.js';
+import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
+import { cleanUrl, escapeHtml } from '../core/dom.js';
 import { getIconMarkup, setInlineIcon } from '../core/icons.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { getRouteModuleDisplayName } from '../core/data-utils.js';
@@ -631,6 +632,21 @@ function syncDonateLinks(elements) {
   });
 }
 
+/** Populate the shared site footer social icons (no-op on pages without a footer). */
+function renderFooterSocials(siteData) {
+  const target = document.getElementById('footerSocialLinks');
+  if (!(target instanceof HTMLElement)) return;
+
+  target.innerHTML = SOCIAL_PLATFORMS.map(({ key, label }) => {
+    const href = cleanUrl(siteData.socials?.[key] || '');
+    const icon = SOCIAL_ICON_SVG[key] || '';
+    if (!href) {
+      return `<a class="social-link" aria-disabled="true" tabindex="-1" aria-label="${escapeHtml(label)}">${icon}</a>`;
+    }
+    return `<a class="social-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(label)}">${icon}</a>`;
+  }).join('');
+}
+
 function startDownloadThenRedirect(downloadHref, redirectHref, downloadName = '') {
   if (!downloadHref) {
     navigateWithRouteTransition(redirectHref);
@@ -1066,6 +1082,7 @@ function boot() {
   bindRouteProductMeta(elements, routeProduct, localeController.locale);
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
+  renderFooterSocials(siteData);
   renderGuiPreview(elements, previewContexts, previewState);
 
   new MutationObserver((mutations) => {
