@@ -188,16 +188,47 @@ function buildPublishCommitMessage(uploadCount) {
 function applyPendingUploadsToData(data, uploads) {
     const normalized = normalizeData(data);
     const files = [];
+    const resolvedMediaUrls = new Map();
 
     for (const product of normalized.products) {
-        const upload = uploads.get(product.id);
-        if (!upload) continue;
+        const downloadUpload = uploads.get(product.id);
+        if (downloadUpload) {
+            const repoPath = buildRepoAssetPath(downloadUpload.relativePath);
+            product.downloadUrl = `./${repoPath}`;
+            files.push({
+                path: repoPath,
+                file: downloadUpload.file,
+            });
+        }
 
-        const repoPath = buildRepoAssetPath(upload.relativePath);
-        product.downloadUrl = `./${upload.relativePath}`;
-        files.push({
-            path: repoPath,
-            file: upload.file,
+        for (const [key, upload] of uploads.entries()) {
+            if (typeof key !== 'string' || !key.startsWith(`${product.id}::media::`)) continue;
+            const repoPath = buildRepoAssetPath(upload.relativePath || upload.path);
+            const file = upload.file || upload.blob;
+            if (repoPath && file) {
+                files.push({ path: repoPath, file });
+                resolvedMediaUrls.set(key, `./${repoPath}`);
+            }
+        }
+    }
+
+    for (const product of normalized.products) {
+        if (!Array.isArray(product.media)) continue;
+        product.media = product.media.map((item) => {
+            if (!item || typeof item !== 'object') return item;
+            const uploadKey = item.uploadKey;
+            if (uploadKey && resolvedMediaUrls.has(uploadKey)) {
+                return {
+                    ...item,
+                    type: item.type || 'image',
+                    url: resolvedMediaUrls.get(uploadKey),
+                    dataUrl: '',
+                };
+            }
+            if (item.dataUrl && item.url && /^\.\/assets\/media\//i.test(item.url)) {
+                return { ...item, dataUrl: '' };
+            }
+            return item;
         });
     }
 
