@@ -388,6 +388,7 @@ export function normalizeProduct(raw = {}, index = 0) {
         note: cleanText(raw.note, ''),
         autoRouteRedirect: Boolean(raw.autoRouteRedirect),
         routeModules: normalizeRouteModules(raw.routeModules),
+        media: Array.isArray(raw.media) ? raw.media : [],
     };
 }
 
