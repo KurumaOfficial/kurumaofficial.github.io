@@ -107,6 +107,8 @@ const ADMIN_MESSAGES = Object.freeze({
         toastFileTooLarge: 'Сервис публикации не принимает файлы больше 100 MB.',
         toastFileQueued: 'Файл добавлен в очередь публикации.',
         toastFileRemoved: 'Файл убран из очереди публикации.',
+        toastMediaReadFailed: 'Не удалось прочитать файл.',
+        toastMediaUrlRequired: 'Введите ссылку на видео.',
         toastGithubSaved: 'Сохранено для всех. Данные и файлы отправлены в удалённое хранилище, сайт обновится после публикации.',
         toastGithubFailed: 'Не удалось сохранить глобально.',
         githubTokenRequired: 'Для публикации нужен пароль.',
@@ -327,6 +329,8 @@ const ADMIN_MESSAGES = Object.freeze({
         toastFileTooLarge: 'The publishing service does not accept files larger than 100 MB.',
         toastFileQueued: 'File added to the publish queue.',
         toastFileRemoved: 'File removed from the publish queue.',
+        toastMediaReadFailed: 'Could not read the file.',
+        toastMediaUrlRequired: 'Enter a video link.',
         toastGithubSaved: 'Saved for everyone. Content and files were pushed to remote storage.',
         toastGithubFailed: 'Could not save globally.',
         githubTokenRequired: 'A password is required to publish.',
@@ -547,6 +551,8 @@ const ADMIN_MESSAGES = Object.freeze({
         toastFileTooLarge: 'Сервіс публікації не приймає файли більше 100 MB.',
         toastFileQueued: 'Файл додано до черги публікації.',
         toastFileRemoved: 'Файл прибрано з черги публікації.',
+        toastMediaReadFailed: 'Не вдалося прочитати файл.',
+        toastMediaUrlRequired: 'Введіть посилання на відео.',
         toastGithubSaved: 'Збережено для всіх. Дані та файли відправлено до віддаленого сховища.',
         toastGithubFailed: 'Не вдалося зберегти глобально.',
         githubTokenRequired: 'Для публікації потрібен пароль.',
@@ -1502,7 +1508,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function getActiveProductsCount() {
         const products = Array.isArray(editorData?.products) ? editorData.products : [];
         return products.filter((p) => {
-            const lc = String(p?.lifecycle || 'active').toLowerCase();
+            /* Lifecycle is stored in `status` (with `tag` as the legacy field) —
+             * there is no `lifecycle` property on normalized products. */
+            const lc = String(p?.status || p?.tag || 'active').toLowerCase();
             return lc !== 'frozen' && lc !== 'abandoned';
         }).length;
     }
@@ -2040,7 +2048,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
 
         if (!media.length) {
-            mediaGalleryListEl.innerHTML = '<p class="dash-media-empty">Добавьте изображения или видео</p>';
+            mediaGalleryListEl.innerHTML = `<p class="dash-media-empty">${escapeHtml(msg('mediaNoImages'))}</p>`;
             return;
         }
 
@@ -2051,7 +2059,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 return `
                     <div class="dash-media-item" data-media-index="${index}" draggable="true">
                         <div class="dash-media-thumb">
-                            <img src="${src}" alt="${item.alt || ''}" loading="lazy" decoding="async">
+                            <img src="${escapeHtml(src)}" alt="${escapeHtml(item.alt || '')}" loading="lazy" decoding="async">
                         </div>
                         <div class="dash-media-actions">
                             <button type="button" class="dash-media-edit-alt" data-media-edit-alt="${index}" aria-label="Редактировать alt текст">
@@ -2073,8 +2081,8 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                     videoSrc = item.dataUrl;
                 }
                 const previewHtml = ytId ?
-                    `<iframe src="https://www.youtube-nocookie.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` :
-                    `<video src="${videoSrc}" controls preload="metadata" playsinline></video>`;
+                    `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` :
+                    `<video src="${escapeHtml(videoSrc)}" controls preload="metadata" playsinline></video>`;
                 return `
                     <div class="dash-media-item" data-media-index="${index}" draggable="true">
                         <div class="dash-media-thumb">
@@ -2099,36 +2107,40 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     function renderVideoElement(url) {
         const ytId = extractYouTubeId(url);
         if (ytId) {
-            return `<iframe src="https://www.youtube-nocookie.com/embed/${ytId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            return `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         }
-        return `<video src="${url}" controls preload="metadata" playsinline></video>`;
+        return `<video src="${escapeHtml(url)}" controls preload="metadata" playsinline></video>`;
     }
 
     function renderMediaVideo() {
         if (!mediaVideoListEl) return;
         const media = getSelectedProductMedia();
         if (!media) {
-            mediaVideoListEl.innerHTML = '<p class="dash-help">Выберите продукт для загрузки медиа.</p>';
+            mediaVideoListEl.innerHTML = `<p class="dash-help">${escapeHtml(msg('selectProduct'))}</p>`;
             return;
         }
 
-        const videos = media.filter(item => item.type === 'video');
+        /* Keep the *real* media[] index on every row — the list is filtered
+         * to videos only, so a positional index would delete wrong items. */
+        const videos = media
+            .map((item, mediaIndex) => ({ item, mediaIndex }))
+            .filter(({ item }) => item.type === 'video');
         if (!videos.length) {
-            mediaVideoListEl.innerHTML = '<p class="dash-help">Видео не загружены.</p>';
+            mediaVideoListEl.innerHTML = `<p class="dash-help">${escapeHtml(msg('mediaNoVideos'))}</p>`;
             return;
         }
 
-        mediaVideoListEl.innerHTML = videos.map((item, index) => {
+        mediaVideoListEl.innerHTML = videos.map(({ item, mediaIndex }) => {
             const src = item.dataUrl || item.url;
             return `
-                <div class="dash-media-video-item" data-video-index="${index}">
+                <div class="dash-media-video-item" data-video-index="${mediaIndex}">
                     <div class="dash-media-video-wrapper">
                         ${renderVideoElement(src)}
                     </div>
                     <div class="dash-media-video-actions">
-                        <button type="button" class="dash-btn dash-sm dash-danger" data-video-delete="${index}">
+                        <button type="button" class="dash-btn dash-sm dash-danger" data-video-delete="${mediaIndex}">
                             <span class="material-icons">delete</span>
-                            Удалить видео
+                            <span data-admin-i18n="editorDeleteBtn">${escapeHtml(msg('editorDeleteBtn'))}</span>
                         </button>
                     </div>
                 </div>
@@ -2189,6 +2201,14 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     }
 
     function setupMediaActionsDelegation() {
+        /* Video rows live in their own list and carry the real media[] index. */
+        mediaVideoListEl?.addEventListener('click', (e) => {
+            const deleteBtn = e.target instanceof Element ? e.target.closest('[data-video-delete]') : null;
+            if (!deleteBtn) return;
+            e.preventDefault();
+            deleteMediaVideo(Number(deleteBtn.getAttribute('data-video-delete')));
+        });
+
         if (!mediaGalleryListEl) return;
 
         mediaGalleryListEl.addEventListener('click', (e) => {
@@ -2221,7 +2241,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
     async function addMediaImage(file) {
         const media = getSelectedProductMedia();
         if (!media) {
-            emitToast('Сначала выберите продукт', 'error');
+            emitToast(msg('promptSelectFirst'), 'error');
             return;
         }
 
@@ -2246,7 +2266,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         });
 
         if (!dataUrl) {
-            emitToast('Ошибка чтения файла', 'error');
+            emitToast(msg('toastMediaReadFailed'), 'error');
             return;
         }
 
@@ -2269,13 +2289,13 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         syncDraftControls();
         renderMediaGallery();
-        emitToast(`Изображение добавлено: ${webpFileName}`, 'success');
+        emitToast(msg('toastFileQueued'), 'success');
     }
 
     async function addMediaVideo(file) {
         const media = getSelectedProductMedia();
         if (!media) {
-            emitToast('Сначала выберите продукт', 'error');
+            emitToast(msg('promptSelectFirst'), 'error');
             return;
         }
 
@@ -2305,19 +2325,20 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         syncDraftControls();
         renderMediaVideo();
-        emitToast('Видео добавлено в очередь загрузки', 'success');
+        renderMediaGallery();
+        emitToast(msg('toastFileQueued'), 'success');
     }
 
     function addMediaVideoUrl(url) {
         const media = getSelectedProductMedia();
         if (!media) {
-            emitToast('Сначала выберите продукт', 'error');
+            emitToast(msg('promptSelectFirst'), 'error');
             return;
         }
 
         const trimmedUrl = url.trim();
         if (!trimmedUrl) {
-            emitToast('Введите ссылку на видео', 'error');
+            emitToast(msg('toastMediaUrlRequired'), 'error');
             return;
         }
 
@@ -2329,8 +2350,9 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
 
         syncDraftControls();
         renderMediaVideo();
-        emitToast('Видео добавлено', 'success');
-        
+        renderMediaGallery();
+        emitToast(msg('toastFileQueued'), 'success');
+
         if (mediaVideoUrlInputEl) mediaVideoUrlInputEl.value = '';
     }
 
@@ -2343,8 +2365,11 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
         media.splice(index, 1);
         syncDraftControls();
+        /* Both lists index into the same media[] array — re-render both so
+         * stored indexes never go stale after a removal. */
         renderMediaGallery();
-        emitToast('Изображение удалено', 'info');
+        renderMediaVideo();
+        emitToast(msg('toastFileRemoved'), 'info');
     }
 
     function deleteMediaVideo(index) {
@@ -2358,7 +2383,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         syncDraftControls();
         renderMediaVideo();
         renderMediaGallery();
-        emitToast('Видео удалено', 'info');
+        emitToast(msg('toastFileRemoved'), 'info');
     }
 
     function editMediaAlt(index) {
