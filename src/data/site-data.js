@@ -228,6 +228,14 @@ export const DEFAULT_SITE_DATA = {
             },
             "media": [
                 {
+                    "type": "video",
+                    "url": "https://www.youtube.com/watch?v=OvoJATIyCj4",
+                    "dataUrl": "",
+                    "alt": "",
+                    "fileName": "",
+                    "uploadKey": ""
+                },
+                {
                     "type": "image",
                     "url": "./assets/media/strange-visuals/1.webp",
                     "dataUrl": "",
@@ -258,14 +266,6 @@ export const DEFAULT_SITE_DATA = {
                     "alt": "",
                     "fileName": "4.webp",
                     "uploadKey": "strange-visuals::media::assets/media/strange-visuals/4.webp"
-                },
-                {
-                    "type": "video",
-                    "url": "https://www.youtube.com/watch?v=OvoJATIyCj4",
-                    "dataUrl": "",
-                    "alt": "",
-                    "fileName": "",
-                    "uploadKey": ""
                 }
             ]
         },
@@ -357,7 +357,7 @@ export const DEFAULT_SITE_DATA = {
             "id": "team-member-1781008791243-1",
             "name": "FiyZzy",
             "role": "Персонал",
-            "avatarUrl": "https://media.discordapp.net/attachments/1350004590120009738/1513885502636425247/image.png?ex=6a295b3e&is=6a2809be&hm=0723360668557b8d339ff64ac79b8a3f22bb6f3568a1f1cf0e59c30160bdd7ae&=&format=webp&quality=lossless&width=218&height=315",
+            "avatarUrl": "https://media.discordapp.net/attachments/1350004590120009738/1513885502636425247/image.png?ex=6a2d4fbe&is=6a2bfe3e&hm=51a4da82edc5847f43439e2c47727aeed0dbc514c6104990946e90cc8e870d02&=&format=webp&quality=lossless&width=544&height=785",
             "description": "Всегда в сети",
             "sortOrder": 4
         }
