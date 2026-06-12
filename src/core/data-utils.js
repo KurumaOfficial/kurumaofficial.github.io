@@ -344,14 +344,27 @@ export function normalizeSupportPage(raw) {
  */
 
 /**
+ * Legacy default-content migrations. When a bundled product gets renamed,
+ * visitors' localStorage snapshots still carry the old default title and
+ * would override the new branding forever. Any stored title that exactly
+ * matches a legacy default is upgraded to the current one; genuinely
+ * custom titles (anything else) are left untouched.
+ * @type {Readonly<Record<string, Readonly<Record<string, string>>>>}
+ */
+const LEGACY_PRODUCT_TITLE_MIGRATIONS = Object.freeze({
+    'aleph-launcher': Object.freeze({ 'Aleph Launcher': 'ALauncher' }),
+});
+
+/**
  * Normalise a single product record.
  * @param {Record<string, unknown>} raw
  * @param {number} index
  * @returns {Product}
  */
 export function normalizeProduct(raw = {}, index = 0) {
-    const title = cleanText(raw.title, 'New product');
+    let title = cleanText(raw.title, 'New product');
     const id = slugify(raw.id, title);
+    title = LEGACY_PRODUCT_TITLE_MIGRATIONS[id]?.[title] || title;
     const rawTag = cleanText(raw.tag, `product ${String(index + 1).padStart(2, '0')}`);
     const rawStatus = cleanText(raw.status, 'active');
     const tagKey = getProductLifecycleKey(rawTag);
