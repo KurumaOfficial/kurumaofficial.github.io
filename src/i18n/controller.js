@@ -21,9 +21,10 @@ import {
 import { MESSAGES } from './messages.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
 
-const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/products/strange-visuals/after.webp';
-const DEFAULT_SOCIAL_IMAGE_WIDTH = '1919';
-const DEFAULT_SOCIAL_IMAGE_HEIGHT = '1054';
+const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/social/og-banner.png';
+const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/png';
+const DEFAULT_SOCIAL_IMAGE_WIDTH = '1200';
+const DEFAULT_SOCIAL_IMAGE_HEIGHT = '630';
 
 const OG_LOCALE_MAP = Object.freeze({
     ru: 'ru_RU',
@@ -168,7 +169,7 @@ export function createLocaleController() {
         ensureHeadMeta('siteOgUrl', 'og:url', 'property').content = canonicalHref;
         if (socialImageHref) {
             ensureHeadMeta('siteOgImage', 'og:image', 'property').content = socialImageHref;
-            ensureHeadMeta('siteOgImageType', 'og:image:type', 'property').content = 'image/webp';
+            ensureHeadMeta('siteOgImageType', 'og:image:type', 'property').content = DEFAULT_SOCIAL_IMAGE_TYPE;
             ensureHeadMeta('siteOgImageWidth', 'og:image:width', 'property').content = DEFAULT_SOCIAL_IMAGE_WIDTH;
             ensureHeadMeta('siteOgImageHeight', 'og:image:height', 'property').content = DEFAULT_SOCIAL_IMAGE_HEIGHT;
             ensureHeadMeta('siteOgImageAlt', 'og:image:alt', 'property').content = title;
