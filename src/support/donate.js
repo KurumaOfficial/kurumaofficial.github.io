@@ -1372,6 +1372,11 @@ function boot() {
     if (booted) return;
     booted = true;
 
+    /* This module is also imported by the /test preview route for its
+     * exported card factory — only the real donate page (which has the
+     * .donate-main container) should run the full boot sequence. */
+    if (!document.querySelector('.donate-main')) return;
+
     const localeController = createLocaleController();
     const locale = localeController.locale;
     const siteData = localizeSiteData(getEffectiveSiteData(), locale);
