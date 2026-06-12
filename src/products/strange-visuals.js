@@ -647,6 +647,116 @@ function renderFooterSocials(siteData) {
   }).join('');
 }
 
+/* ── Placeholder-gallery media rendering ─────────────────────────
+ * The /strange-visuals route ships its own static gallery markup and
+ * an inline slider script, so it is intentionally left alone. The
+ * launcher/trust-style pages ship *placeholder* gallery items
+ * (.gallery-video-placeholder / .gallery-stub) and no slider wiring —
+ * for those pages we render `product.media` from site-data (admin
+ * managed) and wire the prev/next/dots controls. */
+
+function extractGalleryYouTubeId(url) {
+  const match = String(url || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
+}
+
+function buildGalleryMediaItem(item) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'gallery-item';
+  wrapper.setAttribute('role', 'listitem');
+
+  if (item.type === 'video') {
+    wrapper.classList.add('gallery-item--video');
+    const ytId = extractGalleryYouTubeId(item.url);
+    if (ytId) {
+      const iframe = document.createElement('iframe');
+      iframe.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}`;
+      iframe.setAttribute('frameborder', '0');
+      iframe.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture');
+      iframe.setAttribute('allowfullscreen', '');
+      iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:0;';
+      wrapper.appendChild(iframe);
+      return wrapper;
+    }
+
+    const videoSrc = item.dataUrl || resolveRouteAsset(item.url);
+    if (!videoSrc) return null;
+    const video = document.createElement('video');
+    video.src = videoSrc;
+    video.controls = true;
+    video.preload = 'metadata';
+    video.setAttribute('playsinline', '');
+    video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000;';
+    wrapper.appendChild(video);
+    return wrapper;
+  }
+
+  const imageSrc = item.dataUrl || resolveRouteAsset(item.url);
+  if (!imageSrc) return null;
+  const img = document.createElement('img');
+  img.src = imageSrc;
+  img.alt = String(item.alt || '');
+  img.loading = 'lazy';
+  img.decoding = 'async';
+  wrapper.appendChild(img);
+  return wrapper;
+}
+
+function initPlaceholderGallerySlider(scroll, dots) {
+  const prev = document.getElementById('galleryPrev');
+  const next = document.getElementById('galleryNext');
+  const getDotEls = () => (dots ? Array.from(dots.querySelectorAll('.gallery-dot')) : []);
+  const total = () => scroll.children.length;
+
+  const currentIndex = () => Math.round(scroll.scrollLeft / Math.max(1, scroll.clientWidth));
+  const goTo = (index) => {
+    const count = total();
+    if (!count) return;
+    const i = ((index % count) + count) % count;
+    scroll.scrollTo({ left: i * scroll.clientWidth, behavior: 'smooth' });
+  };
+  const updateDots = () => {
+    const i = currentIndex();
+    getDotEls().forEach((dot, idx) => dot.classList.toggle('active', idx === i));
+  };
+
+  scroll.addEventListener('scroll', updateDots, { passive: true });
+  prev?.addEventListener('click', () => goTo(currentIndex() - 1));
+  next?.addEventListener('click', () => goTo(currentIndex() + 1));
+  updateDots();
+}
+
+function renderProductMediaGallery(routeProduct) {
+  const scroll = document.getElementById('galleryScroll');
+  const dots = document.getElementById('galleryDots');
+  if (!(scroll instanceof HTMLElement) || scroll.dataset.galleryMediaBound === '1') return;
+
+  /* Pages with real (non-placeholder) gallery markup manage themselves. */
+  const isPlaceholderGallery = Boolean(scroll.querySelector('.gallery-video-placeholder, .gallery-stub'));
+  if (!isPlaceholderGallery) return;
+  scroll.dataset.galleryMediaBound = '1';
+
+  const mediaItems = (Array.isArray(routeProduct?.media) ? routeProduct.media : [])
+    .map((item) => (item && typeof item === 'object' ? buildGalleryMediaItem(item) : null))
+    .filter(Boolean);
+
+  if (mediaItems.length) {
+    scroll.textContent = '';
+    mediaItems.forEach((node) => scroll.appendChild(node));
+
+    if (dots instanceof HTMLElement) {
+      dots.textContent = '';
+      mediaItems.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = `gallery-dot${index === 0 ? ' active' : ''}`;
+        dots.appendChild(dot);
+      });
+    }
+  }
+
+  initPlaceholderGallerySlider(scroll, dots);
+}
+
 function startDownloadThenRedirect(downloadHref, redirectHref, downloadName = '') {
   if (!downloadHref) {
     navigateWithRouteTransition(redirectHref);
@@ -1083,6 +1193,7 @@ function boot() {
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
   renderFooterSocials(siteData);
+  renderProductMediaGallery(routeProduct);
   renderGuiPreview(elements, previewContexts, previewState);
 
   new MutationObserver((mutations) => {
