@@ -647,13 +647,16 @@ function renderFooterSocials(siteData) {
   }).join('');
 }
 
-/* ── Placeholder-gallery media rendering ─────────────────────────
- * The /strange-visuals route ships its own static gallery markup and
- * an inline slider script, so it is intentionally left alone. The
- * launcher/trust-style pages ship *placeholder* gallery items
- * (.gallery-video-placeholder / .gallery-stub) and no slider wiring —
- * for those pages we render `product.media` from site-data (admin
- * managed) and wire the prev/next/dots controls. */
+/* ── Admin-managed gallery media rendering ───────────────────────
+ * When the route product carries a non-empty `media[]` (managed from
+ * the admin Media tab), it replaces the static gallery markup on every
+ * product page. Two flavours of static markup exist:
+ *   1. placeholder pages (launcher/trust) — ship .gallery-video-placeholder
+ *      / .gallery-stub items and NO slider wiring; we render media *and*
+ *      wire prev/next/dots ourselves;
+ *   2. strange-visuals — ships real content plus an inline slider script;
+ *      we only swap the slides + dots and let the inline slider (which
+ *      reads counts dynamically) keep driving navigation. */
 
 function extractGalleryYouTubeId(url) {
   const match = String(url || '').match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
@@ -702,7 +705,9 @@ function buildGalleryMediaItem(item) {
   return wrapper;
 }
 
-function initPlaceholderGallerySlider(scroll, dots) {
+const GALLERY_AUTO_ADVANCE_MS = 30000;
+
+function initGalleryMediaSlider(scroll, dots) {
   const prev = document.getElementById('galleryPrev');
   const next = document.getElementById('galleryNext');
   const getDotEls = () => (dots ? Array.from(dots.querySelectorAll('.gallery-dot')) : []);
@@ -720,41 +725,80 @@ function initPlaceholderGallerySlider(scroll, dots) {
     getDotEls().forEach((dot, idx) => dot.classList.toggle('active', idx === i));
   };
 
+  /* Idle auto-advance, mirroring the legacy inline slider behaviour:
+   * after 30s without interaction the gallery starts rotating slides. */
+  let autoTimer = 0;
+  let idleTimer = 0;
+  const startAuto = () => {
+    window.clearInterval(autoTimer);
+    autoTimer = window.setInterval(() => goTo(currentIndex() + 1), GALLERY_AUTO_ADVANCE_MS);
+  };
+  const resetIdle = () => {
+    window.clearTimeout(idleTimer);
+    window.clearInterval(autoTimer);
+    idleTimer = window.setTimeout(startAuto, GALLERY_AUTO_ADVANCE_MS);
+  };
+
   scroll.addEventListener('scroll', updateDots, { passive: true });
-  prev?.addEventListener('click', () => goTo(currentIndex() - 1));
-  next?.addEventListener('click', () => goTo(currentIndex() + 1));
+  ['mousedown', 'touchstart', 'keydown'].forEach((eventName) => {
+    scroll.addEventListener(eventName, resetIdle, { passive: true });
+  });
+  prev?.addEventListener('click', () => { goTo(currentIndex() - 1); resetIdle(); });
+  next?.addEventListener('click', () => { goTo(currentIndex() + 1); resetIdle(); });
   updateDots();
+  resetIdle();
+}
+
+/** Replace a node with a deep clone — strips every listener bound to it. */
+function cloneToDetachListeners(element) {
+  if (!(element instanceof HTMLElement)) return element;
+  const clone = /** @type {HTMLElement} */ (element.cloneNode(true));
+  element.replaceWith(clone);
+  return clone;
 }
 
 function renderProductMediaGallery(routeProduct) {
-  const scroll = document.getElementById('galleryScroll');
+  let scroll = document.getElementById('galleryScroll');
   const dots = document.getElementById('galleryDots');
   if (!(scroll instanceof HTMLElement) || scroll.dataset.galleryMediaBound === '1') return;
-
-  /* Pages with real (non-placeholder) gallery markup manage themselves. */
-  const isPlaceholderGallery = Boolean(scroll.querySelector('.gallery-video-placeholder, .gallery-stub'));
-  if (!isPlaceholderGallery) return;
   scroll.dataset.galleryMediaBound = '1';
+
+  const isPlaceholderGallery = Boolean(scroll.querySelector('.gallery-video-placeholder, .gallery-stub'));
 
   const mediaItems = (Array.isArray(routeProduct?.media) ? routeProduct.media : [])
     .map((item) => (item && typeof item === 'object' ? buildGalleryMediaItem(item) : null))
     .filter(Boolean);
 
-  if (mediaItems.length) {
-    scroll.textContent = '';
-    mediaItems.forEach((node) => scroll.appendChild(node));
-
-    if (dots instanceof HTMLElement) {
-      dots.textContent = '';
-      mediaItems.forEach((_, index) => {
-        const dot = document.createElement('div');
-        dot.className = `gallery-dot${index === 0 ? ' active' : ''}`;
-        dots.appendChild(dot);
-      });
-    }
+  if (!mediaItems.length) {
+    /* Nothing from the admin — static markup stays as-is. Placeholder
+     * pages still need navigation wired (they ship none of their own). */
+    if (isPlaceholderGallery) initGalleryMediaSlider(scroll, dots);
+    return;
   }
 
-  initPlaceholderGallerySlider(scroll, dots);
+  if (!isPlaceholderGallery) {
+    /* Static galleries (strange-visuals) wire an inline slider at parse
+     * time that caches slide count and dot elements — both go stale once
+     * we swap the slides. Clone the interactive nodes to drop the inline
+     * listeners, then re-wire navigation against the fresh content. */
+    scroll = cloneToDetachListeners(scroll);
+    cloneToDetachListeners(document.getElementById('galleryPrev'));
+    cloneToDetachListeners(document.getElementById('galleryNext'));
+  }
+
+  scroll.textContent = '';
+  mediaItems.forEach((node) => scroll.appendChild(node));
+
+  if (dots instanceof HTMLElement) {
+    dots.textContent = '';
+    mediaItems.forEach((_, index) => {
+      const dot = document.createElement('div');
+      dot.className = `gallery-dot${index === 0 ? ' active' : ''}`;
+      dots.appendChild(dot);
+    });
+  }
+
+  initGalleryMediaSlider(scroll, dots);
 }
 
 function startDownloadThenRedirect(downloadHref, redirectHref, downloadName = '') {
