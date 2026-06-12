@@ -180,6 +180,10 @@ def validate_detail_route_pages(site_data: dict, errors: list[str]) -> None:
 
             if expected_version:
                 html_version = extract_tag_text(DETAIL_VERSION_RE, text)
+                # The em-dash placeholder is intentional: JS fills the version
+                # at runtime, so static HTML must not hard-code it.
+                if html_version in {'—', '\u2014'}:
+                    html_version = ''
                 if html_version and html_version != expected_version:
                     errors.append(
                         f'products: stale hero version on {detail_index.relative_to(ROOT)} '
