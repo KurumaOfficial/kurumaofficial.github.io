@@ -2070,6 +2070,47 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         return /\.(mp4|webm|ogg|ogv)(\?|$)/i.test(url);
     }
 
+    /** Blob preview URLs for queued (not yet published) media uploads. */
+    const mediaPreviewObjectUrls = new Map();
+
+    function releaseMediaPreviewUrl(uploadKey) {
+        const objectUrl = mediaPreviewObjectUrls.get(uploadKey);
+        if (!objectUrl) return;
+        URL.revokeObjectURL(objectUrl);
+        mediaPreviewObjectUrls.delete(uploadKey);
+    }
+
+    function getPendingUploadPreviewUrl(uploadKey) {
+        if (!uploadKey || !pendingProductUploads.has(uploadKey)) return '';
+        const cached = mediaPreviewObjectUrls.get(uploadKey);
+        if (cached) return cached;
+        const pending = pendingProductUploads.get(uploadKey);
+        if (!(pending?.file instanceof Blob)) return '';
+        const objectUrl = URL.createObjectURL(pending.file);
+        mediaPreviewObjectUrls.set(uploadKey, objectUrl);
+        return objectUrl;
+    }
+
+    /**
+     * Resolve a media item's preview source for the admin route.
+     * Priority:
+     *  1. inline dataUrl (fresh image uploads);
+     *  2. blob URL from the pending upload queue (fresh video uploads —
+     *     their `./assets/media/...` path does not exist until published);
+     *  3. the stored site-root-relative URL, resolved against the site
+     *     base — the admin lives under `/admin/`, so using the raw
+     *     `./assets/...` value verbatim points at `/admin/assets/...`
+     *     and renders broken previews.
+     * @param {{ dataUrl?: string, url?: string, uploadKey?: string }} item
+     * @returns {string}
+     */
+    function resolveMediaPreviewSrc(item) {
+        if (item?.dataUrl) return item.dataUrl;
+        const pendingPreview = getPendingUploadPreviewUrl(item?.uploadKey);
+        if (pendingPreview) return pendingPreview;
+        return resolvePreviewImageUrl(item?.url || '');
+    }
+
     function renderMediaGallery() {
         if (!mediaGalleryListEl) return;
 
@@ -2087,7 +2128,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const galleryHtml = media.map((item, index) => {
             const handleClass = 'dash-media-handle';
             if (item.type === 'image') {
-                const src = item.dataUrl || item.url || '';
+                const src = resolveMediaPreviewSrc(item);
                 return `
                     <div class="dash-media-item" data-media-index="${index}" draggable="true">
                         <div class="dash-media-thumb">
@@ -2108,10 +2149,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 `;
             } else {
                 const ytId = extractYouTubeId(item.url);
-                let videoSrc = item.url || '';
-                if (item.dataUrl && !ytId) {
-                    videoSrc = item.dataUrl;
-                }
+                const videoSrc = ytId ? '' : resolveMediaPreviewSrc(item);
                 /* Grid previews are intentionally inert (no controls + CSS
                  * pointer-events:none): an interactive iframe/video swallows
                  * mousedown and the parent card never receives dragstart.
@@ -2167,7 +2205,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
 
         mediaVideoListEl.innerHTML = videos.map(({ item, mediaIndex }) => {
-            const src = item.dataUrl || item.url;
+            /* YouTube links must stay verbatim for embed-id extraction;
+             * everything else resolves against the site root so previews
+             * work from the /admin/ route. */
+            const src = extractYouTubeId(item.url) ? item.url : resolveMediaPreviewSrc(item);
             return `
                 <div class="dash-media-video-item" data-video-index="${mediaIndex}">
                     <div class="dash-media-video-wrapper">
@@ -2401,6 +2442,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const item = media[index];
         if (item && item.uploadKey) {
             pendingProductUploads.delete(item.uploadKey);
+            releaseMediaPreviewUrl(item.uploadKey);
         }
         media.splice(index, 1);
         syncDraftControls();
@@ -2417,6 +2459,7 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         const item = media[index];
         if (item && item.uploadKey) {
             pendingProductUploads.delete(item.uploadKey);
+            releaseMediaPreviewUrl(item.uploadKey);
         }
         media.splice(index, 1);
         syncDraftControls();
