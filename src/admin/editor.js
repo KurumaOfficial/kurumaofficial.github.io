@@ -2112,9 +2112,13 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
                 if (item.dataUrl && !ytId) {
                     videoSrc = item.dataUrl;
                 }
+                /* Grid previews are intentionally inert (no controls + CSS
+                 * pointer-events:none): an interactive iframe/video swallows
+                 * mousedown and the parent card never receives dragstart.
+                 * Playback lives in the dedicated video list below. */
                 const previewHtml = ytId ?
-                    `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>` :
-                    `<video src="${escapeHtml(videoSrc)}" controls preload="metadata" playsinline></video>`;
+                    `<iframe src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(ytId)}" frameborder="0" tabindex="-1" aria-hidden="true"></iframe>` :
+                    `<video src="${escapeHtml(videoSrc)}" preload="metadata" muted playsinline></video>`;
                 return `
                     <div class="dash-media-item" data-media-index="${index}" draggable="true">
                         <div class="dash-media-thumb">
@@ -2228,7 +2232,10 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
             const [moved] = media.splice(draggedIndex, 1);
             media.splice(dropIndex, 0, moved);
             syncDraftControls();
+            /* Re-render both lists — video rows store absolute media[]
+             * indexes that go stale after any reorder. */
             renderMediaGallery();
+            renderMediaVideo();
         });
     }
 

@@ -2568,6 +2568,15 @@ html[data-theme-switching="true"] .locale-option__code {
   border: 0;
 }
 
+/* Grid previews must never capture the pointer — an interactive iframe or
+ * video swallows mousedown and HTML5 drag-and-drop on the parent card
+ * (`.dash-media-item[draggable]`) silently stops working. Playback is
+ * available in the dedicated video list, not in the ordering grid. */
+.dash-media-thumb video,
+.dash-media-thumb iframe {
+  pointer-events: none;
+}
+
 .dash-media-actions {
   position: absolute;
   top: 8px;
