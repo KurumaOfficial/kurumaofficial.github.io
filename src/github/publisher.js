@@ -338,6 +338,43 @@ async function commitRepoFilesAtomically(config, token, files, message) {
     }, config, 'Could not update the publish branch');
 }
 
+/**
+ * Fetch the currently *published* site data straight from the repository
+ * (unauthenticated read — public repo). Used by the admin route so a fresh
+ * browser sees the latest published content instead of only its own
+ * localStorage snapshot.
+ *
+ * Resolves to a parsed (raw, un-normalized) site-data object, or `null`
+ * when the data cannot be fetched/parsed (offline, rate-limited, markers
+ * missing). Never throws.
+ */
+export async function fetchPublishedSiteData() {
+    const config = resolveGitHubConfig();
+    if (!config.owner || !config.repo || !config.branch || !config.path) return null;
+
+    try {
+        const apiUrl = `${buildGitHubContentsApiUrl(config, config.path)}?ref=${encodeURIComponent(config.branch)}`;
+        const response = await fetch(apiUrl, {
+            headers: { Accept: 'application/vnd.github.raw+json' },
+            cache: 'no-store',
+        });
+        if (!response.ok) return null;
+
+        const text = await response.text();
+        const match = text.match(DATA_MARKERS.pattern);
+        if (!match) return null;
+
+        const block = match[0];
+        const braceStart = block.indexOf('{');
+        const braceEnd = block.lastIndexOf('}');
+        if (braceStart < 0 || braceEnd <= braceStart) return null;
+
+        return JSON.parse(block.slice(braceStart, braceEnd + 1));
+    } catch {
+        return null;
+    }
+}
+
 export function createGitHubPublisher({ getPendingUploads, clearPendingUploads, renderProductUploadMeta, syncDraftControls, getMessage = (_key, fallback = '') => fallback }) {
     const githubTokenEl = document.getElementById('githubToken');
     const githubSyncTargetEl = document.getElementById('githubSyncTarget');
