@@ -16,7 +16,7 @@ import {
 } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
-import { createGitHubPublisher } from '../github/publisher.js';
+import { createGitHubPublisher, fetchPublishedSiteData } from '../github/publisher.js';
 import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
@@ -1641,17 +1641,49 @@ export function createEditorController({ renderSite, showToast, locale = 'ru' })
         }
     }
 
-    function initializeData() {
+    /**
+     * Resolve the freshest baseline for the editor:
+     *  1. fetch the currently *published* data from the repository,
+     *  2. fall back to the local snapshot, then to the bundled defaults.
+     *
+     * Remote data wins whenever the local snapshot is absent or carries no
+     * local edits (i.e. it matches either the remote payload or the bundled
+     * defaults). A diverged local snapshot is kept — it is an applied local
+     * draft the user has not published yet.
+     */
+    async function resolveInitialData() {
         const localData = loadLocalData();
-        const merged = mergeDefaultProducts(localData);
+        const remoteRaw = navigator.onLine ? await fetchPublishedSiteData() : null;
+        const remoteData = remoteRaw ? normalizeData(remoteRaw) : null;
+
+        if (!remoteData) return { data: localData, persist: false };
+        if (!localData) return { data: remoteData, persist: true };
+
+        const localSerialized = serializeData(localData);
+        if (localSerialized === serializeData(remoteData)) {
+            return { data: remoteData, persist: false };
+        }
+        if (localSerialized === serializeData(DEFAULT_SITE_DATA)) {
+            /* Local snapshot is just the stale bundled defaults — sync up. */
+            return { data: remoteData, persist: true };
+        }
+
+        /* Local edits diverge from the published payload — keep them. */
+        return { data: localData, persist: false };
+    }
+
+    async function initializeData() {
+        const { data, persist } = await resolveInitialData();
+        const merged = mergeDefaultProducts(data);
         const initialized = normalizeData(merged || DEFAULT_SITE_DATA);
-        
-        if (merged && localData && merged.products.length !== (localData.products || []).length) {
-            if (!saveToLocalStorage(merged)) {
+
+        const productsChanged = merged && data && merged.products.length !== (data.products || []).length;
+        if (persist || productsChanged) {
+            if (!saveToLocalStorage(initialized)) {
                 console.warn('Failed to persist merged data to localStorage');
             }
         }
-        
+
         applyDataToState(initialized);
         _draftEditingArmed = true;
     }
