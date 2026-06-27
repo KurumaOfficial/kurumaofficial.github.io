@@ -270,8 +270,8 @@ export const DEFAULT_SITE_DATA = {
             ]
         },
         {
-            "id": "aleph-launcher",
-            "title": "ALauncher",
+            "id": "aleph-minecraft-launcher",
+            "title": "AMCLauncher",
             "version": "0.1.0",
             "tag": "active",
             "flag": "alpha",
@@ -333,23 +333,15 @@ export const DEFAULT_SITE_DATA = {
             "id": "team-member-01",
             "name": "Kuruma",
             "role": "Основатель",
-            "avatarUrl": "https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExcm45aXN6cnFnY2toMzc3dHFucml2czYwa3licHd4OHBpd2JkazBxMiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12swa4UfSd6Viw/giphy.gif",
-            "description": "молодец",
+            "avatarUrl": "https://i.pinimg.com/736x/3d/22/0d/3d220dfb8d97629479c42ced6ebf3e9c.jpg",
+            "description": "Плохой человек",
             "sortOrder": 1
-        },
-        {
-            "id": "team-member-02",
-            "name": "notyx",
-            "role": "Администратор",
-            "avatarUrl": "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdmF6eGxqaWtxcXNwbWU0cGZodGZsbWxhOXY4amE3cDNva2h0N3B2dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/EvpaQ7YVPCZvG/giphy.gif",
-            "description": "Плейбой, миллиардер, филантроп",
-            "sortOrder": 2
         },
         {
             "id": "team-member-03",
             "name": "GARAKIL",
             "role": "Разработчик",
-            "avatarUrl": "",
+            "avatarUrl": "https://i.pinimg.com/736x/e0/3e/da/e03edad288f1412795ef88787ec2eb7b.jpg",
             "description": "просто есть",
             "sortOrder": 3
         },
@@ -357,7 +349,7 @@ export const DEFAULT_SITE_DATA = {
             "id": "team-member-1781008791243-1",
             "name": "FiyZzy",
             "role": "Персонал",
-            "avatarUrl": "https://media.discordapp.net/attachments/1350004590120009738/1513885502636425247/image.png?ex=6a2d4fbe&is=6a2bfe3e&hm=51a4da82edc5847f43439e2c47727aeed0dbc514c6104990946e90cc8e870d02&=&format=webp&quality=lossless&width=544&height=785",
+            "avatarUrl": "https://i.pinimg.com/736x/25/60/e1/2560e1cbf27a9cfa78faccde40971482.jpg",
             "description": "Всегда в сети",
             "sortOrder": 4
         }
