@@ -10,7 +10,7 @@ export const MESSAGES = Object.freeze({
         meta: {
             title: 'Aleph Studio',
             description:
-                'Aleph Studio — моды, игры, DLC и небольшие цифровые релизы с открытым исходным кодом, понятной установкой и быстрым доступом к актуальной версии.',
+                'Aleph Studio — разработка игр, модификаций и DLC для пользователей. Мы ценим культуру открытого кода и создаем качественные продукты.',
         },
         brand: { homeLabel: 'Aleph Studio — наверх' },
         skipLink: 'Перейти к основному содержимому',
@@ -27,13 +27,13 @@ export const MESSAGES = Object.freeze({
         },
         hero: {
             intro:
-                'Игровые проекты с открытым исходным кодом. Моды, игры, DLC — всё, что мы делаем, ты можешь изучить, изменить и запустить сам.',
+                'Игровые проекты, моды и DLC. Мы создаем качественный контент для любимых игр, ценим культуру открытого кода и даем пользователям реальную свободу.',
             ctaPrimary: 'Смотреть продукты',
             ctaSecondary: 'Наш принцип',
         },
         approach: {
             lead:
-                'Aleph Studio исходит из того, что пользователь должен <strong>понимать что именно работает на его машине</strong>. Поэтому мы публикуем код под лицензией GPL — его можно изучить, развить, использовать в своих проектах.<br><br>Это не альтруизм. Это <strong>стандарт качества</strong>.',
+                'В Aleph Studio мы создаем игры, модификации и DLC, основывая всю разработку на трех столпах: <strong>качество</strong>, <strong>удобство</strong> и <strong>стильный дизайн</strong>. Пользователь должен понимать, что именно работает на его машине, поэтому мы стремимся открывать исходный код везде, где это возможно.<br><br>При этом мы остаемся реалистами: мы не благотворительная организация. Сложная разработка и поддержка инфраструктуры требуют ресурсов. Мы никогда не берем деньги из воздуха, но если содержание продукта стоит денег — продукт будет платным. Это честный подход.<br><br>Мы даем пользователям реальную свободу влиять на продукт. Любой может скопировать наш открытый проект на GitHub, дописать свою фичу и отправить Pull Request — чистый и безопасный код обязательно станет частью релиза. Нам обидно видеть, как тонны мертвого кода лежат на просторах сети у авторов, которые пытались делать всё в одиночку ради статуса "главного", но чьи мечты разбились о реальность. Объединяя усилия сообщества, мы строим работающие продукты и создаем реальную конкуренцию жадным студиям.',
         },
         products: {
             title: 'Главные релизы',
@@ -84,20 +84,20 @@ export const MESSAGES = Object.freeze({
             heading: 'Что важно',
             text: 'Открытый код — это не скидка на качество.<br>Это <em>уважение</em> к тому, кто запускает.',
             case1Title: 'Открытый код',
-            case1Text: 'Репозиторий публикуется, структура не прячется за закрытой сборкой.',
+            case1Text: 'Репозиторий публикуется везде, где это возможно. Вы можете изучить проект, дописать свою фичу и предложить ее слияние через Pull Request.',
             case2Title: 'Честный статус',
             case2Text: 'Alpha — это alpha. Beta — это beta. Без маркетинговых слов вместо правды.',
             case3Title: 'Прямой доступ',
             case3Text: 'Если файл готов — скачай сразу. Без лишних переходов и непрозрачных установщиков.',
         },
         team: {
-            title: 'Люди за проектом',
+            title: 'Персонал проекта',
             intro: 'Участники, которые ведут разработку, поддерживают релизы и держат в порядке публичную часть проекта.',
             avatarFallback: 'Участник команды',
             empty: 'Нет участников.',
         },
         footer: {
-            desc: 'Дочерний проект WeTTeA. Игровые разработки с открытым исходным кодом.',
+            desc: 'Дочерний проект WeTTeA. Разработка игр, модификаций и DLC для пользователей.',
             navHeading: 'Навигация',
             wetteaHeading: 'Ссылки',
             tagline: 'Дочерний проект WeTTeA',
@@ -113,7 +113,7 @@ export const MESSAGES = Object.freeze({
         meta: {
             title: 'Aleph Studio',
             description:
-                'Aleph Studio — mods, games, DLC and small digital releases with open source code, clear installation and quick access to the latest version.',
+                'Aleph Studio — developing games, mods, and DLC for users. We value the open source culture and create high-quality products.',
         },
         brand: { homeLabel: 'Aleph Studio — back to top' },
         skipLink: 'Skip to main content',
@@ -130,13 +130,13 @@ export const MESSAGES = Object.freeze({
         },
         hero: {
             intro:
-                'Open source game projects. Mods, games, DLC — everything we make, you can study, modify and run yourself.',
+                'Game projects, mods, and DLC. We create quality content for our favorite games, value the open source culture, and give users true freedom.',
             ctaPrimary: 'See products',
             ctaSecondary: 'Our principle',
         },
         approach: {
             lead:
-                'Aleph Studio operates on the premise that users should <strong>understand exactly what is running on their machine</strong>. That\'s why we publish code under the GPL licence — you can study it, extend it, use it in your own projects.<br><br>This isn\'t altruism. It\'s a <strong>quality standard</strong>.',
+                'At Aleph Studio, we create games, mods, and DLC, basing all our development on three pillars: <strong>quality</strong>, <strong>convenience</strong>, and <strong>stylish design</strong>. Users should understand exactly what is running on their machines, which is why we strive to keep our source code open wherever possible.<br><br>However, we remain realistic: we are not a charity. Complex development and infrastructure support require resources. We never take money out of thin air, but if hosting or maintaining a project costs money, the product will be paid. That is a fair approach.<br><br>We give users true freedom to shape our products. Anyone can fork our public repositories on GitHub, add their own features, and submit a Pull Request — clean and secure code will always be merged into the release. We hate seeing tons of dead code rotting on the internet from developers who tried to build everything alone just to be the "boss" but saw their dreams shattered by reality. By pooling the community\'s efforts, we build functioning products and offer real competition to greedy studios.',
         },
         products: {
             title: 'Main releases',
@@ -187,20 +187,20 @@ export const MESSAGES = Object.freeze({
             heading: 'What matters',
             text: 'Open source is not a discount on quality.<br>It\'s <em>respect</em> for the person running it.',
             case1Title: 'Open code',
-            case1Text: 'The repository is public, the structure isn\'t hidden behind a closed build.',
+            case1Text: 'The repository is public wherever possible. You can study the project, implement your own features, and contribute via Pull Request.',
             case2Title: 'Honest status',
             case2Text: 'Alpha is alpha. Beta is beta. No marketing words instead of truth.',
             case3Title: 'Direct access',
             case3Text: 'If the file is ready — download it right away. No extra steps or opaque installers.',
         },
         team: {
-            title: 'The people behind the project',
+            title: 'Project staff',
             intro: 'Members who lead development, maintain releases and keep the public side of the project in order.',
             avatarFallback: 'Team member avatar',
             empty: 'No team members.',
         },
         footer: {
-            desc: 'A subsidiary project of WeTTeA. Open source game development.',
+            desc: 'A subsidiary project of WeTTeA. Developing games, mods, and DLC for users.',
             navHeading: 'Navigation',
             wetteaHeading: 'Links',
             tagline: 'A subsidiary of WeTTeA',
@@ -216,7 +216,7 @@ export const MESSAGES = Object.freeze({
         meta: {
             title: 'Aleph Studio',
             description:
-                'Aleph Studio — моди, ігри, DLC та невеликі цифрові релізи з відкритим вихідним кодом, зрозумілою установкою та швидким доступом до актуальної версії.',
+                'Aleph Studio — розробка ігор, модифікацій та DLC для користувачів. Ми цінуємо культуру відкритого коду та створюємо якісні продукти.',
         },
         brand: { homeLabel: 'Aleph Studio — нагору' },
         skipLink: 'Перейти до основного вмісту',
@@ -233,13 +233,13 @@ export const MESSAGES = Object.freeze({
         },
         hero: {
             intro:
-                'Ігрові проєкти з відкритим вихідним кодом. Моди, ігри, DLC — все, що ми робимо, ти можеш вивчити, змінити і запустити сам.',
+                'Ігрові проєкти, моди та DLC. Ми створюємо якісний контент для улюблених ігор, цінуємо культуру відкритого коду та даємо користувачам реальну свободу.',
             ctaPrimary: 'Переглянути продукти',
             ctaSecondary: 'Наш принцип',
         },
         approach: {
             lead:
-                'Aleph Studio виходить з того, що користувач повинен <strong>розуміти що саме працює на його машині</strong>. Тому ми публікуємо код під ліцензією GPL — його можна вивчити, розвинути, використати у власних проєктах.<br><br>Це не альтруїзм. Це <strong>стандарт якості</strong>.',
+                'В Aleph Studio ми створюємо ігри, модифікації та DLC, засновуючи всю розробку на трьох стовпах: <strong>якість</strong>, <strong>зручність</strong> та <strong>стильний дизайн</strong>. Користувач повинен розуміти, що саме працює на його машині, тому ми прагнемо відкривати вихідний код скрізь, де це можливо.<br><br>При цьому ми залишаємося реалістами: ми не благодійна організація. Складна розробка та підтримка інфраструктури потребують ресурсів. Ми ніколи не беремо гроші з повітря, але якщо утримання продукту коштує грошей — продукт буде платним. Це чесний підхід.<br><br>Ми даємо користувачам реальну свободу впливати на продукт. Кожен може скопіювати наш відкритий проєкт на GitHub, дописати свою фічу та надіслати Pull Request — чистий та безпечний код обов\'язково стане частиною релізу. Нам прикро бачити, як тонни мертвого коду лежать на просторах мережі у авторів, які намагалися робити все самотужки заради статусу "головного", але чиї мрії розбилися об реальність. Об\'єднуючи зусилля спільноти, ми будуємо працюючі продукти та створюємо реальну конкуренцію жадібним студіям.',
         },
         products: {
             title: 'Головні релізи',
@@ -290,20 +290,20 @@ export const MESSAGES = Object.freeze({
             heading: 'Що важливо',
             text: 'Відкритий код — це не знижка на якість.<br>Це <em>повага</em> до того, хто запускає.',
             case1Title: 'Відкритий код',
-            case1Text: 'Репозиторій публікується, структура не ховається за закритою збіркою.',
+            case1Text: 'Репозиторій публікується скрізь, де це можливо. Ви можете вивчити проєкт, дописати свою фічу та внести свій внесок через Pull Request.',
             case2Title: 'Чесний статус',
             case2Text: 'Alpha — це alpha. Beta — це beta. Без маркетингових слів замість правди.',
             case3Title: 'Прямий доступ',
             case3Text: 'Якщо файл готовий — скачай одразу. Без зайвих переходів і непрозорих інсталяторів.',
         },
         team: {
-            title: 'Люди за проєктом',
+            title: 'Персонал проєкту',
             intro: 'Учасники, які ведуть розробку, підтримують релізи та тримають у порядку публічну частину проєкту.',
             avatarFallback: 'Учасник команди',
             empty: 'Немає учасників.',
         },
         footer: {
-            desc: 'Дочірній проєкт WeTTeA. Ігрові розробки з відкритим вихідним кодом.',
+            desc: 'Дочірній проєкт WeTTeA. Розробка ігор, модифікацій та DLC для користувачів.',
             navHeading: 'Навігація',
             wetteaHeading: 'Посилання',
             tagline: 'Дочірній проєкт WeTTeA',
