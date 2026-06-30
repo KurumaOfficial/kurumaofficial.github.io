@@ -82,7 +82,7 @@ export const MESSAGES = Object.freeze({
         },
         manifesto: {
             heading: 'Что важно',
-            text: 'Открытый код — это не скидка на качество.<br>Это <em>уважение</em> к тому, кто запускает.',
+            text: 'Открытый код — это не скидка на качество.<br>Это <em>свобода контроля</em> для каждого, кто запускает.',
             case1Title: 'Открытый код',
             case1Text: 'Исходный код наших проектов публикуется на GitHub. Вы можете свободно изучить структуру, предложить новые фичи или отправить Pull Request.',
             case2Title: 'Честный подход',
@@ -185,7 +185,7 @@ export const MESSAGES = Object.freeze({
         },
         manifesto: {
             heading: 'What matters',
-            text: 'Open source is not a discount on quality.<br>It\'s <em>respect</em> for the person running it.',
+            text: 'Open source is not a discount on quality.<br>It\'s <em>freedom of control</em> for everyone who runs it.',
             case1Title: 'Open source',
             case1Text: 'Our project source code is published on GitHub. Feel free to study the structure, suggest features, or submit a Pull Request.',
             case2Title: 'Honest approach',
@@ -288,7 +288,7 @@ export const MESSAGES = Object.freeze({
         },
         manifesto: {
             heading: 'Що важливо',
-            text: 'Відкритий код — це не знижка на якість.<br>Це <em>повага</em> до того, хто запускає.',
+            text: 'Відкритий код — це не знижка на якість.<br>Це <em>свобода контролю</em> для кожного, хто запускає.',
             case1Title: 'Відкритий код',
             case1Text: 'Вихідний код наших проєктів публікується на GitHub. Ви можете вільно вивчити структуру, запропонувати нові фічі або надіслати Pull Request.',
             case2Title: 'Чесний підхід',
