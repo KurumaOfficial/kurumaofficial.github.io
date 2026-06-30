@@ -33,7 +33,7 @@ export const MESSAGES = Object.freeze({
         },
         approach: {
             lead:
-                'В Aleph Studio мы создаем игры, модификации и DLC, основывая всю разработку на трех столпах: <strong>качество</strong>, <strong>удобство</strong> и <strong>стильный дизайн</strong>. Пользователь должен понимать, что именно работает на его машине, поэтому мы стремимся открывать исходный код везде, где это возможно.<br><br>При этом мы остаемся реалистами: <strong>мы не благотворительная организация</strong>. Сложная разработка и поддержка инфраструктуры требуют ресурсов. Мы никогда не берем деньги из воздуха, но если содержание продукта стоит денег — продукт будет платным. Это честный подход.<br><br>Мы даем пользователям реальную свободу влиять на продукт. Любой может скопировать наш открытый проект на GitHub, дописать свою фичу и отправить Pull Request — чистый и безопасный код обязательно станет частью релиза. Нам обидно видеть, как тонны мертвого кода лежат на просторах сети у авторов, которые пытались делать всё в одиночку ради статуса "главного", но чьи мечты разбились о реальность. Объединяя усилия сообщества, мы строим работающие продукты и создаем реальную конкуренцию жадным студиям.',
+                'В Aleph Studio мы создаем игры, модификации и DLC, основывая всю разработку на трех столпах: <strong>качество</strong>, <strong>удобство</strong> и <strong>честность</strong>. Пользователь должен <strong>понимать, что именно работает на его машине</strong>, поэтому мы стремимся открывать исходный код везде, где это возможно.<br><br>При этом мы остаемся реалистами: <strong>мы не благотворительная организация</strong>. Сложная разработка и поддержка инфраструктуры требуют ресурсов. Мы никогда не берем деньги из воздуха, но если содержание продукта стоит денег — продукт будет платным. Это честный подход.<br><br>Мы даем пользователям реальную свободу влиять на продукт. Любой может скопировать наш открытый проект <strong>на GitHub</strong>, дописать свою фичу и отправить <strong>Pull Request</strong> — чистый и безопасный код обязательно станет частью релиза. Нам обидно видеть, как тонны мертвого кода лежат на просторах сети у авторов, которые пытались делать всё в одиночку ради статуса "главного", но чьи мечты разбились о реальность. Объединяя усилия сообщества, мы строим работающие продукты и создаем <strong>реальную конкуренцию жадным студиям</strong>.',
         },
         products: {
             title: 'Главные релизы',
@@ -85,8 +85,8 @@ export const MESSAGES = Object.freeze({
             text: 'Открытый код — это не скидка на качество.<br>Это <em>уважение</em> к тому, кто запускает.',
             case1Title: 'Открытый код',
             case1Text: 'Исходный код наших проектов публикуется на GitHub. Вы можете свободно изучить структуру, предложить новые фичи или отправить Pull Request.',
-            case2Title: 'Стильный дизайн',
-            case2Text: 'Мы уделяем внимание каждой детали, шрифту и анимации. Интерфейс должен приносить эстетическое удовольствие при каждом запуске.',
+            case2Title: 'Честный подход',
+            case2Text: 'Мы не обещаем невозможного и не скрываем проблемы. Продукты становятся платными только тогда, когда их поддержка требует реальных ресурсов, а не ради наживы.',
             case3Title: 'Удобство и простота',
             case3Text: 'Никакого мусорного софта, навязчивой рекламы или лишних переходов. Вы получаете чистый рабочий инструмент в пару кликов.',
         },
@@ -136,7 +136,7 @@ export const MESSAGES = Object.freeze({
         },
         approach: {
             lead:
-                'At Aleph Studio, we create games, mods, and DLC, basing all our development on three pillars: <strong>quality</strong>, <strong>convenience</strong>, and <strong>stylish design</strong>. Users should understand exactly what is running on their machines, which is why we strive to keep our source code open wherever possible.<br><br>However, we remain realistic: <strong>we are not a charity</strong>. Complex development and infrastructure support require resources. We never take money out of thin air, but if hosting or maintaining a project costs money, the product will be paid. That is a fair approach.<br><br>We give users true freedom to shape our products. Anyone can fork our public repositories on GitHub, add their own features, and submit a Pull Request — clean and secure code will always be merged into the release. We hate seeing tons of dead code rotting on the internet from developers who tried to build everything alone just to be the "boss" but saw their dreams shattered by reality. By pooling the community\'s efforts, we build functioning products and offer real competition to greedy studios.',
+                'At Aleph Studio, we create games, mods, and DLC, basing all our development on three pillars: <strong>quality</strong>, <strong>convenience</strong>, and <strong>honesty</strong>. Users should <strong>understand exactly what is running on their machine</strong>, which is why we strive to keep our source code open wherever possible.<br><br>However, we remain realistic: <strong>we are not a charity</strong>. Complex development and infrastructure support require resources. We never take money out of thin air, but if hosting or maintaining a project costs money, the product will be paid. That is a fair approach.<br><br>We give users true freedom to shape our products. Anyone can fork our public repositories <strong>on GitHub</strong>, add their own features, and submit a <strong>Pull Request</strong> — clean and secure code will always be merged into the release. We hate seeing tons of dead code rotting on the internet from developers who tried to build everything alone just to be the "boss" but saw their dreams shattered by reality. By pooling the community\'s efforts, we build functioning products and offer <strong>real competition to greedy studios</strong>.',
         },
         products: {
             title: 'Main releases',
@@ -188,8 +188,8 @@ export const MESSAGES = Object.freeze({
             text: 'Open source is not a discount on quality.<br>It\'s <em>respect</em> for the person running it.',
             case1Title: 'Open source',
             case1Text: 'Our project source code is published on GitHub. Feel free to study the structure, suggest features, or submit a Pull Request.',
-            case2Title: 'Stylish design',
-            case2Text: 'We pay attention to every detail, font, and animation. The interface is crafted to bring aesthetic pleasure at every launch.',
+            case2Title: 'Honest approach',
+            case2Text: 'We do not promise the impossible or hide issues. Products only become paid when their maintenance requires real resources, not for greed.',
             case3Title: 'Convenience & simplicity',
             case3Text: 'No junk software, intrusive ads, or extra steps. You get a clean, working tool in just a couple of clicks.',
         },
@@ -239,7 +239,7 @@ export const MESSAGES = Object.freeze({
         },
         approach: {
             lead:
-                'В Aleph Studio ми створюємо ігри, модифікації та DLC, засновуючи всю розробку на трьох стовпах: <strong>якість</strong>, <strong>зручність</strong> та <strong>стильний дизайн</strong>. Користувач повинен розуміти, що саме працює на його машині, тому ми прагнемо відкривати вихідний код скрізь, де це можливо.<br><br>При цьому ми залишаємося реалістами: <strong>ми не благодійна організація</strong>. Складна розробка та підтримка інфраструктури потребують ресурсів. Ми ніколи не беремо гроші з повітря, але якщо утримання продукту коштує грошей — продукт буде платним. Це чесний підхід.<br><br>Ми даємо користувачам реальну свободу впливати на продукт. Кожен може скопіювати наш відкритий проєкт на GitHub, дописати свою фічу та надіслати Pull Request — чистий та безпечний код обов\'язково стане частиною релізу. Нам прикро бачити, як тонни мертвого коду лежать на просторах мережі у авторів, які намагалися робити все самотужки заради статусу "головного", але чиї мрії розбилися об реальність. Об\'єднуючи зусилля спільноти, ми будуємо працюючі продукти та створюємо реальну конкуренцію жадібним студіям.',
+                'В Aleph Studio ми створюємо ігри, модифікації та DLC, засновуючи всю розробку на трьох стовпах: <strong>якість</strong>, <strong>зручність</strong> та <strong>чесність</strong>. Користувач повинен <strong>розуміти, що саме працює на його машині</strong>, тому ми прагнемо відкривати вихідний код скрізь, де це можливо.<br><br>При цьому ми залишаємося реалістами: <strong>ми не благодійна організація</strong>. Складна розробка та підтримка інфраструктури потребують ресурсів. Ми ніколи не беремо гроші з повітря, але якщо утримання продукту коштує грошей — продукт буде платним. Це чесний підхід.<br><br>Ми даємо користувачам реальну свободу впливати на продукт. Кожен може скопіювати наш відкритий проєкт <strong>на GitHub</strong>, дописати свою фічу та надіслати <strong>Pull Request</strong> — чистий та безпечний код обов\'язково стане частиною релізу. Нам прикро бачити, як тонни мертвого коду лежать на просторах мережі у авторів, які намагалися робити все самотужки заради статусу "головного", але чиї мрії розбилися об реальність. Об\'єднуючи зусилля спільноти, ми будуємо працюючі продукти та створюємо <strong>реальну конкуренцію жадібним студіям</strong>.',
         },
         products: {
             title: 'Головні релізи',
@@ -291,10 +291,10 @@ export const MESSAGES = Object.freeze({
             text: 'Відкритий код — це не знижка на якість.<br>Це <em>повага</em> до того, хто запускає.',
             case1Title: 'Відкритий код',
             case1Text: 'Вихідний код наших проєктів публікується на GitHub. Ви можете вільно вивчити структуру, запропонувати нові фічі або надіслати Pull Request.',
-            case2Title: 'Стильний дизайн',
-            case2Text: 'Ми приділяємо увагу кожній деталі, шрифту та анімації. Інтерфейс має приносити естетичне задоволення при кожному запуску.',
+            case2Title: 'Чесний підхід',
+            case2Text: 'Ми не обіцяємо неможливого і не приховуємо проблеми. Продукти стають платними лише тоді, коли їх підтримка потребує реальних ресурсів, а не заради наживи.',
             case3Title: 'Зручність та простота',
-            case3Text: 'Жодного сміттєвого софту, нав'язливої реклами чи зайвих переходів. Ви отримуєте чистий робочий інструмент у кілька кліків.',
+            case3Text: 'Жодного сміттєвого софту, нав\'язливої реклами чи зайвих переходів. Ви отримуєте чистий робочий інструмент у кілька кліків.',
         },
         team: {
             title: 'Персонал проєкту',
