@@ -353,6 +353,7 @@ export function normalizeSupportPage(raw) {
  */
 const LEGACY_PRODUCT_TITLE_MIGRATIONS = Object.freeze({
     'aleph-launcher': Object.freeze({ 'Aleph Launcher': 'ALauncher' }),
+    'aleph-minecraft-launcher': Object.freeze({ 'ALauncher': 'AMCLauncher', 'Aleph Launcher': 'AMCLauncher' }),
 });
 
 /**

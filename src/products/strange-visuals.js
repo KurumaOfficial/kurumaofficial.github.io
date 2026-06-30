@@ -324,14 +324,19 @@ function renderProductName(target, title) {
   target.textContent = '';
 
   if (segments.length < 2) {
-    /* Single-word titles (e.g. "ALauncher") highlight the first letter
+    /* Single-word titles (e.g. "AMCLauncher") highlight the first letter(s)
      * with the site accent colour — mirrors the static HTML markup
-     * `<em class="accent-letter">A</em>Launcher` so the JS re-render
+     * `<em class="accent-letter">AMC</em>Launcher` so the JS re-render
      * never strips the accent. */
     const accentLetter = document.createElement('em');
     accentLetter.className = 'accent-letter';
-    accentLetter.textContent = nextTitle[0];
-    target.append(accentLetter, document.createTextNode(nextTitle.slice(1)));
+    if (nextTitle === 'AMCLauncher') {
+      accentLetter.textContent = 'AMC';
+      target.append(accentLetter, document.createTextNode(nextTitle.slice(3)));
+    } else {
+      accentLetter.textContent = nextTitle[0];
+      target.append(accentLetter, document.createTextNode(nextTitle.slice(1)));
+    }
     return;
   }
 

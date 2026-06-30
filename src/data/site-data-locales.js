@@ -23,8 +23,8 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                 // in DEFAULT_SITE_DATA (routeModules[*].nameEn). The renderer
                 // picks `nameEn` for the EN locale; no overlay is needed here.
             }),
-            'aleph-launcher': Object.freeze({
-                title: 'ALauncher',
+            'aleph-minecraft-launcher': Object.freeze({
+                title: 'AMCLauncher',
                 summary: 'Minecraft launcher by Aleph Studio. Open source, free. In development.',
                 note: 'The launcher is in development.',
             }),
@@ -95,8 +95,8 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                 // route by design — these short labels read fine in Russian
                 // and an extra translation layer would only add admin work.
             }),
-            'aleph-launcher': Object.freeze({
-                title: 'ALauncher',
+            'aleph-minecraft-launcher': Object.freeze({
+                title: 'AMCLauncher',
                 summary: 'Лаунчер для Minecraft від Aleph Studio. Відкритий код, безкоштовно. У розробці.',
                 note: 'Лаунчер знаходиться в розробці.',
             }),

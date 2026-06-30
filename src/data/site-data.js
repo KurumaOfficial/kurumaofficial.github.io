@@ -285,7 +285,7 @@ export const DEFAULT_SITE_DATA = {
             "sourceUrl": "https://github.com/KurumaOfficial",
             "downloadUrl": "",
             "downloadName": "",
-            "detailUrl": "products/aleph-launcher/",
+            "detailUrl": "products/aleph-minecraft-launcher/",
             "note": "Лаунчер находится в разработке.",
             "autoRouteRedirect": false,
             "routeModules": {
