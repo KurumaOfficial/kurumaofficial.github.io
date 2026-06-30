@@ -242,7 +242,7 @@ body {
     color: var(--text); margin: 0; max-width: 760px;
 }
 .hero-app-name em { font-style: italic; color: var(--accent); }
-/* ALauncher: accent letter, no italic */
+/* AMCLauncher: accent letter, no italic */
 .hero-app-name em.accent-letter {
   font-style: normal;
   color: var(--color-ruby);
