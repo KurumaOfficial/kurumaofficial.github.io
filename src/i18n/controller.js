@@ -189,6 +189,7 @@ export function createLocaleController() {
         ['navLinkProducts',  'nav.products'],
         ['navLinkManifesto', 'nav.manifesto'],
         ['navLinkTeam',      'nav.team'],
+        ['navLinkDonate',    'nav.donate'],
         /* Hero CTAs */
         ['heroCta1',         'hero.ctaPrimary'],
         ['heroCta2',         'hero.ctaSecondary'],
