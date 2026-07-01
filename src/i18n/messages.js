@@ -18,6 +18,7 @@ export const MESSAGES = Object.freeze({
             products: 'Продукты',
             manifesto: 'Принцип',
             team: 'Команда',
+            donate: 'Поддержать',
         },
         locale: {
             triggerLabel: 'Выбор языка',
@@ -121,6 +122,7 @@ export const MESSAGES = Object.freeze({
             products: 'Products',
             manifesto: 'Principle',
             team: 'Team',
+            donate: 'Support',
         },
         locale: {
             triggerLabel: 'Language switcher',
@@ -224,6 +226,7 @@ export const MESSAGES = Object.freeze({
             products: 'Продукти',
             manifesto: 'Принцип',
             team: 'Команда',
+            donate: 'Підтримати',
         },
         locale: {
             triggerLabel: 'Перемикач мови',
