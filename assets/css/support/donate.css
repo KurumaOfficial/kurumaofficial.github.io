@@ -797,8 +797,6 @@ html[data-theme="light"] .donate-section::after {
 .supporters-grid {
   grid-template-columns:repeat(auto-fill, minmax(190px,1fr));
   gap:24px;
-  content-visibility:auto;
-  contain-intrinsic-size:auto 500px;
   padding-top:6px;
 }
 
@@ -1296,6 +1294,22 @@ html[data-theme="light"] .donate-section::after {
 @media (max-width: 768px) {
   .donate-main {
     padding-top:calc(76px + var(--safe-top));
+  }
+
+  .donate-page-top {
+    position: sticky;
+    top: calc(76px + var(--safe-top));
+    height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    pointer-events: none;
+    z-index: 12;
+    overflow: visible;
+  }
+
+  .donate-page-top .donate-back {
+    pointer-events: auto;
+    margin-top: 16px;
   }
 
   #donateBackLabel {
