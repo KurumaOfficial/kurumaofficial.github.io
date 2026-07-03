@@ -68,29 +68,7 @@ body {
   z-index: 0;
 }
 
-.snowflakes {
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
 
-.snowflake {
-  position: absolute;
-  color: var(--accent-light);
-  opacity: 0.35;
-  animation: drift 9s ease-in-out infinite;
-  user-select: none;
-}
-
-@keyframes drift {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-14px) rotate(20deg); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .snowflake { animation: none; }
-}
 
 /* ---------- layout ---------- */
 .layout {
@@ -271,13 +249,23 @@ body {
 .info-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
   padding: 22px 0;
-  border-bottom: 1px solid var(--divider);
   font-size: 16px;
+  transition: padding 0.2s ease, background-color 0.2s ease;
+}
+
+.info-row::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px dashed var(--divider);
+  margin: 0 8px;
+  order: 2;
+  align-self: center;
 }
 
 .info-row .label {
+  order: 1;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -292,8 +280,11 @@ body {
 }
 
 .info-row .value {
+  order: 3;
   color: var(--text-primary);
   font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
 .info-row .value.mono {
@@ -306,6 +297,32 @@ body {
   font-weight: 700;
   font-family: var(--font-mono), monospace;
   text-transform: uppercase;
+}
+
+/* Copyable info row styles */
+.info-row.copyable {
+  cursor: pointer;
+}
+
+.info-row.copyable:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.copy-hint {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  margin-left: 8px;
+  color: var(--text-tertiary);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.info-row.copyable:hover .copy-hint {
+  opacity: 1;
 }
 
 /* ---------- subscription card ---------- */

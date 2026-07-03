@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=6">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=7">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -43,7 +43,7 @@
 
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
-<div class="snowflakes" id="snowflakes"></div>
+<!-- Snowflakes removed from HTML -->
 
 <nav class="nav" aria-label="Main navigation">
     <a id="logoLink" class="nav-logo" href="../../ru/" aria-label="Aleph Studio">
@@ -98,19 +98,19 @@
           </div>
         </div>
 
-        <div class="info-row">
+        <div class="info-row copyable" data-copy="06.09.2024 г, 00:00">
           <span class="label">Дата регистрации</span>
-          <span class="value">06.09.2024 г, 00:00</span>
+          <span class="value">06.09.2024 г, 00:00 <span class="copy-hint">Копировать</span></span>
         </div>
 
-        <div class="info-row">
+        <div class="info-row copyable" data-copy="Бета">
           <span class="label">Ваша роль</span>
-          <span class="value role-beta">Бета</span>
+          <span class="value role-beta">Бета <span class="copy-hint">Копировать</span></span>
         </div>
 
-        <div class="info-row">
+        <div class="info-row copyable" data-copy="7ab33b0f2b8ae70708dbc5b2aa34acca">
           <span class="label">HWID <svg class="icon icon-stroke" title="Уникальный идентификатор вашего оборудования"><use href="#i-info"/></svg></span>
-          <span class="value mono">7ab33b0f2b8ae70708dbc5b2aa34acca</span>
+          <span class="value mono">7ab33b0f2b8ae70708dbc5b2aa34acca <span class="copy-hint">Копировать</span></span>
         </div>
 
         <div class="subscription-card">
@@ -249,6 +249,6 @@
     <span id="footerWetteaHeading" hidden></span>
 </footer>
 <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
-<script type="module" src="../../src/profile/profile.js?v=6"></script>
+<script type="module" src="../../src/profile/profile.js?v=7"></script>
 </body>
 </html>
