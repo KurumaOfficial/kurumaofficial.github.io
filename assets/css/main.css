@@ -1952,3 +1952,94 @@ footer {
         padding: 6px 10px 6px 8px;
     }
 }
+
+
+/* ── §10.1 Cube 3D Visual ──────────────────────────────────── */
+
+.cube-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    --cube-size: 320px;
+    --cube-half: 160px;
+    --cube-half-neg: -160px;
+    pointer-events: none;
+}
+
+@media (max-width: 960px) {
+    .cube-stage {
+        --cube-size: 160px;
+        --cube-half: 80px;
+        --cube-half-neg: -80px;
+    }
+}
+
+.cube-wrap {
+    position: absolute;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    transform-style: preserve-3d;
+    animation: spin 18s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotateX(20deg) rotateY(0deg); }
+    to   { transform: rotateX(380deg) rotateY(360deg); }
+}
+
+.face {
+    position: absolute;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    border: 1.5px solid var(--color-ruby-light);
+    box-shadow:
+        0 0 12px rgba(181, 34, 57, 0.35) inset,
+        0 0 18px rgba(181, 34, 57, 0.35);
+    background: rgba(139, 26, 42, 0.03);
+    transition: all 0.3s ease;
+}
+
+.face--front  { transform: translateZ(var(--cube-half)); }
+.face--back   { transform: translateZ(var(--cube-half-neg)) rotateY(180deg); }
+.face--right  { transform: rotateY(90deg) translateZ(var(--cube-half)); }
+.face--left   { transform: rotateY(-90deg) translateZ(var(--cube-half)); }
+.face--top    { transform: rotateX(90deg) translateZ(var(--cube-half)); }
+.face--bottom { transform: rotateX(-90deg) translateZ(var(--cube-half)); }
+
+/* ── §13.1 Manifesto layout & visual ───────────────────────── */
+
+.manifesto-visual {
+    position: absolute;
+    right: var(--page-gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@media (max-width: 1100px) {
+    .manifesto-visual {
+        right: 5%;
+        opacity: 0.15;
+    }
+}
+
+@media (max-width: 960px) {
+    .manifesto-visual {
+        left: 50%;
+        right: auto;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.08;
+        z-index: 0;
+    }
+}
