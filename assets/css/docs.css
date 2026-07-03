@@ -44,6 +44,40 @@
   z-index: var(--z-base, 1);
 }
 
+.docs-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 calc(var(--page-gutter, 64px) + var(--safe-right, 0px))
+             0 calc(var(--page-gutter, 64px) + var(--safe-left, 0px));
+  position: sticky;
+  top: calc(var(--nav-height, 92px) + 12px);
+  z-index: 10;
+  pointer-events: none;
+  height: 0;
+  overflow: visible;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.docs-back-link {
+  pointer-events: auto;
+}
+
+@media (max-width: 860px) {
+  .docs-top {
+    position: static;
+    top: auto;
+    height: auto;
+    margin-bottom: 18px;
+    padding-right: var(--page-gutter, 64px);
+    padding-left: var(--page-gutter, 64px);
+    pointer-events: auto;
+    z-index: auto;
+  }
+}
+
 .docs-container {
   display: grid;
   grid-template-columns: 240px 1fr;
@@ -140,7 +174,7 @@ button.docs-nav-link {
 
 .docs-nav {
   position: sticky;
-  top: calc(var(--nav-height, 92px) + 32px);
+  top: calc(var(--nav-height, 92px) + 80px);
   height: fit-content;
   display: flex;
   flex-direction: column;
