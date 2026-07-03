@@ -702,6 +702,12 @@ body {
   gap: 4px;
 }
 
+.license-date {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .license-key-wrap {
   display: flex;
   align-items: center;
