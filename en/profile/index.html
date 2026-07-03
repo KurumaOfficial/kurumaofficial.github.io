@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=12">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=13">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -94,7 +94,7 @@
           <h2>Hello, User! <span class="mini-avatar" id="avatarBtn" title="Change avatar"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" id="avatarImg"><input type="file" id="avatarInput" accept="image/*" style="display: none;"></span></h2>
           <div class="user-meta">
             <div>Email: <b>user@aleph.icu</b></div>
-            <div>UID: <b>1408</b></div>
+            <div>Balance: <b>14.08 USDT</b></div>
           </div>
         </div>
 
@@ -113,37 +113,32 @@
           <span class="value mono">7ab33b0f2b8ae70708dbc5b2aa34acca <span class="copy-hint">Copy</span></span>
         </div>
 
-        <div style="margin-top: 32px;">
-          <div class="license-card merged-card">
-            <div class="card-left">
-              <div class="license-header">
-                <span class="license-name">Strange Visuals</span>
-                <span class="license-status active">Active</span>
-              </div>
-              <div class="license-details">
-                <span>Type: <b>Personal License</b></span>
-                <span>Activated: <b>2026-06-01</b></span>
-                <span>Valid until: <b>10.07.2026, 15:03</b></span>
-              </div>
-              <div class="license-key-wrap">
-                <span class="license-key">STRANGE-XXXX-XXXX-XXXX</span>
-                <button class="copy-key-btn" title="Copy Key">Copy</button>
-              </div>
-              <div class="license-actions">
-                <a class="license-btn primary" href="../products/strange-visuals/">Product Page</a>
-                <a class="license-btn" href="#">Download</a>
-              </div>
+        <h2 class="section-title" style="font-size: 18px; font-weight: 700; margin: 36px 0 16px;">My Licenses</h2>
+
+        <div class="license-card merged-card">
+          <div class="card-left">
+            <div class="license-header">
+              <span class="license-name">Strange Visuals</span>
+              <span class="license-status active">Active</span>
             </div>
-            <div class="card-right">
-              <div class="progress-ring">
-                <svg viewBox="0 0 64 64">
-                  <circle class="track" cx="32" cy="32" r="27"></circle>
-                  <circle class="bar" cx="32" cy="32" r="27" id="ringBar"></circle>
-                </svg>
-                <div class="ring-label">
-                  <span class="num">96</span>
-                  <span class="unit">d</span>
-                </div>
+            <div class="license-details">
+              <span>Type: <b>Personal License</b></span>
+              <span>Activated: <b>2026-06-01</b></span>
+              <span>Valid until: <b>10.07.2026, 15:03</b></span>
+            </div>
+            <div class="license-actions">
+              <a class="license-btn primary" href="../products/strange-visuals/">Product Page</a>
+            </div>
+          </div>
+          <div class="card-right">
+            <div class="progress-ring">
+              <svg viewBox="0 0 64 64">
+                <circle class="track" cx="32" cy="32" r="27"></circle>
+                <circle class="bar" cx="32" cy="32" r="27" id="ringBar"></circle>
+              </svg>
+              <div class="ring-label">
+                <span class="num">96</span>
+                <span class="unit">d</span>
               </div>
             </div>
           </div>
@@ -221,6 +216,6 @@
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=12"></script>
+<script type="module" src="../../src/profile/profile.js?v=13"></script>
 </body>
 </html>
