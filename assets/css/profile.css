@@ -278,11 +278,15 @@ body {
 .info-row::after {
   content: '';
   flex: 1;
-  border-bottom: 1px dashed var(--divider);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
   margin: 0 8px;
   order: 2;
   align-self: center;
   transition: border-color 0.2s ease;
+}
+
+[data-theme="light"] .info-row::after {
+  border-bottom-color: rgba(0, 0, 0, 0.15);
 }
 
 .info-row .label {
