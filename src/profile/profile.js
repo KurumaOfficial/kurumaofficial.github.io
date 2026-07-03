@@ -7,21 +7,22 @@ function boot() {
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
 
-    // ── Tab Navigation ──────────────────────────────────
-    const menuItems = document.querySelectorAll('.profile-menu-item');
-    const contentSections = document.querySelectorAll('.content-section');
+    // ── Tab Navigation (sidebar-link & profile-section) ──
+    const menuItems = document.querySelectorAll('.sidebar-link');
+    const contentSections = document.querySelectorAll('.profile-section');
 
     menuItems.forEach((item) => {
         item.addEventListener('click', () => {
             const targetSectionId = item.dataset.target;
+            if (!targetSectionId) return;
 
-            menuItems.forEach((btn) => btn.classList.remove('is-active'));
-            item.classList.add('is-active');
+            menuItems.forEach((btn) => btn.classList.remove('active'));
+            item.classList.add('active');
 
             contentSections.forEach((section) => {
-                section.classList.remove('is-active');
+                section.classList.remove('active');
                 if (section.id === targetSectionId) {
-                    section.classList.add('is-active');
+                    section.classList.add('active');
                 }
             });
         });
@@ -47,24 +48,7 @@ function boot() {
         });
     });
 
-    // ── Mock Form Submissions (no alerts) ───────────────
-    const settingsForm = document.getElementById('settingsForm');
-    if (settingsForm) {
-        settingsForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const btn = settingsForm.querySelector('.save-btn');
-            if (btn) {
-                const original = btn.textContent;
-                btn.textContent = '✓';
-                btn.style.background = 'var(--green)';
-                setTimeout(() => {
-                    btn.textContent = original;
-                    btn.style.background = '';
-                }, 1500);
-            }
-        });
-    }
-
+    // ── Mock Form Submissions ───────────────────────────
     const securityForm = document.getElementById('securityForm');
     if (securityForm) {
         securityForm.addEventListener('submit', (e) => {
@@ -82,6 +66,43 @@ function boot() {
         });
     }
 
+    // ── Decorative Square Particles (Aleph Square Motif) ──
+    const particlesContainer = document.getElementById('squareParticles');
+    if (particlesContainer) {
+        const positions = [
+            {top:'20%', left:'46.5%', size:8, delay:0},
+            {top:'27%', left:'75.3%', size:6, delay:0.6},
+            {top:'42%', left:'66.7%', size:10, delay:1.2},
+            {top:'47%', left:'91.3%', size:7, delay:0.3},
+            {top:'49%', left:'35.5%', size:5, delay:1.6},
+            {top:'54%', left:'50.7%', size:9, delay:0.9},
+            {top:'64%', left:'6.5%',  size:7, delay:1.9},
+        ];
+        
+        positions.forEach(p => {
+            const el = document.createElement('span');
+            el.className = 'particle';
+            el.textContent = '■'; // square motif
+            el.style.top = p.top;
+            el.style.left = p.left;
+            el.style.fontSize = p.size + 'px';
+            el.style.animationDelay = p.delay + 's';
+            particlesContainer.appendChild(el);
+        });
+    }
+
+    // ── Progress Ring Dashoffset ────────────────────────
+    const ring = document.getElementById('ringBar');
+    if (ring) {
+        const r = 27;
+        const c = 2 * Math.PI * r;
+        const pct = 0.85; // Mock progress (85%)
+        ring.style.strokeDasharray = c;
+        ring.style.strokeDashoffset = c * (1 - pct);
+    }
+
+    // Since we don't have reveal-specific class wrappers on the outer body blocks,
+    // we can initialize reveal on the main container just in case.
     initReveal([document.getElementById('main')].filter(Boolean));
 }
 
