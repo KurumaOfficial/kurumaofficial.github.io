@@ -1,5 +1,5 @@
 /* ============================================================
-   legal.css  — Privacy · Terms · Cookies · User Agreement
+   docs.css  — Privacy · Terms · Cookies · User Agreement
    Loaded AFTER main.css.
 
    Two-column layout: sticky document navigation on the left,
@@ -37,14 +37,14 @@
 
 /* ── §1  Page container ────────────────────────────────────── */
 
-.legal-page {
+.docs-page {
   padding-top: var(--nav-height, 92px);
   min-height: 100dvh;
   position: relative;
   z-index: var(--z-base, 1);
 }
 
-.legal-container {
+.docs-container {
   display: grid;
   grid-template-columns: 240px 1fr;
   gap: 48px;
@@ -54,7 +54,7 @@
 }
 
 @media (max-width: 860px) {
-  .legal-container {
+  .docs-container {
     grid-template-columns: 1fr;
     gap: 28px;
     padding-bottom: 100px;
@@ -64,7 +64,7 @@
 
 /* ── §2  Sidebar navigation ───────────────────────────────── */
 
-.legal-nav {
+.docs-nav {
   position: sticky;
   top: calc(var(--nav-height, 92px) + 32px);
   height: fit-content;
@@ -74,14 +74,14 @@
 }
 
 @media (max-width: 860px) {
-  .legal-nav {
+  .docs-nav {
     position: static;
     border-bottom: 1px solid var(--border);
     padding-bottom: 16px;
   }
 }
 
-.legal-nav-title {
+.docs-nav-title {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   text-transform: uppercase;
@@ -90,7 +90,7 @@
   margin-bottom: 10px;
 }
 
-.legal-nav-link {
+.docs-nav-link {
   display: block;
   padding: 10px 14px;
   color: var(--text-muted);
@@ -102,30 +102,30 @@
   transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.legal-nav-link:hover {
+.docs-nav-link:hover {
   color: var(--text-dim);
   border-left-color: var(--border-hi);
 }
 
-.legal-nav-link.is-active {
+.docs-nav-link.is-active {
   color: var(--text);
   border-left-color: var(--accent);
   background: var(--surface);
 }
 
 @media (max-width: 860px) {
-  .legal-nav-link {
+  .docs-nav-link {
     border-left: none;
     border-bottom: 2px solid transparent;
     padding: 8px 12px;
   }
 
-  .legal-nav-link.is-active {
+  .docs-nav-link.is-active {
     border-left-color: transparent;
     border-bottom-color: var(--accent);
   }
 
-  .legal-nav {
+  .docs-nav {
     flex-direction: row;
     flex-wrap: wrap;
     gap: 4px;
@@ -135,7 +135,7 @@
 
 /* ── §3  Document content ──────────────────────────────────── */
 
-.legal-content {
+.docs-content {
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -145,7 +145,7 @@
   position: relative;
 }
 
-.legal-content::before {
+.docs-content::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -155,19 +155,19 @@
 }
 
 @media (max-width: 640px) {
-  .legal-content {
+  .docs-content {
     padding: 28px 20px;
     gap: 32px;
   }
 }
 
-.legal-content section {
+.docs-content section {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.legal-content h1 {
+.docs-content h1 {
   font-family: var(--font-display, 'Unbounded', sans-serif);
   font-size: 28px;
   font-weight: 700;
@@ -177,7 +177,7 @@
   margin-bottom: 4px;
 }
 
-.legal-content h2 {
+.docs-content h2 {
   font-family: var(--font-display, 'Unbounded', sans-serif);
   font-size: 16px;
   font-weight: 700;
@@ -188,7 +188,7 @@
   letter-spacing: -0.01em;
 }
 
-.legal-content h3 {
+.docs-content h3 {
   font-family: var(--font-display, 'Unbounded', sans-serif);
   font-size: 14px;
   font-weight: 700;
@@ -196,7 +196,7 @@
   margin-top: 8px;
 }
 
-.legal-content p {
+.docs-content p {
   margin: 0;
   font-family: var(--font-body, 'Cormorant Garamond', serif);
   font-size: 17px;
@@ -204,12 +204,12 @@
   color: var(--text-dim);
 }
 
-.legal-content p strong {
+.docs-content p strong {
   color: var(--text);
 }
 
-.legal-content ul,
-.legal-content ol {
+.docs-content ul,
+.docs-content ol {
   margin: 0;
   padding-left: 24px;
   display: flex;
@@ -218,22 +218,22 @@
   list-style: disc;
 }
 
-.legal-content ol {
+.docs-content ol {
   list-style: decimal;
 }
 
-.legal-content li {
+.docs-content li {
   font-family: var(--font-body, 'Cormorant Garamond', serif);
   font-size: 17px;
   line-height: 1.7;
   color: var(--text-dim);
 }
 
-.legal-content li strong {
+.docs-content li strong {
   color: var(--text);
 }
 
-.legal-update-date {
+.docs-update-date {
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 10px;
   letter-spacing: 0.08em;
@@ -242,7 +242,7 @@
   margin-top: -12px;
 }
 
-.legal-note {
+.docs-note {
   padding: 20px 24px;
   border: 1px dashed var(--border-hi);
   background: var(--surface);
@@ -253,6 +253,6 @@
   margin-top: 8px;
 }
 
-.legal-note strong {
+.docs-note strong {
   color: var(--text);
 }
