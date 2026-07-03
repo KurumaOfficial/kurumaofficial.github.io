@@ -137,7 +137,7 @@
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
+    gap: 40px;
     max-width: 1120px;
     margin: 0 auto;
     align-items: stretch;
