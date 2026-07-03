@@ -371,7 +371,7 @@ body {
 .progress-ring {
   position: relative;
   width: 90px; height: 90px;
-  margin-top: -14px;
+  margin-top: -4px;
 }
 
 .progress-ring svg {
@@ -782,7 +782,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   gap: 16px;
   padding: 28px 24px;
   width: 100%;
