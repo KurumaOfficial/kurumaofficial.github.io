@@ -25,6 +25,14 @@ function boot() {
                     section.classList.add('active');
                 }
             });
+
+            // Update breadcrumb dynamically to reflect tab text
+            const currentBreadcrumb = document.querySelector('.breadcrumb .current');
+            if (currentBreadcrumb) {
+                const clone = item.cloneNode(true);
+                clone.querySelectorAll('svg').forEach(s => s.remove());
+                currentBreadcrumb.textContent = clone.textContent.trim();
+            }
         });
     });
 
