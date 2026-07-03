@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=7">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=8">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -43,7 +43,6 @@
 
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
-<!-- Snowflakes removed from HTML -->
 
 <nav class="nav" aria-label="Main navigation">
     <a id="logoLink" class="nav-logo" href="../../ua/" aria-label="Aleph Studio">
@@ -91,7 +90,7 @@
       <!-- OVERVIEW -->
       <section class="profile-section active" id="overview">
         <div class="user-header">
-          <h2>Привіт, User! <span class="mini-avatar"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar"></span></h2>
+          <h2>Привіт, User! <span class="mini-avatar" id="avatarBtn" title="Змінити аватарку"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" id="avatarImg"><input type="file" id="avatarInput" accept="image/*" style="display: none;"></span></h2>
           <div class="user-meta">
             <div>Email: <b>user@aleph.icu</b></div>
             <div>UID: <b>1408</b></div>
@@ -249,6 +248,6 @@
     <span id="footerWetteaHeading" hidden></span>
 </footer>
 <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
-<script type="module" src="../../src/profile/profile.js?v=7"></script>
+<script type="module" src="../../src/profile/profile.js?v=8"></script>
 </body>
 </html>
