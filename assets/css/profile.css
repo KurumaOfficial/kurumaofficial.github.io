@@ -1,12 +1,12 @@
-/* Profile dashboard specific styling */
+/* Profile dashboard specific styling - Swapped columns (Content Left, Menu Right) */
 
 .profile-container {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 40px var(--page-gutter);
+  padding: 40px var(--page-gutter) 140px; /* spacing at the bottom */
   display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 40px;
+  grid-template-columns: 1fr 280px; /* Main content left, Menu right */
+  gap: 48px;
   position: relative;
   z-index: 1;
 }
@@ -14,21 +14,27 @@
 @media (max-width: 960px) {
   .profile-container {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 32px;
   }
 }
 
-/* Sidebar layout */
+/* Right Sidebar */
 .profile-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 28px;
+}
+
+@media (max-width: 960px) {
+  .profile-sidebar {
+    order: -1; /* Tabs/Sidebar first on mobile */
+  }
 }
 
 .profile-card-mini {
-  background: color-mix(in srgb, var(--bg2) 65%, transparent);
+  background: color-mix(in srgb, var(--bg2) 40%, transparent);
   border: 1px solid var(--border);
-  padding: 30px;
+  padding: 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -43,19 +49,23 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 2px;
+  height: 1px;
   background: var(--accent);
 }
 
 .avatar-wrapper {
   position: relative;
-  width: 96px;
-  height: 96px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
   cursor: pointer;
-  group-hover: border-color: var(--accent-light);
+  transition: border-color 0.2s;
+}
+
+.avatar-wrapper:hover {
+  border-color: var(--accent-light);
 }
 
 .avatar-image {
@@ -68,13 +78,13 @@
 .avatar-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.65);
+  background: rgba(8, 6, 6, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
+  color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 9px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   opacity: 0;
@@ -88,12 +98,12 @@
 .profile-info-mini {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .profile-name {
   font-family: 'Unbounded', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
 }
@@ -104,82 +114,112 @@
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--text-dim);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
 }
 
 .status-badge {
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: 9px;
-  font-weight: bold;
+  padding: 3px 10px;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
 }
 
 .status-badge.premium {
-  background: rgba(181, 34, 57, 0.15);
+  background: rgba(181, 34, 57, 0.12);
   color: var(--accent-light);
-  border: 1px solid rgba(181, 34, 57, 0.3);
+  border: 1px solid rgba(181, 34, 57, 0.2);
 }
 
-/* Sidebar Menu */
+/* Minimal Tab Menu (Right side) */
 .profile-menu {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+  border-left: 1px solid var(--border);
+  padding-left: 2px;
+}
+
+@media (max-width: 960px) {
+  .profile-menu {
+    border-left: none;
+    border-bottom: 1px solid var(--border);
+    padding-left: 0;
+    padding-bottom: 8px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 }
 
 .profile-menu-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: transparent;
-  border: 1px solid var(--border);
+  border: none;
+  border-left: 2px solid transparent;
   color: var(--text-dim);
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  transition: color 0.2s, border-color 0.2s, background-color 0.2s;
   text-align: left;
   width: 100%;
+}
+
+@media (max-width: 960px) {
+  .profile-menu-item {
+    width: auto;
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 8px 12px;
+  }
 }
 
 .profile-menu-item:hover,
 .profile-menu-item.is-active {
   color: var(--text);
-  border-color: var(--border-hi);
-  background: var(--surface);
 }
 
 .profile-menu-item.is-active {
-  border-left: 2px solid var(--accent);
+  border-left-color: var(--accent);
+  background: var(--surface);
 }
 
-.profile-menu-item svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+@media (max-width: 960px) {
+  .profile-menu-item.is-active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
+  }
 }
 
-/* Dashboard Content */
+/* Left Content Dashboard Card */
 .profile-content {
-  background: color-mix(in srgb, var(--bg2) 65%, transparent);
+  background: color-mix(in srgb, var(--bg2) 50%, transparent);
   border: 1px solid var(--border);
-  padding: 40px;
+  padding: 48px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 36px;
   position: relative;
-  min-height: 500px;
+  box-shadow: var(--shadow);
+}
+
+.profile-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+  opacity: 0.8;
 }
 
 @media (max-width: 640px) {
   .profile-content {
-    padding: 24px;
+    padding: 28px;
   }
 }
 
@@ -190,7 +230,7 @@
 .content-section.is-active {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 30px;
 }
 
 .section-title {
@@ -199,20 +239,20 @@
   font-weight: 700;
   color: var(--text);
   border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
+  padding-bottom: 14px;
 }
 
 /* Grid configs inside tabs */
 .licenses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
 .license-card {
   border: 1px solid var(--border);
   padding: 24px;
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.18);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -232,7 +272,7 @@
 
 .license-name {
   font-family: 'Unbounded', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -244,9 +284,9 @@
 }
 
 .license-status.active {
-  background: rgba(76, 175, 110, 0.15);
+  background: rgba(76, 175, 110, 0.12);
   color: var(--green);
-  border: 1px solid rgba(76, 175, 110, 0.3);
+  border: 1px solid rgba(76, 175, 110, 0.2);
 }
 
 .license-details {
@@ -254,14 +294,14 @@
   color: var(--text-dim);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .license-key-wrap {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.25);
   padding: 8px 12px;
   border: 1px solid var(--border);
 }
@@ -276,9 +316,10 @@
   border: none;
   cursor: pointer;
   color: var(--text-dim);
-  padding: 2px;
-  display: flex;
-  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  transition: color 0.2s;
 }
 
 .copy-key-btn:hover {
@@ -295,7 +336,7 @@
   padding: 10px;
   text-align: center;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-size: 10px;
   text-transform: uppercase;
   text-decoration: none;
   border: 1px solid var(--border);
@@ -351,7 +392,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
+  padding: 16px 20px;
   border: 1px solid var(--border);
   background: rgba(0, 0, 0, 0.15);
 }
@@ -359,12 +400,12 @@
 .connection-info {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .connection-icon {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   fill: var(--text-dim);
 }
 
@@ -376,7 +417,7 @@
 
 .connection-name {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
@@ -391,7 +432,7 @@
 }
 
 .connection-btn {
-  padding: 8px 16px;
+  padding: 8px 14px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   text-transform: uppercase;
