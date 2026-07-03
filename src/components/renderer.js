@@ -166,8 +166,8 @@ export function createRenderer({ localeController }) {
             const dotClass = (product.downloadUrl || product.detailUrl) ? 'status-dot' : 'status-dot inactive';
             const badge = flagBadgeHtml(product.flag);
             const bannerHtml = product.cardBannerUrl
-                ? `<div class="product-card-banner"><img src="${escapeHtml(localeController.resolveSitePath(product.cardBannerUrl))}" alt="" loading="lazy"></div>`
-                : '<div class="product-card-banner default-banner"></div>';
+                ? `<div class="product-card-bg-banner" style="background-image: url('${escapeHtml(localeController.resolveSitePath(product.cardBannerUrl))}')"></div><div class="product-card-bg-overlay"></div>`
+                : '';
 
             /* Card with detail page link */
             if (product.detailUrl) {
