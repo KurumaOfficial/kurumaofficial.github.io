@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=9">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=10">
+<link rel="stylesheet" href="../../assets/css/docs.css?v=10">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -139,7 +140,7 @@
             </div>
             <div class="license-details">
               <span>Тип: Персональная лицензия</span>
-              <span>Актировано: 2026-06-01</span>
+              <span>Активировано: 2026-06-01</span>
             </div>
             <div class="license-key-wrap">
               <span class="license-key">STRANGE-XXXX-XXXX-XXXX</span>
@@ -175,45 +176,87 @@
         </form>
       </section>
 
-      <!-- DOCUMENTATION -->
+      <!-- DOCUMENTATION (Normal integrated view) -->
       <section class="profile-section" id="documentation">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Документация</h2>
-        <div class="licenses-grid">
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Правила пользования</span>
-            </div>
-            <div class="license-details">
-              <span>Основные правила использования сервисов Aleph Studio.</span>
-            </div>
-            <a class="license-btn primary" href="../docs/terms/">Читать</a>
+        <div class="docs-container" style="padding: 0; max-width: 100%; grid-template-columns: 200px 1fr; gap: 32px;">
+          <div class="docs-nav" style="position: static;">
+            <button class="docs-nav-link docs-tab-btn is-active" data-doc="privacy">Конфиденциальность</button>
+            <button class="docs-nav-link docs-tab-btn" data-doc="terms">Правила пользования</button>
+            <button class="docs-nav-link docs-tab-btn" data-doc="agreement">Соглашение</button>
+            <button class="docs-nav-link docs-tab-btn" data-doc="cookies">Cookies</button>
           </div>
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Конфиденциальность</span>
+          <div class="docs-content" style="padding: 36px;">
+            <!-- Privacy Pane -->
+            <div class="doc-tab-pane active" id="doc-privacy">
+              <section>
+                <h1>Политика конфиденциальности</h1>
+                <div class="docs-update-date">Последнее обновление: 3 июля 2026</div>
+                <p>Настоящая Политика конфиденциальности описывает, как Aleph Studio собирает, использует и защищает вашу личную информацию при использовании наших продуктов и сайта.</p>
+              </section>
+              <section>
+                <h2>1. Сбор информации</h2>
+                <p>Мы собираем информацию, которую вы предоставляете непосредственно: имя пользователя, адрес электронной почты и данные учетной записи Discord, если вы связываете ее с нашим сервисом.</p>
+              </section>
+              <section>
+                <h2>2. Использование данных</h2>
+                <p>Мы используем собранную информацию для предоставления и поддержки наших продуктов, аутентификации аккаунта и связи с вами.</p>
+              </section>
+              <section>
+                <h2>3. Безопасность данных</h2>
+                <p>Мы применяем соответствующие технические и организационные меры безопасности для защиты ваших данных от несанкционированного доступа.</p>
+              </section>
             </div>
-            <div class="license-details">
-              <span>Правила обработки и защиты персональных данных.</span>
+            
+            <!-- Terms Pane -->
+            <div class="doc-tab-pane" id="doc-terms">
+              <section>
+                <h1>Правила пользования</h1>
+                <div class="docs-update-date">Последнее обновление: 3 июля 2026</div>
+                <p>Используя сайт и продукты Aleph Studio, вы соглашаетесь с настоящими Условиями использования.</p>
+              </section>
+              <section>
+                <h2>1. Лицензия на использование</h2>
+                <p>Мы предоставляем вам неисключительную лицензию на использование наших модов и инструментов исключительно в личных некоммерческих целях.</p>
+              </section>
+              <section>
+                <h2>2. Ограничения</h2>
+                <p>Запрещается продавать, декомпилировать или распространять исходный код наших продуктов без согласия студии.</p>
+              </section>
             </div>
-            <a class="license-btn primary" href="../docs/privacy/">Читать</a>
-          </div>
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Пользовательское соглашение</span>
+            
+            <!-- Agreement Pane -->
+            <div class="doc-tab-pane" id="doc-agreement">
+              <section>
+                <h1>Пользовательское соглашение</h1>
+                <div class="docs-update-date">Последнее обновление: 3 июля 2026</div>
+                <p>Настоящее Пользовательское соглашение является юридически обязывающим договором между вами и Aleph Studio.</p>
+              </section>
+              <section>
+                <h2>1. Учетные записи</h2>
+                <p>При создании аккаунта вы несете полную ответственность за сохранность ваших учетных данных и пароля.</p>
+              </section>
+              <section>
+                <h2>2. Донаты и цифровые покупки</h2>
+                <p>Все транзакции поддержки являются окончательными и не подлежат возврату, за исключением случаев, установленных законом.</p>
+              </section>
             </div>
-            <div class="license-details">
-              <span>Договор между пользователем и Aleph Studio.</span>
+            
+            <!-- Cookies Pane -->
+            <div class="doc-tab-pane" id="doc-cookies">
+              <section>
+                <h1>Политика Cookies</h1>
+                <div class="docs-update-date">Последнее обновление: 3 июля 2026</div>
+                <p>Мы используем файлы cookie для улучшения пользовательского опыта, сессий авторизации и сохранения настроек оформления.</p>
+              </section>
+              <section>
+                <h2>1. Что такое файлы cookie?</h2>
+                <p>Cookie — это небольшие текстовые файлы, сохраняемые на вашем устройстве для ускорения работы и авторизации.</p>
+              </section>
+              <section>
+                <h2>2. Как мы их используем</h2>
+                <p>Мы храним сессионные данные авторизации и выбранную вами тему оформления (светлая/тёмная).</p>
+              </section>
             </div>
-            <a class="license-btn primary" href="../docs/user-agreement/">Читать</a>
-          </div>
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Политика Cookies</span>
-            </div>
-            <div class="license-details">
-              <span>Использование файлов cookie для сессий и тем оформления.</span>
-            </div>
-            <a class="license-btn primary" href="../docs/cookies/">Читать</a>
           </div>
         </div>
       </section>
@@ -221,6 +264,6 @@
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=9"></script>
+<script type="module" src="../../src/profile/profile.js?v=10"></script>
 </body>
 </html>

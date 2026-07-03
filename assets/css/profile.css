@@ -743,3 +743,9 @@ body {
   .user-meta { text-align: left; }
   .subscription-card { width: 100%; }
 }
+
+@media (min-height: 850px) {
+  body {
+    overflow: hidden;
+  }
+}

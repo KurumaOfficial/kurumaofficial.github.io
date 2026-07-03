@@ -274,3 +274,9 @@
   color: var(--text-muted);
   letter-spacing: 0.02em;
 }
+
+@media (min-height: 700px) {
+  body {
+    overflow: hidden;
+  }
+}

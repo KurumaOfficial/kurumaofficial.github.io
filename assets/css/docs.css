@@ -64,6 +64,54 @@
 
 /* ── §2  Sidebar navigation ───────────────────────────────── */
 
+.docs-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+  transition: color 0.15s ease;
+}
+
+.docs-back-link:hover {
+  color: var(--accent-light);
+}
+
+.docs-back-link .icon {
+  width: 9px; height: 9px;
+}
+
+button.docs-nav-link {
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.doc-tab-pane {
+  display: none;
+  width: 100%;
+}
+
+.doc-tab-pane.active {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  animation: doc-pane-fade 0.25s ease forwards;
+}
+
+@keyframes doc-pane-fade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 .docs-nav {
   position: sticky;
   top: calc(var(--nav-height, 92px) + 32px);
