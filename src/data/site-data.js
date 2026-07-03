@@ -19,6 +19,7 @@ export const DEFAULT_SITE_DATA = {
             "featuredOrder": 1,
             "sortOrder": 1,
             "tone": "green",
+            "cardBannerUrl": "./assets/media/strange-visuals/card-banner.jpg",
             "summary": "Strange Visuals сфокусирован на визуальных улучшениях, которые не нарушают правила серверов.",
             "instructions": [
                 "Установите Minecraft Fabric 1.21.8 в вашем лаунчере.",

@@ -165,6 +165,9 @@ export function createRenderer({ localeController }) {
         featuredEl.innerHTML = products.map((product) => {
             const dotClass = (product.downloadUrl || product.detailUrl) ? 'status-dot' : 'status-dot inactive';
             const badge = flagBadgeHtml(product.flag);
+            const bannerHtml = product.cardBannerUrl
+                ? `<div class="product-card-banner"><img src="${escapeHtml(localeController.resolveSitePath(product.cardBannerUrl))}" alt="" loading="lazy"></div>`
+                : '<div class="product-card-banner default-banner"></div>';
 
             /* Card with detail page link */
             if (product.detailUrl) {
@@ -178,6 +181,7 @@ export function createRenderer({ localeController }) {
                     : '';
                 return `
 <article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}" role="listitem"${cardAttrs}>
+  ${bannerHtml}
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
@@ -205,6 +209,7 @@ export function createRenderer({ localeController }) {
 
             return `
 <article class="product-card" id="${escapeHtml(product.id)}" role="listitem">
+  ${bannerHtml}
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
