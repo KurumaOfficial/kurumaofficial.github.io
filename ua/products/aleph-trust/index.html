@@ -53,7 +53,7 @@
     <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Підтримати</a>
   </div>
   <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключити тему" aria-pressed="false">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
       <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
     </button>
     <div id="localeSwitcher" class="locale-switcher">
@@ -62,14 +62,14 @@
         <span id="localeSwitcherLabel">UA</span>
         <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Змінити мову" hidden></div>
+      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Change language" hidden></div>
     </div>
   </div>
 </nav>
 
 <main id="main">
 <div class="hero-store-top">
-  <a href="../" class="hero-store-back" aria-label="Назад до списку продуктів">
+  <a href="../" class="hero-store-back" aria-label="НАЗАД ДО СПИСКУ ПРОДУКТІВ">
     <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     <span class="hero-store-back-label">НАЗАД ДО СПИСКУ ПРОДУКТІВ</span>
   </a>
@@ -112,7 +112,7 @@
           </div>
         </div>
         <div class="hero-actions">
-          <a class="hero-install-btn" id="installBtn" href="#" aria-disabled="true" style="opacity:.42;pointer-events:none;cursor:default;">НЕЗАБАРОМ</a>
+          <a class="hero-install-btn" id="installBtn" href="#">Придбати</a>
           <a class="hero-source-btn" id="sourceBtn" hidden><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
           <div class="hero-share-dock" id="shareDock">
             <div class="hero-share-bg" aria-hidden="true"></div>
@@ -172,74 +172,83 @@
     <p class="s-desc">SaaS-система допуску для Minecraft-серверів. Перевірка лаунчера, модів, ідентифікації та цілісності клієнта.</p>
   </div>
   <div class="feat-grid reveal">
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.7 9.4h14.6M4.9 14.6h14.2M12 3.8c2.1 2.1 3.3 5 3.3 8.2S14.1 18.1 12 20.2M12 3.8C9.9 5.9 8.7 8.8 8.7 12s1.2 6.1 3.3 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
-      <h3>Довірене середовище</h3>
-      <p>Aleph Trust забезпечує допуск лише через офіційний AMCLauncher. Будь-які модифіковані клієнти автоматично блокуються.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>Верифікація модів</h3>
-      <p>Перевірка цілісності лаунчера, modset_hash та модів через довірені джерела. Захист від підміни та ін'єкцій.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
-      <h3>WetID інтеграція</h3>
-      <p>Підтримка WetID-акаунтів та верифікованих документів. Багаторівнева система довіри для серйозних серверів.</p>
-    </div>
-    <div class="feat-card w2">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>Гнучкі політики</h3>
-      <p>Налаштовуйте режими безпеки для кожного сервера: від базового лаунчер-гейту до повної верифікації документів. Окремі політики для lobby, survival, pvp.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 300 300" fill="currentColor"><path d="M150 44 L238 78 L238 152 Q238 218 150 260 Q62 218 62 152 L62 78 Z" fill="none" stroke="currentColor" stroke-width="14" stroke-linejoin="round"/></svg></span></div>
-      <h3>Панель керування</h3>
-      <p>Risk dashboard, розширені audit logs, session revocation. Повний контроль над підключеннями до вашого сервера.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>API та Webhooks</h3>
-      <p>Відкритий API для перевірки trust-сесій, webhooks для Discord та вашого backend. Інтеграція в будь-яку інфраструктуру.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24"><path d="M13.7 3.8 6.8 13h4.2l-.8 7.2 6.8-9.2h-4.2Z" fill="currentColor"/></svg></span></div>
-      <h3>Підтримка серверів</h3>
-      <p>Paper, Purpur, Velocity. Плагін сумісний з популярними серверними платформами Minecraft.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>Enterprise SDK</h3>
-      <p>Для великих мереж: власний лаунчер, white-label, vendor certificate, окремі ключі підпису та team management.</p>
-    </div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.7 9.4h14.6M4.9 14.6h14.2M12 3.8c2.1 2.1 3.3 5 3.3 8.2S14.1 18.1 12 20.2M12 3.8C9.9 5.9 8.7 8.8 8.7 12s1.2 6.1 3.3 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
+  <h3>Довірене середовище</h3>
+  <p>Aleph Trust забезпечує допуск лише через офіційний AMCLauncher. Будь-які модифіковані клієнти автоматично блокуються.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>Верифікація модів</h3>
+  <p>Перевірка цілісності лаунчера, modset_hash та модів через довірені джерела. Захист від підміни та ін'єкцій.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+  <h3>WetID інтеграція</h3>
+  <p>Підтримка WetID-акаунтів та верифікованих документів. Багаторівнева система довіри для серйозних серверів.</p>
+</div>
+<div class="feat-card w2">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>Гнучкі політики</h3>
+  <p>Налаштовуйте режими безпеки для кожного сервера: від базового лаунчер-гейту до повної верифікації документів. Окремі політики для lobby, survival, pvp.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 300 300" fill="currentColor"><path d="M150 44 L238 78 L238 152 Q238 218 150 260 Q62 218 62 152 L62 78 Z" fill="none" stroke="currentColor" stroke-width="14" stroke-linejoin="round"/></svg></span></div>
+  <h3>Панель керування</h3>
+  <p>Risk dashboard, розширені audit logs, session revocation. Повний контроль над підключеннями до вашого сервера.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>API та Webhooks</h3>
+  <p>Відкритий API для перевірки trust-сесій, webhooks для Discord та вашого backend. Інтеграція в будь-яку інфраструктуру.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M13.7 3.8 6.8 13h4.2l-.8 7.2 6.8-9.2h-4.2Z" fill="currentColor"/></svg></span></div>
+  <h3>Підтримка серверів</h3>
+  <p>Paper, Purpur, Velocity. Плагін сумісний з популярними серверними платформами Minecraft.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>Enterprise SDK</h3>
+  <p>Для великих мереж: власний лаунчер, white-label, vendor certificate, окремі ключі підпису та team management.</p>
+</div>
   </div>
 </div>
+</main>
 
-<!-- PRICING SECTION -->
-<div class="wrap pricing-section" id="pricing">
-  <div class="eyebrow reveal">Тарифи та підписка</div>
-  <h2 class="s-title reveal">Плани Aleph Trust</h2>
-  <p class="s-desc reveal">Оберіть тариф, що підходить для вашого сервера. Чим довший термін, тим нижча ціна.</p>
-  
-  <div class="duration-selector reveal">
-    <button class="duration-option is-active" data-days="30">30 днів</button>
-    <button class="duration-option" data-days="60">60 днів <span class="duration-save">-8%</span></button>
-    <button class="duration-option" data-days="90">90 днів <span class="duration-save">-12%</span></button>
-    <button class="duration-option" data-days="180">180 днів <span class="duration-save">-15%</span></button>
-  </div>
+<!-- PRICING MODAL WINDOW -->
+<div class="pricing-modal" id="pricingModal" aria-hidden="true">
+  <div class="pricing-modal-overlay" id="pricingModalOverlay"></div>
+  <div class="pricing-modal-container">
+    <button class="pricing-modal-close" id="pricingModalClose" aria-label="Close">
+      <svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="pricing-modal-content">
+      <!-- Pricing section inside modal -->
+      <div class="pricing-section" id="pricing">
+        <div class="eyebrow">Тарифи та підписка</div>
+        <h2 class="s-title">Плани Aleph Trust</h2>
+        <p class="s-desc">Оберіть тариф, що підходить для вашого сервера. Чим довший термін, тим нижча ціна.</p>
+        
+        <div class="duration-selector">
+          <button class="duration-option is-active" data-days="30">30 днів</button>
+          <button class="duration-option" data-days="60">60 днів <span class="duration-save">-8%</span></button>
+          <button class="duration-option" data-days="90">90 днів <span class="duration-save">-12%</span></button>
+          <button class="duration-option" data-days="180">180 днів <span class="duration-save">-15%</span></button>
+        </div>
 
-  <div class="pricing-grid reveal">
-    <!-- Beth plan -->
-    <div class="plan-card plan-card--beth">
-      <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
-      <div class="plan-name">Beth</div>
-      <div class="plan-desc">Для невеликих серверів з базовим лаунчер-гейтом</div>
-      <div class="plan-price">от $19<span class="plan-period">/міс</span></div>
-      <div class="plan-limits">
-        <dl><dt>Онлайн</dt><dd>до 100 гравців</dd></dl>
-        <dl><dt>Інстанси</dt><dd>до 3 інстансів</dd></dl>
-      </div>
-      <ul class="plan-features">
+        <div class="pricing-grid">
+          <!-- Beth plan -->
+          <div class="plan-card plan-card--beth">
+            <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
+            <div class="plan-name">Beth</div>
+            <div class="plan-desc">Для невеликих серверів з базовим лаунчер-гейтом</div>
+            <div class="plan-price">$19<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>до 100 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>до 3 інстансів</dd></dl>
+            </div>
+            <ul class="plan-features">
         <li>Вхід лише через AMCLauncher</li>
         <li>Перевірка цілісності лаунчера</li>
         <li>Перевірка modset_hash</li>
@@ -253,22 +262,22 @@
         <li class="feat-unavailable">Підписані модпаки</li>
         <li class="feat-unavailable">Власний лаунчер</li>
         <li class="feat-unavailable">White-label</li>
-      </ul>
-      <a class="plan-cta" href="#">Обрати Beth</a>
-    </div>
+            </ul>
+            <a class="plan-cta" href="#">Обрати Beth</a>
+          </div>
 
-    <!-- Gimel plan -->
-    <div class="plan-card plan-card--gimel">
-      <span class="plan-badge">Популярний</span>
-      <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
-      <div class="plan-name">Gimel</div>
-      <div class="plan-desc">Повна система довіри для PvP, Survival та RPG серверів</div>
-      <div class="plan-price">$49<span class="plan-period">/міс</span></div>
-      <div class="plan-limits">
-        <dl><dt>Онлайн</dt><dd>до 500 гравців</dd></dl>
-        <dl><dt>Інстанси</dt><dd>до 20 інстансів</dd></dl>
-      </div>
-      <ul class="plan-features">
+          <!-- Gimel plan -->
+          <div class="plan-card plan-card--gimel">
+            <span class="plan-badge">Популярний</span>
+            <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
+            <div class="plan-name">Gimel</div>
+            <div class="plan-desc">Повна система довіри для PvP, Survival та RPG серверів</div>
+            <div class="plan-price">$49<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>до 500 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>до 20 інстансів</dd></dl>
+            </div>
+            <ul class="plan-features">
         <li class="feat-highlight">Все з Beth</li>
         <li>Усі режими безпеки</li>
         <li>WetID верифікація документів</li>
@@ -283,21 +292,21 @@
         <li>Пріоритетна підтримка</li>
         <li class="feat-unavailable">Власний лаунчер SDK</li>
         <li class="feat-unavailable">White-label</li>
-      </ul>
-      <a class="plan-cta" href="#">Обрати Gimel</a>
-    </div>
+            </ul>
+            <a class="plan-cta" href="#">Обрати Gimel</a>
+          </div>
 
-    <!-- Dalet plan -->
-    <div class="plan-card plan-card--dalet">
-      <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
-      <div class="plan-name">Dalet</div>
-      <div class="plan-desc">Enterprise для великих мереж з власним лаунчером</div>
-      <div class="plan-price"><span class="plan-price-from">від </span> $199<span class="plan-period">/міс</span></div>
-      <div class="plan-limits">
-        <dl><dt>Онлайн</dt><dd>від 2 000 гравців</dd></dl>
-        <dl><dt>Інстанси</dt><dd>без ліміту</dd></dl>
-      </div>
-      <ul class="plan-features">
+          <!-- Dalet plan -->
+          <div class="plan-card plan-card--dalet">
+            <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
+            <div class="plan-name">Dalet</div>
+            <div class="plan-desc">Enterprise для великих мереж з власним лаунчером</div>
+            <div class="plan-price"><span class="plan-price-from">від </span>$199<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>від 2 000 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>без ліміту</dd></dl>
+            </div>
+            <ul class="plan-features">
         <li class="feat-highlight">Все з Gimel</li>
         <li>Власний лаунчер SDK</li>
         <li>Vendor certificate</li>
@@ -310,38 +319,40 @@
         <li>SLA за договором</li>
         <li>Виділений канал підтримки</li>
         <li>Кастомні інтеграції</li>
-      </ul>
-      <a class="plan-cta" href="#">Зв'язатися</a>
-    </div>
-  </div>
+            </ul>
+            <a class="plan-cta" href="#">Зв'язатися</a>
+          </div>
+        </div>
 
-  <p class="pricing-note reveal">Beth обмежений максимумом у 60 днів. Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
+        <p class="pricing-note">Beth обмежений максимумом у 60 днів. Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
 
-  <div class="promo-wrap reveal">
-    <input class="promo-input" type="text" placeholder="Промокод" maxlength="32">
-    <button class="promo-btn" type="button">Застосувати</button>
-  </div>
+        <div class="promo-wrap">
+          <input class="promo-input" type="text" placeholder="Промокод" maxlength="32">
+          <button class="promo-btn" type="button">Застосувати</button>
+        </div>
 
-  <div class="payment-methods reveal">
-    <div class="payment-option" data-method="card">
-      <svg viewBox="0 0 24 24" width="28" height="28"><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
-      <span>Картка</span>
-    </div>
-    <div class="payment-option" data-method="crypto">
-      <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 8h4.5a2.5 2.5 0 010 5H9V8zm0 5h5a2.5 2.5 0 010 5H9v-5z" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="6" x2="10" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="6" x2="14" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="18" x2="14" y2="20" stroke="currentColor" stroke-width="1.3"/></svg>
-      <span>Крипто</span>
-    </div>
-    <div class="payment-option" data-method="paypal">
-      <svg viewBox="0 0 24 24" width="28" height="28"><path d="M7.5 21L9 13h3.5c4 0 7-2.5 7.5-6.5S17 2 14 2H8L5 21h2.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 17l1-5h3c3.2 0 5.5-2 6-5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.5"/></svg>
-      <span>PayPal</span>
-    </div>
-    <div class="payment-option" data-method="qiwi">
-      <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="15" cy="15" r="0.8" fill="currentColor"/></svg>
-      <span>QIWI</span>
+        <div class="payment-methods">
+          <div class="payment-option" data-method="card">
+            <svg viewBox="0 0 24 24" width="28" height="28"><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>Картка</span>
+          </div>
+          <div class="payment-option" data-method="crypto">
+            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 8h4.5a2.5 2.5 0 010 5H9V8zm0 5h5a2.5 2.5 0 010 5H9v-5z" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="6" x2="10" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="6" x2="14" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="18" x2="14" y2="20" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span>Крипто</span>
+          </div>
+          <div class="payment-option" data-method="paypal">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M7.5 21L9 13h3.5c4 0 7-2.5 7.5-6.5S17 2 14 2H8L5 21h2.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 17l1-5h3c3.2 0 5.5-2 6-5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.5"/></svg>
+            <span>PayPal</span>
+          </div>
+          <div class="payment-option" data-method="qiwi">
+            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="15" cy="15" r="0.8" fill="currentColor"/></svg>
+            <span>QIWI</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-</main>
 
 <footer class="site-footer">
     <div class="site-footer__main">
@@ -460,6 +471,34 @@
                     }
                 }
             });
+        });
+
+        // ── Modal Actions ───────────────────────────────────
+        const modal = document.getElementById('pricingModal');
+        const openBtn = document.getElementById('installBtn');
+        const closeBtn = document.getElementById('pricingModalClose');
+        const overlay = document.getElementById('pricingModalOverlay');
+        
+        if (modal && openBtn) {
+            openBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.classList.add('is-open');
+                document.body.classList.add('modal-open');
+            });
+        }
+        
+        function closeModal() {
+            if (modal) {
+                modal.classList.remove('is-open');
+                document.body.classList.remove('modal-open');
+            }
+        }
+        
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (overlay) overlay.addEventListener('click', closeModal);
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
         });
     });
     </script>

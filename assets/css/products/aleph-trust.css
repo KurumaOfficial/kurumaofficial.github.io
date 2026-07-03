@@ -137,7 +137,7 @@
 .pricing-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0;
+    gap: 28px;
     max-width: 1120px;
     margin: 0 auto;
     align-items: stretch;
@@ -161,10 +161,6 @@
         background 0.28s ease;
 }
 
-/* Adjacent card borders collapse */
-.plan-card + .plan-card {
-    border-left: none;
-}
 
 /* Hover — lift + glow */
 .plan-card:hover {
@@ -1200,4 +1196,108 @@
     font-family: var(--font-display), sans-serif;
     letter-spacing: -0.02em;
 }
+
+/* Pricing Modal CSS */
+.pricing-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.pricing-modal.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.pricing-modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(8, 6, 6, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.pricing-modal-container {
+    position: relative;
+    width: 92%;
+    max-width: 1200px;
+    max-height: 90vh;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.96);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    overflow-y: auto;
+    z-index: 10001;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+}
+
+.pricing-modal-container::-webkit-scrollbar {
+    width: 6px;
+}
+.pricing-modal-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.pricing-modal-container::-webkit-scrollbar-thumb {
+    background: var(--border);
+}
+
+.pricing-modal.is-open .pricing-modal-container {
+    transform: scale(1);
+}
+
+.pricing-modal-close {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease, transform 0.2s ease;
+    z-index: 10002;
+}
+
+.pricing-modal-close:hover {
+    color: var(--text);
+    transform: rotate(90deg);
+}
+
+.pricing-modal-close svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.pricing-modal .pricing-section {
+    padding: 60px 40px;
+    scroll-margin-top: 0;
+}
+
+body.modal-open {
+    overflow: hidden !important;
+}
+
+@media (max-width: 768px) {
+    .pricing-modal .pricing-section {
+        padding: 48px 20px;
+    }
+    .pricing-modal-close {
+        top: 16px;
+        right: 16px;
+    }
+}
+
 
