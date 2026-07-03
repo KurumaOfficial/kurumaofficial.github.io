@@ -282,6 +282,7 @@ body {
   margin: 0 8px;
   order: 2;
   align-self: center;
+  transition: border-color 0.2s ease;
 }
 
 .info-row .label {
@@ -324,23 +325,12 @@ body {
   cursor: pointer;
 }
 
-.info-row.copyable:hover {
-  background-color: rgba(255, 255, 255, 0.02);
+.info-row.copyable:hover::after {
+  border-bottom-color: var(--accent);
 }
 
 .copy-hint {
-  font-family: var(--font-mono), monospace;
-  font-size: 10px;
-  margin-left: 8px;
-  color: var(--text-tertiary);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.info-row.copyable:hover .copy-hint {
-  opacity: 1;
+  display: none !important;
 }
 
 .subscription-card {

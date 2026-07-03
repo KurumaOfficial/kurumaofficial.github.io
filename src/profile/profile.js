@@ -101,15 +101,14 @@ function boot() {
 
             navigator.clipboard.writeText(val)
                 .then(() => {
-                    const hint = row.querySelector('.copy-hint');
-                    if (hint) {
-                        const original = hint.textContent;
-                        hint.textContent = '✓';
-                        hint.style.color = 'var(--green)';
-                        setTimeout(() => {
-                            hint.textContent = original;
-                            hint.style.color = '';
-                        }, 1500);
+                    const locale = window.__ALEPH_LOCALE__ || 'ru';
+                    const messages = {
+                        ru: 'Скопировано в буфер обмена!',
+                        en: 'Copied to clipboard!',
+                        ua: 'Скопійовано в буфер обміну!'
+                    };
+                    if (window.__alephToast) {
+                        window.__alephToast(messages[locale] || messages.en, 'info');
                     }
                 })
                 .catch(() => {});
