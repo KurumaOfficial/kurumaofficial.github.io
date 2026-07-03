@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aleph Studio — Dashboard</title>
-<meta name="theme-color" content="#080606">
-<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#08080d">
+<meta name="color-scheme" content="dark">
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
 <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../favicon.ico" sizes="48x48">
@@ -14,7 +14,7 @@
 <link rel="icon" href="../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
 <link rel="stylesheet" href="../../assets/css/profile.css?v=3">
 </head>
@@ -34,6 +34,7 @@
     <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.5v-7l6.2 3.5-6.2 3.5z"/></symbol>
     <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.9 4.3 18.7 20c-.2.9-.9 1.1-1.7.7l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9L18 8.2c.4-.4-.1-.6-.6-.2L7 14.7l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3.4c.8-.3 1.6.2 1.3 1z"/></symbol>
     <symbol id="i-discord" viewBox="0 0 24 24"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.37-.44.86-.61 1.25a18.3 18.3 0 0 0-5.49 0 12.6 12.6 0 0 0-.62-1.25.08.08 0 0 0-.08-.04 19.74 19.74 0 0 0-4.88 1.52.07.07 0 0 0-.03.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .09-.03 14.1 14.1 0 0 0 1.22-2 .08.08 0 0 0-.04-.1 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1 0-.13c.13-.1.25-.2.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08.01c.12.1.25.2.37.3a.08.08 0 0 1-.01.12 12.3 12.3 0 0 1-1.87.9.08.08 0 0 0-.04.11c.36.7.77 1.36 1.22 1.99a.08.08 0 0 0 .09.03 19.84 19.84 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.67-3.55-13.66a.06.06 0 0 0-.03-.03zM8.02 15.33c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42zm7.97 0c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
   </defs>
 </svg>
 
@@ -41,40 +42,70 @@
 
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
-<div class="square-particles" id="squareParticles"></div>
+<div class="snowflakes" id="snowflakes"></div>
 
-<nav class="nav" aria-label="Main navigation">
-    <a id="logoLink" class="nav-logo" href="../../ru/" aria-label="Aleph Studio">
-        <span class="logo-sq" aria-hidden="true"></span>
-        <span class="logo-text">Aleph Studio</span>
+<header class="topbar nav" aria-label="Main navigation">
+  <div class="topbar-left">
+    <a class="logo nav-logo" id="logoLink" href="../../ru/">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="logoGrad" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#8b7cff"/>
+            <stop offset="1" stop-color="#4b3fb5"/>
+          </linearGradient>
+        </defs>
+        <path d="M16 1 L30 9 V23 L16 31 L2 23 V9 Z" stroke="url(#logoGrad)" stroke-width="2" fill="rgba(108,92,231,0.12)"/>
+        <path d="M16 8 L23 12.5 V21.5 L16 26 L9 21.5 V12.5 Z" fill="url(#logoGrad)"/>
+      </svg>
+      Aleph Studio
     </a>
-    <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../ru/products/">Продукты</a>
-        <a id="navLinkDonate" class="nav__link" href="../../ru/donate/" data-donate-link>Поддержать</a>
+    <nav class="main-nav nav-links">
+      <a id="navLinkProducts" class="nav-link nav__link" href="../../ru/products/">Продукты</a>
+      <a id="navLinkDonate" class="nav-link nav__link" href="../../ru/donate/" data-donate-link>Поддержать</a>
+    </nav>
+  </div>
+  <div class="topbar-right nav-right">
+    <div class="topbar-socials">
+      <a href="#" title="YouTube"><svg class="icon icon-fill"><use href="#i-youtube"/></svg></a>
+      <a href="#" title="Telegram"><svg class="icon icon-fill"><use href="#i-telegram"/></svg></a>
+      <a href="#" title="Discord"><svg class="icon icon-fill"><use href="#i-discord"/></svg></a>
     </div>
-    <div class="nav-right">
-        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
-            <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-        </button>
-        <div id="localeSwitcher" class="locale-switcher">
-            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Выбор языка">
-                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
-                <span id="localeSwitcherLabel">RU</span>
-                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Выбор языка" hidden></div>
-        </div>
+
+    <!-- Hidden/minimal elements to satisfy site-shell.js bindings -->
+    <div id="localeSwitcher" class="locale-switcher" style="position: relative; display: inline-block;">
+      <button id="localeSwitcherTrigger" class="nav-link" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Выбор языка" style="background: none; border: none; padding: 0; color: var(--text-secondary); display: flex; align-items: center; gap: 4px;">
+        <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel">RU</span>
+        <svg class="icon icon-stroke"><use href="#i-chevron-down"/></svg>
+      </button>
+      <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Выбор языка" hidden></div>
     </div>
-</nav>
+
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" style="background: none; border: none; color: var(--text-secondary); padding: 6px; display: flex; align-items: center; justify-content: center; transition: color .15s ease;">
+      <span id="themeIco" class="theme-icon" aria-hidden="true"><svg class="icon icon-stroke"><use href="#i-sun"/></svg></span>
+    </button>
+
+    <button class="download-btn"><svg class="icon icon-stroke"><use href="#i-monitor"/></svg>Скачать</button>
+    <div class="user-chip">
+      <div class="avatar">U</div>
+      <div>
+        <div class="user-name">User</div>
+        <div class="user-role">Бета</div>
+      </div>
+    </div>
+    <button class="menu-dots"><svg class="icon icon-stroke"><use href="#i-dots"/></svg></button>
+  </div>
+</header>
+
 <main id="main">
 <div class="profile-page">
   <div class="layout">
     <aside class="sidebar">
       <h1 class="page-title">Мой профиль</h1>
       <nav class="sidebar-nav">
-        <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Обзор</button>
-        <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Лицензии</button>
-        <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Безопасность</button>
+        <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Аккаунт</button>
+        <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Покупка клиента</button>
+        <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Дополнительно</button>
       </nav>
     </aside>
 
@@ -142,7 +173,7 @@
 
       <!-- LICENSES -->
       <section class="profile-section" id="licenses">
-        <h2 class="section-title">Мои лицензии</h2>
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Мои лицензии</h2>
         <div class="licenses-grid">
           <div class="license-card">
             <div class="license-header">
@@ -167,7 +198,7 @@
 
       <!-- SECURITY -->
       <section class="profile-section" id="security">
-        <h2 class="section-title">Безопасность</h2>
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Безопасность</h2>
         <form class="profile-form-grid" id="securityForm">
           <div class="form-group profile-form-full">
             <label class="form-label" for="curr-pass">Текущий пароль</label>

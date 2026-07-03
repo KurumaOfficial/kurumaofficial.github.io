@@ -66,28 +66,28 @@ function boot() {
         });
     }
 
-    // ── Decorative Square Particles (Aleph Square Motif) ──
-    const particlesContainer = document.getElementById('squareParticles');
-    if (particlesContainer) {
+    // ── Decorative Snowflakes Background ─────────────────
+    const container = document.getElementById('snowflakes');
+    if (container) {
         const positions = [
-            {top:'20%', left:'46.5%', size:8, delay:0},
-            {top:'27%', left:'75.3%', size:6, delay:0.6},
-            {top:'42%', left:'66.7%', size:10, delay:1.2},
-            {top:'47%', left:'91.3%', size:7, delay:0.3},
-            {top:'49%', left:'35.5%', size:5, delay:1.6},
-            {top:'54%', left:'50.7%', size:9, delay:0.9},
-            {top:'64%', left:'6.5%',  size:7, delay:1.9},
+            {top:'20%', left:'46.5%', size:14, delay:0},
+            {top:'27%', left:'75.3%', size:12, delay:0.6},
+            {top:'42%', left:'66.7%', size:18, delay:1.2},
+            {top:'47%', left:'91.3%', size:15, delay:0.3},
+            {top:'49%', left:'35.5%', size:11, delay:1.6},
+            {top:'54%', left:'50.7%', size:16, delay:0.9},
+            {top:'64%', left:'6.5%',  size:13, delay:1.9},
         ];
         
         positions.forEach(p => {
             const el = document.createElement('span');
-            el.className = 'particle';
-            el.textContent = '■'; // square motif
+            el.className = 'snowflake';
+            el.textContent = '❄';
             el.style.top = p.top;
             el.style.left = p.left;
             el.style.fontSize = p.size + 'px';
             el.style.animationDelay = p.delay + 's';
-            particlesContainer.appendChild(el);
+            container.appendChild(el);
         });
     }
 
@@ -101,8 +101,6 @@ function boot() {
         ring.style.strokeDashoffset = c * (1 - pct);
     }
 
-    // Since we don't have reveal-specific class wrappers on the outer body blocks,
-    // we can initialize reveal on the main container just in case.
     initReveal([document.getElementById('main')].filter(Boolean));
 }
 
