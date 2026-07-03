@@ -2046,45 +2046,40 @@ footer {
 
 /* ── §10.2 Product Card Banners ────────────────────────────── */
 
-.product-card-banner {
-    position: relative;
-    width: calc(100% + 72px);
-    margin-left: -36px;
-    margin-right: -36px;
-    margin-top: calc(-1 * var(--space-10));
-    margin-bottom: var(--space-6);
-    height: 144px;
-    overflow: hidden;
-    border-bottom: 1px solid var(--border-subtle);
+.product-card-bg-banner {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
     z-index: 0;
-}
-
-@media (max-width: 960px) {
-    .product-card-banner {
-        width: calc(100% + 2 * var(--space-5));
-        margin-left: calc(-1 * var(--space-5));
-        margin-right: calc(-1 * var(--space-5));
-        margin-top: calc(-1 * var(--space-6));
-        height: 120px;
-    }
-}
-
-.product-card-banner img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
     transition: transform 0.6s var(--ease-default);
+    pointer-events: none;
 }
 
-.product-card:hover .product-card-banner img {
+.product-card-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(8, 6, 6, 0.72) 0%, rgba(8, 6, 6, 0.94) 100%);
+    z-index: 1;
+    transition: background 0.3s ease;
+    pointer-events: none;
+}
+
+.product-card:hover .product-card-bg-banner {
     transform: scale(1.05);
 }
 
-.product-card-banner.default-banner {
-    background: linear-gradient(135deg, #120d0e 0%, #1c1416 100%);
-    background-image: 
-        radial-gradient(circle at 20% 30%, rgba(181, 34, 57, 0.05), transparent 75%),
-        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 16px 16px, 16px 16px;
+.product-card:hover .product-card-bg-overlay {
+    background: linear-gradient(to bottom, rgba(8, 6, 6, 0.58) 0%, rgba(8, 6, 6, 0.88) 100%);
+}
+
+.product-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+.product-card > .product-card-bg-banner,
+.product-card > .product-card-bg-overlay {
+    position: absolute;
+    z-index: 0;
 }

@@ -215,8 +215,8 @@ function boot() {
                 ? `<p class="plist-card-desc">${linkify(product.summary)}</p>`
                 : '';
             const bannerHtml = product.cardBannerUrl
-                ? `<div class="plist-card-banner"><img src="${escapeHtml(lc.resolveSitePath(product.cardBannerUrl))}" alt="" loading="lazy"></div>`
-                : '<div class="plist-card-banner default-banner"></div>';
+                ? `<div class="plist-card-bg-banner" style="background-image: url('${escapeHtml(lc.resolveSitePath(product.cardBannerUrl))}')"></div><div class="plist-card-bg-overlay"></div>`
+                : '';
             return `
 <article class="plist-card" id="plist-${escapeHtml(product.id)}">
   ${bannerHtml}
