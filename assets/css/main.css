@@ -786,8 +786,8 @@ section {
 }
 
 .p-sq-outer {
-    width: 240px;
-    height: 240px;
+    width: 312px;
+    height: 312px;
     border: 1px solid var(--color-ruby-dim);
     position: relative;
     animation: sq-rotate 12s ease-in-out infinite;
@@ -795,14 +795,14 @@ section {
 
 .p-sq-inner {
     position: absolute;
-    inset: 32px;
+    inset: 42px;
     background: var(--color-ruby);
     opacity: 0.12;
 }
 
 .p-sq-center {
     position: absolute;
-    inset: 64px;
+    inset: 83px;
     border: 1px solid var(--color-ruby);
 }
 
@@ -2014,11 +2014,11 @@ footer {
 
 .manifesto-visual {
     position: absolute;
-    right: calc(var(--page-gutter) - 20px);
+    right: calc(var(--page-gutter) + 20px);
     top: 50%;
     transform: translateY(-50%);
-    width: 300px;
-    height: 300px;
+    width: 360px;
+    height: 360px;
     display: flex;
     align-items: center;
     justify-content: center;
