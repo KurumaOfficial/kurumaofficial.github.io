@@ -74,30 +74,28 @@ function boot() {
         });
     }
 
-    // ── Decorative Snowflakes Background ─────────────────
-    const container = document.getElementById('snowflakes');
-    if (container) {
-        const positions = [
-            {top:'20%', left:'46.5%', size:14, delay:0},
-            {top:'27%', left:'75.3%', size:12, delay:0.6},
-            {top:'42%', left:'66.7%', size:18, delay:1.2},
-            {top:'47%', left:'91.3%', size:15, delay:0.3},
-            {top:'49%', left:'35.5%', size:11, delay:1.6},
-            {top:'54%', left:'50.7%', size:16, delay:0.9},
-            {top:'64%', left:'6.5%',  size:13, delay:1.9},
-        ];
-        
-        positions.forEach(p => {
-            const el = document.createElement('span');
-            el.className = 'snowflake';
-            el.textContent = '❄';
-            el.style.top = p.top;
-            el.style.left = p.left;
-            el.style.fontSize = p.size + 'px';
-            el.style.animationDelay = p.delay + 's';
-            container.appendChild(el);
+    // ── Click to Copy for Info Rows ─────────────────────
+    document.querySelectorAll('.info-row.copyable').forEach((row) => {
+        row.addEventListener('click', () => {
+            const val = row.dataset.copy;
+            if (!val) return;
+
+            navigator.clipboard.writeText(val)
+                .then(() => {
+                    const hint = row.querySelector('.copy-hint');
+                    if (hint) {
+                        const original = hint.textContent;
+                        hint.textContent = '✓';
+                        hint.style.color = 'var(--green)';
+                        setTimeout(() => {
+                            hint.textContent = original;
+                            hint.style.color = '';
+                        }, 1500);
+                    }
+                })
+                .catch(() => {});
         });
-    }
+    });
 
     // ── Progress Ring Dashoffset ────────────────────────
     const ring = document.getElementById('ringBar');
