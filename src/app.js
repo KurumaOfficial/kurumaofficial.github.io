@@ -19,7 +19,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from './core/site-shell.js?v=20260510a';
+} from './core/site-shell.js?v=20260703a';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -68,7 +68,7 @@ function boot() {
     /* 5.1 — Admin: lazy-load editor on admin page, otherwise just
              wire up the secret key-sequence redirect. --------------- */
     if (isAdminPage) {
-        import('./admin/editor.js?v=20260611c').then(({ createEditorController }) => {
+        import('./admin/editor.js?v=20260703a').then(({ createEditorController }) => {
             const editor = createEditorController({
                 renderSite: renderer.renderSite,
                 showToast,

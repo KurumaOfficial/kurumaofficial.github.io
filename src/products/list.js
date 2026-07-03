@@ -18,7 +18,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js?v=20260510a';
+} from '../core/site-shell.js?v=20260703a';
 import { resolveLocaleRootRelativePath } from '../i18n/config.js';
 import { localizeSiteData } from '../data/localized-site-data.js';
 import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';

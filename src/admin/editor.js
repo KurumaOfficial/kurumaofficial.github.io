@@ -15,7 +15,7 @@ import {
     toNumber,
 } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 import { createGitHubPublisher, fetchPublishedSiteData } from '../github/publisher.js';
 import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js';
 

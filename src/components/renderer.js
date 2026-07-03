@@ -12,7 +12,7 @@ import { localizeSiteData } from '../data/localized-site-data.js';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
 import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
 import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 import { resolveLocaleRootRelativePath } from '../i18n/config.js';
 
 // ── Factory ─────────────────────────────────────────────────
