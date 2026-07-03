@@ -7,19 +7,17 @@ function boot() {
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
 
-    // Tab Navigation Logic
+    // ── Tab Navigation ──────────────────────────────────
     const menuItems = document.querySelectorAll('.profile-menu-item');
     const contentSections = document.querySelectorAll('.content-section');
 
     menuItems.forEach((item) => {
         item.addEventListener('click', () => {
             const targetSectionId = item.dataset.target;
-            
-            // Toggle active menu item
+
             menuItems.forEach((btn) => btn.classList.remove('is-active'));
             item.classList.add('is-active');
 
-            // Toggle active content section
             contentSections.forEach((section) => {
                 section.classList.remove('is-active');
                 if (section.id === targetSectionId) {
@@ -29,41 +27,58 @@ function boot() {
         });
     });
 
-    // Copy License Key Action
+    // ── Copy License Key ────────────────────────────────
     document.querySelectorAll('.copy-key-btn').forEach((btn) => {
         btn.addEventListener('click', () => {
             const keyEl = btn.previousElementSibling;
-            if (keyEl) {
-                navigator.clipboard.writeText(keyEl.textContent.trim())
-                    .then(() => {
-                        const originalHtml = btn.innerHTML;
-                        btn.innerHTML = '<span style="font-size:10px;color:var(--green)">✓</span>';
-                        setTimeout(() => {
-                            btn.innerHTML = originalHtml;
-                        }, 1500);
-                    })
-                    .catch(() => {
-                        alert('Failed to copy key.');
-                    });
-            }
+            if (!keyEl) return;
+
+            navigator.clipboard.writeText(keyEl.textContent.trim())
+                .then(() => {
+                    const original = btn.textContent;
+                    btn.textContent = '✓';
+                    btn.style.color = 'var(--green)';
+                    setTimeout(() => {
+                        btn.textContent = original;
+                        btn.style.color = '';
+                    }, 1500);
+                })
+                .catch(() => {});
         });
     });
 
-    // Mock Profile Edit Form Save
+    // ── Mock Form Submissions (no alerts) ───────────────
     const settingsForm = document.getElementById('settingsForm');
     if (settingsForm) {
         settingsForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('[Mock Profile] Profile details successfully updated.');
+            const btn = settingsForm.querySelector('.save-btn');
+            if (btn) {
+                const original = btn.textContent;
+                btn.textContent = '✓';
+                btn.style.background = 'var(--green)';
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.style.background = '';
+                }, 1500);
+            }
         });
     }
 
-    // Mock Password Change Save
     const securityForm = document.getElementById('securityForm');
     if (securityForm) {
         securityForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            alert('[Mock Security] Password successfully changed.');
+            const btn = securityForm.querySelector('.save-btn');
+            if (btn) {
+                const original = btn.textContent;
+                btn.textContent = '✓';
+                btn.style.background = 'var(--green)';
+                setTimeout(() => {
+                    btn.textContent = original;
+                    btn.style.background = '';
+                }, 1500);
+            }
         });
     }
 

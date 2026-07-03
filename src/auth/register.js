@@ -7,29 +7,26 @@ function boot() {
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
 
-    // Mock Register Action
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const agree = document.getElementById('agree').checked;
 
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
+            const pw = document.getElementById('password')?.value || '';
+            const cpw = document.getElementById('confirmPassword')?.value || '';
+
+            if (pw !== cpw) {
+                // Simple inline validation — no alert
+                const cpwInput = document.getElementById('confirmPassword');
+                if (cpwInput) {
+                    cpwInput.style.borderColor = 'var(--accent-light)';
+                    cpwInput.focus();
+                }
                 return;
             }
-            if (!agree) {
-                alert("You must agree to the Terms of Service!");
-                return;
-            }
-            
-            alert(`[Mock Register] Attempting registration for Username: ${username}, Email: ${email}`);
-            // Redirect to profile
+
             const currentLocale = window.__ALEPH_LOCALE__ || 'ru';
+            // Mock redirect — backend will handle real registration
             window.location.href = `/${currentLocale}/profile/`;
         });
     }

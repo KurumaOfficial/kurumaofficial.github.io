@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="ua" data-theme="dark">
+<!doctype html>
+<html lang="ua" dir="ltr" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aleph Studio — Вхід</title>
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ua';</script>
 <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../../favicon.ico" sizes="48x48">
@@ -12,90 +14,61 @@
 <link rel="icon" href="../../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../../assets/css/auth.css?v=1">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
 </head>
 <body>
-
-<a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
-
-<nav class="nav" aria-label="Основная навигация">
-  <a id="logoLink" class="nav-logo" href="../../../ua/" aria-label="Aleph Studio — наверх">
-      <span class="logo-sq" aria-hidden="true"></span>
-      <span class="logo-text">Aleph Studio</span>
-  </a>
-
-  <div class="nav-links">
-    <a id="navLinkProducts" class="nav__link" href="../../../ua/products/">Продукти</a>
-    <a id="navLinkDonate" class="nav__link" href="../../../ua/donate/" data-donate-link>Підтримати</a>
-  </div>
-
-  <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему" aria-pressed="false">
-      <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
-    </button>
-
-    <div id="localeSwitcher" class="locale-switcher">
-      <button
-        id="localeSwitcherTrigger"
-        class="locale-switcher__trigger"
-        type="button"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-label="Перемикач мов"
-      >
-        <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
-        <span id="localeSwitcherLabel">UA</span>
-        <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
-          <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-        </svg>
-      </button>
-      <div
-        id="localeSwitcherMenu"
-        class="locale-switcher__menu"
-        role="menu"
-        aria-label="Выбор языка"
-        hidden
-      ></div>
+<a id="skipLink" class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Main navigation">
+    <a id="logoLink" class="nav-logo" href="../../../ua/" aria-label="Aleph Studio">
+        <span class="logo-sq" aria-hidden="true"></span>
+        <span class="logo-text">Aleph Studio</span>
+    </a>
+    <div class="nav-links">
+        <a id="navLinkProducts" class="nav__link" href="../../../ua/products/">Продукти</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../ua/donate/" data-donate-link>Підтримати</a>
     </div>
-  </div>
+    <div class="nav-right">
+        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
+            <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </button>
+        <div id="localeSwitcher" class="locale-switcher">
+            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Мова">
+                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                <span id="localeSwitcherLabel">UA</span>
+                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Мова" hidden></div>
+        </div>
+    </div>
 </nav>
-
-<main id="main" class="reveal">
-
+<main id="main">
 <div class="auth-container">
   <div class="auth-card">
     <div class="auth-header">
       <h1 class="auth-title">Вхід в <em>Aleph</em></h1>
-      <p class="auth-subtitle">Увійдіть у кабінет, щоб отримати доступ до ліцензій</p>
+      <p class="auth-subtitle">Доступ до ліцензій та особистого кабінету</p>
     </div>
     <form class="auth-form" id="loginForm">
       <div class="form-group">
         <label class="form-label" for="email">Ел. пошта / Логін</label>
-        <input class="form-input" type="text" id="email" required placeholder="name@example.com">
+        <input class="form-input" type="text" id="email" required placeholder="name@example.com" autocomplete="username">
       </div>
       <div class="form-group">
         <label class="form-label" for="password">Пароль</label>
-        <input class="form-input" type="password" id="password" required placeholder="••••••••">
+        <input class="form-input" type="password" id="password" required placeholder="••••••••" autocomplete="current-password">
       </div>
       <div class="form-options">
-        <label class="remember-me">
-          <input type="checkbox" id="remember">
-          Запам'ятати мене
-        </label>
+        <label class="remember-me"><input type="checkbox" id="remember"> Запам'ятати мене</label>
         <a class="forgot-link" href="../reset/">Забули пароль?</a>
       </div>
       <button class="auth-btn" type="submit">Увійти</button>
     </form>
-    <div class="auth-footer">
-      Немає акаунту? <a class="auth-link" href="../register/">Створити акаунт</a>
-    </div>
+    <div class="auth-footer">Немає акаунту? <a class="auth-link" href="../register/">Створити акаунт</a></div>
   </div>
 </div>
-
 </main>
-
 <footer class="site-footer">
     <div class="site-footer__main">
         <div class="site-footer__left">
@@ -106,20 +79,23 @@
             <span class="site-footer__divider" aria-hidden="true"></span>
             <span id="footerTagline" class="site-footer__tagline">Дочірній проєкт WeTTeA</span>
         </div>
-        <nav id="footerNav" class="site-footer__nav" aria-label="Подвал — навигация">
+        <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
             <a href="../../../ua/products/">Продукти</a>
             <a href="../../../ua/#manifesto">Принцип</a>
             <a href="../../../ua/#team">Команда</a>
             <span class="site-footer__nav-sep" aria-hidden="true"></span>
             <a id="footerDonateLink" href="../../../ua/donate/">Підтримати</a>
         </nav>
-        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Социальные сети"></div>
+        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div>
     </div>
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. Всі права захищені.</span>
     </div>
+    <span id="footerDesc" hidden></span>
+    <span id="footerNavHeading" hidden></span>
+    <span id="footerWetteaHeading" hidden></span>
 </footer>
-
-<script type="module" src="../../../src/auth/login.js?v=1"></script>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+<script type="module" src="../../../src/auth/login.js?v=2"></script>
 </body>
 </html>

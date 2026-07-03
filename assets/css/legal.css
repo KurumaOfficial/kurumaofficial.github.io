@@ -1,72 +1,164 @@
-/* Legal pages styling (Privacy, Terms, Cookies, User Agreement) */
+/* ============================================================
+   legal.css  — Privacy · Terms · Cookies · User Agreement
+   Loaded AFTER main.css.
+
+   Two-column layout: sticky document navigation on the left,
+   clean reading typography on the right.
+   ============================================================ */
+
+/* ── §0  Token bridge ──────────────────────────────────────── */
+
+[data-theme="dark"] {
+  --bg:           #080606;
+  --bg2:          #0f0b0b;
+  --text:         #e8dada;
+  --text-dim:     #b09c97;
+  --text-muted:   #5a4a44;
+  --accent:       #8b1a2a;
+  --accent-light: #b52239;
+  --border:       rgba(139,26,42,0.10);
+  --border-hi:    rgba(139,26,42,0.20);
+  --surface:      rgba(139,26,42,0.04);
+}
+
+[data-theme="light"] {
+  --bg:           #f5f0ee;
+  --bg2:          #ede8e4;
+  --text:         #2d1512;
+  --text-dim:     #6b3d34;
+  --text-muted:   #9a7068;
+  --accent:       #8b1a2a;
+  --accent-light: #b52239;
+  --border:       rgba(139,26,42,0.10);
+  --border-hi:    rgba(139,26,42,0.20);
+  --surface:      rgba(139,26,42,0.04);
+}
+
+
+/* ── §1  Page container ────────────────────────────────────── */
+
+.legal-page {
+  padding-top: var(--nav-height, 92px);
+  min-height: 100dvh;
+  position: relative;
+  z-index: var(--z-base, 1);
+}
 
 .legal-container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 40px var(--page-gutter);
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 240px 1fr;
   gap: 48px;
-  position: relative;
-  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px var(--page-gutter, 64px) 140px;
 }
 
 @media (max-width: 860px) {
   .legal-container {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 28px;
+    padding-bottom: 100px;
   }
 }
 
+
+/* ── §2  Sidebar navigation ───────────────────────────────── */
+
 .legal-nav {
   position: sticky;
-  top: calc(100px + var(--safe-top));
+  top: calc(var(--nav-height, 92px) + 32px);
   height: fit-content;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 @media (max-width: 860px) {
   .legal-nav {
     position: static;
-    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
   }
 }
 
 .legal-nav-title {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   color: var(--text-muted);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .legal-nav-link {
   display: block;
-  padding: 8px 12px;
-  color: var(--text-dim);
+  padding: 10px 14px;
+  color: var(--text-muted);
   text-decoration: none;
-  font-size: 13px;
-  border-left: 1px solid var(--border);
-  transition: color 0.2s, border-color 0.2s;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  border-left: 2px solid transparent;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.legal-nav-link:hover,
+.legal-nav-link:hover {
+  color: var(--text-dim);
+  border-left-color: var(--border-hi);
+}
+
 .legal-nav-link.is-active {
   color: var(--text);
   border-left-color: var(--accent);
+  background: var(--surface);
 }
+
+@media (max-width: 860px) {
+  .legal-nav-link {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 8px 12px;
+  }
+
+  .legal-nav-link.is-active {
+    border-left-color: transparent;
+    border-bottom-color: var(--accent);
+  }
+
+  .legal-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
+
+/* ── §3  Document content ──────────────────────────────────── */
 
 .legal-content {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  font-family: 'Karla', sans-serif;
-  font-size: 15px;
-  line-height: 1.75;
-  color: var(--text-dim);
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 48px;
+  position: relative;
+}
+
+.legal-content::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+  opacity: 0.4;
+}
+
+@media (max-width: 640px) {
+  .legal-content {
+    padding: 28px 20px;
+    gap: 32px;
+  }
 }
 
 .legal-content section {
@@ -76,27 +168,29 @@
 }
 
 .legal-content h1 {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 32px;
+  font-family: var(--font-display, 'Unbounded', sans-serif);
+  font-size: 28px;
   font-weight: 700;
   color: var(--text);
-  line-height: 1.15;
-  margin-bottom: 8px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
 }
 
 .legal-content h2 {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 20px;
+  font-family: var(--font-display, 'Unbounded', sans-serif);
+  font-size: 16px;
   font-weight: 700;
   color: var(--text);
-  margin-top: 16px;
-  padding-bottom: 8px;
+  margin-top: 12px;
+  padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
+  letter-spacing: -0.01em;
 }
 
 .legal-content h3 {
-  font-family: 'Unbounded', sans-serif;
-  font-size: 15px;
+  font-family: var(--font-display, 'Unbounded', sans-serif);
+  font-size: 14px;
   font-weight: 700;
   color: var(--text);
   margin-top: 8px;
@@ -104,6 +198,10 @@
 
 .legal-content p {
   margin: 0;
+  font-family: var(--font-body, 'Cormorant Garamond', serif);
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-dim);
 }
 
 .legal-content p strong {
@@ -113,10 +211,22 @@
 .legal-content ul,
 .legal-content ol {
   margin: 0;
-  padding-left: 20px;
+  padding-left: 24px;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  list-style: disc;
+}
+
+.legal-content ol {
+  list-style: decimal;
+}
+
+.legal-content li {
+  font-family: var(--font-body, 'Cormorant Garamond', serif);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--text-dim);
 }
 
 .legal-content li strong {
@@ -124,19 +234,22 @@
 }
 
 .legal-update-date {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 0.05em;
+  font-family: var(--font-mono, 'JetBrains Mono', monospace);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--text-muted);
-  margin-top: -24px;
+  margin-top: -12px;
 }
 
 .legal-note {
-  padding: 20px;
+  padding: 20px 24px;
   border: 1px dashed var(--border-hi);
   background: var(--surface);
   color: var(--text-dim);
-  font-size: 14px;
+  font-family: var(--font-body, 'Cormorant Garamond', serif);
+  font-size: 16px;
+  line-height: 1.7;
   margin-top: 8px;
 }
 

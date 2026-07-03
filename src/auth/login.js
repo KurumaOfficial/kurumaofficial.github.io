@@ -7,17 +7,12 @@ function boot() {
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
 
-    // Mock Login Action
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            alert(`[Mock Login] Attempting login with Email: ${email}`);
-            // Redirect to profile
             const currentLocale = window.__ALEPH_LOCALE__ || 'ru';
+            // Mock redirect — backend will handle real auth
             window.location.href = `/${currentLocale}/profile/`;
         });
     }
