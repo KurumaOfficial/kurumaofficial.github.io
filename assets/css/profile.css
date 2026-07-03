@@ -816,6 +816,10 @@ body {
   flex-shrink: 0;
 }
 
+.license-card.merged-card .license-details span {
+  white-space: nowrap;
+}
+
 @media (max-width: 640px) {
   .license-card.merged-card {
     flex-direction: column;
