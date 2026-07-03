@@ -4,7 +4,7 @@
  * @module core/data-utils
  */
 
-import { FLAG_META } from './constants.js';
+import { FLAG_META } from './constants.js?v=20260703a';
 
 // ── Primitives ──────────────────────────────────────────────
 

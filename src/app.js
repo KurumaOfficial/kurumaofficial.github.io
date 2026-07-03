@@ -7,7 +7,7 @@
  * @module app
  */
 
-import { createLocaleController } from './i18n/controller.js';
+import { createLocaleController } from './i18n/controller.js?v=20260703a';
 import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';

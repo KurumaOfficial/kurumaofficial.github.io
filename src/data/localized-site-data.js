@@ -1,5 +1,5 @@
-import { deepClone, normalizeData } from '../core/data-utils.js';
-import { DEFAULT_SITE_DATA } from './site-data.js';
+import { deepClone, normalizeData } from '../core/data-utils.js?v=20260703a';
+import { DEFAULT_SITE_DATA } from './site-data.js?v=20260703a';
 import { SITE_DATA_LOCALE_OVERRIDES } from './site-data-locales.js';
 
 /**
@@ -125,9 +125,9 @@ function applySupportOverrides(siteData, localeOverrides) {
 /**
  * Returns a deep clone of site data with locale-specific overlays for the
  * bundled default content only.
- * @param {import('../core/data-utils.js').SiteData} siteData
+ * @param {import('../core/data-utils.js?v=20260703a').SiteData} siteData
  * @param {string} locale
- * @returns {import('../core/data-utils.js').SiteData}
+ * @returns {import('../core/data-utils.js?v=20260703a').SiteData}
  */
 export function localizeSiteData(siteData, locale) {
     const localized = deepClone(siteData);

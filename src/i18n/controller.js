@@ -17,7 +17,7 @@ import {
     getLocaleOptions,
     normalizeLocale,
     resolveRouteRelativePath,
-} from './config.js';
+} from './config.js?v=20260703a';
 import { MESSAGES } from './messages.js';
 import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 
