@@ -370,7 +370,8 @@ body {
 
 .progress-ring {
   position: relative;
-  width: 64px; height: 64px;
+  width: 90px; height: 90px;
+  margin-top: -14px;
 }
 
 .progress-ring svg {
@@ -404,7 +405,7 @@ body {
 
 .progress-ring .ring-label .num {
   font-family: var(--font-display), sans-serif;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 800;
   color: var(--green);
 }
