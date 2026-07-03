@@ -278,7 +278,7 @@ body {
 .info-row::after {
   content: '';
   flex: 1;
-  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+  border-bottom: 1px dashed rgba(139, 26, 42, 0.35);
   margin: 0 8px;
   order: 2;
   align-self: center;
@@ -286,7 +286,7 @@ body {
 }
 
 [data-theme="light"] .info-row::after {
-  border-bottom-color: rgba(0, 0, 0, 0.15);
+  border-bottom-color: rgba(139, 26, 42, 0.25);
 }
 
 .info-row .label {
