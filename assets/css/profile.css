@@ -121,6 +121,8 @@ body {
   cursor: pointer;
   width: 100%;
   text-align: left;
+  text-decoration: none;
+  box-sizing: border-box;
   transition: background .15s ease, color .15s ease;
 }
 

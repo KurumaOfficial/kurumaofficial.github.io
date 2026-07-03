@@ -16,8 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=10">
-<link rel="stylesheet" href="../../assets/css/docs.css?v=10">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=11">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -77,7 +76,7 @@
         <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Аккаунт</button>
         <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Купівля клієнта</button>
         <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Додатково</button>
-        <button class="sidebar-link" data-target="documentation"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Документація</button>
+        <a class="sidebar-link" href="../docs/privacy/"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Документація</a>
       </nav>
     </aside>
 
@@ -144,7 +143,7 @@
             </div>
             <div class="license-key-wrap">
               <span class="license-key">STRANGE-XXXX-XXXX-XXXX</span>
-              <button class="copy-key-btn" title="Копировать ключ">Копіювати</button>
+              <button class="copy-key-btn" title="Копіювати ключ">Копіювати</button>
             </div>
             <div class="license-actions">
               <a class="license-btn primary" href="../products/strange-visuals/">Сторінка</a>
@@ -175,95 +174,10 @@
           </div>
         </form>
       </section>
-
-      <!-- DOCUMENTATION (Normal integrated view) -->
-      <section class="profile-section" id="documentation">
-        <div class="docs-container" style="padding: 0; max-width: 100%; grid-template-columns: 200px 1fr; gap: 32px;">
-          <div class="docs-nav" style="position: static;">
-            <button class="docs-nav-link docs-tab-btn is-active" data-doc="privacy">Конфіденційність</button>
-            <button class="docs-nav-link docs-tab-btn" data-doc="terms">Правила</button>
-            <button class="docs-nav-link docs-tab-btn" data-doc="agreement">Угода</button>
-            <button class="docs-nav-link docs-tab-btn" data-doc="cookies">Cookies</button>
-          </div>
-          <div class="docs-content" style="padding: 36px;">
-            <!-- Privacy Pane -->
-            <div class="doc-tab-pane active" id="doc-privacy">
-              <section>
-                <h1>Політика конфіденційності</h1>
-                <div class="docs-update-date">Останнє оновлення: 3 липня 2026</div>
-                <p>Ця Політика конфіденційності описує, як Aleph Studio збирає, використовує та захищає вашу особисту інформацію при використанні наших продуктів та сайту.</p>
-              </section>
-              <section>
-                <h2>1. Збір інформації</h2>
-                <p>Ми збираємо інформацію, яку ви надаєте безпосередньо: ім'я користувача, адресу електронної пошти та дані облікового запису Discord, якщо ви пов'язуєте його з нашим сервісом.</p>
-              </section>
-              <section>
-                <h2>2. Використання даних</h2>
-                <p>Ми використовуємо зібрану інформацію для надання та підтримки наших продуктів, автентифікації акаунта та зв'язку з вами.</p>
-              </section>
-              <section>
-                <h2>3. Безпека даних</h2>
-                <p>Ми застосовуємо відповідні технічні та організаційні заходи безпеки для захисту ваших даних від несанкціонованого доступу.</p>
-              </section>
-            </div>
-            
-            <!-- Terms Pane -->
-            <div class="doc-tab-pane" id="doc-terms">
-              <section>
-                <h1>Правила користування</h1>
-                <div class="docs-update-date">Останнє оновлення: 3 липня 2026</div>
-                <p>Використовуючи сайт та продукти Aleph Studio, ви погоджуєтеся з цими Умовами використання.</p>
-              </section>
-              <section>
-                <h2>1. Ліцензія на використання</h2>
-                <p>Ми надаємо вам невиключну ліцензію на використання наших модів та інструментів виключно в особистих некомерційних цілях.</p>
-              </section>
-              <section>
-                <h2>2. Обмеження</h2>
-                <p>Забороняється продавати, декомпілювати або поширювати вихідний код наших продуктів без згоди студії.</p>
-              </section>
-            </div>
-            
-            <!-- Agreement Pane -->
-            <div class="doc-tab-pane" id="doc-agreement">
-              <section>
-                <h1>Угода користувача</h1>
-                <div class="docs-update-date">Останнє оновлення: 3 липня 2026</div>
-                <p>Ця Угода користувача є юридично обов'язковим договором між вами та Aleph Studio.</p>
-              </section>
-              <section>
-                <h2>1. Облікові записи</h2>
-                <p>При створенні акаунта ви несете повну відповідальність за збереження ваших облікових даних та пароля.</p>
-              </section>
-              <section>
-                <h2>2. Донати та цифрові покупки</h2>
-                <p>Всі транзакції підтримки є остаточними і не підлягають поверненню, за винятком випадків, встановлених законом.</p>
-              </section>
-            </div>
-            
-            <!-- Cookies Pane -->
-            <div class="doc-tab-pane" id="doc-cookies">
-              <section>
-                <h1>Політика Cookies</h1>
-                <div class="docs-update-date">Останнє оновлення: 3 липня 2026</div>
-                <p>Ми використовуємо файли cookie для покращення користувацького досвіду, сесій автентифікації та збереження налаштувань оформлення.</p>
-              </section>
-              <section>
-                <h2>1. Що таке файли cookie?</h2>
-                <p>Cookie — це невеликі текстові файли, що зберігаються на вашому пристрої для прискорення роботи та автентифікації.</p>
-              </section>
-              <section>
-                <h2>2. Як ми їх використовуємо</h2>
-                <p>Ми зберігаємо сесійні дані автентифікації та обрану вами тему оформлення (світла/темна).</p>
-              </section>
-            </div>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=10"></script>
+<script type="module" src="../../src/profile/profile.js?v=11"></script>
 </body>
 </html>
