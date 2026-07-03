@@ -68,6 +68,11 @@ function mergeDefaultProducts(stored) {
             .map((sp) => {
                 const dp = defaultProducts.find((p) => p.id === sp.id);
                 if (!dp) return sp;
+                // If version is different, overwrite with default product
+                if (sp.version !== dp.version) {
+                    propertiesUpdated = true;
+                    return dp;
+                }
                 const merged = { ...sp };
                 if (dp.cardBannerUrl && merged.cardBannerUrl !== dp.cardBannerUrl) {
                     merged.cardBannerUrl = dp.cardBannerUrl;
