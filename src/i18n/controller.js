@@ -19,7 +19,7 @@ import {
     resolveRouteRelativePath,
 } from './config.js';
 import { MESSAGES } from './messages.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/social/og-banner.png';
 const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/png';
