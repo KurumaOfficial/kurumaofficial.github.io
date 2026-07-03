@@ -2014,7 +2014,7 @@ footer {
 
 .manifesto-visual {
     position: absolute;
-    right: calc(var(--page-gutter) - 40px);
+    right: calc(var(--page-gutter) - 60px);
     top: 50%;
     transform: translateY(-50%);
     width: 300px;
