@@ -219,7 +219,8 @@ body {
 .user-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 24px;
   margin-bottom: 24px;
   border-bottom: 1px solid var(--divider);
   padding-bottom: 24px;
@@ -243,15 +244,18 @@ body {
   background: var(--accent-dim);
   border: 1px solid var(--border-hi);
   display: inline-flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.mini-avatar .icon {
-  width: 18px; height: 18px;
-  color: var(--accent-light);
+.mini-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .user-meta {
-  text-align: right;
+  text-align: left;
   font-family: var(--font-mono), monospace;
   font-size: 11px;
   color: var(--text-secondary);
