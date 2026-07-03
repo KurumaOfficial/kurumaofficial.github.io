@@ -1,0 +1,145 @@
+/* Legal pages styling (Privacy, Terms, Cookies, User Agreement) */
+
+.legal-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px var(--page-gutter);
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 48px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 860px) {
+  .legal-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.legal-nav {
+  position: sticky;
+  top: calc(100px + var(--safe-top));
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+@media (max-width: 860px) {
+  .legal-nav {
+    position: static;
+    margin-bottom: 16px;
+  }
+}
+
+.legal-nav-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.legal-nav-link {
+  display: block;
+  padding: 8px 12px;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 13px;
+  border-left: 1px solid var(--border);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.legal-nav-link:hover,
+.legal-nav-link.is-active {
+  color: var(--text);
+  border-left-color: var(--accent);
+}
+
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  font-family: 'Karla', sans-serif;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+
+.legal-content section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.legal-content h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+
+.legal-content h2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.legal-content h3 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 8px;
+}
+
+.legal-content p {
+  margin: 0;
+}
+
+.legal-content p strong {
+  color: var(--text);
+}
+
+.legal-content ul,
+.legal-content ol {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legal-content li strong {
+  color: var(--text);
+}
+
+.legal-update-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-top: -24px;
+}
+
+.legal-note {
+  padding: 20px;
+  border: 1px dashed var(--border-hi);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.legal-note strong {
+  color: var(--text);
+}
