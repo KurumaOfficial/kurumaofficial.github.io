@@ -1,9 +1,11 @@
-<!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<!doctype html>
+<html lang="ru" dir="ltr" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Aleph Studio — Личный Кабинет</title>
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
 <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../favicon.ico" sizes="48x48">
@@ -12,81 +14,56 @@
 <link rel="icon" href="../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=1">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=2">
 </head>
 <body>
-
-<a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
-
-<nav class="nav" aria-label="Основная навигация">
-  <a id="logoLink" class="nav-logo" href="../../ru/" aria-label="Aleph Studio — наверх">
-      <span class="logo-sq" aria-hidden="true"></span>
-      <span class="logo-text">Aleph Studio</span>
-  </a>
-
-  <div class="nav-links">
-    <a id="navLinkProducts" class="nav__link" href="../../ru/products/">Продукты</a>
-    <a id="navLinkDonate" class="nav__link" href="../../ru/donate/" data-donate-link>Поддержать</a>
-  </div>
-
-  <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Переключить тему" aria-pressed="false">
-      <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
-    </button>
-
-    <div id="localeSwitcher" class="locale-switcher">
-      <button
-        id="localeSwitcherTrigger"
-        class="locale-switcher__trigger"
-        type="button"
-        aria-haspopup="menu"
-        aria-expanded="false"
-        aria-label="Переключатель языков"
-      >
-        <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
-        <span id="localeSwitcherLabel">RU</span>
-        <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
-          <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-        </svg>
-      </button>
-      <div
-        id="localeSwitcherMenu"
-        class="locale-switcher__menu"
-        role="menu"
-        aria-label="Выбор языка"
-        hidden
-      ></div>
+<a id="skipLink" class="skip-link" href="#main">Skip to content</a>
+<nav class="nav" aria-label="Main navigation">
+    <a id="logoLink" class="nav-logo" href="../../ru/" aria-label="Aleph Studio">
+        <span class="logo-sq" aria-hidden="true"></span>
+        <span class="logo-text">Aleph Studio</span>
+    </a>
+    <div class="nav-links">
+        <a id="navLinkProducts" class="nav__link" href="../../ru/products/">Продукты</a>
+        <a id="navLinkDonate" class="nav__link" href="../../ru/donate/" data-donate-link>Поддержать</a>
     </div>
-  </div>
+    <div class="nav-right">
+        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
+            <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </button>
+        <div id="localeSwitcher" class="locale-switcher">
+            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Выбор языка">
+                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                <span id="localeSwitcherLabel">RU</span>
+                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Выбор языка" hidden></div>
+        </div>
+    </div>
 </nav>
-
-<main id="main" class="reveal">
-
+<main id="main">
+<div class="profile-page">
 <div class="profile-container">
-  <!-- LEFT COLUMN: MAIN CONTENT CARD -->
   <div class="profile-content">
-    
-    <!-- OVERVIEW TAB -->
     <div class="content-section is-active" id="overview">
       <h2 class="section-title">Обзор аккаунта</h2>
       <form class="settings-form" id="settingsForm">
         <div class="form-group">
-          <label class="form-label">Имя пользователя</label>
+          <label class="form-label" for="prof-username">Имя пользователя</label>
           <input class="form-input" type="text" id="prof-username" value="User">
         </div>
         <div class="form-group">
-          <label class="form-label">Эл. почта</label>
+          <label class="form-label" for="prof-email">Эл. почта</label>
           <input class="form-input" type="email" id="prof-email" value="user@aleph.icu">
         </div>
         <div class="settings-form-full">
-          <button class="auth-btn" style="width: auto; padding: 12px 30px;" type="submit">Сохранить изменения</button>
+          <button class="save-btn" type="submit">Сохранить изменения</button>
         </div>
       </form>
-      
+      <h3 class="connections-heading">Связанные аккаунты</h3>
       <div class="connections-list">
-        <h3 style="font-family:'Unbounded'; font-size:14px; text-transform:uppercase; letter-spacing:0.05em;">Связанные аккаунты</h3>
         <div class="connection-item">
           <div class="connection-info">
             <svg class="connection-icon" viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,53.22,6.83,77.19,77.19,0,0,0,49.88,0,105.15,105.15,0,0,0,19.44,8.07C3.66,31.58-1.86,54.65,1,77.53A105.73,105.73,0,0,0,32,96.36a77.7,77.7,0,0,0,6.63-10.85,68.43,68.43,0,0,1-10.45-5c.88-.65,1.74-1.34,2.58-2a75.58,75.58,0,0,0,72.68,0c.84.71,1.7,1.4,2.58,2a68.43,68.43,0,0,1-10.45,5,77.7,77.7,0,0,0,6.63,10.85,105.73,105.73,0,0,0,31-18.83C129.24,48.54,122.61,25.76,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>
@@ -99,8 +76,6 @@
         </div>
       </div>
     </div>
-    
-    <!-- LICENSES TAB -->
     <div class="content-section" id="licenses">
       <h2 class="section-title">Мои лицензии</h2>
       <div class="licenses-grid">
@@ -124,8 +99,6 @@
         </div>
       </div>
     </div>
-    
-    <!-- SECURITY TAB -->
     <div class="content-section" id="security">
       <h2 class="section-title">Безопасность</h2>
       <form class="settings-form" id="securityForm">
@@ -142,14 +115,11 @@
           <input class="form-input" type="password" id="conf-new-pass" required placeholder="••••••••">
         </div>
         <div class="settings-form-full">
-          <button class="auth-btn" style="width: auto; padding: 12px 30px;" type="submit">Обновить пароль</button>
+          <button class="save-btn" type="submit">Обновить пароль</button>
         </div>
       </form>
     </div>
-    
   </div>
-
-  <!-- RIGHT COLUMN: SIDEBAR / TABS -->
   <div class="profile-sidebar">
     <div class="profile-card-mini">
       <div class="avatar-wrapper">
@@ -158,27 +128,18 @@
       </div>
       <div class="profile-info-mini">
         <div class="profile-name">Пользователь</div>
-        <div class="profile-status">
-          <span class="status-badge premium">PREMIUM</span>
-        </div>
+        <span class="status-badge premium">PREMIUM</span>
       </div>
     </div>
     <div class="profile-menu">
-      <button class="profile-menu-item is-active" data-target="overview">
-        Обзор аккаунта
-      </button>
-      <button class="profile-menu-item" data-target="licenses">
-        Мои лицензии
-      </button>
-      <button class="profile-menu-item" data-target="security">
-        Безопасность
-      </button>
+      <button class="profile-menu-item is-active" data-target="overview">Обзор</button>
+      <button class="profile-menu-item" data-target="licenses">Лицензии</button>
+      <button class="profile-menu-item" data-target="security">Безопасность</button>
     </div>
   </div>
 </div>
-
+</div>
 </main>
-
 <footer class="site-footer">
     <div class="site-footer__main">
         <div class="site-footer__left">
@@ -189,20 +150,23 @@
             <span class="site-footer__divider" aria-hidden="true"></span>
             <span id="footerTagline" class="site-footer__tagline">Дочерний проект WeTTeA</span>
         </div>
-        <nav id="footerNav" class="site-footer__nav" aria-label="Подвал — навигация">
+        <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
             <a href="../../ru/products/">Продукты</a>
             <a href="../../ru/#manifesto">Принцип</a>
             <a href="../../ru/#team">Команда</a>
             <span class="site-footer__nav-sep" aria-hidden="true"></span>
             <a id="footerDonateLink" href="../../ru/donate/">Поддержать</a>
         </nav>
-        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Социальные сети"></div>
+        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div>
     </div>
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. Все права защищены.</span>
     </div>
+    <span id="footerDesc" hidden></span>
+    <span id="footerNavHeading" hidden></span>
+    <span id="footerWetteaHeading" hidden></span>
 </footer>
-
-<script type="module" src="../../src/profile/profile.js?v=1"></script>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+<script type="module" src="../../src/profile/profile.js?v=2"></script>
 </body>
 </html>
