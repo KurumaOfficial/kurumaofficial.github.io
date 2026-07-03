@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=11">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=12">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -52,6 +52,7 @@
     <div class="nav-links">
         <a id="navLinkProducts" class="nav__link" href="../../ru/products/">Продукты</a>
         <a id="navLinkDonate" class="nav__link" href="../../ru/donate/" data-donate-link>Поддержать</a>
+        <a id="navLinkDocs" class="nav__link" href="../../ru/docs/privacy/">Документация</a>
     </div>
     <div class="nav-right">
         <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
@@ -74,7 +75,7 @@
       <h1 class="page-title">Мой профиль</h1>
       <nav class="sidebar-nav">
         <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Аккаунт</button>
-        <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Покупка клиента</button>
+        <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Магазин</button>
         <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Дополнительно</button>
         <a class="sidebar-link" href="../docs/privacy/"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Документация</a>
       </nav>
@@ -112,42 +113,84 @@
           <span class="value mono">7ab33b0f2b8ae70708dbc5b2aa34acca <span class="copy-hint">Копировать</span></span>
         </div>
 
-        <div class="subscription-card">
-          <div class="progress-ring">
-            <svg viewBox="0 0 64 64">
-              <circle class="track" cx="32" cy="32" r="27"></circle>
-              <circle class="bar" cx="32" cy="32" r="27" id="ringBar"></circle>
-            </svg>
-            <div class="ring-label">
-              <span class="num">96</span>
-              <span class="unit">д</span>
+        <div style="margin-top: 32px;">
+          <div class="license-card merged-card">
+            <div class="card-left">
+              <div class="license-header">
+                <span class="license-name">Strange Visuals</span>
+                <span class="license-status active">Активно</span>
+              </div>
+              <div class="license-details">
+                <span>Тип: <b>Персональная лицензия</b></span>
+                <span>Активировано: <b>2026-06-01</b></span>
+                <span>Действительна до: <b>10.07.2026 г, 15:03</b></span>
+              </div>
+              <div class="license-key-wrap">
+                <span class="license-key">STRANGE-XXXX-XXXX-XXXX</span>
+                <button class="copy-key-btn" title="Копировать ключ">Копировать</button>
+              </div>
+              <div class="license-actions">
+                <a class="license-btn primary" href="../products/strange-visuals/">Страница</a>
+                <a class="license-btn" href="#">Скачать</a>
+              </div>
+            </div>
+            <div class="card-right">
+              <div class="progress-ring">
+                <svg viewBox="0 0 64 64">
+                  <circle class="track" cx="32" cy="32" r="27"></circle>
+                  <circle class="bar" cx="32" cy="32" r="27" id="ringBar"></circle>
+                </svg>
+                <div class="ring-label">
+                  <span class="num">96</span>
+                  <span class="unit">д</span>
+                </div>
+              </div>
             </div>
           </div>
-          <h3>Статус подписки</h3>
-          <p>Ваша подписка действительна до<br><b>10.07.2026 г, 15:03</b></p>
         </div>
       </section>
 
-      <!-- LICENSES -->
+      <!-- STORE -->
       <section class="profile-section" id="licenses">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Мои лицензии</h2>
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Магазин продуктов</h2>
         <div class="licenses-grid">
+          <!-- Strange Visuals -->
           <div class="license-card">
             <div class="license-header">
               <span class="license-name">Strange Visuals</span>
-              <span class="license-status active">Активно</span>
+              <span class="license-status active" style="background: rgba(139,26,42,0.1); color: var(--accent-light); border-color: rgba(139,26,42,0.2);">699 ₽ / мес</span>
             </div>
             <div class="license-details">
-              <span>Тип: Персональная лицензия</span>
-              <span>Активировано: 2026-06-01</span>
+              <span>Визуальный чит для Minecraft с продвинутыми обходами и красивым интерфейсом.</span>
             </div>
-            <div class="license-key-wrap">
-              <span class="license-key">STRANGE-XXXX-XXXX-XXXX</span>
-              <button class="copy-key-btn" title="Копировать ключ">Копировать</button>
+            <div class="license-actions" style="margin-top: auto;">
+              <a class="license-btn primary" href="../products/strange-visuals/">Купить</a>
             </div>
-            <div class="license-actions">
-              <a class="license-btn primary" href="../products/strange-visuals/">Страница</a>
-              <a class="license-btn" href="#">Скачать</a>
+          </div>
+          <!-- Minecraft Launcher -->
+          <div class="license-card">
+            <div class="license-header">
+              <span class="license-name">Aleph Launcher</span>
+              <span class="license-status active" style="background: rgba(63,207,127,0.1); color: var(--green); border-color: rgba(63,207,127,0.2);">Бесплатно</span>
+            </div>
+            <div class="license-details">
+              <span>Минималистичный и быстрый лаунчер для комфортной игры с читами.</span>
+            </div>
+            <div class="license-actions" style="margin-top: auto;">
+              <a class="license-btn primary" href="../products/aleph-minecraft-launcher/">Скачать</a>
+            </div>
+          </div>
+          <!-- Aleph Trust -->
+          <div class="license-card">
+            <div class="license-header">
+              <span class="license-name">Aleph Trust</span>
+              <span class="license-status" style="background: rgba(255,255,255,0.05); color: var(--text-secondary); border-color: var(--panel-border);">Скоро</span>
+            </div>
+            <div class="license-details">
+              <span>Система обхода проверок и защиты аккаунта нового поколения.</span>
+            </div>
+            <div class="license-actions" style="margin-top: auto;">
+              <a class="license-btn" href="../products/aleph-trust/">Подробнее</a>
             </div>
           </div>
         </div>
@@ -178,6 +221,6 @@
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=11"></script>
+<script type="module" src="../../src/profile/profile.js?v=12"></script>
 </body>
 </html>
