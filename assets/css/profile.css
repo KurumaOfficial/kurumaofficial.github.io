@@ -1,0 +1,418 @@
+/* Profile dashboard specific styling */
+
+.profile-container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px var(--page-gutter);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 960px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+/* Sidebar layout */
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile-card-mini {
+  background: color-mix(in srgb, var(--bg2) 65%, transparent);
+  border: 1px solid var(--border);
+  padding: 30px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.profile-card-mini::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+.avatar-wrapper {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  cursor: pointer;
+  group-hover: border-color: var(--accent-light);
+}
+
+.avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.avatar-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+  opacity: 1;
+}
+
+.profile-info-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.profile-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.profile-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.status-badge {
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 9px;
+  font-weight: bold;
+}
+
+.status-badge.premium {
+  background: rgba(181, 34, 57, 0.15);
+  color: var(--accent-light);
+  border: 1px solid rgba(181, 34, 57, 0.3);
+}
+
+/* Sidebar Menu */
+.profile-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  text-align: left;
+  width: 100%;
+}
+
+.profile-menu-item:hover,
+.profile-menu-item.is-active {
+  color: var(--text);
+  border-color: var(--border-hi);
+  background: var(--surface);
+}
+
+.profile-menu-item.is-active {
+  border-left: 2px solid var(--accent);
+}
+
+.profile-menu-item svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+/* Dashboard Content */
+.profile-content {
+  background: color-mix(in srgb, var(--bg2) 65%, transparent);
+  border: 1px solid var(--border);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  position: relative;
+  min-height: 500px;
+}
+
+@media (max-width: 640px) {
+  .profile-content {
+    padding: 24px;
+  }
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.is-active {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.section-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+/* Grid configs inside tabs */
+.licenses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.license-card {
+  border: 1px solid var(--border);
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  transition: border-color 0.2s;
+}
+
+.license-card:hover {
+  border-color: var(--border-hi);
+}
+
+.license-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.license-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.license-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 6px;
+  text-transform: uppercase;
+}
+
+.license-status.active {
+  background: rgba(76, 175, 110, 0.15);
+  color: var(--green);
+  border: 1px solid rgba(76, 175, 110, 0.3);
+}
+
+.license-details {
+  font-size: 13px;
+  color: var(--text-dim);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.license-key-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+}
+
+.license-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.copy-key-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-dim);
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.copy-key-btn:hover {
+  color: var(--text);
+}
+
+.license-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.license-btn {
+  flex: 1;
+  padding: 10px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.license-btn:hover {
+  border-color: var(--border-hi);
+  background: var(--surface);
+}
+
+.license-btn.primary {
+  background: var(--accent);
+  border-color: transparent;
+  color: #fff;
+}
+
+.license-btn.primary:hover {
+  background: var(--accent-light);
+}
+
+/* Security settings forms */
+.settings-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 640px) {
+  .settings-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-form-full {
+  grid-column: span 2;
+}
+
+@media (max-width: 640px) {
+  .settings-form-full {
+    grid-column: span 1;
+  }
+}
+
+.connections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.connection-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.connection-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.connection-icon {
+  width: 24px;
+  height: 24px;
+  fill: var(--text-dim);
+}
+
+.connection-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.connection-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.connection-status {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.connection-status.connected {
+  color: var(--green);
+}
+
+.connection-btn {
+  padding: 8px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.connection-btn:hover {
+  border-color: var(--border-hi);
+  background: var(--surface);
+}
+
+.connection-btn.disconnect {
+  color: var(--accent-light);
+  border-color: rgba(181, 34, 57, 0.2);
+}
+
+.connection-btn.disconnect:hover {
+  background: rgba(181, 34, 57, 0.05);
+  border-color: var(--accent-light);
+}

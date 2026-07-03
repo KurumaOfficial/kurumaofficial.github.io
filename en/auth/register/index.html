@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aleph Studio — Register</title>
+<script>window.__ALEPH_LOCALE__ = 'en';</script>
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+<link rel="icon" href="../../../favicon.ico" sizes="48x48">
+<link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Karla:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../../assets/css/main.css?v=12">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=1">
+</head>
+<body>
+
+<a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
+
+<nav class="nav" aria-label="Основная навигация">
+  <a id="logoLink" class="nav-logo" href="../../../en/" aria-label="Aleph Studio — наверх">
+      <span class="nav-logo__sq" aria-hidden="true"></span>
+      <span class="logo-text">Aleph Studio</span>
+  </a>
+
+  <div class="nav-links">
+    <a id="navLinkProducts" class="nav__link" href="../../../en/products/">Products</a>
+    <a id="navLinkDonate" class="nav__link" href="../../../en/donate/" data-donate-link>Support</a>
+  </div>
+
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
+      <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
+    </button>
+
+    <div id="localeSwitcher" class="locale-switcher">
+      <button
+        id="localeSwitcherTrigger"
+        class="locale-switcher__trigger"
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded="false"
+        aria-label="Language switcher"
+      >
+        <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+        <span id="localeSwitcherLabel">EN</span>
+        <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true">
+          <polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+        </svg>
+      </button>
+      <div
+        id="localeSwitcherMenu"
+        class="locale-switcher__menu"
+        role="menu"
+        aria-label="Выбор языка"
+        hidden
+      ></div>
+    </div>
+  </div>
+</nav>
+
+<main id="main" class="reveal">
+
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1 class="auth-title">Create Account</h1>
+      <p class="auth-subtitle">Create a new account in Aleph system</p>
+    </div>
+    <form class="auth-form" id="registerForm">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input class="form-input" type="text" id="username" required placeholder="User">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email address</label>
+        <input class="form-input" type="email" id="email" required placeholder="name@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input class="form-input" type="password" id="password" required placeholder="••••••••">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="confirmPassword">Confirm Password</label>
+        <input class="form-input" type="password" id="confirmPassword" required placeholder="••••••••">
+      </div>
+      <div class="form-options">
+        <label class="remember-me">
+          <input type="checkbox" id="agree" required>
+          I agree to the <a class="auth-link" href="../../legal/terms/" target="_blank">Terms of Service</a> and <a class="auth-link" href="../../legal/privacy/" target="_blank">Privacy Policy</a>
+        </label>
+      </div>
+      <button class="auth-btn" type="submit">Create Account</button>
+    </form>
+    <div class="auth-footer">
+      Already have an account? <a class="auth-link" href="../login/">Log in</a>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer class="site-footer">
+    <div class="site-footer__main">
+        <div class="site-footer__left">
+            <a class="site-footer__logo" href="../../../en/">
+                <span class="site-footer__sq" aria-hidden="true"></span>
+                <span class="site-footer__name">Aleph Studio</span>
+            </a>
+            <span class="site-footer__divider" aria-hidden="true"></span>
+            <span id="footerTagline" class="site-footer__tagline">WeTTeA sub-project</span>
+        </div>
+        <nav id="footerNav" class="site-footer__nav" aria-label="Подвал — навигация">
+            <a href="../../../en/products/">Products</a>
+            <a href="../../../en/#manifesto">Принцип</a>
+            <a href="../../../en/#team">Команда</a>
+            <span class="site-footer__nav-sep" aria-hidden="true"></span>
+            <a id="footerDonateLink" href="../../../en/donate/">Support</a>
+        </nav>
+        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Социальные сети"></div>
+    </div>
+    <div class="site-footer__bottom">
+        <span id="footerCopyright" class="site-footer__copy">© 2026. All rights reserved.</span>
+    </div>
+</footer>
+
+<script type="module" src="../../../src/auth/register.js?v=1"></script>
+</body>
+</html>
