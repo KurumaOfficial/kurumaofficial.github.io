@@ -97,6 +97,31 @@ function boot() {
         });
     });
 
+    // ── Avatar Upload Picker ───────────────────────────
+    const avatarBtn = document.getElementById('avatarBtn');
+    const avatarInput = document.getElementById('avatarInput');
+    const avatarImg = document.getElementById('avatarImg');
+
+    if (avatarBtn && avatarInput && avatarImg) {
+        avatarBtn.addEventListener('click', (e) => {
+            // Prevent event bubbles from nested elements if they fire click
+            if (e.target !== avatarInput) {
+                avatarInput.click();
+            }
+        });
+
+        avatarInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    avatarImg.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     // ── Progress Ring Dashoffset ────────────────────────
     const ring = document.getElementById('ringBar');
     if (ring) {
