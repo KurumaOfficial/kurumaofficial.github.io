@@ -1,0 +1,1203 @@
+/* ============================================================
+   aleph-trust.css  — Pricing page skin for Aleph Trust
+   Loaded AFTER product-page.css.  Uses the same CSS token
+   aliases (--bg, --accent, --border …) that product-page.css
+   maps from main.css.
+   ============================================================ */
+
+
+/* ── §0  Pricing-page-specific tokens ──────────────────────── */
+
+.pricing-section {
+    --card-bg:          var(--bg2);
+    --card-bg-hover:    var(--surface-h);
+    --card-border:      var(--border);
+    --card-border-hi:   rgba(139, 26, 42, 0.35);
+    --card-shadow:      0 8px 48px rgba(0, 0, 0, 0.35);
+    --card-shadow-lift: 0 18px 56px rgba(0, 0, 0, 0.45);
+    --badge-bg:         var(--accent);
+    --badge-text:       #fff;
+    --check-color:      var(--color-success, #3fcf7f);
+    --cta-bg:           var(--text);
+    --cta-color:        var(--bg);
+    --cta-accent-bg:    var(--accent);
+    --cta-accent-text:  #fff;
+    --hebrew-opacity:   0.045;
+    --hebrew-size:      260px;
+    --promo-bg:         rgba(255, 255, 255, 0.03);
+    --payment-bg:       rgba(255, 255, 255, 0.04);
+}
+
+[data-theme="light"] .pricing-section {
+    --card-bg:          var(--bg2);
+    --card-bg-hover:    var(--surface-h);
+    --card-border:      var(--border);
+    --card-border-hi:   rgba(139, 26, 42, 0.28);
+    --card-shadow:      0 8px 48px rgba(0, 0, 0, 0.08);
+    --card-shadow-lift: 0 18px 56px rgba(0, 0, 0, 0.12);
+    --badge-bg:         var(--accent);
+    --badge-text:       #fff;
+    --hebrew-opacity:   0.05;
+    --promo-bg:         rgba(0, 0, 0, 0.03);
+    --payment-bg:       rgba(0, 0, 0, 0.03);
+}
+
+
+/* ── §1  Pricing section wrapper ───────────────────────────── */
+
+.pricing-section {
+    position: relative;
+    padding: 100px calc(var(--page-gutter, 52px) + var(--safe-right, 0px))
+                    calc(100px + var(--safe-bottom, 0px))
+                    calc(var(--page-gutter, 52px) + var(--safe-left, 0px));
+    scroll-margin-top: calc(var(--nav-height, 92px) + 16px);
+}
+
+.pricing-section > .eyebrow,
+.pricing-section > .s-title,
+.pricing-section > .s-desc {
+    text-align: center;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* ── §2  Duration selector (segmented tabs) ────────────────── */
+
+.duration-selector {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    margin: 36px auto 48px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* centre the selector */
+.pricing-section > .duration-selector {
+    display: flex;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.duration-option {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--card-border);
+    padding: 12px 24px;
+    cursor: pointer;
+    position: relative;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.duration-option:last-child {
+    border-right: none;
+}
+
+.duration-option:hover {
+    color: var(--text);
+    background: var(--card-bg-hover);
+}
+
+.duration-option.is-active,
+.duration-option[aria-pressed="true"] {
+    color: var(--badge-text);
+    background: var(--accent);
+}
+
+/* Discount badge on longer durations */
+.duration-option .duration-save {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--check-color);
+    margin-left: 6px;
+}
+
+.duration-option.is-active .duration-save,
+.duration-option[aria-pressed="true"] .duration-save {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+
+/* ── §3  Pricing grid ──────────────────────────────────────── */
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    max-width: 1120px;
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+
+/* ── §4  Plan card — base ──────────────────────────────────── */
+
+.plan-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 32px 36px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    overflow: hidden;
+    transition:
+        transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+        border-color 0.28s ease,
+        background 0.28s ease;
+}
+
+/* Adjacent card borders collapse */
+.plan-card + .plan-card {
+    border-left: none;
+}
+
+/* Hover — lift + glow */
+.plan-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-lift);
+    border-color: var(--card-border-hi);
+    z-index: 2;
+}
+
+/* Subtle top gradient line */
+.plan-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, var(--accent) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+}
+
+.plan-card:hover::before {
+    opacity: 1;
+}
+
+
+/* ── §5  Hebrew watermark letter ───────────────────────────── */
+
+.plan-hebrew-letter {
+    position: absolute;
+    top: -20px;
+    right: -10px;
+    font-family: 'Times New Roman', 'David', 'Noto Serif Hebrew', serif;
+    font-size: var(--hebrew-size);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+    opacity: var(--hebrew-opacity);
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.plan-card:hover .plan-hebrew-letter {
+    opacity: calc(var(--hebrew-opacity) * 1.8);
+    transform: scale(1.04) translateY(-4px);
+}
+
+/* Card-specific letter sizes and positions */
+.plan-card--beth .plan-hebrew-letter {
+    font-size: 240px;
+    top: -16px;
+    right: -8px;
+}
+
+.plan-card--gimel .plan-hebrew-letter {
+    font-size: 280px;
+    top: -24px;
+    right: -12px;
+}
+
+.plan-card--dalet .plan-hebrew-letter {
+    font-size: 250px;
+    top: -18px;
+    right: -6px;
+}
+
+
+/* ── §6  Plan card — Beth variant ──────────────────────────── */
+
+.plan-card--beth {
+    background: linear-gradient(168deg, var(--card-bg) 0%, rgba(139, 26, 42, 0.03) 100%);
+}
+
+
+/* ── §7  Plan card — Gimel (highlighted) ───────────────────── */
+
+.plan-card--gimel {
+    background: linear-gradient(168deg, var(--card-bg) 0%, rgba(139, 26, 42, 0.06) 100%);
+    border-color: var(--card-border-hi);
+    transform: scaleY(1.02);
+    transform-origin: top center;
+    z-index: 3;
+    box-shadow: var(--card-shadow);
+    /* Restore collapsed border */
+    border-left: 1px solid var(--card-border-hi);
+}
+
+/* Re-collapse the next sibling's border */
+.plan-card--gimel + .plan-card {
+    border-left: none;
+}
+
+.plan-card--gimel::before {
+    opacity: 1;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--color-ruby-light, #b52239) 50%, var(--accent) 100%);
+}
+
+.plan-card--gimel:hover {
+    transform: scaleY(1.02) translateY(-6px);
+    box-shadow: var(--card-shadow-lift),
+                0 0 60px rgba(139, 26, 42, 0.12);
+}
+
+
+/* ── §8  Plan badge ('Most Popular') ───────────────────────── */
+
+.plan-badge {
+    position: absolute;
+    top: 0;
+    right: 28px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--badge-text);
+    background: var(--badge-bg);
+    padding: 6px 14px 8px;
+    z-index: 4;
+    line-height: 1;
+}
+
+/* Tiny triangle below badge */
+.plan-badge::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--badge-bg);
+}
+
+
+/* ── §9  Plan name ─────────────────────────────────────────── */
+
+.plan-name {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ── §10  Plan description ─────────────────────────────────── */
+
+.plan-desc {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+    min-height: 38px;
+}
+
+
+/* ── §11  Plan price ───────────────────────────────────────── */
+
+.plan-price {
+    font-family: var(--font-display);
+    font-size: clamp(42px, 5vw, 56px);
+    font-weight: 200;
+    letter-spacing: -2px;
+    line-height: 1;
+    color: var(--text);
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+}
+
+/* Currency symbol */
+.plan-price sup {
+    font-size: 0.4em;
+    font-weight: 400;
+    vertical-align: super;
+    letter-spacing: 0;
+    opacity: 0.6;
+}
+
+/* "from" prefix for enterprise */
+.plan-price .plan-price-from {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-right: 4px;
+}
+
+.plan-period {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    margin-top: 6px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+}
+
+
+/* ── §12  Plan limits (players, instances) ─────────────────── */
+
+.plan-limits {
+    display: flex;
+    gap: 0;
+    border: 1px solid var(--card-border);
+    margin-bottom: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.plan-limits dt,
+.plan-limits dd {
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+}
+
+.plan-limits dt {
+    color: var(--text-dim);
+    text-transform: uppercase;
+    border-right: 1px solid var(--card-border);
+    flex: 1;
+}
+
+.plan-limits dd {
+    color: var(--text);
+    font-weight: 600;
+    min-width: 60px;
+    text-align: center;
+}
+
+.plan-limits dl {
+    display: flex;
+    flex: 1;
+    border-right: 1px solid var(--card-border);
+}
+
+.plan-limits dl:last-child {
+    border-right: none;
+}
+
+
+/* ── §13  Feature list ─────────────────────────────────────── */
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+    flex: 1;
+}
+
+.plan-features li {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-dim);
+    padding: 10px 0 10px 28px;
+    position: relative;
+    border-bottom: 1px solid rgba(139, 26, 42, 0.06);
+}
+
+.plan-features li:last-child {
+    border-bottom: none;
+}
+
+/* Checkmark */
+.plan-features li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--check-color);
+    line-height: 1.5;
+}
+
+/* Highlighted / premium features */
+.plan-features li.feat-highlight {
+    color: var(--text);
+}
+
+/* Unavailable feature (cross) */
+.plan-features li.feat-unavailable {
+    color: var(--text-muted, var(--text-dim));
+    opacity: 0.45;
+}
+
+.plan-features li.feat-unavailable::before {
+    content: '—';
+    color: var(--text-muted, var(--text-dim));
+}
+
+
+/* ── §14  CTA button ───────────────────────────────────────── */
+
+.plan-cta {
+    display: block;
+    width: 100%;
+    padding: 16px 24px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    color: var(--cta-color);
+    background: var(--cta-bg);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    isolation: isolate;
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Sweep fill on hover */
+.plan-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--accent);
+    transform: translateX(-101%);
+    transition: transform 0.42s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.plan-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    color: #fff;
+}
+
+.plan-cta:hover::before {
+    transform: translateX(0);
+}
+
+.plan-cta:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Gimel accent CTA variant */
+.plan-card--gimel .plan-cta {
+    background: var(--cta-accent-bg);
+    color: var(--cta-accent-text);
+    box-shadow: 0 6px 20px rgba(139, 26, 42, 0.25);
+}
+
+.plan-card--gimel .plan-cta::before {
+    background: var(--color-ruby-light, #b52239);
+}
+
+.plan-card--gimel .plan-cta:hover {
+    box-shadow: 0 12px 32px rgba(139, 26, 42, 0.35);
+    color: #fff;
+}
+
+
+/* ── §15  Promo code ───────────────────────────────────────── */
+
+.promo-wrap {
+    max-width: 480px;
+    margin: 48px auto 0;
+    display: flex;
+    align-items: stretch;
+    border: 1px solid var(--card-border);
+    background: var(--promo-bg);
+    transition: border-color 0.2s ease;
+}
+
+.promo-wrap:focus-within {
+    border-color: var(--card-border-hi);
+}
+
+.promo-input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 18px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--text);
+    background: transparent;
+    border: none;
+    outline: none;
+}
+
+.promo-input::placeholder {
+    color: var(--text-dim);
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.promo-btn {
+    flex-shrink: 0;
+    padding: 14px 22px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: transparent;
+    border: none;
+    border-left: 1px solid var(--card-border);
+    cursor: pointer;
+    transition:
+        color 0.18s ease,
+        background 0.18s ease;
+}
+
+.promo-btn:hover {
+    color: var(--text);
+    background: var(--card-bg-hover);
+}
+
+/* Success state */
+.promo-wrap.is-valid {
+    border-color: var(--check-color);
+}
+
+.promo-wrap.is-valid .promo-btn {
+    color: var(--check-color);
+}
+
+/* Error state */
+.promo-wrap.is-invalid {
+    border-color: var(--color-error, #b52239);
+}
+
+
+/* ── §16  Payment methods ──────────────────────────────────── */
+
+.payment-methods {
+    max-width: 600px;
+    margin: 36px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    flex-wrap: wrap;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 20px;
+    border: 1px solid var(--card-border);
+    background: var(--payment-bg);
+    cursor: default;
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+/* Collapse adjacent borders */
+.payment-option + .payment-option {
+    border-left: none;
+}
+
+.payment-option:hover {
+    border-color: var(--card-border-hi);
+    background: var(--card-bg-hover);
+}
+
+.payment-option img,
+.payment-option svg,
+.payment-option .payment-icon {
+    width: 36px;
+    height: 24px;
+    object-fit: contain;
+    filter: grayscale(100%) brightness(0.7);
+    opacity: 0.5;
+    transition:
+        filter 0.25s ease,
+        opacity 0.25s ease;
+}
+
+.payment-option:hover img,
+.payment-option:hover svg,
+.payment-option:hover .payment-icon {
+    filter: grayscale(0%) brightness(1);
+    opacity: 1;
+}
+
+.payment-option .payment-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-left: 10px;
+}
+
+
+/* ── §17  Pricing note (footnotes) ─────────────────────────── */
+
+.pricing-note {
+    max-width: 680px;
+    margin: 36px auto 0;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    opacity: 0.7;
+}
+
+.pricing-note a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(139, 26, 42, 0.25);
+    transition: border-color 0.18s ease;
+}
+
+.pricing-note a:hover {
+    border-color: var(--accent);
+}
+
+.pricing-note strong {
+    color: var(--text);
+    font-weight: 600;
+}
+
+
+/* ── §18  Comparison table ─────────────────────────────────── */
+
+.compare-table {
+    max-width: 1120px;
+    margin: 80px auto 0;
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-mono);
+    font-size: 12px;
+}
+
+.compare-table thead th {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-align: center;
+    padding: 18px 16px;
+    border-bottom: 2px solid var(--card-border-hi);
+    background: var(--card-bg);
+}
+
+.compare-table thead th:first-child {
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+}
+
+/* Highlight the Gimel column header */
+.compare-table thead th.col-gimel {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: rgba(139, 26, 42, 0.05);
+}
+
+.compare-table tbody td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--card-border);
+    color: var(--text-dim);
+    text-align: center;
+    letter-spacing: 0.04em;
+    transition: background 0.15s ease;
+}
+
+.compare-table tbody td:first-child {
+    text-align: left;
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* Highlight the Gimel column */
+.compare-table tbody td.col-gimel {
+    background: rgba(139, 26, 42, 0.03);
+}
+
+.compare-table tbody tr:hover td {
+    background: var(--card-bg-hover);
+}
+
+.compare-table tbody tr:hover td.col-gimel {
+    background: rgba(139, 26, 42, 0.06);
+}
+
+/* Check/cross icons in table */
+.compare-table .t-check {
+    color: var(--check-color);
+    font-weight: 700;
+}
+
+.compare-table .t-cross {
+    color: var(--text-dim);
+    opacity: 0.35;
+}
+
+.compare-table .t-value {
+    color: var(--text);
+    font-weight: 600;
+}
+
+/* Table footer */
+.compare-table tfoot td {
+    padding: 14px 16px;
+    border-bottom: none;
+    border-top: 2px solid var(--card-border-hi);
+}
+
+
+/* ── §19  Animations ───────────────────────────────────────── */
+
+@keyframes pricingFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(28px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pricingPulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.6; }
+}
+
+@keyframes badgeShimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+/* Staggered card entrance */
+.plan-card {
+    animation: pricingFadeUp 0.65s ease both;
+}
+
+.plan-card--beth  { animation-delay: 0.1s; }
+.plan-card--gimel { animation-delay: 0.22s; }
+.plan-card--dalet { animation-delay: 0.34s; }
+
+/* Badge shimmer */
+.plan-badge {
+    background-image: linear-gradient(
+        105deg,
+        var(--badge-bg) 0%,
+        var(--badge-bg) 40%,
+        rgba(255, 255, 255, 0.15) 50%,
+        var(--badge-bg) 60%,
+        var(--badge-bg) 100%
+    );
+    background-size: 200% 100%;
+    animation: badgeShimmer 3.5s ease-in-out infinite;
+}
+
+
+/* ── §20  Responsive — tablet ──────────────────────────────── */
+
+@media (max-width: 1100px) {
+    .pricing-section {
+        padding-left: calc(var(--page-gutter, 32px) + var(--safe-left, 0px));
+        padding-right: calc(var(--page-gutter, 32px) + var(--safe-right, 0px));
+    }
+
+    .plan-card {
+        padding: 36px 24px 32px;
+    }
+
+    .plan-price {
+        font-size: clamp(36px, 4.5vw, 48px);
+    }
+
+    .plan-card--gimel {
+        transform: scaleY(1);
+    }
+
+    .plan-card--gimel:hover {
+        transform: translateY(-6px);
+    }
+
+    .compare-table {
+        font-size: 11px;
+    }
+
+    .compare-table thead th {
+        font-size: 14px;
+        padding: 14px 12px;
+    }
+
+    .compare-table tbody td {
+        padding: 12px;
+    }
+}
+
+
+/* ── §21  Responsive — mobile (<768px) ─────────────────────── */
+
+@media (max-width: 768px) {
+    .pricing-section {
+        padding: 64px calc(var(--page-gutter, 16px) + var(--safe-right, 0px))
+                        calc(64px + var(--safe-bottom, 0px))
+                        calc(var(--page-gutter, 16px) + var(--safe-left, 0px));
+    }
+
+    /* Stack cards vertically */
+    .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 480px;
+        gap: 0;
+    }
+
+    .plan-card + .plan-card {
+        border-left: 1px solid var(--card-border);
+        border-top: none;
+    }
+
+    .plan-card--gimel {
+        transform: none;
+        border-left: 1px solid var(--card-border-hi);
+    }
+
+    .plan-card--gimel:hover {
+        transform: translateY(-4px);
+    }
+
+    .plan-card {
+        padding: 32px 20px 28px;
+    }
+
+    .plan-price {
+        font-size: 44px;
+    }
+
+    .plan-hebrew-letter {
+        --hebrew-size: 180px;
+    }
+
+    .plan-card--beth .plan-hebrew-letter {
+        font-size: 170px;
+    }
+
+    .plan-card--gimel .plan-hebrew-letter {
+        font-size: 200px;
+    }
+
+    .plan-card--dalet .plan-hebrew-letter {
+        font-size: 180px;
+    }
+
+    /* Duration selector — wrap on small screens */
+    .duration-selector {
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 360px;
+    }
+
+    .duration-option {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 12px 16px;
+        text-align: center;
+    }
+
+    /* Promo code */
+    .promo-wrap {
+        flex-direction: column;
+    }
+
+    .promo-btn {
+        border-left: none;
+        border-top: 1px solid var(--card-border);
+        padding: 14px 18px;
+    }
+
+    /* Payment methods wrap */
+    .payment-methods {
+        gap: 0;
+    }
+
+    .payment-option {
+        flex: 1 1 calc(33.333% - 0px);
+        min-width: 0;
+    }
+
+    .payment-option + .payment-option {
+        border-left: none;
+    }
+
+    /* Comparison table — horizontal scroll */
+    .compare-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin-top: 48px;
+    }
+
+    .compare-table thead,
+    .compare-table tbody,
+    .compare-table tfoot {
+        min-width: 600px;
+    }
+
+    .compare-table thead th {
+        font-size: 13px;
+        white-space: nowrap;
+    }
+}
+
+
+/* ── §22  Responsive — small mobile (<420px) ───────────────── */
+
+@media (max-width: 420px) {
+    .plan-price {
+        font-size: 38px;
+        letter-spacing: -1.5px;
+    }
+
+    .plan-name {
+        font-size: 18px;
+    }
+
+    .plan-hebrew-letter {
+        --hebrew-size: 140px;
+    }
+
+    .plan-card--beth .plan-hebrew-letter,
+    .plan-card--gimel .plan-hebrew-letter,
+    .plan-card--dalet .plan-hebrew-letter {
+        font-size: 140px;
+    }
+
+    .duration-selector {
+        flex-direction: column;
+    }
+
+    .duration-option {
+        border-right: none;
+        border-bottom: 1px solid var(--card-border);
+    }
+
+    .duration-option:last-child {
+        border-bottom: none;
+    }
+}
+
+
+/* ── §23  Reduced motion ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+    .plan-card,
+    .plan-hebrew-letter,
+    .plan-cta,
+    .plan-badge {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .plan-card:hover {
+        transform: none;
+    }
+
+    .plan-card--gimel:hover {
+        transform: none;
+    }
+
+    .plan-card:hover .plan-hebrew-letter {
+        transform: none;
+    }
+}
+
+
+/* ── §24  Light theme overrides ────────────────────────────── */
+
+[data-theme="light"] .plan-card {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .plan-card--beth {
+    background: linear-gradient(168deg, var(--card-bg) 0%, rgba(139, 26, 42, 0.025) 100%);
+}
+
+[data-theme="light"] .plan-card--gimel {
+    background: linear-gradient(168deg, var(--card-bg) 0%, rgba(139, 26, 42, 0.05) 100%);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .plan-card--dalet {
+    background: linear-gradient(168deg, var(--card-bg) 0%, rgba(139, 26, 42, 0.02) 100%);
+}
+
+[data-theme="light"] .plan-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .plan-card--gimel:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12),
+                0 0 48px rgba(139, 26, 42, 0.06);
+}
+
+[data-theme="light"] .plan-cta {
+    --cta-bg: var(--color-text-primary);
+}
+
+[data-theme="light"] .plan-card--gimel .plan-cta {
+    --cta-accent-bg: var(--accent);
+}
+
+[data-theme="light"] .plan-features li {
+    border-bottom-color: rgba(139, 26, 42, 0.05);
+}
+
+[data-theme="light"] .plan-hebrew-letter {
+    color: var(--accent);
+}
+
+[data-theme="light"] .payment-option img,
+[data-theme="light"] .payment-option svg,
+[data-theme="light"] .payment-option .payment-icon {
+    filter: grayscale(100%) brightness(0.5);
+    opacity: 0.4;
+}
+
+[data-theme="light"] .payment-option:hover img,
+[data-theme="light"] .payment-option:hover svg,
+[data-theme="light"] .payment-option:hover .payment-icon {
+    filter: grayscale(0%) brightness(1);
+    opacity: 1;
+}
+
+[data-theme="light"] .compare-table tbody td.col-gimel {
+    background: rgba(139, 26, 42, 0.025);
+}
+
+[data-theme="light"] .compare-table tbody tr:hover td.col-gimel {
+    background: rgba(139, 26, 42, 0.04);
+}
+
+
+/* ── §25  Print ────────────────────────────────────────────── */
+
+@media print {
+    .pricing-section {
+        padding: 24px;
+    }
+
+    .pricing-grid {
+        display: block;
+    }
+
+    .plan-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 16px;
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+
+    .plan-card::before,
+    .plan-badge::after {
+        display: none;
+    }
+
+    .plan-hebrew-letter {
+        display: none;
+    }
+
+    .plan-cta {
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+
+    .duration-selector,
+    .promo-wrap,
+    .payment-methods {
+        display: none;
+    }
+}
+
+/* Custom styles for disabled/inactive states */
+.plan-card.plan-card--disabled {
+    opacity: 0.35;
+    pointer-events: none;
+    filter: grayscale(1);
+    transform: none !important;
+    box-shadow: none !important;
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.plan-card .plan-price .price-na {
+    font-size: 28px;
+    color: var(--text-dim);
+    font-family: var(--font-display), sans-serif;
+    letter-spacing: -0.02em;
+}
+
