@@ -203,12 +203,13 @@
     pointer-events: none;
     user-select: none;
     z-index: 0;
-    transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.4s ease, color 0.4s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .plan-card:hover .plan-hebrew-letter {
     opacity: calc(var(--hebrew-opacity) * 1.8);
     transform: scale(1.04) translateY(-4px);
+    color: var(--color-ruby-light, #b52239);
 }
 
 /* Card-specific letter sizes and positions */
