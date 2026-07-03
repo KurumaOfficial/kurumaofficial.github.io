@@ -35,7 +35,26 @@ function boot() {
             }
         });
     });
+    // ── Document Sub-Tab Switcher ──────────────────────
+    const docTabBtns = document.querySelectorAll('.docs-tab-btn');
+    const docTabPanes = document.querySelectorAll('.doc-tab-pane');
 
+    docTabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            const targetDoc = btn.dataset.doc;
+            if (!targetDoc) return;
+
+            docTabBtns.forEach((b) => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+
+            docTabPanes.forEach((pane) => {
+                pane.classList.remove('active');
+                if (pane.id === `doc-${targetDoc}`) {
+                    pane.classList.add('active');
+                }
+            });
+        });
+    });
     // ── Copy License Key ────────────────────────────────
     document.querySelectorAll('.copy-key-btn').forEach((btn) => {
         btn.addEventListener('click', () => {

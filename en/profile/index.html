@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=9">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=10">
+<link rel="stylesheet" href="../../assets/css/docs.css?v=10">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -175,45 +176,87 @@
         </form>
       </section>
 
-      <!-- DOCUMENTATION -->
+      <!-- DOCUMENTATION (Normal integrated view) -->
       <section class="profile-section" id="documentation">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Documentation</h2>
-        <div class="licenses-grid">
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Terms of Service</span>
-            </div>
-            <div class="license-details">
-              <span>Core rules for using Aleph Studio services.</span>
-            </div>
-            <a class="license-btn primary" href="../docs/terms/">Read</a>
+        <div class="docs-container" style="padding: 0; max-width: 100%; grid-template-columns: 200px 1fr; gap: 32px;">
+          <div class="docs-nav" style="position: static;">
+            <button class="docs-nav-link docs-tab-btn is-active" data-doc="privacy">Privacy</button>
+            <button class="docs-nav-link docs-tab-btn" data-doc="terms">Terms</button>
+            <button class="docs-nav-link docs-tab-btn" data-doc="agreement">Agreement</button>
+            <button class="docs-nav-link docs-tab-btn" data-doc="cookies">Cookies</button>
           </div>
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Privacy Policy</span>
+          <div class="docs-content" style="padding: 36px;">
+            <!-- Privacy Pane -->
+            <div class="doc-tab-pane active" id="doc-privacy">
+              <section>
+                <h1>Privacy Policy</h1>
+                <div class="docs-update-date">Last updated: July 3, 2026</div>
+                <p>This Privacy Policy describes how Aleph Studio collects, uses, and protects your personal information when using our products and website.</p>
+              </section>
+              <section>
+                <h2>1. Information Collection</h2>
+                <p>We collect information you provide directly: username, email, and Discord account details if linked.</p>
+              </section>
+              <section>
+                <h2>2. Data Usage</h2>
+                <p>We use collected data to support our products, authenticate accounts, and communicate updates.</p>
+              </section>
+              <section>
+                <h2>3. Security</h2>
+                <p>We apply appropriate technical and organizational measures to safeguard your personal data.</p>
+              </section>
             </div>
-            <div class="license-details">
-              <span>Rules for processing and protecting personal data.</span>
+            
+            <!-- Terms Pane -->
+            <div class="doc-tab-pane" id="doc-terms">
+              <section>
+                <h1>Terms of Service</h1>
+                <div class="docs-update-date">Last updated: July 3, 2026</div>
+                <p>By using the website and products of Aleph Studio, you agree to these Terms of Service.</p>
+              </section>
+              <section>
+                <h2>1. Usage License</h2>
+                <p>We grant you a non-exclusive license to use our tools and mods solely for personal, non-commercial purposes.</p>
+              </section>
+              <section>
+                <h2>2. Restrictions</h2>
+                <p>You may not sell, decompile, or redistribute the source code of our proprietary products.</p>
+              </section>
             </div>
-            <a class="license-btn primary" href="../docs/privacy/">Read</a>
-          </div>
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">User Agreement</span>
+            
+            <!-- Agreement Pane -->
+            <div class="doc-tab-pane" id="doc-agreement">
+              <section>
+                <h1>User Agreement</h1>
+                <div class="docs-update-date">Last updated: July 3, 2026</div>
+                <p>This User Agreement is a legally binding contract between you and Aleph Studio.</p>
+              </section>
+              <section>
+                <h2>1. Accounts</h2>
+                <p>When creating an account, you agree to provide accurate data and are responsible for password security.</p>
+              </section>
+              <section>
+                <h2>2. Digital Purchases and Donations</h2>
+                <p>All support transactions are final and non-refundable unless specified otherwise by law.</p>
+              </section>
             </div>
-            <div class="license-details">
-              <span>Binding contract between the user and Aleph Studio.</span>
+            
+            <!-- Cookies Pane -->
+            <div class="doc-tab-pane" id="doc-cookies">
+              <section>
+                <h1>Cookie Policy</h1>
+                <div class="docs-update-date">Last updated: July 3, 2026</div>
+                <p>We use cookies to improve experience, manage auth sessions, and save theme preferences.</p>
+              </section>
+              <section>
+                <h2>1. What are Cookies?</h2>
+                <p>Cookies are small text files saved on your device to remember settings and sessions.</p>
+              </section>
+              <section>
+                <h2>2. Usage</h2>
+                <p>We store auth session parameters and your selected dark/light visual theme.</p>
+              </section>
             </div>
-            <a class="license-btn primary" href="../docs/user-agreement/">Read</a>
-          </div>
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Cookie Policy</span>
-            </div>
-            <div class="license-details">
-              <span>Usage of cookies for auth sessions and theme settings.</span>
-            </div>
-            <a class="license-btn primary" href="../docs/cookies/">Read</a>
           </div>
         </div>
       </section>
@@ -221,6 +264,6 @@
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=9"></script>
+<script type="module" src="../../src/profile/profile.js?v=10"></script>
 </body>
 </html>
