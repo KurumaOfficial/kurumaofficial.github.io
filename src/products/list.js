@@ -8,7 +8,7 @@
  * @module products/list
  */
 
-import { createLocaleController } from '../i18n/controller.js';
+import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import { initReveal } from '../components/reveal.js';
 import {
     applyGlobalRouteRedirect,
@@ -19,10 +19,10 @@ import {
     initSharedThemeToggle,
     initSmoothRouteTransitions,
 } from '../core/site-shell.js?v=20260703a';
-import { resolveLocaleRootRelativePath } from '../i18n/config.js';
-import { localizeSiteData } from '../data/localized-site-data.js';
-import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
-import { escapeHtml, linkify } from '../core/dom.js';
+import { resolveLocaleRootRelativePath } from '../i18n/config.js?v=20260703a';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
+import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js?v=20260703a';
+import { escapeHtml, linkify } from '../core/dom.js?v=20260703a';
 
 const STATUS_KEYS = ['active', 'frozen', 'abandoned'];
 const FLAG_KEYS = ['alpha', 'beta', 'release'];

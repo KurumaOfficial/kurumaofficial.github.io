@@ -1,4 +1,4 @@
-import { createLocaleController } from '../i18n/controller.js';
+import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import { initSharedThemeToggle } from '../core/site-shell.js';
 import { initReveal } from '../components/reveal.js';
 

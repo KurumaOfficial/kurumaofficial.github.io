@@ -1,5 +1,5 @@
-import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
+import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260703a';
+import { GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260703a';
 import {
     deepClone,
     formatBytes,
@@ -13,11 +13,11 @@ import {
     normalizeTeamMember,
     ROUTE_MODULE_KEYS,
     toNumber,
-} from '../core/data-utils.js';
-import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js';
+} from '../core/data-utils.js?v=20260703a';
+import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js?v=20260703a';
 import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 import { createGitHubPublisher, fetchPublishedSiteData } from '../github/publisher.js';
-import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js';
+import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js?v=20260703a';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
 const PREVIEW_DISCORD_IMAGE_SIZE = 256;
