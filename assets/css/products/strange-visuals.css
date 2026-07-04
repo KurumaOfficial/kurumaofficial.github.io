@@ -2829,6 +2829,6 @@ footer {
 
 /* Scale SVG logo inside the box to be larger */
 .hero-app-icon svg {
-  width: 64% !important;
-  height: 64% !important;
+  width: 54% !important;
+  height: 54% !important;
 }
