@@ -194,40 +194,406 @@
           </div>
       </section>
 
-      <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
+            <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
       <section class="profile-section" id="aleph-trust">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Aleph Trust Control Panel</h2>
-        <p class="section-subtitle" style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; text-transform: none; font-family: var(--font-body), serif;">Status: <b style="color: var(--green);">Active</b> · Plan: <b id="trustPlanName">Beth</b></p>
-        
-        <div class="security-grid">
-          <!-- Active Sessions & Limits -->
-          <div class="security-card">
-            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Limits & Usage</h3>
-            <div class="info-row">
-              <span class="label">Active sessions</span>
-              <span class="value"><b id="trustSessionsCount">0</b> / <span id="trustSessionsLimit">100</span></span>
+        <div class="at-roleswitch">
+          <button id="btn-admin" class="active" onclick="atSetRole('admin')">Admin</button>
+          <button id="btn-player" onclick="atSetRole('player')">Player</button>
+        </div>
+
+        <!-- ============ ADMIN APP ============ -->
+        <div class="at-app" id="app-admin">
+          <div class="at-sidebar">
+            <div class="at-brand">
+              <div class="at-brand-mark">AT</div>
+              <div>
+                <div class="at-brand-name">Aleph Trust</div>
+                <div class="at-brand-sub">play.frostcraft.net</div>
+              </div>
             </div>
-            <div class="info-row">
-              <span class="label">Active instances</span>
-              <span class="value"><b>0</b> / <span id="trustInstancesLimit">3</span></span>
+            <div class="at-nav">
+              <div class="at-nav-label">General</div>
+              <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Overview</div>
+              <div class="at-nav-label">Protection</div>
+              <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Access Mode</div>
+              <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Entrance Logs</div>
+              <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Mods</div>
+              <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban & Appeals</div>
+              <div class="at-nav-label">Account</div>
+              <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Subscription</div>
+              <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
+            </div>
+            <div class="at-sidebar-foot">
+              Growth Plan · <span id="adminOnlineCount">187</span>/200<br>online · refreshed 12h
             </div>
           </div>
-          
-          <!-- API Keys & SDK -->
-          <div class="security-card">
-            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Integration & API</h3>
-            <div class="info-row copyable" id="apiKeyRow" data-copy="at_live_7ab33b0f2b8ae70708dbc5b2aa34">
-              <span class="label">API Key (token)</span>
-              <span class="value mono">at_live_7ab33b0f2b8ae707...</span>
+
+          <div class="at-main">
+            <!-- OVERVIEW -->
+            <div class="at-page active" id="page-a-overview">
+              <div class="at-pagehead">
+                <div>
+                  <h1>Server Overview</h1>
+                  <p>FrostCraft Network — last updated 2 minutes ago</p>
+                </div>
+                <span class="at-pill ok">● Aleph Trust is active</span>
+              </div>
+
+              <div class="at-grid at-g4" style="margin-bottom:16px;">
+                <div class="at-card">
+                  <h3>Server Trust Rating</h3>
+                  <div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">0.87×</div>
+                  <div class="at-stat-label">weight of your bans in network</div>
+                  <div class="at-stat-delta up">↑ 0.04 in 30 days</div>
+                </div>
+                <div class="at-card">
+                  <h3>Connections (24h)</h3>
+                  <div class="at-stat-value">1,942</div>
+                  <div class="at-stat-label">unique connections</div>
+                  <div class="at-stat-delta up">↑ 6.2%</div>
+                </div>
+                <div class="at-card">
+                  <h3>Rejected</h3>
+                  <div class="at-stat-value" style="color:var(--at-red);">54</div>
+                  <div class="at-stat-label">unverified / flagged</div>
+                  <div class="at-stat-delta down">↓ 12%</div>
+                </div>
+                <div class="at-card">
+                  <h3>Appeals Against You</h3>
+                  <div class="at-stat-value" style="color:var(--at-amber);">2</div>
+                  <div class="at-stat-label">awaiting Aleph resolution</div>
+                </div>
+              </div>
+
+              <div class="at-grid at-g2">
+                <div class="at-card">
+                  <h3>Connections in 7 Days</h3>
+                  <div class="at-barchart" id="chart-connections"></div>
+                  <div class="at-barchart-labels"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+                  <div style="display:flex; gap:16px; margin-top:14px; font-size:11.5px; color:var(--at-text-dim);">
+                    <div style="display:flex; align-items:center; gap:6px;"><span class="at-dot" style="background:var(--at-accent)"></span>Allowed</div>
+                    <div style="display:flex; align-items:center; gap:6px;"><span class="at-dot" style="background:var(--at-red-dim)"></span>Rejected</div>
+                  </div>
+                </div>
+                <div class="at-card">
+                  <h3>Current Access Mode</h3>
+                  <div style="font-size:14px; font-weight:600; color:var(--color-ruby-light, #b52239); margin-bottom:6px;">WetID Account</div>
+                  <p class="at-seg-desc" style="margin-top:0;">Players must sign in with a WetID account. Banning requires creating a new WetID.</p>
+                  <div style="margin-top:14px;">
+                    <div class="at-list-row"><span class="dim">Safe Mode players</span><span class="mono">0</span></div>
+                    <div class="at-list-row"><span class="dim">WetID players</span><span class="mono">1,888</span></div>
+                    <div class="at-list-row"><span class="dim">WetID+Passport</span><span class="mono">54</span></div>
+                  </div>
+                  <button class="at-btn small" style="margin-top:12px; width:100%;" onclick="atNav(document.querySelector('[data-page=a-access]'),'a-access')">Change mode →</button>
+                </div>
+              </div>
             </div>
-            <div class="license-actions" style="margin-top: 16px;">
-              <a class="license-btn primary" href="#" onclick="alert('Downloading plugin...'); return false;">Download plugin (.jar)</a>
+
+            <!-- ACCESS MODE -->
+            <div class="at-page" id="page-a-access">
+              <div class="at-pagehead">
+                <div><h1>Access Mode</h1><p>Select the required trust level for logging into your server</p></div>
+              </div>
+
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>Trust Level</h3>
+                <div class="at-seg" style="max-width:640px;">
+                  <button class="active" onclick="atSetAccessMode(this,0)">Safe Mode</button>
+                  <button onclick="atSetAccessMode(this,1)">WetID Account</button>
+                  <button onclick="atSetAccessMode(this,2)">WetID + Passport</button>
+                </div>
+                <p class="at-seg-desc" id="access-desc">Player is admitted with a clean launcher without modifications. WetID link is not required — lowest barrier to entry, bypass possible by reinstalling launcher.</p>
+              </div>
+
+              <div class="at-grid at-g3">
+                <div class="at-card">
+                  <h3>Whitelist WetID</h3>
+                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Allow specific accounts to join regardless of Trust Score</p>
+                  <input type="text" placeholder="WetID username or ID">
+                  <button class="at-btn small" style="margin-top:10px;">Add to whitelist</button>
+                </div>
+                <div class="at-card">
+                  <h3>Blacklist WetID</h3>
+                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Block a specific account from this server</p>
+                  <input type="text" placeholder="WetID username or ID">
+                  <button class="at-btn small danger" style="margin-top:10px;">Add to blacklist</button>
+                </div>
+                <div class="at-card">
+                  <h3>Access Denied Screen</h3>
+                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Custom kick message text (Business+)</p>
+                  <input type="text" value="Connection rejected by FrostCraft Aleph Trust node.">
+                  <button class="at-btn small" style="margin-top:10px;">Save</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- LOGS -->
+            <div class="at-page" id="page-a-logs">
+              <div class="at-pagehead">
+                <div><h1>Entrance Logs</h1><p>Aleph Trust checks history for the last 24 hours</p></div>
+                <button class="at-btn small">⭳ Export CSV</button>
+              </div>
+              <div class="at-card">
+                <table>
+                  <thead><tr><th>Time</th><th>Username</th><th>WetID</th><th>Result</th><th>Reason</th></tr></thead>
+                  <tbody id="logs-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- MODS -->
+            <div class="at-page" id="page-a-mods">
+              <div class="at-pagehead">
+                <div><h1>Mod Management</h1><p>Mods are matched against Modrinth automatically. Add custom exceptions here.</p></div>
+              </div>
+              <div class="at-card">
+                <h3>Manually Whitelist Private Mod</h3>
+                <p class="at-seg-desc" style="margin-top:0;">Use if your server has a legitimate custom-built mod not uploaded to Modrinth. This adds its SHA-256 to your local whitelist.</p>
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                  <input type="text" placeholder="Mod file SHA-256 hash" style="margin-top:0;">
+                  <button class="at-btn primary small" style="flex-shrink:0;">Add Mod</button>
+                </div>
+              </div>
+              <div class="at-card" style="margin-top:16px;">
+                <h3>Manually Whitelisted Mods</h3>
+                <table>
+                  <thead><tr><th>Name (claimed)</th><th>SHA-256</th><th>Added</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td>FrostCraft-CustomHUD.jar</td><td class="mono faint">a3f1...9e02</td><td class="dim">3 days ago</td><td><button class="at-btn small danger">Remove</button></td></tr>
+                    <tr><td>ServerSideHelper.jar</td><td class="mono faint">7c88...11ab</td><td class="dim">2 weeks ago</td><td><button class="at-btn small danger">Remove</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- BANS / APPEALS -->
+            <div class="at-page" id="page-a-bans">
+              <div class="at-pagehead">
+                <div><h1>/atban and Appeals</h1><p>Your server bans affect player Trust Scores with a weight matching your Server Trust Rating (0.87×)</p></div>
+              </div>
+
+              <div class="at-grid at-g3" style="margin-bottom:16px;">
+                <div class="at-card"><h3>Bans Submitted (30d)</h3><div class="at-stat-value">31</div></div>
+                <div class="at-card"><h3>Appeals Approved</h3><div class="at-stat-value" style="color:var(--at-amber);">3 <span style="font-size:14px; color:var(--at-text-faint);">/ 31</span></div><div class="at-stat-label">9.7% — within normal range (&lt;15%)</div></div>
+                <div class="at-card"><h3>Trust Rating Impact</h3><div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">stable</div></div>
+              </div>
+
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>File an /atban (mirrors in-game command)</h3>
+                <div class="at-grid at-g3" style="gap:10px;">
+                  <div class="field" style="margin-bottom:0;"><label>Player Username</label><input type="text" placeholder="Steve_1337"></div>
+                  <div class="field" style="margin-bottom:0;">
+                    <label>Violation Category</label>
+                    <select><option>killaura</option><option>xray</option><option>fly</option><option>speed</option><option>aim-assist</option><option>other</option></select>
+                  </div>
+                  <div class="field" style="margin-bottom:0;"><label>Evidence URL (optional)</label><input type="text" placeholder="clips.twitch.tv/..."></div>
+                </div>
+                <button class="at-btn primary" style="margin-top:4px;">Submit /atban</button>
+              </div>
+
+              <div class="at-card">
+                <h3>Appeals Against Your Server</h3>
+                <div class="at-appeal-item">
+                  <div class="at-appeal-head">
+                    <div><strong>WetID: nordic_wolf</strong> <span class="at-cat-tag">xray</span></div>
+                    <span class="at-pill warn">Under Aleph review</span>
+                  </div>
+                  <p class="dim" style="font-size:12.5px;">Player claims: Ban is based on suspicion without concrete proof. Banned 5 days ago.</p>
+                </div>
+                <div class="at-appeal-item">
+                  <div class="at-appeal-head">
+                    <div><strong>WetID: quietfox22</strong> <span class="at-cat-tag">killaura</span></div>
+                    <span class="at-pill bad">Approved — Ban lifted</span>
+                  </div>
+                  <p class="dim" style="font-size:12.5px;">Aleph Studio decision: Evidence was insufficient. Your Server Trust Rating has been adjusted.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- BILLING -->
+            <div class="at-page" id="page-a-billing">
+              <div class="at-pagehead"><div><h1>Subscription</h1><p>Manage subscription plans & billing</p></div></div>
+
+              <div class="at-grid at-g2" style="margin-bottom:16px;">
+                <div class="at-card">
+                  <h3>Current Plan</h3>
+                  <div class="at-flex-row" style="margin-bottom:14px;">
+                    <div>
+                      <div style="font-size:20px; font-weight:700;" id="trustBillingPlanName">Beth</div>
+                      <div class="dim" style="font-size:12.5px;" id="trustBillingPlanLimit">up to 100 online · $19/mo</div>
+                    </div>
+                    <span class="at-pill ok">Active</span>
+                  </div>
+                  <div class="at-list-row"><span class="dim">Current Online (peak)</span><span class="mono" id="trustBillingOnline">87 / 100</span></div>
+                  <div class="at-list-row"><span class="dim">Next Invoice Date</span><span class="mono">July 14, 2026</span></div>
+                  <div class="at-list-row"><span class="dim">Payment Method</span><span class="mono">•••• 4471</span></div>
+                  <button class="at-btn" style="margin-top:12px;" onclick="document.querySelector('#sidebarLinkLicenses, [data-target=licenses]').click();">Change Plan</button>
+                </div>
+                <div class="at-card">
+                  <h3>Available Plans</h3>
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="at-list-row"><span>Beth · up to 100</span><span class="mono">$19/mo</span></div>
+                    <div class="at-list-row"><span>Gimel · up to 500</span><span class="mono">$49/mo</span></div>
+                    <div class="at-list-row"><span>Dalet · Enterprise</span><span class="mono">from $199</span></div>
+                  </div>
+                  <p class="at-seg-desc">Subscriptions longer than 180 days are available only for Dalet customers.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- API -->
+            <div class="at-page" id="page-a-api">
+              <div class="at-pagehead"><div><h1>API / Webhooks</h1><p>Available on Gimel plan and above</p></div></div>
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>API Key</h3>
+                <div style="display:flex; gap:10px;">
+                  <input type="text" id="trustApiKeyVal" value="at_live_7ab33b0f2b8ae70708dbc5b2aa34" readonly style="font-family:var(--font-mono), monospace;">
+                  <button class="at-btn small" style="flex-shrink:0;" onclick="alert('Key re-issued!');">Re-issue</button>
+                </div>
+              </div>
+              <div class="at-card">
+                <h3>Webhook Notifications</h3>
+                <div class="field"><label>URL (Discord / Webhook)</label><input type="text" placeholder="https://discord.com/api/webhooks/..."></div>
+                <div class="at-list-row"><span class="dim">Rejection Spikes (&gt;20/min)</span><input type="checkbox" checked></div>
+                <div class="at-list-row"><span class="dim">Appeal against your ban</span><input type="checkbox" checked></div>
+                <div class="at-list-row"><span class="dim">Billing / payments</span><input type="checkbox"></div>
+                <button class="at-btn primary" style="margin-top:12px;" onclick="alert('Saved!');">Save</button>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- SECURITY (Key activation and 2FA setup) -->
+        <!-- ============ PLAYER APP ============ -->
+        <div class="at-app" id="app-player" style="display:none;">
+          <div class="at-sidebar">
+            <div class="at-brand">
+              <div class="at-brand-mark">AT</div>
+              <div>
+                <div class="at-brand-name">Aleph Trust</div>
+                <div class="at-brand-sub">Player Profile</div>
+              </div>
+            </div>
+            <div class="at-nav">
+              <div class="at-nav-label">Profile</div>
+              <div class="at-nav-item active" data-page="p-overview" onclick="atNav(this,'p-overview')">🛡️ My Trust Score</div>
+              <div class="at-nav-item" data-page="p-history" onclick="atNav(this,'p-history')">📜 Ban History</div>
+              <div class="at-nav-item" data-page="p-appeals" onclick="atNav(this,'p-appeals')">✉️ My Appeals</div>
+              <div class="at-nav-item" data-page="p-launcher" onclick="atNav(this,'p-launcher')">🖥️ My Launcher</div>
+            </div>
+            <div class="at-sidebar-foot">
+              WetID: user<br>Verification: Passport ✓
+            </div>
+          </div>
+
+          <div class="at-main">
+            <div class="at-page active" id="page-p-overview">
+              <div class="at-pagehead">
+                <div><h1>My Trust Score</h1><p>Your WetID reputation across the entire Aleph Trust ecosystem</p></div>
+              </div>
+
+              <div class="at-grid at-g2" style="margin-bottom:16px;">
+                <div class="at-card">
+                  <h3>Current Status</h3>
+                  <div class="at-trust-ring-wrap">
+                    <div class="at-trust-ring">
+                      <svg width="100" height="100" viewBox="0 0 132 132">
+                        <circle cx="66" cy="66" r="56" fill="none" stroke="#1A1F29" stroke-width="12"/>
+                        <circle cx="66" cy="66" r="56" fill="none" stroke="#D9A441" stroke-width="12"
+                          stroke-dasharray="351.8" stroke-dashoffset="70.4" stroke-linecap="round"/>
+                      </svg>
+                      <div class="at-trust-ring-center">
+                        <div class="at-trust-ring-num" style="color:var(--at-amber);">80</div>
+                        <div class="at-trust-ring-sub">/ 100</div>
+                      </div>
+                    </div>
+                    <div class="at-trust-legend">
+                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-amber)"></span>1 active ban (xray)</div>
+                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-text-faint)"></span>0 confirmed violations</div>
+                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--color-ruby-light, #b52239)"></span>Passport Verified</div>
+                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-line)"></span>Deactivation Threshold: 20</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="at-card">
+                  <h3>What this means</h3>
+                  <p style="font-size:13px; line-height:1.6; color:var(--at-text-dim);">
+                    Your Score is reduced due to one active ban on <strong style="color:var(--at-text)">FrostCraft Network</strong> under the <span class="at-cat-tag">xray</span> category. The ban is not finalized — you have the right to file an appeal.
+                  </p>
+                  <p style="font-size:13px; line-height:1.6; color:var(--at-text-dim); margin-top:10px;">
+                    Because your WetID is passport verified, your deactivation threshold is higher than standard accounts.
+                  </p>
+                  <button class="at-btn primary" style="margin-top:12px;" onclick="atNav(document.querySelector('[data-page=p-appeals]'),'p-appeals')">File an Appeal →</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="at-page" id="page-p-history">
+              <div class="at-pagehead"><div><h1>Ban History</h1><p>Bans affecting your Trust Score</p></div></div>
+              <div class="at-card">
+                <table>
+                  <thead><tr><th>Server</th><th>Category</th><th>Date</th><th>Weight</th><th>Status</th></tr></thead>
+                  <tbody>
+                    <tr>
+                      <td>FrostCraft Network</td>
+                      <td><span class="at-cat-tag">xray</span></td>
+                      <td class="dim mono">June 28, 2026</td>
+                      <td class="mono">0.87× · 12 pts</td>
+                      <td><span class="at-badge flagged">Appeal Filed</span></td>
+                    </tr>
+                    <tr>
+                      <td>SkyBlock Legends</td>
+                      <td><span class="at-cat-tag">other</span></td>
+                      <td class="dim mono">March 14, 2026</td>
+                      <td class="mono">0.2× · 2 pts</td>
+                      <td><span class="at-badge denied">Rejected</span></td>
+                    </tr>
+                    <tr>
+                      <td>PvP Arena RU</td>
+                      <td><span class="at-cat-tag">killaura</span></td>
+                      <td class="dim mono">January 2, 2026</td>
+                      <td class="mono">1.0× · 18 pts</td>
+                      <td><span class="at-badge allowed">Appeal Approved</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="at-page" id="page-p-appeals">
+              <div class="at-pagehead"><div><h1>My Appeals</h1><p>Appeals are reviewed by Aleph Studio, not the server issuing the ban</p></div></div>
+
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>File a New Appeal</h3>
+                <div class="field"><label>Choose Ban</label>
+                  <select><option>FrostCraft Network — xray — June 28, 2026</option></select>
+                </div>
+                <div class="field"><label>Explanation</label><input type="text" placeholder="Explain why you believe the ban was issued in error"></div>
+                <button class="at-btn primary" onclick="alert('Appeal submitted!');">Submit for Review</button>
+              </div>
+
+              <div class="at-card">
+                <h3>Appeals Status</h3>
+                <div class="at-appeal-item">
+                  <div class="at-appeal-head">
+                    <div><strong>FrostCraft Network</strong> <span class="at-cat-tag">xray</span></div>
+                    <span class="at-pill warn">Under Review</span>
+                  </div>
+                  <p class="dim" style="font-size:12.5px;">Submitted 2 days ago. Average review time is 5 days.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="at-page" id="page-p-launcher">
+              <div class="at-pagehead"><div><h1>My Launcher</h1><p>Status of AMCLauncher linked to your WetID</p></div></div>
+              <div class="at-grid at-g3">
+                <div class="at-card"><h3>Launcher Version</h3><div class="at-stat-value" style="font-size:20px;">2.4.1</div><div class="at-label">official release ✓</div></div>
+                <div class="at-card"><h3>Mode</h3><div class="at-stat-value" style="font-size:20px; color:var(--color-ruby-light, #b52239);">WetID</div><div class="at-label">account linked</div></div>
+                <div class="at-card"><h3>Devices Linked</h3><div class="at-stat-value" style="font-size:20px;">2</div><div class="at-label">limit: 3</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>\n\n      <!-- SECURITY (Key activation and 2FA setup) -->
       <section class="profile-section" id="security">
         <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Security & Activation</h2>
         <div class="security-grid">
