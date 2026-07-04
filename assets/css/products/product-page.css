@@ -789,3 +789,9 @@ body {
 /* focus-visible */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 :focus:not(:focus-visible) { outline: none; }
+
+/* Scale SVG logo inside the box to be larger */
+.hero-app-icon svg {
+    width: 64% !important;
+    height: 64% !important;
+}
