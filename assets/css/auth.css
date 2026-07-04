@@ -200,13 +200,14 @@
 
 .remember-me {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
   cursor: pointer;
   font-family: var(--font-mono, 'JetBrains Mono', monospace);
   font-size: 11px;
   color: var(--text-dim);
   letter-spacing: 0.02em;
+  line-height: 1.4;
 }
 
 .remember-me input[type="checkbox"] {
@@ -214,6 +215,8 @@
   width: 14px;
   height: 14px;
   cursor: pointer;
+  margin-top: 1px;
+  flex-shrink: 0;
 }
 
 .forgot-link,
