@@ -77,6 +77,7 @@
       <nav class="sidebar-nav">
         <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Account</button>
         <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Store</button>
+        <button class="sidebar-link" data-target="aleph-trust" id="sidebarAlephTrust" style="display: none;"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Aleph Trust</button>
         <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Extra</button>
         <a class="sidebar-link" href="../docs/privacy/"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Documentation</a>
       </nav>
@@ -192,6 +193,39 @@
           </div>
       </section>
 
+      <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
+      <section class="profile-section" id="aleph-trust">
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Aleph Trust Control Panel</h2>
+        <p class="section-subtitle" style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; text-transform: none; font-family: var(--font-body), serif;">Status: <b style="color: var(--green);">Active</b> · Plan: <b id="trustPlanName">Beth</b></p>
+        
+        <div class="security-grid">
+          <!-- Active Sessions & Limits -->
+          <div class="security-card">
+            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Limits & Usage</h3>
+            <div class="info-row">
+              <span class="label">Active sessions</span>
+              <span class="value"><b id="trustSessionsCount">0</b> / <span id="trustSessionsLimit">100</span></span>
+            </div>
+            <div class="info-row">
+              <span class="label">Active instances</span>
+              <span class="value"><b>0</b> / <span id="trustInstancesLimit">3</span></span>
+            </div>
+          </div>
+          
+          <!-- API Keys & SDK -->
+          <div class="security-card">
+            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Integration & API</h3>
+            <div class="info-row copyable" id="apiKeyRow" data-copy="at_live_7ab33b0f2b8ae70708dbc5b2aa34">
+              <span class="label">API Key (token)</span>
+              <span class="value mono">at_live_7ab33b0f2b8ae707...</span>
+            </div>
+            <div class="license-actions" style="margin-top: 16px;">
+              <a class="license-btn primary" href="#" onclick="alert('Downloading plugin...'); return false;">Download plugin (.jar)</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- SECURITY (Key activation and 2FA setup) -->
       <section class="profile-section" id="security">
         <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Security & Activation</h2>
@@ -235,7 +269,7 @@
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=16"></script>
+<script type="module" src="../../src/profile/profile.js?v=17"></script>
 
 <!-- PRICING MODAL WINDOW -->
 <div class="pricing-modal" id="pricingModal" aria-hidden="true">
@@ -284,7 +318,7 @@
             <li class="feat-unavailable">Custom launcher</li>
             <li class="feat-unavailable">White-label</li>
             </ul>
-            <a class="plan-cta" href="#">Choose Beth</a>
+            <a class="plan-cta" href="#" data-plan="Beth">Choose Beth</a>
           </div>
 
           <!-- Gimel plan -->
@@ -314,7 +348,7 @@
             <li class="feat-unavailable">Custom launcher SDK</li>
             <li class="feat-unavailable">White-label</li>
             </ul>
-            <a class="plan-cta" href="#">Choose Gimel</a>
+            <a class="plan-cta" href="#" data-plan="Gimel">Choose Gimel</a>
           </div>
 
           <!-- Dalet plan -->
@@ -341,7 +375,7 @@
             <li>Dedicated support channel</li>
             <li>Custom integrations</li>
             </ul>
-            <a class="plan-cta" href="#">Contact Sales</a>
+            <a class="plan-cta" href="#" data-plan="Dalet">Contact Sales</a>
           </div>
         </div>
 

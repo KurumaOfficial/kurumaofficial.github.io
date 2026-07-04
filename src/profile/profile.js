@@ -35,6 +35,104 @@ function boot() {
             }
         });
     });
+
+    // ── Aleph Trust Subscription purchase simulation ──
+    const planCtaBtns = document.querySelectorAll('.plan-cta');
+    planCtaBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const planName = btn.dataset.plan || 'Beth';
+
+            const activeDurationBtn = document.querySelector('.duration-option.is-active');
+            const days = activeDurationBtn ? activeDurationBtn.dataset.days : '30';
+
+            localStorage.setItem('aleph-trust-plan', planName);
+            localStorage.setItem('aleph-trust-duration', days);
+
+            applyTrustPurchase(planName, days);
+
+            // Close modal
+            const modal = document.getElementById('pricingModal');
+            if (modal) {
+                modal.classList.remove('is-open');
+                document.body.classList.remove('modal-open');
+            }
+        });
+    });
+
+    function applyTrustPurchase(plan, duration) {
+        // 1. Show the sidebar tab for Aleph Trust
+        const sidebarTab = document.getElementById('sidebarAlephTrust');
+        if (sidebarTab) {
+            sidebarTab.style.display = 'flex';
+        }
+
+        // 2. Update active license card under overview section
+        const licenseNameNode = document.querySelector('#overview .license-card.merged-card .license-name');
+        if (licenseNameNode) {
+            licenseNameNode.textContent = 'Aleph Trust';
+        }
+
+        const locale = window.__ALEPH_LOCALE__ || 'ru';
+        const typeLabels = {
+            ru: 'Тип: <b>Персональная лицензия - ' + plan + '</b>',
+            en: 'Type: <b>Personal license - ' + plan + '</b>',
+            ua: 'Тип: <b>Персональна ліцензія - ' + plan + '</b>'
+        };
+        const licenseDetailsSpan = document.querySelector('#overview .license-card.merged-card .license-details span:first-child');
+        if (licenseDetailsSpan) {
+            licenseDetailsSpan.innerHTML = typeLabels[locale] || typeLabels.ru;
+        }
+
+        const licenseButton = document.querySelector('#overview .license-card.merged-card .license-actions a');
+        if (licenseButton) {
+            licenseButton.href = '../products/aleph-trust/';
+        }
+
+        const ringNum = document.querySelector('#overview .license-card.merged-card .progress-ring .ring-label .num');
+        if (ringNum) {
+            ringNum.textContent = duration;
+        }
+        
+        const ringUnit = document.querySelector('#overview .license-card.merged-card .progress-ring .ring-label .unit');
+        if (ringUnit) {
+            const units = { ru: 'д', en: 'd', ua: 'д' };
+            ringUnit.textContent = units[locale] || 'd';
+        }
+
+        const ringBar = document.getElementById('ringBar');
+        if (ringBar) {
+            const r = 27;
+            const c = 2 * Math.PI * r;
+            ringBar.style.strokeDasharray = c;
+            ringBar.style.strokeDashoffset = '0'; // 100% full
+        }
+
+        // 3. Update the inner details of the Aleph Trust control panel tab
+        const trustPlanNameNode = document.getElementById('trustPlanName');
+        if (trustPlanNameNode) {
+            trustPlanNameNode.textContent = plan;
+        }
+
+        const trustSessionsLimitNode = document.getElementById('trustSessionsLimit');
+        const trustInstancesLimitNode = document.getElementById('trustInstancesLimit');
+        if (plan === 'Beth') {
+            if (trustSessionsLimitNode) trustSessionsLimitNode.textContent = '100';
+            if (trustInstancesLimitNode) trustInstancesLimitNode.textContent = '3';
+        } else if (plan === 'Gimel') {
+            if (trustSessionsLimitNode) trustSessionsLimitNode.textContent = '500';
+            if (trustInstancesLimitNode) trustInstancesLimitNode.textContent = '20';
+        } else { // Dalet
+            if (trustSessionsLimitNode) trustSessionsLimitNode.textContent = '2000';
+            if (trustInstancesLimitNode) trustInstancesLimitNode.textContent = '∞';
+        }
+    }
+
+    const savedPlan = localStorage.getItem('aleph-trust-plan');
+    const savedDuration = localStorage.getItem('aleph-trust-duration') || '30';
+    if (savedPlan) {
+        applyTrustPurchase(savedPlan, savedDuration);
+    }
     // ── Document Sub-Tab Switcher ──────────────────────
     const docTabBtns = document.querySelectorAll('.docs-tab-btn');
     const docTabPanes = document.querySelectorAll('.doc-tab-pane');
