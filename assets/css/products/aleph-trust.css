@@ -386,7 +386,7 @@
     display: flex;
     gap: 0;
     border: 1px solid var(--card-border);
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     position: relative;
     z-index: 1;
 }
@@ -1350,7 +1350,7 @@ body.modal-open {
   gap: 6px;
   border-bottom: 1px solid var(--at-line);
   padding-bottom: 16px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .at-nav-item {
@@ -1402,7 +1402,7 @@ body.modal-open {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  margin-bottom: 22px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
   gap: 12px;
 }
