@@ -194,38 +194,21 @@
           </div>
       </section>
 
-            <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
+                  <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
       <section class="profile-section" id="aleph-trust">
-        <div class="at-roleswitch">
-          <button id="btn-admin" class="active" onclick="atSetRole('admin')">Admin</button>
-          <button id="btn-player" onclick="atSetRole('player')">Player</button>
-        </div>
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Aleph Trust Control Panel</h2>
+        <p class="section-subtitle" style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; text-transform: none; font-family: var(--font-body), serif;">Status: <b style="color: var(--green);">Active</b> · Plan: <b id="trustPlanName">Beth</b></p>
 
         <!-- ============ ADMIN APP ============ -->
         <div class="at-app" id="app-admin">
-          <div class="at-sidebar">
-            <div class="at-brand">
-              <div class="at-brand-mark">AT</div>
-              <div>
-                <div class="at-brand-name">Aleph Trust</div>
-                <div class="at-brand-sub">play.frostcraft.net</div>
-              </div>
-            </div>
-            <div class="at-nav">
-              <div class="at-nav-label">General</div>
-              <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Overview</div>
-              <div class="at-nav-label">Protection</div>
-              <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Access Mode</div>
-              <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Entrance Logs</div>
-              <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Mods</div>
-              <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban & Appeals</div>
-              <div class="at-nav-label">Account</div>
-              <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Subscription</div>
-              <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
-            </div>
-            <div class="at-sidebar-foot">
-              Growth Plan · <span id="adminOnlineCount">187</span>/200<br>online · refreshed 12h
-            </div>
+          <div class="at-nav">
+            <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Overview</div>
+            <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Access Mode</div>
+            <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Entrance Logs</div>
+            <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Mods</div>
+            <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban & Appeals</div>
+            <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Subscription</div>
+            <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
           </div>
 
           <div class="at-main">
@@ -458,137 +441,6 @@
                 <div class="at-list-row"><span class="dim">Appeal against your ban</span><input type="checkbox" checked></div>
                 <div class="at-list-row"><span class="dim">Billing / payments</span><input type="checkbox"></div>
                 <button class="at-btn primary" style="margin-top:12px;" onclick="alert('Saved!');">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ============ PLAYER APP ============ -->
-        <div class="at-app" id="app-player" style="display:none;">
-          <div class="at-sidebar">
-            <div class="at-brand">
-              <div class="at-brand-mark">AT</div>
-              <div>
-                <div class="at-brand-name">Aleph Trust</div>
-                <div class="at-brand-sub">Player Profile</div>
-              </div>
-            </div>
-            <div class="at-nav">
-              <div class="at-nav-label">Profile</div>
-              <div class="at-nav-item active" data-page="p-overview" onclick="atNav(this,'p-overview')">🛡️ My Trust Score</div>
-              <div class="at-nav-item" data-page="p-history" onclick="atNav(this,'p-history')">📜 Ban History</div>
-              <div class="at-nav-item" data-page="p-appeals" onclick="atNav(this,'p-appeals')">✉️ My Appeals</div>
-              <div class="at-nav-item" data-page="p-launcher" onclick="atNav(this,'p-launcher')">🖥️ My Launcher</div>
-            </div>
-            <div class="at-sidebar-foot">
-              WetID: user<br>Verification: Passport ✓
-            </div>
-          </div>
-
-          <div class="at-main">
-            <div class="at-page active" id="page-p-overview">
-              <div class="at-pagehead">
-                <div><h1>My Trust Score</h1><p>Your WetID reputation across the entire Aleph Trust ecosystem</p></div>
-              </div>
-
-              <div class="at-grid at-g2" style="margin-bottom:16px;">
-                <div class="at-card">
-                  <h3>Current Status</h3>
-                  <div class="at-trust-ring-wrap">
-                    <div class="at-trust-ring">
-                      <svg width="100" height="100" viewBox="0 0 132 132">
-                        <circle cx="66" cy="66" r="56" fill="none" stroke="#1A1F29" stroke-width="12"/>
-                        <circle cx="66" cy="66" r="56" fill="none" stroke="#D9A441" stroke-width="12"
-                          stroke-dasharray="351.8" stroke-dashoffset="70.4" stroke-linecap="round"/>
-                      </svg>
-                      <div class="at-trust-ring-center">
-                        <div class="at-trust-ring-num" style="color:var(--at-amber);">80</div>
-                        <div class="at-trust-ring-sub">/ 100</div>
-                      </div>
-                    </div>
-                    <div class="at-trust-legend">
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-amber)"></span>1 active ban (xray)</div>
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-text-faint)"></span>0 confirmed violations</div>
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--color-ruby-light, #b52239)"></span>Passport Verified</div>
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-line)"></span>Deactivation Threshold: 20</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="at-card">
-                  <h3>What this means</h3>
-                  <p style="font-size:13px; line-height:1.6; color:var(--at-text-dim);">
-                    Your Score is reduced due to one active ban on <strong style="color:var(--at-text)">FrostCraft Network</strong> under the <span class="at-cat-tag">xray</span> category. The ban is not finalized — you have the right to file an appeal.
-                  </p>
-                  <p style="font-size:13px; line-height:1.6; color:var(--at-text-dim); margin-top:10px;">
-                    Because your WetID is passport verified, your deactivation threshold is higher than standard accounts.
-                  </p>
-                  <button class="at-btn primary" style="margin-top:12px;" onclick="atNav(document.querySelector('[data-page=p-appeals]'),'p-appeals')">File an Appeal →</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="at-page" id="page-p-history">
-              <div class="at-pagehead"><div><h1>Ban History</h1><p>Bans affecting your Trust Score</p></div></div>
-              <div class="at-card">
-                <table>
-                  <thead><tr><th>Server</th><th>Category</th><th>Date</th><th>Weight</th><th>Status</th></tr></thead>
-                  <tbody>
-                    <tr>
-                      <td>FrostCraft Network</td>
-                      <td><span class="at-cat-tag">xray</span></td>
-                      <td class="dim mono">June 28, 2026</td>
-                      <td class="mono">0.87× · 12 pts</td>
-                      <td><span class="at-badge flagged">Appeal Filed</span></td>
-                    </tr>
-                    <tr>
-                      <td>SkyBlock Legends</td>
-                      <td><span class="at-cat-tag">other</span></td>
-                      <td class="dim mono">March 14, 2026</td>
-                      <td class="mono">0.2× · 2 pts</td>
-                      <td><span class="at-badge denied">Rejected</span></td>
-                    </tr>
-                    <tr>
-                      <td>PvP Arena RU</td>
-                      <td><span class="at-cat-tag">killaura</span></td>
-                      <td class="dim mono">January 2, 2026</td>
-                      <td class="mono">1.0× · 18 pts</td>
-                      <td><span class="at-badge allowed">Appeal Approved</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="at-page" id="page-p-appeals">
-              <div class="at-pagehead"><div><h1>My Appeals</h1><p>Appeals are reviewed by Aleph Studio, not the server issuing the ban</p></div></div>
-
-              <div class="at-card" style="margin-bottom:16px;">
-                <h3>File a New Appeal</h3>
-                <div class="field"><label>Choose Ban</label>
-                  <select><option>FrostCraft Network — xray — June 28, 2026</option></select>
-                </div>
-                <div class="field"><label>Explanation</label><input type="text" placeholder="Explain why you believe the ban was issued in error"></div>
-                <button class="at-btn primary" onclick="alert('Appeal submitted!');">Submit for Review</button>
-              </div>
-
-              <div class="at-card">
-                <h3>Appeals Status</h3>
-                <div class="at-appeal-item">
-                  <div class="at-appeal-head">
-                    <div><strong>FrostCraft Network</strong> <span class="at-cat-tag">xray</span></div>
-                    <span class="at-pill warn">Under Review</span>
-                  </div>
-                  <p class="dim" style="font-size:12.5px;">Submitted 2 days ago. Average review time is 5 days.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="at-page" id="page-p-launcher">
-              <div class="at-pagehead"><div><h1>My Launcher</h1><p>Status of AMCLauncher linked to your WetID</p></div></div>
-              <div class="at-grid at-g3">
-                <div class="at-card"><h3>Launcher Version</h3><div class="at-stat-value" style="font-size:20px;">2.4.1</div><div class="at-label">official release ✓</div></div>
-                <div class="at-card"><h3>Mode</h3><div class="at-stat-value" style="font-size:20px; color:var(--color-ruby-light, #b52239);">WetID</div><div class="at-label">account linked</div></div>
-                <div class="at-card"><h3>Devices Linked</h3><div class="at-stat-value" style="font-size:20px;">2</div><div class="at-label">limit: 3</div></div>
               </div>
             </div>
           </div>

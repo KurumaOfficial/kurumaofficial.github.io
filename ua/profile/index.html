@@ -108,9 +108,15 @@
           <span class="value">06.09.2024 р, 00:00</span>
         </div>
 
-        <div class="info-row copyable" data-copy="Бета">
-          <span class="label">Ваша роль</span>
-          <span class="value role-beta">Бета</span>
+        <div class="info-row">
+          <span class="label">Trust Factor</span>
+          <span class="value" style="display:flex; align-items:center; gap:8px; line-height:1;">
+            <span style="font-family:var(--font-mono), monospace; font-weight:700;">80/100</span>
+            <svg width="14" height="14" viewBox="0 0 36 36" style="transform: rotate(-90deg); flex-shrink: 0; display: block;">
+              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border-default)" stroke-width="4.5"/>
+              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--color-ruby-light, #b52239)" stroke-width="4.5" stroke-dasharray="94.2" stroke-dashoffset="18.8" stroke-linecap="round"/>
+            </svg>
+          </span>
         </div>
 
         <div class="info-row copyable" data-copy="7ab33b0f2b8ae70708dbc5b2aa34acca">
@@ -195,38 +201,21 @@
         </div>
       </section>
 
-            <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
+                  <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
       <section class="profile-section" id="aleph-trust">
-        <div class="at-roleswitch">
-          <button id="btn-admin" class="active" onclick="atSetRole('admin')">Admin</button>
-          <button id="btn-player" onclick="atSetRole('player')">Player</button>
-        </div>
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Панель керування Aleph Trust</h2>
+        <p class="section-subtitle" style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; text-transform: none; font-family: var(--font-body), serif;">Статус: <b style="color: var(--green);">Активний</b> · Тариф: <b id="trustPlanName">Beth</b></p>
 
         <!-- ============ ADMIN APP ============ -->
         <div class="at-app" id="app-admin">
-          <div class="at-sidebar">
-            <div class="at-brand">
-              <div class="at-brand-mark">AT</div>
-              <div>
-                <div class="at-brand-name">Aleph Trust</div>
-                <div class="at-brand-sub">play.frostcraft.net</div>
-              </div>
-            </div>
-            <div class="at-nav">
-              <div class="at-nav-label">Огляд</div>
-              <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Огляд</div>
-              <div class="at-nav-label">Захист</div>
-              <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Режим допуску</div>
-              <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Логи входів</div>
-              <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Моди</div>
-              <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban та апеляції</div>
-              <div class="at-nav-label">Акаунт</div>
-              <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Підписка</div>
-              <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
-            </div>
-            <div class="at-sidebar-foot">
-              Growth Plan · <span id="adminOnlineCount">187</span>/200<br>онлайн · оновлення 12г
-            </div>
+          <div class="at-nav">
+            <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Огляд</div>
+            <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Режим допуску</div>
+            <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Логи входів</div>
+            <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Моди</div>
+            <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban та апеляції</div>
+            <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Підписка</div>
+            <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
           </div>
 
           <div class="at-main">
@@ -348,7 +337,7 @@
                 <div><h1>Керування модами</h1><p>Моди звіряються з базою Modrinth автоматично. Тут — ручні винятки.</p></div>
               </div>
               <div class="at-card">
-                <h3>Дозволити приватний мод вручну</h3>
+                <h3>Дозволити приватний мод вручную</h3>
                 <p class="at-seg-desc" style="margin-top:0;">Використовуйте, якщо ваш сервер має легітимний самописний мод, якого немає на Modrinth. Це додасть його SHA-256 у ваш власний whitelist.</p>
                 <div style="display:flex; gap:10px; margin-top:12px;">
                   <input type="text" placeholder="SHA-256 хеш файлу мода" style="margin-top:0;">
@@ -374,13 +363,13 @@
               </div>
 
               <div class="at-grid at-g3" style="margin-bottom:16px;">
-                <div class="at-card"><h3>Банов подано (30д)</h3><div class="at-stat-value">31</div></div>
+                <div class="at-card"><h3>Банів подано (30д)</h3><div class="at-stat-value">31</div></div>
                 <div class="at-card"><h3>Апеляцій схвалено</h3><div class="at-stat-value" style="color:var(--at-amber);">3 <span style="font-size:14px; color:var(--at-text-faint);">/ 31</span></div><div class="at-stat-label">9.7% — в межах норми (&lt;15%)</div></div>
                 <div class="at-card"><h3>Вплив на ваш рейтинг</h3><div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">стабільний</div></div>
               </div>
 
               <div class="at-card" style="margin-bottom:16px;">
-                <h3>Подати /atban вручну (дублює ин-гейм команду)</h3>
+                <h3>Подати /atban вручну (дублирует ин-гейм команду)</h3>
                 <div class="at-grid at-g3" style="gap:10px;">
                   <div class="field" style="margin-bottom:0;"><label>Нікнейм гравця</label><input type="text" placeholder="Steve_1337"></div>
                   <div class="field" style="margin-bottom:0;">
@@ -393,7 +382,7 @@
               </div>
 
               <div class="at-card">
-                <h3>Апеляції против ваших банів</h3>
+                <h3>Апеляції проти вашого бану</h3>
                 <div class="at-appeal-item">
                   <div class="at-appeal-head">
                     <div><strong>WetID: nordic_wolf</strong> <span class="at-cat-tag">xray</span></div>
@@ -459,134 +448,6 @@
                 <div class="at-list-row"><span class="dim">Апеляція проти вашого бану</span><input type="checkbox" checked></div>
                 <div class="at-list-row"><span class="dim">Зміна тарифу / оплата</span><input type="checkbox"></div>
                 <button class="at-btn primary" style="margin-top:12px;" onclick="alert('Збережено!');">Зберегти</button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- ============ PLAYER APP ============ -->
-        <div class="at-app" id="app-player" style="display:none;">
-          <div class="at-sidebar">
-            <div class="at-brand">
-              <div class="at-brand-mark">AT</div>
-              <div>
-                <div class="at-brand-name">Aleph Trust</div>
-                <div class="at-brand-sub">Player Profile</div>
-              </div>
-            </div>
-            <div class="at-nav">
-              <div class="at-nav-label">Профіль</div>
-              <div class="at-nav-item active" data-page="p-overview" onclick="atNav(this,'p-overview')">🛡️ Мій Trust Score</div>
-              <div class="at-nav-item" data-page="p-history" onclick="atNav(this,'p-history')">📜 Історія банів</div>
-              <div class="at-nav-item" data-page="p-appeals" onclick="atNav(this,'p-appeals')">✉️ Мої апеляції</div>
-              <div class="at-nav-item" data-page="p-launcher" onclick="atNav(this,'p-launcher')">🖥️ Мій лаунчер</div>
-            </div>
-            <div class="at-sidebar-foot">
-              WetID: user<br>Верифікація: паспорт ✓
-            </div>
-          </div>
-
-          <div class="at-main">
-            <div class="at-page active" id="page-p-overview">
-              <div class="at-pagehead">
-                <div><h1>Мій Trust Score</h1><p>Репутація вашого WetID у всій екосистемі Aleph Trust</p></div>
-              </div>
-
-              <div class="at-grid at-g2" style="margin-bottom:16px;">
-                <div class="at-card">
-                  <h3>Поточний статус</h3>
-                  <div class="at-trust-ring-wrap">
-                    <div class="at-trust-ring">
-                      <svg width="100" height="100" viewBox="0 0 132 132">
-                        <circle cx="66" cy="66" r="56" fill="none" stroke="#1A1F29" stroke-width="12"/>
-                        <circle cx="66" cy="66" r="56" fill="none" stroke="#D9A441" stroke-width="12"
-                          stroke-dasharray="351.8" stroke-dashoffset="70.4" stroke-linecap="round"/>
-                      </svg>
-                      <div class="at-trust-ring-center">
-                        <div class="at-trust-ring-num" style="color:var(--at-amber);">80</div>
-                        <div class="at-trust-ring-sub">/ 100</div>
-                      </div>
-                    </div>
-                    <div class="at-trust-legend">
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-amber)"></span>1 активний бан (xray)</div>
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--at-text-faint)"></span>0 підтверджених порушень</div>
-                      <div class="at-trust-legend-item"><span class="at-dot" style="background:var(--color-ruby-light, #b52239)"></span>Паспорт верифікований</div>
-                      <div class="at-dot" style="background:var(--at-line)">Поріг деактивації: 20</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="at-card">
-                  <h3>Що це означає</h3>
-                  <p style="font-size:13px; line-height:1.6; color:var(--at-text-dim);">
-                    Ваш Score знижений через один бан на сервері <strong style="color:var(--at-text)">FrostCraft Network</strong> за категорією <span class="at-cat-tag">xray</span>. Бан ще не підтверджений остаточно — ви маєте право подать апеляцію.
-                  </p>
-                  <p style="font-size:13px; line-height:1.6; color:var(--at-text-dim); margin-top:10px;">
-                    Оскільки ваш WetID верифікований паспортом, поріг деактивації для вас вищий, ніж у звичайного акаунта.
-                  </p>
-                  <button class="at-btn primary" style="margin-top:12px;" onclick="atNav(document.querySelector('[data-page=p-appeals]'),'p-appeals')">Подати апеляцію →</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="at-page" id="page-p-history">
-              <div class="at-pagehead"><div><h1>Історія банів</h1><p>Бани, що впливають на ваш Trust Score</p></div></div>
-              <div class="at-card">
-                <table>
-                  <thead><tr><th>Сервер</th><th>Категорія</th><th>Дата</th><th>Вага</th><th>Статус</th></tr></thead>
-                  <tbody>
-                    <tr>
-                      <td>FrostCraft Network</td>
-                      <td><span class="at-cat-tag">xray</span></td>
-                      <td class="dim mono">28 червня 2026</td>
-                      <td class="mono">0.87× · 12 pts</td>
-                      <td><span class="at-badge flagged">Апеляція подана</span></td>
-                    </tr>
-                    <tr>
-                      <td>SkyBlock Legends</td>
-                      <td><span class="at-cat-tag">other</span></td>
-                      <td class="dim mono">14 березня 2026</td>
-                      <td class="mono">0.2× · 2 pts</td>
-                      <td><span class="at-badge denied">Відхилена</span></td>
-                    </tr>
-                    <tr>
-                      <td>PvP Arena UA</td>
-                      <td><span class="at-badge allowed">Апеляція схвалена</span></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="at-page" id="page-p-appeals">
-              <div class="at-pagehead"><div><h1>Мої апеляції</h1><p>Апеляції розглядає команда Aleph Studio, а не сервер, який видав бан</p></div></div>
-
-              <div class="at-card" style="margin-bottom:16px;">
-                <h3>Подати нову апеляцію</h3>
-                <div class="field"><label>Оберіть бан</label>
-                  <select><option>FrostCraft Network — xray — 28 червня 2026</option></select>
-                </div>
-                <div class="field"><label>Пояснення</label><input type="text" placeholder="Опишіть, чому вважаєте бан помилковим"></div>
-                <button class="at-btn primary" onclick="alert('Апеляцію надіслано!');">Надіслати на розгляд</button>
-              </div>
-
-              <div class="at-card">
-                <h3>Статус апелляцій</h3>
-                <div class="at-appeal-item">
-                  <div class="at-appeal-head">
-                    <div><strong>FrostCraft Network</strong> <span class="at-cat-tag">xray</span></div>
-                    <span class="at-pill warn">На розгляді</span>
-                  </div>
-                  <p class="dim" style="font-size:12.5px;">Подана 2 дні тому. Середній час розгляду — 5 днів.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="at-page" id="page-p-launcher">
-              <div class="at-pagehead"><div><h1>Мій лаунчер</h1><p>Статус AMCLauncher, прив'язаного до вашого WetID</p></div></div>
-              <div class="at-grid at-g3">
-                <div class="at-card"><h3>Версия лаунчера</h3><div class="at-stat-value" style="font-size:20px;">2.4.1</div><div class="at-label">офіційна збірка ✓</div></div>
-                <div class="at-card"><h3>Режим</h3><div class="at-stat-value" style="font-size:20px; color:var(--color-ruby-light, #b52239);">WetID</div><div class="at-label">акаунт прив'язаний</div></div>
-                <div class="at-card"><h3>Пристроїв прив'язано</h3><div class="at-stat-value" style="font-size:20px;">2</div><div class="at-label">лимит: 3</div></div>
               </div>
             </div>
           </div>
