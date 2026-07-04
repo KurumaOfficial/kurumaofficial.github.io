@@ -60,6 +60,61 @@ function boot() {
         });
     });
 
+    // Define global helpers for Aleph Trust Dashboard navigation and settings
+    window.atNav = function(el, pageId) {
+        const parent = el.closest('.at-app');
+        if (!parent) return;
+        parent.querySelectorAll('.at-nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+        parent.querySelectorAll('.at-page').forEach(p => p.classList.remove('active'));
+        
+        const targetPage = parent.querySelector('#page-' + pageId);
+        if (targetPage) targetPage.classList.add('active');
+    };
+
+    window.atSetRole = function(role) {
+        const activeSection = document.getElementById('aleph-trust');
+        if (!activeSection) return;
+        
+        const btnAdmin = activeSection.querySelector('#btn-admin');
+        const btnPlayer = activeSection.querySelector('#btn-player');
+        const appAdmin = activeSection.querySelector('#app-admin');
+        const appPlayer = activeSection.querySelector('#app-player');
+
+        if (btnAdmin) btnAdmin.classList.toggle('active', role === 'admin');
+        if (btnPlayer) btnPlayer.classList.toggle('active', role === 'player');
+        if (appAdmin) appAdmin.style.display = role === 'admin' ? 'flex' : 'none';
+        if (appPlayer) appPlayer.style.display = role === 'player' ? 'flex' : 'none';
+    };
+
+    window.atSetAccessMode = function(el, idx) {
+        const activeSection = document.getElementById('aleph-trust');
+        if (!activeSection) return;
+        el.parentElement.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        el.classList.add('active');
+        
+        const descNode = activeSection.querySelector('#access-desc');
+        const locale = window.__ALEPH_LOCALE__ || 'ru';
+        const accessDescriptions = {
+            ru: [
+                "Игрок допускается при чистом лаунчере без модификаций. Привязка WetID не требуется — самый низкий барьер входа, обход возможен переустановкой лаунчера.",
+                "Игрок обязан войти в WetID-аккаунт. Бан на этом уровне требует создания нового WetID для обхода — умеренный барьер.",
+                "Требуется WetID с верифицированным паспортом/документом. Обход практически невозможен без создания новой цифровой личности — максимальный барьер."
+            ],
+            en: [
+                "Player is admitted with a clean launcher without modifications. WetID link is not required — lowest barrier to entry, bypass possible by reinstalling launcher.",
+                "Players must sign in with a WetID account. Banning at this level requires creating a new WetID — moderate barrier.",
+                "WetID with verified passport/document is required. Bypass is practically impossible without creating a new digital identity — maximum barrier."
+            ],
+            ua: [
+                "Гравець допускається при чистому лаунчері без модифікацій. Прив'язка WetID не потрібна — найнижчий бар'єр входу, обход можливий переустановкою лаунчера.",
+                "Гравець зобов'язаний увійти у WetID-акаунт. Бан на цьому рівні вимагає створення нового WetID для обходу — помірний бар'єр.",
+                "Необхідний WetID з верифікованим паспортом/документом. Обхід практично неможливий без створення нової цифрової особистості — максимальний бар'єр."
+            ]
+        }[locale] || accessDescriptions.ru;
+        if (descNode) descNode.textContent = accessDescriptions[idx];
+    };
+
     function applyTrustPurchase(plan, duration) {
         // 1. Show the sidebar tab for Aleph Trust
         const sidebarTab = document.getElementById('sidebarAlephTrust');
@@ -125,6 +180,111 @@ function boot() {
         } else { // Dalet
             if (trustSessionsLimitNode) trustSessionsLimitNode.textContent = '2000';
             if (trustInstancesLimitNode) trustInstancesLimitNode.textContent = '∞';
+        }
+
+        // 4. Update billing info inside Aleph Trust control panel
+        const billingPlanName = document.getElementById('trustBillingPlanName');
+        if (billingPlanName) billingPlanName.textContent = plan;
+
+        const billingPlanLimit = document.getElementById('trustBillingPlanLimit');
+        const billingOnline = document.getElementById('trustBillingOnline');
+        const adminOnlineCount = document.getElementById('adminOnlineCount');
+
+        const billingDetails = {
+            ru: {
+                Beth: { limit: 'до 100 онлайн · $19/мес', online: '87 / 100', count: '87' },
+                Gimel: { limit: 'до 500 онлайн · $49/мес', online: '342 / 500', count: '342' },
+                Dalet: { limit: 'Enterprise · от $199/мес', online: '1 280 / 2 000', count: '1280' }
+            },
+            en: {
+                Beth: { limit: 'up to 100 online · $19/mo', online: '87 / 100', count: '87' },
+                Gimel: { limit: 'up to 500 online · $49/mo', online: '342 / 500', count: '342' },
+                Dalet: { limit: 'Enterprise · from $199/mo', online: '1,280 / 2,000', count: '1280' }
+            },
+            ua: {
+                Beth: { limit: 'до 100 онлайн · $19/міс', online: '87 / 100', count: '87' },
+                Gimel: { limit: 'до 500 онлайн · $49/міс', online: '342 / 500', count: '342' },
+                Dalet: { limit: 'Enterprise · від $199/міс', online: '1 280 / 2 000', count: '1280' }
+            }
+        }[locale] || billingDetails.ru;
+
+        const pData = billingDetails[plan];
+        if (pData) {
+            if (billingPlanLimit) billingPlanLimit.textContent = pData.limit;
+            if (billingOnline) billingOnline.textContent = pData.online;
+            if (adminOnlineCount) adminOnlineCount.textContent = pData.count;
+        }
+
+        // 5. Draw connections bar chart
+        const chart = document.getElementById('chart-connections');
+        if (chart) {
+            chart.innerHTML = '';
+            const allowed = [1720, 1830, 1690, 1980, 2100, 2350, 1942];
+            const denied  = [38, 41, 29, 52, 47, 60, 54];
+            const maxV = Math.max(...allowed);
+            allowed.forEach((v, i) => {
+                const wrap = document.createElement('div');
+                wrap.className = 'at-bar-wrap';
+
+                const dBar = document.createElement('div');
+                dBar.className = 'at-bar denied';
+                dBar.style.height = Math.max(2, (denied[i] / maxV) * 75) + 'px';
+                dBar.title = denied[i] + ' rejected';
+
+                const aBar = document.createElement('div');
+                aBar.className = 'at-bar';
+                aBar.style.height = Math.max(2, (v / maxV) * 75) + 'px';
+                aBar.title = v + ' allowed';
+
+                wrap.appendChild(dBar);
+                wrap.appendChild(aBar);
+                chart.appendChild(wrap);
+            });
+        }
+
+        // 6. Draw logs table
+        const logsTable = document.getElementById('logs-table');
+        if (logsTable) {
+            logsTable.innerHTML = '';
+            const logNames = ['Steve_1337', 'nordic_wolf', 'quietfox22', 'xXx_Diamond_xXx', 'FrostyPine', 'Vantablack', 'ember_lynx', 'Cobalt99', 'driftwood', 'Nyx_Shade'];
+            const results = ['allowed', 'allowed', 'allowed', 'denied', 'allowed', 'flagged', 'allowed', 'allowed', 'denied', 'allowed'];
+            
+            const reasons = {
+                ru: {
+                    allowed: ['Проверка пройдена', 'WetID подтверждён', 'Whitelist'],
+                    denied: ['Unverified mod detected', 'Хэндшейк не пройден', 'Blacklist WetID'],
+                    flagged: ['Низкий Trust Score (34)', 'Подозрение на модификацию']
+                },
+                en: {
+                    allowed: ['Check passed', 'WetID verified', 'Whitelist'],
+                    denied: ['Unverified mod detected', 'Handshake failed', 'Blacklist WetID'],
+                    flagged: ['Low Trust Score (34)', 'Suspicion of modification']
+                },
+                ua: {
+                    allowed: ['Перевірка пройдена', 'WetID підтверджено', 'Whitelist'],
+                    denied: ['Unverified mod detected', 'Хендшейк не пройдено', 'Blacklist WetID'],
+                    flagged: ['Низький Trust Score (34)', 'Підозра на модифікацію']
+                }
+            }[locale] || reasons.ru;
+
+            for (let i = 0; i < 10; i++) {
+                const r = results[i];
+                const time = new Date(Date.now() - i * 1000 * 60 * 17);
+                const timeStr = time.toTimeString().slice(0, 5);
+                const reasonList = reasons[r];
+                const reason = reasonList[Math.floor(Math.random() * reasonList.length)];
+                const wetid = r === 'denied' && Math.random() > 0.5 ? '—' : logNames[i].toLowerCase();
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="mono dim">${timeStr}</td>
+                    <td>${logNames[i]}</td>
+                    <td class="mono dim">${wetid}</td>
+                    <td><span class="at-badge ${r}">${r}</span></td>
+                    <td class="dim">${reason}</td>
+                `;
+                logsTable.appendChild(row);
+            }
         }
     }
 
