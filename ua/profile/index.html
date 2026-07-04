@@ -1,765 +1,764 @@
-<!doctype html>
-<html lang="ua" dir="ltr" data-theme="dark">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Aleph Studio — Dashboard</title>
-<meta name="theme-color" content="#080606">
-<meta name="color-scheme" content="dark light">
-<script>window.__ALEPH_LOCALE__ = 'ua';</script>
-<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
-<link rel="icon" href="../../favicon.ico" sizes="48x48">
-<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
-<link rel="icon" href="../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
-<link rel="stylesheet" href="../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../assets/css/profile.css?v=17">
-<link rel="stylesheet" href="../../assets/css/products/aleph-trust.css?v=4">
-</head>
-<body>
-<!-- SVG icon sprite: all icons are inline, no external dependency -->
-<svg style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
-  <defs>
-    <symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
-    <symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
-    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
-    <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.53l1.65-6.47H5.12"/></symbol>
-    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
-    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
-    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="19" r="1.4"/></symbol>
-    <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></symbol>
-    <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></symbol>
-    <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.5v-7l6.2 3.5-6.2 3.5z"/></symbol>
-    <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.9 4.3 18.7 20c-.2.9-.9 1.1-1.7.7l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9L18 8.2c.4-.4-.1-.6-.6-.2L7 14.7l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3.4c.8-.3 1.6.2 1.3 1z"/></symbol>
-    <symbol id="i-discord" viewBox="0 0 24 24"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.37-.44.86-.61 1.25a18.3 18.3 0 0 0-5.49 0 12.6 12.6 0 0 0-.62-1.25.08.08 0 0 0-.08-.04 19.74 19.74 0 0 0-4.88 1.52.07.07 0 0 0-.03.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .09-.03 14.1 14.1 0 0 0 1.22-2 .08.08 0 0 0-.04-.1 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1 0-.13c.13-.1.25-.2.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08.01c.12.1.25.2.37.3a.08.08 0 0 1-.01.12 12.3 12.3 0 0 1-1.87.9.08.08 0 0 0-.04.11c.36.7.77 1.36 1.22 1.99a.08.08 0 0 0 .09.03 19.84 19.84 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.67-3.55-13.66a.06.06 0 0 0-.03-.03zM8.02 15.33c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42zm7.97 0c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42z"/></symbol>
-    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
-    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
-    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
-  </defs>
-</svg>
-
-<a id="skipLink" class="skip-link" href="#main">Skip to content</a>
-
-<div class="bg-grid"></div>
-<div class="bg-glow"></div>
-
-<nav class="nav" aria-label="Main navigation">
-    <a id="logoLink" class="nav-logo" href="../../ua/" aria-label="Aleph Studio">
-        <span class="logo-sq" aria-hidden="true"></span>
-        <span class="logo-text">Aleph Studio</span>
-    </a>
-    <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../ua/products/">Продукти</a>
-        <a id="navLinkDonate" class="nav__link" href="../../ua/donate/" data-donate-link>Підтримати</a>
-        <a id="navLinkDocs" class="nav__link" href="../../ua/docs/privacy/">Документація</a>
-    </div>
-    <div class="nav-right">
-        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
-            <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-        </button>
-        <div id="localeSwitcher" class="locale-switcher">
-            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Мова">
-                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
-                <span id="localeSwitcherLabel">UA</span>
-                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Мова" hidden></div>
-        </div>
-    </div>
-</nav>
-<main id="main">
-<div class="profile-page">
-  <div class="layout">
-    <aside class="sidebar">
-      <h1 class="page-title">Мій профіль</h1>
-      <nav class="sidebar-nav">
-        <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Аккаунт</button>
-        <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Магазин</button>
-        <button class="sidebar-link" data-target="aleph-trust" id="sidebarAlephTrust" style="display: none;"><svg class="icon icon-stroke"><use href="#i-shield"/></svg> Aleph Trust</button>
-        <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Додатково</button>
-        <a class="sidebar-link" href="../docs/privacy/"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Документація</a>
-      </nav>
-    </aside>
-
-    <div class="content">
-      <div class="breadcrumb">
-        <a href="../">Головна</a>
-        <svg class="icon icon-stroke"><use href="#i-chevron-right"/></svg>
-        <span>WetID</span>
-        <svg class="icon icon-stroke"><use href="#i-chevron-right"/></svg>
-        <span class="current">Аккаунт</span>
-      </div>
-
-      <!-- OVERVIEW -->
-      <section class="profile-section active" id="overview">
-        <div class="user-header">
-          <h2>Привіт, User! <span class="mini-avatar" id="avatarBtn" title="Змінити аватарку"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" id="avatarImg"><input type="file" id="avatarInput" accept="image/*" style="display: none;"></span></h2>
-          <div class="user-meta">
-            <div>Email: <b>user@aleph.icu</b></div>
-            <div>Баланс: <b>14.08 USDT</b></div>
-          </div>
-        </div>
-
-        <div class="info-row copyable" data-copy="06.09.2024 р, 00:00">
-          <span class="label">Дата реєстрації</span>
-          <span class="value">06.09.2024 р, 00:00</span>
-        </div>
-
-        <div class="info-row">
-          <span class="label">Trust Factor</span>
-          <span class="value" style="display:flex; align-items:center; gap:8px; line-height:1;">
-            <span style="font-family:var(--font-mono), monospace; font-weight:700;">80/100</span>
-            <svg width="14" height="14" viewBox="0 0 36 36" style="transform: rotate(-90deg); flex-shrink: 0; display: block;">
-              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border-default)" stroke-width="4.5"/>
-              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--color-ruby-light, #b52239)" stroke-width="4.5" stroke-dasharray="94.2" stroke-dashoffset="18.8" stroke-linecap="round"/>
-            </svg>
-          </span>
-        </div>
-
-        <div class="info-row copyable" data-copy="7ab33b0f2b8ae70708dbc5b2aa34acca">
-          <span class="label">HWID <svg class="icon icon-stroke" title="Унікальний ідентифікатор вашого обладнання"><use href="#i-info"/></svg></span>
-          <span class="value mono">7ab33b0f2b8ae70708dbc5b2aa34acca</span>
-        </div>
-
-        <h2 class="section-title" style="font-size: 18px; font-weight: 700; margin: 36px 0 16px;">Мої ліцензії</h2>
-
-        <div class="license-card merged-card">
-          <div class="card-left">
-            <div class="license-header">
-              <span class="license-name">Strange Visuals</span>
-            </div>
-            <div class="license-details">
-              <span>Тип: <b>Персональна ліцензія</b></span>
-              <span>Активовано: <b class="license-date">2026-06-01</b></span>
-              <span>Дійсна до: <b class="license-date">10.07.2026 р, 15:03</b></span>
-            </div>
-            <div class="license-actions" style="margin-top: 8px;">
-              <a class="license-btn primary" href="../products/strange-visuals/">Сторінка</a>
-            </div>
-          </div>
-          <div class="card-right">
-            <div class="progress-ring">
-              <svg viewBox="0 0 64 64">
-                <circle class="track" cx="32" cy="32" r="27"></circle>
-                <circle class="bar" cx="32" cy="32" r="27" id="ringBar"></circle>
-              </svg>
-              <div class="ring-label">
-                <span class="num">96</span>
-                <span class="unit">д</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-            <!-- STORE -->
-      <section class="profile-section" id="licenses">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Магазин продуктів</h2>
-        <div class="licenses-grid">
-          <!-- Strange Visuals -->
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Strange Visuals</span>
-              <span class="license-status active" style="background: rgba(63,207,127,0.1); color: var(--green); border-color: rgba(63,207,127,0.2);">Безкоштовно</span>
-            </div>
-            <div class="license-details">
-              <span>Візуальний чит для Minecraft з просунутими обходами та красивим інтерфейсом.</span>
-            </div>
-            <div class="license-actions" style="margin-top: auto;">
-              <a class="license-btn primary" href="../products/strange-visuals/">Завантажити</a>
-            </div>
-          </div>
-          <!-- Minecraft Launcher -->
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Aleph Launcher</span>
-              <span class="license-status active" style="background: rgba(63,207,127,0.1); color: var(--green); border-color: rgba(63,207,127,0.2);">Безкоштовно</span>
-            </div>
-            <div class="license-details">
-              <span>Мінімалістичний та швидкий лаунчер для комфортной гри з читами.</span>
-            </div>
-            <div class="license-actions" style="margin-top: auto;">
-              <a class="license-btn primary" href="../products/aleph-minecraft-launcher/">Завантажити</a>
-            </div>
-          </div>
-          <!-- Aleph Trust -->
-          <div class="license-card">
-            <div class="license-header">
-              <span class="license-name">Aleph Trust</span>
-              <span class="license-status active" style="background: rgba(139,26,42,0.1); color: var(--accent-light); border-color: rgba(139,26,42,0.2);">від $19/міс</span>
-            </div>
-            <div class="license-details">
-              <span>SaaS-система допуску для Minecraft-серверів. Перевірка лаунчера, модів та ідентифікації.</span>
-            </div>
-            <div class="license-actions" style="margin-top: auto;">
-              <a class="license-btn primary acquire-trust-btn" href="#">Придбати</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-                  <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
-      <section class="profile-section" id="aleph-trust">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Панель керування Aleph Trust</h2>
-        <p class="section-subtitle" style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; text-transform: none; font-family: var(--font-body), serif;">Статус: <b style="color: var(--green);">Активний</b> · Тариф: <b id="trustPlanName">Beth</b></p>
-
-        <!-- ============ ADMIN APP ============ -->
-        <div class="at-app" id="app-admin">
-          <div class="at-nav">
-            <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Огляд</div>
-            <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Режим допуску</div>
-            <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Логи входів</div>
-            <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Моди</div>
-            <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban та апеляції</div>
-            <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Підписка</div>
-            <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
-          </div>
-
-          <div class="at-main">
-            <!-- OVERVIEW -->
-            <div class="at-page active" id="page-a-overview">
-              <div class="at-pagehead">
-                <div>
-                  <h1>Огляд сервера</h1>
-                  <p>FrostCraft Network — останнє оновлення 2 хвилини тому</p>
-                </div>
-                <span class="at-pill ok">● Aleph Trust активний</span>
-              </div>
-
-              <div class="at-grid at-g4" style="margin-bottom:16px;">
-                <div class="at-card">
-                  <h3>Server Trust Rating</h3>
-                  <div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">0.87×</div>
-                  <div class="at-stat-label">вага ваших банів у системі</div>
-                  <div class="at-stat-delta up">↑ 0.04 за 30 днів</div>
-                </div>
-                <div class="at-card">
-                  <h3>Входи за 24г</h3>
-                  <div class="at-stat-value">1 942</div>
-                  <div class="at-stat-label">унікальних підключень</div>
-                  <div class="at-stat-delta up">↑ 6.2%</div>
-                </div>
-                <div class="at-card">
-                  <h3>Відхилено</h3>
-                  <div class="at-stat-value" style="color:var(--at-red);">54</div>
-                  <div class="at-stat-label">unverified / flagged</div>
-                  <div class="at-stat-delta down">↓ 12%</div>
-                </div>
-                <div class="at-card">
-                  <h3>Апеляції проти вас</h3>
-                  <div class="at-stat-value" style="color:var(--at-amber);">2</div>
-                  <div class="at-stat-label">очікують на рішення Aleph</div>
-                </div>
-              </div>
-
-              <div class="at-grid at-g2">
-                <div class="at-card">
-                  <h3>Підключення за 7 днів</h3>
-                  <div class="at-barchart" id="chart-connections"></div>
-                  <div class="at-barchart-labels"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Нд</span></div>
-                  <div style="display:flex; gap:16px; margin-top:14px; font-size:11.5px; color:var(--at-text-dim);">
-                    <div style="display:flex; align-items:center; gap:6px;"><span class="at-dot" style="background:var(--at-accent)"></span>Допущено</div>
-                    <div style="display:flex; align-items:center; gap:6px;"><span class="at-dot" style="background:var(--at-red-dim)"></span>Відхилено</div>
-                  </div>
-                </div>
-                <div class="at-card">
-                  <h3>Поточний режим допуску</h3>
-                  <div style="font-size:14px; font-weight:600; color:var(--color-ruby-light, #b52239); margin-bottom:6px;">WetID Account</div>
-                  <p class="at-seg-desc" style="margin-top:0;">Гравці зобов'язані увійти у WetID-акаунт. Бан вимагає створення нового WetID.</p>
-                  <div style="margin-top:14px;">
-                    <div class="at-list-row"><span class="dim">Safe Mode гравців</span><span class="mono">0</span></div>
-                    <div class="at-list-row"><span class="dim">WetID гравців</span><span class="mono">1 888</span></div>
-                    <div class="at-list-row"><span class="dim">WetID+Passport</span><span class="mono">54</span></div>
-                  </div>
-                  <button class="at-btn small" style="margin-top:12px; width:100%;" onclick="atNav(document.querySelector('[data-page=a-access]'),'a-access')">Змінити режим →</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- ACCESS MODE -->
-            <div class="at-page" id="page-a-access">
-              <div class="at-pagehead">
-                <div><h1>Режим допуску</h1><p>Оберіть рівень довіри, обов'язковий для входу на ваш сервер</p></div>
-              </div>
-
-              <div class="at-card" style="margin-bottom:16px;">
-                <h3>Рівень допуску</h3>
-                <div class="at-seg" style="max-width:640px;">
-                  <button class="active" onclick="atSetAccessMode(this,0)">Safe Mode</button>
-                  <button onclick="atSetAccessMode(this,1)">WetID Account</button>
-                  <button onclick="atSetAccessMode(this,2)">WetID + Passport</button>
-                </div>
-                <p class="at-seg-desc" id="access-desc">Гравець допускається при чистому лаунчері без модифікацій. Прив'язка WetID не потрібна — найнижчий бар'єр входу, обхід можливий переустановкою лаунчера.</p>
-              </div>
-
-              <div class="at-grid at-g3">
-                <div class="at-card">
-                  <h3>Whitelist WetID</h3>
-                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Дозволити конкретним акаунтам вхід незалежно від Trust Score</p>
-                  <input type="text" placeholder="WetID username або ID">
-                  <button class="at-btn small" style="margin-top:10px;">Додати у whitelist</button>
-                </div>
-                <div class="at-card">
-                  <h3>Blacklist WetID</h3>
-                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Заблокувати конкретний акаунт на цьому сервері</p>
-                  <input type="text" placeholder="WetID username или ID">
-                  <button class="at-btn small danger" style="margin-top:10px;">Додати у blacklist</button>
-                </div>
-                <div class="at-card">
-                  <h3>Екран відмови в доступі</h3>
-                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Кастомний текст на екрані кіка (Business+)</p>
-                  <input type="text" value="Connection rejected by FrostCraft Aleph Trust node.">
-                  <button class="at-btn small" style="margin-top:10px;">Зберегти</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- LOGS -->
-            <div class="at-page" id="page-a-logs">
-              <div class="at-pagehead">
-                <div><h1>Логи входів</h1><p>Історія перевірок Aleph Trust за останні 24 години</p></div>
-                <button class="at-btn small">⭳ Експорт CSV</button>
-              </div>
-              <div class="at-card">
-                <table>
-                  <thead><tr><th>Час</th><th>Нік</th><th>WetID</th><th>Результат</th><th>Причина</th></tr></thead>
-                  <tbody id="logs-table"></tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- MODS -->
-            <div class="at-page" id="page-a-mods">
-              <div class="at-pagehead">
-                <div><h1>Керування модами</h1><p>Моди звіряються з базою Modrinth автоматично. Тут — ручні винятки.</p></div>
-              </div>
-              <div class="at-card">
-                <h3>Дозволити приватний мод вручную</h3>
-                <p class="at-seg-desc" style="margin-top:0;">Використовуйте, якщо ваш сервер має легітимний самописний мод, якого немає на Modrinth. Це додасть його SHA-256 у ваш власний whitelist.</p>
-                <div style="display:flex; gap:10px; margin-top:12px;">
-                  <input type="text" placeholder="SHA-256 хеш файлу мода" style="margin-top:0;">
-                  <button class="at-btn primary small" style="flex-shrink:0;">Додати</button>
-                </div>
-              </div>
-              <div class="at-card" style="margin-top:16px;">
-                <h3>Дозволені вручную моди</h3>
-                <table>
-                  <thead><tr><th>Ім'я (заявлено)</th><th>SHA-256</th><th>Додано</th><th></th></tr></thead>
-                  <tbody>
-                    <tr><td>FrostCraft-CustomHUD.jar</td><td class="mono faint">a3f1...9e02</td><td class="dim">3 дні тому</td><td><button class="at-btn small danger">Видалити</button></td></tr>
-                    <tr><td>ServerSideHelper.jar</td><td class="mono faint">7c88...11ab</td><td class="dim">2 тижні тому</td><td><button class="at-btn small danger">Видалити</button></td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <!-- BANS / APPEALS -->
-            <div class="at-page" id="page-a-bans">
-              <div class="at-pagehead">
-                <div><h1>/atban та апеляції</h1><p>Ваші бани впливають на Trust Score гравців з вагою, що дорівнює вашому Server Trust Rating (0.87×)</p></div>
-              </div>
-
-              <div class="at-grid at-g3" style="margin-bottom:16px;">
-                <div class="at-card"><h3>Банів подано (30д)</h3><div class="at-stat-value">31</div></div>
-                <div class="at-card"><h3>Апеляцій схвалено</h3><div class="at-stat-value" style="color:var(--at-amber);">3 <span style="font-size:14px; color:var(--at-text-faint);">/ 31</span></div><div class="at-stat-label">9.7% — в межах норми (&lt;15%)</div></div>
-                <div class="at-card"><h3>Вплив на ваш рейтинг</h3><div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">стабільний</div></div>
-              </div>
-
-              <div class="at-card" style="margin-bottom:16px;">
-                <h3>Подати /atban вручну (дублирует ин-гейм команду)</h3>
-                <div class="at-grid at-g3" style="gap:10px;">
-                  <div class="field" style="margin-bottom:0;"><label>Нікнейм гравця</label><input type="text" placeholder="Steve_1337"></div>
-                  <div class="field" style="margin-bottom:0;">
-                    <label>Категорія</label>
-                    <select><option>killaura</option><option>xray</option><option>fly</option><option>speed</option><option>aim-assist</option><option>other</option></select>
-                  </div>
-                  <div class="field" style="margin-bottom:0;"><label>Доказ (посилання, опц.)</label><input type="text" placeholder="clips.twitch.tv/..."></div>
-                </div>
-                <button class="at-btn primary" style="margin-top:4px;">Надіслати /atban</button>
-              </div>
-
-              <div class="at-card">
-                <h3>Апеляції проти вашого бану</h3>
-                <div class="at-appeal-item">
-                  <div class="at-appeal-head">
-                    <div><strong>WetID: nordic_wolf</strong> <span class="at-cat-tag">xray</span></div>
-                    <span class="at-pill warn">На розгляді Aleph</span>
-                  </div>
-                  <p class="dim" style="font-size:12.5px;">Гравець заявляє: звинувачення ґрунтується на підозрі без доказів. Забанений 5 днів тому.</p>
-                </div>
-                <div class="at-appeal-item">
-                  <div class="at-appeal-head">
-                    <div><strong>WetID: quietfox22</strong> <span class="at-cat-tag">killaura</span></div>
-                    <span class="at-pill bad">Схвалена — бан знято</span>
-                  </div>
-                  <p class="dim" style="font-size:12.5px;">Рішення Aleph Studio: доказ не підтвердив порушення. Ваш Trust Rating скориговано.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- BILLING -->
-            <div class="at-page" id="page-a-billing">
-              <div class="at-pagehead"><div><h1>Підписка</h1><p>Керування тарифом та оплатою</p></div></div>
-
-              <div class="at-grid at-g2" style="margin-bottom:16px;">
-                <div class="at-card">
-                  <h3>Поточний тариф</h3>
-                  <div class="at-flex-row" style="margin-bottom:14px;">
-                    <div>
-                      <div style="font-size:20px; font-weight:700;" id="trustBillingPlanName">Beth</div>
-                      <div class="dim" style="font-size:12.5px;" id="trustBillingPlanLimit">до 100 онлайн · $19/міс</div>
-                    </div>
-                    <span class="at-pill ok">Активна</span>
-                  </div>
-                  <div class="at-list-row"><span class="dim">Поточний онлайн (пік)</span><span class="mono" id="trustBillingOnline">87 / 100</span></div>
-                  <div class="at-list-row"><span class="dim">Наступне списання</span><span class="mono">14 липня 2026</span></div>
-                  <div class="at-list-row"><span class="dim">Способ оплати</span><span class="mono">•••• 4471</span></div>
-                  <button class="at-btn" style="margin-top:12px;" onclick="document.querySelector('#sidebarLinkLicenses, [data-target=licenses]').click();">Змінити тариф</button>
-                </div>
-                <div class="at-card">
-                  <h3>Доступні тарифи</h3>
-                  <div style="display:flex; flex-direction:column; gap:10px;">
-                    <div class="at-list-row"><span>Beth · до 100</span><span class="mono">$19/міс</span></div>
-                    <div class="at-list-row"><span>Gimel · до 500</span><span class="mono">$49/міс</span></div>
-                    <div class="at-list-row"><span>Dalet · Enterprise</span><span class="mono">від $199/міс</span></div>
-                  </div>
-                  <p class="at-seg-desc">Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
-                </div>
-              </div>
-            </div>
-
-            <!-- API -->
-            <div class="at-page" id="page-a-api">
-              <div class="at-pagehead"><div><h1>API / Webhooks</h1><p>Доступно на тарифі Gimel та вище</p></div></div>
-              <div class="at-card" style="margin-bottom:16px;">
-                <h3>API-ключ</h3>
-                <div style="display:flex; gap:10px;">
-                  <input type="text" id="trustApiKeyVal" value="at_live_7ab33b0f2b8ae70708dbc5b2aa34" readonly style="font-family:var(--font-mono), monospace;">
-                  <button class="at-btn small" style="flex-shrink:0;" onclick="alert('Ключ перевипущено!');">Перевипустити</button>
-                </div>
-              </div>
-              <div class="at-card">
-                <h3>Webhook повідомлення</h3>
-                <div class="field"><label>URL (Discord / Webhook)</label><input type="text" placeholder="https://discord.com/api/webhooks/..."></div>
-                <div class="at-list-row"><span class="dim">Масовий сплеск відхилень (&gt;20/хв)</span><input type="checkbox" checked></div>
-                <div class="at-list-row"><span class="dim">Апеляція проти вашого бану</span><input type="checkbox" checked></div>
-                <div class="at-list-row"><span class="dim">Зміна тарифу / оплата</span><input type="checkbox"></div>
-                <button class="at-btn primary" style="margin-top:12px;" onclick="alert('Збережено!');">Зберегти</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>\n\n      <!-- SECURITY (Key activation and 2FA setup) -->
-      <section class="profile-section" id="security">
-        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Безпека та Активація</h2>
-        <div class="security-grid">
-          <!-- Key Activation Block -->
-          <div class="security-card">
-            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Активація ключа</h3>
-            <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5;">Введіть ліцензійний ключ продукту для його активації на вашому акаунті.</p>
-            <form class="activation-form" style="display: flex; gap: 12px; margin: 0;" onsubmit="event.preventDefault();">
-              <input class="form-input" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" style="flex: 1; height: 42px; padding: 0 16px; font-size: 14px;" required>
-              <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Активувати</button>
-            </form>
-          </div>
-
-          <!-- 2FA Activation Block -->
-          <div class="security-card">
-            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Двофакторна автентифікація (2FA)</h3>
-            <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 20px; line-height: 1.5;">Захистіть свій акаунт за допомогою 2FA. Відскануйте QR-код у додатку-автентифікаторі (Google Authenticator, Aegis тощо) та введіть 6-значний код підтвердження.</p>
-            
-            <div class="tfa-setup-wrap" style="margin-bottom: 20px;">
-              <div class="tfa-qr" style="width: 100px; height: 100px; background: #fff; padding: 6px; border-radius: var(--radius-sm); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-                <svg viewBox="0 0 29 29" width="100%" height="100%" shape-rendering="crispEdges">
-                  <path fill="#ffffff" d="M0 0h29v29H0z"/>
-                  <path fill="#000000" d="M0 0h7v7H0zm22 0h7v7h-7zM0 22h7v7H0zm9 0h1v1H9zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1H22v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zM2 2h3v3H2zm20 0h3v3h-3zM2 24h3v3H2zm7-22h1v1H9zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-10 2h1v1h-1zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1z"/>
-                </svg>
-              </div>
-              <div class="tfa-secret-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-left: 4px;">
-                <span style="font-size: 10px; text-transform: uppercase; color: var(--text-tertiary); font-family: var(--font-mono); letter-spacing: 0.05em;">Секретний код</span>
-                <span class="mono copyable" data-copy="JBSWY3DPEHPK3PXP" style="font-size: 14px; font-weight: 700; color: var(--text-primary); cursor: pointer;" title="Натисніть, щоб скопіювати">JBSWY3DPEHPK3PXP <span class="copy-hint" style="font-size: 10px; margin-left: 6px; color: var(--accent-light); font-weight: normal;">Копіювати</span></span>
-              </div>
-            </div>
-
-            <form class="tfa-confirm-form" style="display: flex; gap: 12px; align-items: center; margin: 0;" onsubmit="event.preventDefault();">
-              <input class="form-input" type="text" placeholder="000 000" maxlength="7" style="flex: 1; height: 42px; text-align: center; font-family: var(--font-mono); letter-spacing: 0.15em; font-size: 14px; padding: 0;" required>
-              <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Увімкнути 2FA</button>
-            </form>
-          </div>
-        </div>
-      </section>
-    </div>
-  </div>
-</div>
-</main>
-<script type="module" src="../../src/profile/profile.js?v=18"></script>
-
-<!-- PRICING MODAL WINDOW -->
-<div class="pricing-modal" id="pricingModal" aria-hidden="true">
-  <div class="pricing-modal-overlay" id="pricingModalOverlay"></div>
-  <div class="pricing-modal-container">
-    <button class="pricing-modal-close" id="pricingModalClose" aria-label="Close">
-      <svg viewBox="0 0 24 24" width="24" height="24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-    </button>
-    <div class="pricing-modal-content">
-      <!-- Pricing section inside modal -->
-      <div class="pricing-section" id="pricing">
-        <div class="eyebrow">Тарифи та підписка</div>
-        <h2 class="s-title">Плани Aleph Trust</h2>
-        <p class="s-desc">Оберіть тариф, що підходить для вашого сервера. Чим довший термін, тим нижча ціна.</p>
-        
-        <div class="duration-selector">
-          <button class="duration-option is-active" data-days="30">30 днів</button>
-          <button class="duration-option" data-days="60">60 днів <span class="duration-save">-8%</span></button>
-          <button class="duration-option" data-days="90">90 днів <span class="duration-save">-12%</span></button>
-          <button class="duration-option" data-days="180">180 днів <span class="duration-save">-15%</span></button>
-        </div>
-
-        <div class="pricing-grid">
-          <!-- Beth plan -->
-          <div class="plan-card plan-card--beth">
-            <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
-            <div class="plan-name">Beth</div>
-            <div class="plan-desc">Для невеликих серверів з базовим лаунчер-гейтом</div>
-            <div class="plan-price">$19<span class="plan-period">/міс</span></div>
-            <div class="plan-limits">
-              <dl><dt>Онлайн</dt><dd>до 100 гравців</dd></dl>
-              <dl><dt>Інстанси</dt><dd>до 3 інстансів</dd></dl>
-            </div>
-            <ul class="plan-features">
-            <li>Вхід лише через AMCLauncher</li>
-            <li>Перевірка цілісності лаунчера</li>
-            <li>Перевірка modset_hash</li>
-            <li>Довірені джерела модів</li>
-            <li>Режим WetID акаунту</li>
-            <li>Базові Trust Sessions</li>
-            <li>Paper / Purpur / Velocity</li>
-            <li>Базова панель керування</li>
-            <li>Базові логи підключень</li>
-            <li class="feat-unavailable">WetID верифікація документів</li>
-            <li class="feat-unavailable">Підписані модпаки</li>
-            <li class="feat-unavailable">Власний лаунчер</li>
-            <li class="feat-unavailable">White-label</li>
-            </ul>
-            <a class="plan-cta" href="#" data-plan="Beth">Обрати Beth</a>
-          </div>
-
-          <!-- Gimel plan -->
-          <div class="plan-card plan-card--gimel">
-            <span class="plan-badge">Популярний</span>
-            <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
-            <div class="plan-name">Gimel</div>
-            <div class="plan-desc">Повна система довіри для PvP, Survival та RPG серверів</div>
-            <div class="plan-price">$49<span class="plan-period">/міс</span></div>
-            <div class="plan-limits">
-              <dl><dt>Онлайн</dt><dd>до 500 гравців</dd></dl>
-              <dl><dt>Інстанси</dt><dd>до 20 інстансів</dd></dl>
-            </div>
-            <ul class="plan-features">
-            <li class="feat-highlight">Все з Beth</li>
-            <li>Усі режими безпеки</li>
-            <li>WetID верифікація документів</li>
-            <li>Allowlist модів сервера</li>
-            <li>Підписані модпаки</li>
-            <li>Політики Trust Level</li>
-            <li>Risk dashboard</li>
-            <li>Розширені audit logs</li>
-            <li>Відкликання сесій</li>
-            <li>Доступ до API</li>
-            <li>Webhooks для Discord</li>
-            <li>Пріоритетна підтримка</li>
-            <li class="feat-unavailable">Власний лаунчер SDK</li>
-            <li class="feat-unavailable">White-label</li>
-            </ul>
-            <a class="plan-cta" href="#" data-plan="Gimel">Обрати Gimel</a>
-          </div>
-
-          <!-- Dalet plan -->
-          <div class="plan-card plan-card--dalet">
-            <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
-            <div class="plan-name">Dalet</div>
-            <div class="plan-desc">Enterprise для великих мереж з власним лаунчером</div>
-            <div class="plan-price"><span class="plan-price-from">від </span>$199<span class="plan-period">/міс</span></div>
-            <div class="plan-limits">
-              <dl><dt>Онлайн</dt><dd>від 2 000 гравців</dd></dl>
-              <dl><dt>Інстанси</dt><dd>без ліміту</dd></dl>
-            </div>
-            <ul class="plan-features">
-            <li class="feat-highlight">Все з Gimel</li>
-            <li>Власний лаунчер SDK</li>
-            <li>Vendor certificate</li>
-            <li>White-label режим</li>
-            <li>Окремі ключі підпису</li>
-            <li>Enterprise API</li>
-            <li>Team management</li>
-            <li>Рольовий доступ</li>
-            <li>Виділені audit logs</li>
-            <li>SLA за договором</li>
-            <li>Виділений канал підтримки</li>
-            <li>Кастомні інтеграції</li>
-            </ul>
-            <a class="plan-cta" href="#" data-plan="Dalet">Зв'язатися</a>
-          </div>
-        </div>
-
-        <p class="pricing-note">Beth обмежений максимумом у 60 днів. Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
-
-        <div class="promo-wrap">
-          <input class="promo-input" type="text" placeholder="Промокод" maxlength="32">
-          <button class="promo-btn" type="button">Застосувати</button>
-        </div>
-
-        <div class="payment-methods">
-          <div class="payment-option" data-method="card">
-            <svg viewBox="0 0 24 24" width="28" height="28"><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
-            <span>Картка</span>
-          </div>
-          <div class="payment-option" data-method="crypto">
-            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 8h4.5a2.5 2.5 0 010 5H9V8zm0 5h5a2.5 2.5 0 010 5H9v-5z" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="6" x2="10" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="6" x2="14" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="18" x2="14" y2="20" stroke="currentColor" stroke-width="1.3"/></svg>
-            <span>Крипто</span>
-          </div>
-          <div class="payment-option" data-method="paypal">
-            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M7.5 21L9 13h3.5c4 0 7-2.5 7.5-6.5S17 2 14 2H8L5 21h2.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 17l1-5h3c3.2 0 5.5-2 6-5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.5"/></svg>
-            <span>PayPal</span>
-          </div>
-          <div class="payment-option" data-method="qiwi">
-            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="15" cy="15" r="0.8" fill="currentColor"/></svg>
-            <span>QIWI</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const durationBtns = document.querySelectorAll('.duration-option');
-    const priceBeth = document.querySelector('.plan-card--beth .plan-price');
-    const priceGimel = document.querySelector('.plan-card--gimel .plan-price');
-    const priceDalet = document.querySelector('.plan-card--dalet .plan-price');
-    
-    const locale = window.__ALEPH_LOCALE__ || 'ru';
-    
-    const priceData = {
-        '30': {
-            beth: '$19<span class="plan-period">/mo</span>',
-            gimel: '$49<span class="plan-period">/mo</span>',
-            dalet: '<span class="plan-price-from">from</span> $199<span class="plan-period">/mo</span>'
-        },
-        '60': {
-            beth: '$35<span class="plan-period">/2 mo</span>',
-            gimel: '$89<span class="plan-period">/2 mo</span>',
-            dalet: '<span class="plan-price-from">from</span> $379<span class="plan-period">/2 mo</span>'
-        },
-        '90': {
-            beth: '—<span class="plan-period"></span>',
-            gimel: '$129<span class="plan-period">/3 mo</span>',
-            dalet: '<span class="plan-price-from">from</span> $549<span class="plan-period">/3 mo</span>'
-        },
-        '180': {
-            beth: '—<span class="plan-period"></span>',
-            gimel: '$249<span class="plan-period">/6 mo</span>',
-            dalet: '<span class="plan-price-from">from</span> $999<span class="plan-period">/6 mo</span>'
-        }
-    };
-    
-    const trans = {
-        ru: {
-            'mo': '/мес',
-            '2 mo': '/2 мес',
-            '3 mo': '/3 мес',
-            '6 mo': '/6 мес',
-            'from': 'от ',
-            'na': 'Недоступно'
-        },
-        en: {
-            'mo': '/mo',
-            '2 mo': '/2 mo',
-            '3 mo': '/3 mo',
-            '6 mo': '/6 mo',
-            'from': 'from ',
-            'na': 'N/A'
-        },
-        ua: {
-            'mo': '/міс',
-            '2 mo': '/2 міс',
-            '3 mo': '/3 міс',
-            '6 mo': '/6 міс',
-            'from': 'від ',
-            'na': 'Недоступно'
-        }
-    }[locale];
-    
-    function getPriceHtml(plan, days) {
-        if (plan === 'beth' && (days === '90' || days === '180')) {
-            return `<span class="price-na">${trans.na}</span>`;
-        }
-        const data = priceData[days][plan];
-        let html = data;
-        html = html.replace('/mo', trans['mo']);
-        html = html.replace('/2 mo', trans['2 mo']);
-        html = html.replace('/3 mo', trans['3 mo']);
-        html = html.replace('/6 mo', trans['6 mo']);
-        html = html.replace('from', trans['from']);
-        return html;
-    }
-    
-    durationBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            durationBtns.forEach(b => b.classList.remove('is-active'));
-            btn.classList.add('is-active');
-            const days = btn.dataset.days;
-            
-            if (priceBeth) priceBeth.innerHTML = getPriceHtml('beth', days);
-            if (priceGimel) priceGimel.innerHTML = getPriceHtml('gimel', days);
-            if (priceDalet) priceDalet.innerHTML = getPriceHtml('dalet', days);
-            
-            const bethCard = document.querySelector('.plan-card--beth');
-            if (bethCard) {
-                if (days === '90' || days === '180') {
-                    bethCard.classList.add('plan-card--disabled');
-                } else {
-                    bethCard.classList.remove('plan-card--disabled');
-                }
-            }
-        });
-    });
-
-    // ── Modal Actions ──
-    const modal = document.getElementById('pricingModal');
-    const openBtns = document.querySelectorAll('.acquire-trust-btn');
-    const closeBtn = document.getElementById('pricingModalClose');
-    const overlay = document.getElementById('pricingModalOverlay');
-    
-    openBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (modal) {
-                modal.classList.add('is-open');
-                document.body.classList.add('modal-open');
-            }
-        });
-    });
-    
-    function closeModal() {
-        if (modal) {
-            modal.classList.remove('is-open');
-            document.body.classList.remove('modal-open');
-        }
-    }
-    
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (overlay) overlay.addEventListener('click', closeModal);
-    
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
-});
-</script>
-
-</body>
-</html>
+<!doctype html>
+<html lang="ua" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aleph Studio — Dashboard</title>
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark light">
+<script>window.__ALEPH_LOCALE__ = 'ua';</script>
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+<link rel="icon" href="../../favicon.ico" sizes="48x48">
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/main.css?v=13">
+<link rel="stylesheet" href="../../assets/css/profile.css?v=17">
+<link rel="stylesheet" href="../../assets/css/products/aleph-trust.css?v=4">
+</head>
+<body>
+<!-- SVG icon sprite: all icons are inline, no external dependency -->
+<svg style="position:absolute; width:0; height:0; overflow:hidden;" aria-hidden="true">
+  <defs>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 2-1.53l1.65-6.47H5.12"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="19" r="1.4"/></symbol>
+    <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></symbol>
+    <symbol id="i-smile" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></symbol>
+    <symbol id="i-youtube" viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.5v-7l6.2 3.5-6.2 3.5z"/></symbol>
+    <symbol id="i-telegram" viewBox="0 0 24 24"><path d="M21.9 4.3 18.7 20c-.2.9-.9 1.1-1.7.7l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9L18 8.2c.4-.4-.1-.6-.6-.2L7 14.7l-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3.4c.8-.3 1.6.2 1.3 1z"/></symbol>
+    <symbol id="i-discord" viewBox="0 0 24 24"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.37-.44.86-.61 1.25a18.3 18.3 0 0 0-5.49 0 12.6 12.6 0 0 0-.62-1.25.08.08 0 0 0-.08-.04 19.74 19.74 0 0 0-4.88 1.52.07.07 0 0 0-.03.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .09-.03 14.1 14.1 0 0 0 1.22-2 .08.08 0 0 0-.04-.1 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1 0-.13c.13-.1.25-.2.37-.29a.07.07 0 0 1 .08-.01c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08.01c.12.1.25.2.37.3a.08.08 0 0 1-.01.12 12.3 12.3 0 0 1-1.87.9.08.08 0 0 0-.04.11c.36.7.77 1.36 1.22 1.99a.08.08 0 0 0 .09.03 19.84 19.84 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.67-3.55-13.66a.06.06 0 0 0-.03-.03zM8.02 15.33c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42zm7.97 0c-1.18 0-2.16-1.09-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.33-.95 2.42-2.16 2.42z"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="14 2 14 8 20 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<a id="skipLink" class="skip-link" href="#main">Skip to content</a>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<nav class="nav" aria-label="Main navigation">
+    <a id="logoLink" class="nav-logo" href="../../ua/" aria-label="Aleph Studio">
+        <span class="logo-sq" aria-hidden="true"></span>
+        <span class="logo-text">Aleph Studio</span>
+    </a>
+    <div class="nav-links">
+        <a id="navLinkProducts" class="nav__link" href="../../ua/products/">Продукти</a>
+        <a id="navLinkDonate" class="nav__link" href="../../ua/donate/" data-donate-link>Підтримати</a>
+        <a id="navLinkDocs" class="nav__link" href="../../ua/docs/privacy/">Документація</a>
+    </div>
+    <div class="nav-right">
+        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
+            <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </button>
+        <div id="localeSwitcher" class="locale-switcher">
+            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Мова">
+                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                <span id="localeSwitcherLabel">UA</span>
+                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Мова" hidden></div>
+        </div>
+    </div>
+</nav>
+<main id="main">
+<div class="profile-page">
+  <div class="layout">
+    <aside class="sidebar">
+      <h1 class="page-title">Мій профіль</h1>
+      <nav class="sidebar-nav">
+        <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Аккаунт</button>
+        <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Магазин</button>
+        <button class="sidebar-link" data-target="aleph-trust" id="sidebarAlephTrust" style="display: none;"><svg class="icon icon-stroke"><use href="#i-shield"/></svg> Aleph Trust</button>
+        <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Додатково</button>
+        <a class="sidebar-link" href="../docs/privacy/"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Документація</a>
+      </nav>
+    </aside>
+
+    <div class="content">
+      <div class="breadcrumb">
+        <a href="../">Головна</a>
+        <svg class="icon icon-stroke"><use href="#i-chevron-right"/></svg>
+        <span>WetID</span>
+        <svg class="icon icon-stroke"><use href="#i-chevron-right"/></svg>
+        <span class="current">Аккаунт</span>
+      </div>
+
+      <!-- OVERVIEW -->
+      <section class="profile-section active" id="overview">
+        <div class="user-header">
+          <h2>Привіт, User! <span class="mini-avatar" id="avatarBtn" title="Змінити аватарку"><img src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" id="avatarImg"><input type="file" id="avatarInput" accept="image/*" style="display: none;"></span></h2>
+          <div class="user-meta">
+            <div>Email: <b>user@aleph.icu</b></div>
+            <div>Баланс: <b>14.08 USDT</b></div>
+          </div>
+        </div>
+
+        <div class="info-row copyable" data-copy="06.09.2024 р, 00:00">
+          <span class="label">Дата реєстрації</span>
+          <span class="value">06.09.2024 р, 00:00</span>
+        </div>
+
+        <div class="info-row" style="align-items: center;">
+          <span class="label">Trust Factor</span>
+          <span class="value" style="display:flex; align-items:center; gap:8px; line-height:1;">
+            <span style="font-family:var(--font-mono), monospace; font-weight:700;">80/100</span>
+            <svg width="42" height="42" viewBox="0 0 36 36" style="transform: rotate(-90deg); flex-shrink: 0; display: block;">
+              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--border-default)" stroke-width="3"/>
+              <circle cx="18" cy="18" r="15" fill="none" stroke="var(--color-ruby-light, #b52239)" stroke-width="3" stroke-dasharray="94.2" stroke-dashoffset="18.8" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </div>
+
+        <div class="info-row copyable" data-copy="7ab33b0f2b8ae70708dbc5b2aa34acca">
+          <span class="label">HWID <svg class="icon icon-stroke" title="Унікальний ідентифікатор вашого обладнання"><use href="#i-info"/></svg></span>
+          <span class="value mono">7ab33b0f2b8ae70708dbc5b2aa34acca</span>
+        </div>
+
+        <h2 class="section-title" style="font-size: 18px; font-weight: 700; margin: 36px 0 16px;">Мої ліцензії</h2>
+
+        <div class="license-card merged-card">
+          <div class="card-left">
+            <div class="license-header">
+              <span class="license-name">Strange Visuals</span>
+            </div>
+            <div class="license-details">
+              <span>Тип: <b>Персональна ліцензія</b></span>
+              <span>Активовано: <b class="license-date">2026-06-01</b></span>
+              <span>Дійсна до: <b class="license-date">10.07.2026 р, 15:03</b></span>
+            </div>
+            <div class="license-actions" style="margin-top: 8px;">
+              <a class="license-btn primary" href="../products/strange-visuals/">Сторінка</a>
+            </div>
+          </div>
+          <div class="card-right">
+            <div class="progress-ring">
+              <svg viewBox="0 0 64 64">
+                <circle class="track" cx="32" cy="32" r="27"></circle>
+                <circle class="bar" cx="32" cy="32" r="27" id="ringBar"></circle>
+              </svg>
+              <div class="ring-label">
+                <span class="num">96</span>
+                <span class="unit">д</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+            <!-- STORE -->
+      <section class="profile-section" id="licenses">
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Магазин продуктів</h2>
+        <div class="licenses-grid">
+          <!-- Strange Visuals -->
+          <div class="license-card">
+            <div class="license-header">
+              <span class="license-name">Strange Visuals</span>
+              <span class="license-status active" style="background: rgba(63,207,127,0.1); color: var(--green); border-color: rgba(63,207,127,0.2);">Безкоштовно</span>
+            </div>
+            <div class="license-details">
+              <span>Візуальний чит для Minecraft з просунутими обходами та красивим інтерфейсом.</span>
+            </div>
+            <div class="license-actions" style="margin-top: auto;">
+              <a class="license-btn primary" href="../products/strange-visuals/">Завантажити</a>
+            </div>
+          </div>
+          <!-- Minecraft Launcher -->
+          <div class="license-card">
+            <div class="license-header">
+              <span class="license-name">Aleph Launcher</span>
+              <span class="license-status active" style="background: rgba(63,207,127,0.1); color: var(--green); border-color: rgba(63,207,127,0.2);">Безкоштовно</span>
+            </div>
+            <div class="license-details">
+              <span>Мінімалістичний та швидкий лаунчер для комфортной гри з читами.</span>
+            </div>
+            <div class="license-actions" style="margin-top: auto;">
+              <a class="license-btn primary" href="../products/aleph-minecraft-launcher/">Завантажити</a>
+            </div>
+          </div>
+          <!-- Aleph Trust -->
+          <div class="license-card">
+            <div class="license-header">
+              <span class="license-name">Aleph Trust</span>
+              <span class="license-status active" style="background: rgba(139,26,42,0.1); color: var(--accent-light); border-color: rgba(139,26,42,0.2);">від $19/міс</span>
+            </div>
+            <div class="license-details">
+              <span>SaaS-система допуску для Minecraft-серверів. Перевірка лаунчера, модів та ідентифікації.</span>
+            </div>
+            <div class="license-actions" style="margin-top: auto;">
+              <a class="license-btn primary acquire-trust-btn" href="#">Придбати</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+                  <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
+      <section class="profile-section" id="aleph-trust">
+
+
+        <!-- ============ ADMIN APP ============ -->
+        <div class="at-app" id="app-admin">
+          <div class="at-nav">
+            <div class="at-nav-item active" data-page="a-overview" onclick="atNav(this,'a-overview')">📊 Огляд</div>
+            <div class="at-nav-item" data-page="a-access" onclick="atNav(this,'a-access')">🔐 Режим допуску</div>
+            <div class="at-nav-item" data-page="a-logs" onclick="atNav(this,'a-logs')">📋 Логи входів</div>
+            <div class="at-nav-item" data-page="a-mods" onclick="atNav(this,'a-mods')">🧩 Моди</div>
+            <div class="at-nav-item" data-page="a-bans" onclick="atNav(this,'a-bans')">⚠️ /atban та апеляції</div>
+            <div class="at-nav-item" data-page="a-billing" onclick="atNav(this,'a-billing')">💳 Підписка</div>
+            <div class="at-nav-item" data-page="a-api" onclick="atNav(this,'a-api')">🔌 API / Webhooks</div>
+          </div>
+
+          <div class="at-main">
+            <!-- OVERVIEW -->
+            <div class="at-page active" id="page-a-overview">
+              <div class="at-pagehead">
+                <div>
+                  <h1>Огляд сервера</h1>
+                  <p>FrostCraft Network — останнє оновлення 2 хвилини тому</p>
+                </div>
+                <span class="at-pill ok">● Aleph Trust активний</span>
+              </div>
+
+              <div class="at-grid at-g4" style="margin-bottom:16px;">
+                <div class="at-card">
+                  <h3>Server Trust Rating</h3>
+                  <div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">0.87×</div>
+                  <div class="at-stat-label">вага ваших банів у системі</div>
+                  <div class="at-stat-delta up">↑ 0.04 за 30 днів</div>
+                </div>
+                <div class="at-card">
+                  <h3>Входи за 24г</h3>
+                  <div class="at-stat-value">1 942</div>
+                  <div class="at-stat-label">унікальних підключень</div>
+                  <div class="at-stat-delta up">↑ 6.2%</div>
+                </div>
+                <div class="at-card">
+                  <h3>Відхилено</h3>
+                  <div class="at-stat-value" style="color:var(--at-red);">54</div>
+                  <div class="at-stat-label">unverified / flagged</div>
+                  <div class="at-stat-delta down">↓ 12%</div>
+                </div>
+                <div class="at-card">
+                  <h3>Апеляції проти вас</h3>
+                  <div class="at-stat-value" style="color:var(--at-amber);">2</div>
+                  <div class="at-stat-label">очікують на рішення Aleph</div>
+                </div>
+              </div>
+
+              <div class="at-grid at-g2">
+                <div class="at-card">
+                  <h3>Підключення за 7 днів</h3>
+                  <div class="at-barchart" id="chart-connections"></div>
+                  <div class="at-barchart-labels"><span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Нд</span></div>
+                  <div style="display:flex; gap:16px; margin-top:14px; font-size:11.5px; color:var(--at-text-dim);">
+                    <div style="display:flex; align-items:center; gap:6px;"><span class="at-dot" style="background:var(--at-accent)"></span>Допущено</div>
+                    <div style="display:flex; align-items:center; gap:6px;"><span class="at-dot" style="background:var(--at-red-dim)"></span>Відхилено</div>
+                  </div>
+                </div>
+                <div class="at-card">
+                  <h3>Поточний режим допуску</h3>
+                  <div style="font-size:14px; font-weight:600; color:var(--color-ruby-light, #b52239); margin-bottom:6px;">WetID Account</div>
+                  <p class="at-seg-desc" style="margin-top:0;">Гравці зобов'язані увійти у WetID-акаунт. Бан вимагає створення нового WetID.</p>
+                  <div style="margin-top:14px;">
+                    <div class="at-list-row"><span class="dim">Safe Mode гравців</span><span class="mono">0</span></div>
+                    <div class="at-list-row"><span class="dim">WetID гравців</span><span class="mono">1 888</span></div>
+                    <div class="at-list-row"><span class="dim">WetID+Passport</span><span class="mono">54</span></div>
+                  </div>
+                  <button class="at-btn small" style="margin-top:12px; width:100%;" onclick="atNav(document.querySelector('[data-page=a-access]'),'a-access')">Змінити режим →</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- ACCESS MODE -->
+            <div class="at-page" id="page-a-access">
+              <div class="at-pagehead">
+                <div><h1>Режим допуску</h1><p>Оберіть рівень довіри, обов'язковий для входу на ваш сервер</p></div>
+              </div>
+
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>Рівень допуску</h3>
+                <div class="at-seg" style="max-width:640px;">
+                  <button class="active" onclick="atSetAccessMode(this,0)">Safe Mode</button>
+                  <button onclick="atSetAccessMode(this,1)">WetID Account</button>
+                  <button onclick="atSetAccessMode(this,2)">WetID + Passport</button>
+                </div>
+                <p class="at-seg-desc" id="access-desc">Гравець допускається при чистому лаунчері без модифікацій. Прив'язка WetID не потрібна — найнижчий бар'єр входу, обхід можливий переустановкою лаунчера.</p>
+              </div>
+
+              <div class="at-grid at-g3">
+                <div class="at-card">
+                  <h3>Whitelist WetID</h3>
+                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Дозволити конкретним акаунтам вхід незалежно від Trust Score</p>
+                  <input type="text" placeholder="WetID username або ID">
+                  <button class="at-btn small" style="margin-top:10px;">Додати у whitelist</button>
+                </div>
+                <div class="at-card">
+                  <h3>Blacklist WetID</h3>
+                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Заблокувати конкретний акаунт на цьому сервері</p>
+                  <input type="text" placeholder="WetID username или ID">
+                  <button class="at-btn small danger" style="margin-top:10px;">Додати у blacklist</button>
+                </div>
+                <div class="at-card">
+                  <h3>Екран відмови в доступі</h3>
+                  <p class="at-seg-desc" style="margin-top:0; margin-bottom:12px;">Кастомний текст на екрані кіка (Business+)</p>
+                  <input type="text" value="Connection rejected by FrostCraft Aleph Trust node.">
+                  <button class="at-btn small" style="margin-top:10px;">Зберегти</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- LOGS -->
+            <div class="at-page" id="page-a-logs">
+              <div class="at-pagehead">
+                <div><h1>Логи входів</h1><p>Історія перевірок Aleph Trust за останні 24 години</p></div>
+                <button class="at-btn small">⭳ Експорт CSV</button>
+              </div>
+              <div class="at-card">
+                <table>
+                  <thead><tr><th>Час</th><th>Нік</th><th>WetID</th><th>Результат</th><th>Причина</th></tr></thead>
+                  <tbody id="logs-table"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- MODS -->
+            <div class="at-page" id="page-a-mods">
+              <div class="at-pagehead">
+                <div><h1>Керування модами</h1><p>Моди звіряються з базою Modrinth автоматично. Тут — ручні винятки.</p></div>
+              </div>
+              <div class="at-card">
+                <h3>Дозволити приватний мод вручную</h3>
+                <p class="at-seg-desc" style="margin-top:0;">Використовуйте, якщо ваш сервер має легітимний самописний мод, якого немає на Modrinth. Це додасть його SHA-256 у ваш власний whitelist.</p>
+                <div style="display:flex; gap:10px; margin-top:12px;">
+                  <input type="text" placeholder="SHA-256 хеш файлу мода" style="margin-top:0;">
+                  <button class="at-btn primary small" style="flex-shrink:0;">Додати</button>
+                </div>
+              </div>
+              <div class="at-card" style="margin-top:16px;">
+                <h3>Дозволені вручную моди</h3>
+                <table>
+                  <thead><tr><th>Ім'я (заявлено)</th><th>SHA-256</th><th>Додано</th><th></th></tr></thead>
+                  <tbody>
+                    <tr><td>FrostCraft-CustomHUD.jar</td><td class="mono faint">a3f1...9e02</td><td class="dim">3 дні тому</td><td><button class="at-btn small danger">Видалити</button></td></tr>
+                    <tr><td>ServerSideHelper.jar</td><td class="mono faint">7c88...11ab</td><td class="dim">2 тижні тому</td><td><button class="at-btn small danger">Видалити</button></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- BANS / APPEALS -->
+            <div class="at-page" id="page-a-bans">
+              <div class="at-pagehead">
+                <div><h1>/atban та апеляції</h1><p>Ваші бани впливають на Trust Score гравців з вагою, що дорівнює вашому Server Trust Rating (0.87×)</p></div>
+              </div>
+
+              <div class="at-grid at-g3" style="margin-bottom:16px;">
+                <div class="at-card"><h3>Банів подано (30д)</h3><div class="at-stat-value">31</div></div>
+                <div class="at-card"><h3>Апеляцій схвалено</h3><div class="at-stat-value" style="color:var(--at-amber);">3 <span style="font-size:14px; color:var(--at-text-faint);">/ 31</span></div><div class="at-stat-label">9.7% — в межах норми (&lt;15%)</div></div>
+                <div class="at-card"><h3>Вплив на ваш рейтинг</h3><div class="at-stat-value" style="color:var(--color-ruby-light, #b52239);">стабільний</div></div>
+              </div>
+
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>Подати /atban вручну (дублирует ин-гейм команду)</h3>
+                <div class="at-grid at-g3" style="gap:10px;">
+                  <div class="field" style="margin-bottom:0;"><label>Нікнейм гравця</label><input type="text" placeholder="Steve_1337"></div>
+                  <div class="field" style="margin-bottom:0;">
+                    <label>Категорія</label>
+                    <select><option>killaura</option><option>xray</option><option>fly</option><option>speed</option><option>aim-assist</option><option>other</option></select>
+                  </div>
+                  <div class="field" style="margin-bottom:0;"><label>Доказ (посилання, опц.)</label><input type="text" placeholder="clips.twitch.tv/..."></div>
+                </div>
+                <button class="at-btn primary" style="margin-top:4px;">Надіслати /atban</button>
+              </div>
+
+              <div class="at-card">
+                <h3>Апеляції проти вашого бану</h3>
+                <div class="at-appeal-item">
+                  <div class="at-appeal-head">
+                    <div><strong>WetID: nordic_wolf</strong> <span class="at-cat-tag">xray</span></div>
+                    <span class="at-pill warn">На розгляді Aleph</span>
+                  </div>
+                  <p class="dim" style="font-size:12.5px;">Гравець заявляє: звинувачення ґрунтується на підозрі без доказів. Забанений 5 днів тому.</p>
+                </div>
+                <div class="at-appeal-item">
+                  <div class="at-appeal-head">
+                    <div><strong>WetID: quietfox22</strong> <span class="at-cat-tag">killaura</span></div>
+                    <span class="at-pill bad">Схвалена — бан знято</span>
+                  </div>
+                  <p class="dim" style="font-size:12.5px;">Рішення Aleph Studio: доказ не підтвердив порушення. Ваш Trust Rating скориговано.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- BILLING -->
+            <div class="at-page" id="page-a-billing">
+              <div class="at-pagehead"><div><h1>Підписка</h1><p>Керування тарифом та оплатою</p></div></div>
+
+              <div class="at-grid at-g2" style="margin-bottom:16px;">
+                <div class="at-card">
+                  <h3>Поточний тариф</h3>
+                  <div class="at-flex-row" style="margin-bottom:14px;">
+                    <div>
+                      <div style="font-size:20px; font-weight:700;" id="trustBillingPlanName">Beth</div>
+                      <div class="dim" style="font-size:12.5px;" id="trustBillingPlanLimit">до 100 онлайн · $19/міс</div>
+                    </div>
+                    <span class="at-pill ok">Активна</span>
+                  </div>
+                  <div class="at-list-row"><span class="dim">Поточний онлайн (пік)</span><span class="mono" id="trustBillingOnline">87 / 100</span></div>
+                  <div class="at-list-row"><span class="dim">Наступне списання</span><span class="mono">14 липня 2026</span></div>
+                  <div class="at-list-row"><span class="dim">Способ оплати</span><span class="mono">•••• 4471</span></div>
+                  <button class="at-btn" style="margin-top:12px;" onclick="document.querySelector('#sidebarLinkLicenses, [data-target=licenses]').click();">Змінити тариф</button>
+                </div>
+                <div class="at-card">
+                  <h3>Доступні тарифи</h3>
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div class="at-list-row"><span>Beth · до 100</span><span class="mono">$19/міс</span></div>
+                    <div class="at-list-row"><span>Gimel · до 500</span><span class="mono">$49/міс</span></div>
+                    <div class="at-list-row"><span>Dalet · Enterprise</span><span class="mono">від $199/міс</span></div>
+                  </div>
+                  <p class="at-seg-desc">Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- API -->
+            <div class="at-page" id="page-a-api">
+              <div class="at-pagehead"><div><h1>API / Webhooks</h1><p>Доступно на тарифі Gimel та вище</p></div></div>
+              <div class="at-card" style="margin-bottom:16px;">
+                <h3>API-ключ</h3>
+                <div style="display:flex; gap:10px;">
+                  <input type="text" id="trustApiKeyVal" value="at_live_7ab33b0f2b8ae70708dbc5b2aa34" readonly style="font-family:var(--font-mono), monospace;">
+                  <button class="at-btn small" style="flex-shrink:0;" onclick="alert('Ключ перевипущено!');">Перевипустити</button>
+                </div>
+              </div>
+              <div class="at-card">
+                <h3>Webhook повідомлення</h3>
+                <div class="field"><label>URL (Discord / Webhook)</label><input type="text" placeholder="https://discord.com/api/webhooks/..."></div>
+                <div class="at-list-row"><span class="dim">Масовий сплеск відхилень (&gt;20/хв)</span><input type="checkbox" checked></div>
+                <div class="at-list-row"><span class="dim">Апеляція проти вашого бану</span><input type="checkbox" checked></div>
+                <div class="at-list-row"><span class="dim">Зміна тарифу / оплата</span><input type="checkbox"></div>
+                <button class="at-btn primary" style="margin-top:12px;" onclick="alert('Збережено!');">Зберегти</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>\n\n      <!-- SECURITY (Key activation and 2FA setup) -->
+      <section class="profile-section" id="security">
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Безпека та Активація</h2>
+        <div class="security-grid">
+          <!-- Key Activation Block -->
+          <div class="security-card">
+            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Активація ключа</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5;">Введіть ліцензійний ключ продукту для його активації на вашому акаунті.</p>
+            <form class="activation-form" style="display: flex; gap: 12px; margin: 0;" onsubmit="event.preventDefault();">
+              <input class="form-input" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" style="flex: 1; height: 42px; padding: 0 16px; font-size: 14px;" required>
+              <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Активувати</button>
+            </form>
+          </div>
+
+          <!-- 2FA Activation Block -->
+          <div class="security-card">
+            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Двофакторна автентифікація (2FA)</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 20px; line-height: 1.5;">Захистіть свій акаунт за допомогою 2FA. Відскануйте QR-код у додатку-автентифікаторі (Google Authenticator, Aegis тощо) та введіть 6-значний код підтвердження.</p>
+            
+            <div class="tfa-setup-wrap" style="margin-bottom: 20px;">
+              <div class="tfa-qr" style="width: 100px; height: 100px; background: #fff; padding: 6px; border-radius: var(--radius-sm); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 29 29" width="100%" height="100%" shape-rendering="crispEdges">
+                  <path fill="#ffffff" d="M0 0h29v29H0z"/>
+                  <path fill="#000000" d="M0 0h7v7H0zm22 0h7v7h-7zM0 22h7v7H0zm9 0h1v1H9zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1H22v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zM2 2h3v3H2zm20 0h3v3h-3zM2 24h3v3H2zm7-22h1v1H9zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-10 2h1v1h-1zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1z"/>
+                </svg>
+              </div>
+              <div class="tfa-secret-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-left: 4px;">
+                <span style="font-size: 10px; text-transform: uppercase; color: var(--text-tertiary); font-family: var(--font-mono); letter-spacing: 0.05em;">Секретний код</span>
+                <span class="mono copyable" data-copy="JBSWY3DPEHPK3PXP" style="font-size: 14px; font-weight: 700; color: var(--text-primary); cursor: pointer;" title="Натисніть, щоб скопіювати">JBSWY3DPEHPK3PXP <span class="copy-hint" style="font-size: 10px; margin-left: 6px; color: var(--accent-light); font-weight: normal;">Копіювати</span></span>
+              </div>
+            </div>
+
+            <form class="tfa-confirm-form" style="display: flex; gap: 12px; align-items: center; margin: 0;" onsubmit="event.preventDefault();">
+              <input class="form-input" type="text" placeholder="000 000" maxlength="7" style="flex: 1; height: 42px; text-align: center; font-family: var(--font-mono); letter-spacing: 0.15em; font-size: 14px; padding: 0;" required>
+              <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Увімкнути 2FA</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+</main>
+<script type="module" src="../../src/profile/profile.js?v=18"></script>
+
+<!-- PRICING MODAL WINDOW -->
+<div class="pricing-modal" id="pricingModal" aria-hidden="true">
+  <div class="pricing-modal-overlay" id="pricingModalOverlay"></div>
+  <div class="pricing-modal-container">
+    <button class="pricing-modal-close" id="pricingModalClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" width="24" height="24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+    <div class="pricing-modal-content">
+      <!-- Pricing section inside modal -->
+      <div class="pricing-section" id="pricing">
+        <div class="eyebrow">Тарифи та підписка</div>
+        <h2 class="s-title">Плани Aleph Trust</h2>
+        <p class="s-desc">Оберіть тариф, що підходить для вашого сервера. Чим довший термін, тим нижча ціна.</p>
+        
+        <div class="duration-selector">
+          <button class="duration-option is-active" data-days="30">30 днів</button>
+          <button class="duration-option" data-days="60">60 днів <span class="duration-save">-8%</span></button>
+          <button class="duration-option" data-days="90">90 днів <span class="duration-save">-12%</span></button>
+          <button class="duration-option" data-days="180">180 днів <span class="duration-save">-15%</span></button>
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Beth plan -->
+          <div class="plan-card plan-card--beth">
+            <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
+            <div class="plan-name">Beth</div>
+            <div class="plan-desc">Для невеликих серверів з базовим лаунчер-гейтом</div>
+            <div class="plan-price">$19<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>до 100 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>до 3 інстансів</dd></dl>
+            </div>
+            <ul class="plan-features">
+            <li>Вхід лише через AMCLauncher</li>
+            <li>Перевірка цілісності лаунчера</li>
+            <li>Перевірка modset_hash</li>
+            <li>Довірені джерела модів</li>
+            <li>Режим WetID акаунту</li>
+            <li>Базові Trust Sessions</li>
+            <li>Paper / Purpur / Velocity</li>
+            <li>Базова панель керування</li>
+            <li>Базові логи підключень</li>
+            <li class="feat-unavailable">WetID верифікація документів</li>
+            <li class="feat-unavailable">Підписані модпаки</li>
+            <li class="feat-unavailable">Власний лаунчер</li>
+            <li class="feat-unavailable">White-label</li>
+            </ul>
+            <a class="plan-cta" href="#" data-plan="Beth">Обрати Beth</a>
+          </div>
+
+          <!-- Gimel plan -->
+          <div class="plan-card plan-card--gimel">
+            <span class="plan-badge">Популярний</span>
+            <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
+            <div class="plan-name">Gimel</div>
+            <div class="plan-desc">Повна система довіри для PvP, Survival та RPG серверів</div>
+            <div class="plan-price">$49<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>до 500 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>до 20 інстансів</dd></dl>
+            </div>
+            <ul class="plan-features">
+            <li class="feat-highlight">Все з Beth</li>
+            <li>Усі режими безпеки</li>
+            <li>WetID верифікація документів</li>
+            <li>Allowlist модів сервера</li>
+            <li>Підписані модпаки</li>
+            <li>Політики Trust Level</li>
+            <li>Risk dashboard</li>
+            <li>Розширені audit logs</li>
+            <li>Відкликання сесій</li>
+            <li>Доступ до API</li>
+            <li>Webhooks для Discord</li>
+            <li>Пріоритетна підтримка</li>
+            <li class="feat-unavailable">Власний лаунчер SDK</li>
+            <li class="feat-unavailable">White-label</li>
+            </ul>
+            <a class="plan-cta" href="#" data-plan="Gimel">Обрати Gimel</a>
+          </div>
+
+          <!-- Dalet plan -->
+          <div class="plan-card plan-card--dalet">
+            <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
+            <div class="plan-name">Dalet</div>
+            <div class="plan-desc">Enterprise для великих мереж з власним лаунчером</div>
+            <div class="plan-price"><span class="plan-price-from">від </span>$199<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>від 2 000 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>без ліміту</dd></dl>
+            </div>
+            <ul class="plan-features">
+            <li class="feat-highlight">Все з Gimel</li>
+            <li>Власний лаунчер SDK</li>
+            <li>Vendor certificate</li>
+            <li>White-label режим</li>
+            <li>Окремі ключі підпису</li>
+            <li>Enterprise API</li>
+            <li>Team management</li>
+            <li>Рольовий доступ</li>
+            <li>Виділені audit logs</li>
+            <li>SLA за договором</li>
+            <li>Виділений канал підтримки</li>
+            <li>Кастомні інтеграції</li>
+            </ul>
+            <a class="plan-cta" href="#" data-plan="Dalet">Зв'язатися</a>
+          </div>
+        </div>
+
+        <p class="pricing-note">Beth обмежений максимумом у 60 днів. Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
+
+        <div class="promo-wrap">
+          <input class="promo-input" type="text" placeholder="Промокод" maxlength="32">
+          <button class="promo-btn" type="button">Застосувати</button>
+        </div>
+
+        <div class="payment-methods">
+          <div class="payment-option" data-method="card">
+            <svg viewBox="0 0 24 24" width="28" height="28"><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>Картка</span>
+          </div>
+          <div class="payment-option" data-method="crypto">
+            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 8h4.5a2.5 2.5 0 010 5H9V8zm0 5h5a2.5 2.5 0 010 5H9v-5z" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="6" x2="10" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="6" x2="14" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="18" x2="14" y2="20" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span>Крипто</span>
+          </div>
+          <div class="payment-option" data-method="paypal">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M7.5 21L9 13h3.5c4 0 7-2.5 7.5-6.5S17 2 14 2H8L5 21h2.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 17l1-5h3c3.2 0 5.5-2 6-5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.5"/></svg>
+            <span>PayPal</span>
+          </div>
+          <div class="payment-option" data-method="qiwi">
+            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="15" cy="15" r="0.8" fill="currentColor"/></svg>
+            <span>QIWI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const durationBtns = document.querySelectorAll('.duration-option');
+    const priceBeth = document.querySelector('.plan-card--beth .plan-price');
+    const priceGimel = document.querySelector('.plan-card--gimel .plan-price');
+    const priceDalet = document.querySelector('.plan-card--dalet .plan-price');
+    
+    const locale = window.__ALEPH_LOCALE__ || 'ru';
+    
+    const priceData = {
+        '30': {
+            beth: '$19<span class="plan-period">/mo</span>',
+            gimel: '$49<span class="plan-period">/mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $199<span class="plan-period">/mo</span>'
+        },
+        '60': {
+            beth: '$35<span class="plan-period">/2 mo</span>',
+            gimel: '$89<span class="plan-period">/2 mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $379<span class="plan-period">/2 mo</span>'
+        },
+        '90': {
+            beth: '—<span class="plan-period"></span>',
+            gimel: '$129<span class="plan-period">/3 mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $549<span class="plan-period">/3 mo</span>'
+        },
+        '180': {
+            beth: '—<span class="plan-period"></span>',
+            gimel: '$249<span class="plan-period">/6 mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $999<span class="plan-period">/6 mo</span>'
+        }
+    };
+    
+    const trans = {
+        ru: {
+            'mo': '/мес',
+            '2 mo': '/2 мес',
+            '3 mo': '/3 мес',
+            '6 mo': '/6 мес',
+            'from': 'от ',
+            'na': 'Недоступно'
+        },
+        en: {
+            'mo': '/mo',
+            '2 mo': '/2 mo',
+            '3 mo': '/3 mo',
+            '6 mo': '/6 mo',
+            'from': 'from ',
+            'na': 'N/A'
+        },
+        ua: {
+            'mo': '/міс',
+            '2 mo': '/2 міс',
+            '3 mo': '/3 міс',
+            '6 mo': '/6 міс',
+            'from': 'від ',
+            'na': 'Недоступно'
+        }
+    }[locale];
+    
+    function getPriceHtml(plan, days) {
+        if (plan === 'beth' && (days === '90' || days === '180')) {
+            return `<span class="price-na">${trans.na}</span>`;
+        }
+        const data = priceData[days][plan];
+        let html = data;
+        html = html.replace('/mo', trans['mo']);
+        html = html.replace('/2 mo', trans['2 mo']);
+        html = html.replace('/3 mo', trans['3 mo']);
+        html = html.replace('/6 mo', trans['6 mo']);
+        html = html.replace('from', trans['from']);
+        return html;
+    }
+    
+    durationBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            durationBtns.forEach(b => b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+            const days = btn.dataset.days;
+            
+            if (priceBeth) priceBeth.innerHTML = getPriceHtml('beth', days);
+            if (priceGimel) priceGimel.innerHTML = getPriceHtml('gimel', days);
+            if (priceDalet) priceDalet.innerHTML = getPriceHtml('dalet', days);
+            
+            const bethCard = document.querySelector('.plan-card--beth');
+            if (bethCard) {
+                if (days === '90' || days === '180') {
+                    bethCard.classList.add('plan-card--disabled');
+                } else {
+                    bethCard.classList.remove('plan-card--disabled');
+                }
+            }
+        });
+    });
+
+    // ── Modal Actions ──
+    const modal = document.getElementById('pricingModal');
+    const openBtns = document.querySelectorAll('.acquire-trust-btn');
+    const closeBtn = document.getElementById('pricingModalClose');
+    const overlay = document.getElementById('pricingModalOverlay');
+    
+    openBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (modal) {
+                modal.classList.add('is-open');
+                document.body.classList.add('modal-open');
+            }
+        });
+    });
+    
+    function closeModal() {
+        if (modal) {
+            modal.classList.remove('is-open');
+            document.body.classList.remove('modal-open');
+        }
+    }
+    
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (overlay) overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+});
+</script>
+
+</body>
+</html>
