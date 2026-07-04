@@ -77,6 +77,7 @@
       <nav class="sidebar-nav">
         <button class="sidebar-link active" data-target="overview"><svg class="icon icon-stroke"><use href="#i-user"/></svg> Аккаунт</button>
         <button class="sidebar-link" data-target="licenses"><svg class="icon icon-stroke"><use href="#i-cart"/></svg> Магазин</button>
+        <button class="sidebar-link" data-target="aleph-trust" id="sidebarAlephTrust" style="display: none;"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Aleph Trust</button>
         <button class="sidebar-link" data-target="security"><svg class="icon icon-stroke"><use href="#i-layers"/></svg> Дополнительно</button>
         <a class="sidebar-link" href="../docs/privacy/"><svg class="icon icon-stroke"><use href="#i-doc"/></svg> Документация</a>
       </nav>
@@ -190,6 +191,40 @@
               <a class="license-btn primary acquire-trust-btn" href="#">Приобрести</a>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- ALEPH TRUST CONTROL PANEL (appears when purchased) -->
+      <section class="profile-section" id="aleph-trust">
+        <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Панель управления Aleph Trust</h2>
+        <p class="section-subtitle" style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; text-transform: none; font-family: var(--font-body), serif;">Статус: <b style="color: var(--green);">Активен</b> · Тариф: <b id="trustPlanName">Beth</b></p>
+        
+        <div class="security-grid">
+          <!-- Active Sessions & Limits -->
+          <div class="security-card">
+            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Использование лимитов</h3>
+            <div class="info-row">
+              <span class="label">Активные сессии</span>
+              <span class="value"><b id="trustSessionsCount">0</b> / <span id="trustSessionsLimit">100</span></span>
+            </div>
+            <div class="info-row">
+              <span class="label">Активные инстансы</span>
+              <span class="value"><b>0</b> / <span id="trustInstancesLimit">3</span></span>
+            </div>
+          </div>
+          
+          <!-- API Keys & SDK -->
+          <div class="security-card">
+            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Интеграция и API</h3>
+            <div class="info-row copyable" id="apiKeyRow" data-copy="at_live_7ab33b0f2b8ae70708dbc5b2aa34">
+              <span class="label">Ключ API (токен)</span>
+              <span class="value mono">at_live_7ab33b0f2b8ae707...</span>
+            </div>
+            <div class="license-actions" style="margin-top: 16px;">
+              <a class="license-btn primary" href="#" onclick="alert('Скачивание плагина...'); return false;">Скачать плагин (.jar)</a>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- SECURITY (Key activation and 2FA setup) -->
@@ -235,7 +270,7 @@
   </div>
 </div>
 </main>
-<script type="module" src="../../src/profile/profile.js?v=16"></script>
+<script type="module" src="../../src/profile/profile.js?v=17"></script>
 
 <!-- PRICING MODAL WINDOW -->
 <div class="pricing-modal" id="pricingModal" aria-hidden="true">
@@ -284,7 +319,7 @@
             <li class="feat-unavailable">Свой лаунчер</li>
             <li class="feat-unavailable">White-label</li>
             </ul>
-            <a class="plan-cta" href="#">Выбрать Beth</a>
+            <a class="plan-cta" href="#" data-plan="Beth">Выбрать Beth</a>
           </div>
 
           <!-- Gimel plan -->
@@ -314,7 +349,7 @@
             <li class="feat-unavailable">Свой лаунчер SDK</li>
             <li class="feat-unavailable">White-label</li>
             </ul>
-            <a class="plan-cta" href="#">Выбрать Gimel</a>
+            <a class="plan-cta" href="#" data-plan="Gimel">Выбрать Gimel</a>
           </div>
 
           <!-- Dalet plan -->
@@ -341,7 +376,7 @@
             <li>Выделенный канал поддержки</li>
             <li>Кастомные интеграции</li>
             </ul>
-            <a class="plan-cta" href="#">Связаться</a>
+            <a class="plan-cta" href="#" data-plan="Dalet">Связаться</a>
           </div>
         </div>
 
