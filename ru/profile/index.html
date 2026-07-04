@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=13">
 <link rel="stylesheet" href="../../assets/css/profile.css?v=16">
-<link rel="stylesheet" href="../../assets/css/products/aleph-trust.css?v=1">
+<link rel="stylesheet" href="../../assets/css/products/aleph-trust.css?v=2">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -246,7 +246,7 @@
       <div class="pricing-wizard">
         <!-- Step indicator -->
         <div class="wizard-steps">
-          <div class="wizard-step is-active" data-step="1"><span class="wizard-step-num">1</span> <span>Выбор плана</span></div>
+          <div class="wizard-step is-active" data-step="1"><span class="wizard-step-num">1</span> <span>Выбор тарифа</span></div>
           <div class="wizard-step-divider"></div>
           <div class="wizard-step" data-step="2"><span class="wizard-step-num">2</span> <span>Оплата</span></div>
         </div>
@@ -256,7 +256,7 @@
           <div class="pricing-section" id="pricing">
             <div class="eyebrow">Тарифы и подписка</div>
             <h2 class="s-title">Планы Aleph&nbsp;Trust</h2>
-            <p class="s-desc">Выберите тариф, подходящий для вашего сервера. Чем дольше срок, тем ниже цена.</p>
+            <p class="s-desc">Выберите тариф и срок действия подписки.</p>
 
             <div class="duration-selector">
               <button class="duration-option is-active" data-days="30">30 дней</button>
@@ -265,91 +265,85 @@
               <button class="duration-option" data-days="180">180 дней <span class="duration-save">-15%</span></button>
             </div>
 
-            <div class="pricing-grid">
-              <!-- Beth plan -->
-              <div class="plan-card plan-card--beth">
-                <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
-                <div class="plan-name">Beth</div>
-                <div class="plan-desc">Для небольших серверов с базовым лаунчер-гейтом</div>
-                <div class="plan-price">$19<span class="plan-period">/мес</span></div>
-                <div class="plan-limits">
-                  <dl><dt>Онлайн</dt><dd>до 100 игроков</dd></dl>
-                  <dl><dt>Инстансы</dt><dd>до 3 инстансов</dd></dl>
+            <!-- Horizontal Plan List -->
+            <div class="plan-list">
+              <!-- Beth -->
+              <div class="plan-item" data-plan="beth">
+                <div class="plan-item-radio"></div>
+                <div class="plan-item-content">
+                  <div class="plan-item-header">
+                    <span class="plan-item-name">Beth</span>
+                    <span class="plan-item-letter">ב</span>
+                  </div>
+                  <div class="plan-item-desc">Для небольших серверов с базовым лаунчер-гейтом</div>
+                  <div class="plan-item-limits">до 100 игроков · до 3 инстансов</div>
                 </div>
-                <ul class="plan-features">
-                  <li>Вход только через AMCLauncher</li>
-                  <li>Проверка целостности лаунчера</li>
-                  <li>Проверка modset_hash</li>
-                  <li>Базовые Trust Sessions</li>
-                  <li>Paper / Purpur / Velocity</li>
-                </ul>
-                <button class="plan-cta" type="button" data-plan="beth">Выбрать Beth</button>
+                <div class="plan-item-price-wrap">
+                  <span class="plan-item-price">$19</span>
+                </div>
               </div>
 
-              <!-- Gimel plan -->
-              <div class="plan-card plan-card--gimel">
-                <span class="plan-badge">Популярный</span>
-                <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
-                <div class="plan-name">Gimel</div>
-                <div class="plan-desc">Полная система доверия для PvP, Survival и RPG серверов</div>
-                <div class="plan-price">$49<span class="plan-period">/мес</span></div>
-                <div class="plan-limits">
-                  <dl><dt>Онлайн</dt><dd>до 500 игроков</dd></dl>
-                  <dl><dt>Инстансы</dt><dd>до 20 инстансов</dd></dl>
+              <!-- Gimel -->
+              <div class="plan-item is-selected" data-plan="gimel">
+                <div class="plan-item-badge">Популярный</div>
+                <div class="plan-item-radio"></div>
+                <div class="plan-item-content">
+                  <div class="plan-item-header">
+                    <span class="plan-item-name">Gimel</span>
+                    <span class="plan-item-letter">ג</span>
+                  </div>
+                  <div class="plan-item-desc">Полная система доверия для PvP, Survival и RPG серверов</div>
+                  <div class="plan-item-limits">до 500 игроков · до 20 инстансов</div>
                 </div>
-                <ul class="plan-features">
-                  <li class="feat-highlight">Всё из Beth</li>
-                  <li>WetID верификация документов</li>
-                  <li>Подписанные модпаки</li>
-                  <li>Risk dashboard и API</li>
-                  <li>Приоритетная поддержка</li>
-                </ul>
-                <button class="plan-cta" type="button" data-plan="gimel">Выбрать Gimel</button>
+                <div class="plan-item-price-wrap">
+                  <span class="plan-item-price">$49</span>
+                </div>
               </div>
 
-              <!-- Dalet plan -->
-              <div class="plan-card plan-card--dalet">
-                <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
-                <div class="plan-name">Dalet</div>
-                <div class="plan-desc">Enterprise для крупных сетей с собственным лаунчером</div>
-                <div class="plan-price"><span class="plan-price-from">от </span>$199<span class="plan-period">/мес</span></div>
-                <div class="plan-limits">
-                  <dl><dt>Онлайн</dt><dd>от 2 000 игроков</dd></dl>
-                  <dl><dt>Инстансы</dt><dd>без лимита</dd></dl>
+              <!-- Dalet -->
+              <div class="plan-item" data-plan="dalet">
+                <div class="plan-item-radio"></div>
+                <div class="plan-item-content">
+                  <div class="plan-item-header">
+                    <span class="plan-item-name">Dalet</span>
+                    <span class="plan-item-letter">ד</span>
+                  </div>
+                  <div class="plan-item-desc">Enterprise для крупных сетей с собственным лаунчером</div>
+                  <div class="plan-item-limits">от 2 000 игроков · без лимита</div>
                 </div>
-                <ul class="plan-features">
-                  <li class="feat-highlight">Всё из Gimel</li>
-                  <li>Свой лаунчер SDK</li>
-                  <li>White-label режим</li>
-                  <li>Enterprise API и SLA</li>
-                  <li>Выделенный канал поддержки</li>
-                </ul>
-                <button class="plan-cta" type="button" data-plan="dalet">Связаться</button>
+                <div class="plan-item-price-wrap">
+                  <span class="plan-item-price"><span class="price-from">от </span>$199</span>
+                </div>
               </div>
             </div>
 
             <p class="pricing-note">Beth ограничен максимумом в 60 дней. Подписки дольше 180 дней доступны только на тарифе Dalet.</p>
+
+            <div class="wizard-actions">
+              <button class="wizard-next-btn" id="wizardNextBtn" type="button">Продолжить</button>
+            </div>
           </div>
         </div>
 
         <!-- Step 2: Payment -->
         <div class="wizard-panel" id="wizardStep2" style="display: none;">
           <div class="pricing-section">
-            <div class="eyebrow">Оплата</div>
-            <h2 class="s-title">Ваш заказ</h2>
+            <div class="eyebrow">Оплата заказа</div>
+            <h2 class="s-title">Подтверждение и оплата</h2>
+            <p class="s-desc">Выберите удобный способ оплаты подписки.</p>
 
             <div class="order-summary">
               <div class="order-summary-row">
                 <span class="order-summary-label">Тариф</span>
-                <span class="order-summary-value" id="orderPlanName"></span>
+                <span class="order-summary-value" id="orderPlanName">Gimel</span>
               </div>
               <div class="order-summary-row">
                 <span class="order-summary-label">Срок</span>
-                <span class="order-summary-value" id="orderPlanDuration"></span>
+                <span class="order-summary-value" id="orderPlanDuration">30 дней</span>
               </div>
               <div class="order-summary-row">
-                <span class="order-summary-label">Цена</span>
-                <span class="order-summary-value order-price" id="orderPlanPrice"></span>
+                <span class="order-summary-label">Итого к оплате</span>
+                <span class="order-summary-value order-price" id="orderPlanPrice">$49</span>
               </div>
             </div>
 
@@ -377,7 +371,9 @@
               </div>
             </div>
 
-            <button class="wizard-back" type="button" id="wizardBackBtn">← Назад к планам</button>
+            <div class="wizard-actions">
+              <button class="wizard-back-btn" id="wizardBackBtn" type="button">← Назад к выбору тарифа</button>
+            </div>
           </div>
         </div>
       </div>
@@ -413,29 +409,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const naLabel = { ru: 'Недоступно', en: 'N/A', ua: 'Недоступно' }[locale];
 
     let currentDays = '30';
+    let selectedPlan = 'gimel';
 
     // ── Duration selector ──
     const durationBtns = document.querySelectorAll('.duration-option');
-    const priceBeth  = document.querySelector('.plan-card--beth .plan-price');
-    const priceGimel = document.querySelector('.plan-card--gimel .plan-price');
-    const priceDalet = document.querySelector('.plan-card--dalet .plan-price');
 
     function renderPrice(plan, days) {
         const val = priceData[days][plan];
         if (!val) return `<span class="price-na">${naLabel}</span>`;
-        const prefix = plan === 'dalet' ? `<span class="plan-price-from">${fromLabel}</span>` : '';
+        const prefix = plan === 'dalet' ? `<span class="price-from">${fromLabel}</span>` : '';
         return `${prefix}${val}<span class="plan-period">${periodLabels[days]}</span>`;
     }
 
     function updatePrices(days) {
         currentDays = days;
-        if (priceBeth)  priceBeth.innerHTML  = renderPrice('beth', days);
-        if (priceGimel) priceGimel.innerHTML = renderPrice('gimel', days);
-        if (priceDalet) priceDalet.innerHTML = renderPrice('dalet', days);
-
-        const bethCard = document.querySelector('.plan-card--beth');
-        if (bethCard) {
-            bethCard.classList.toggle('plan-card--disabled', days === '90' || days === '180');
+        
+        // Select price spans inside items
+        const bethPriceEl = document.querySelector('.plan-item[data-plan="beth"] .plan-item-price');
+        const gimelPriceEl = document.querySelector('.plan-item[data-plan="gimel"] .plan-item-price');
+        const daletPriceEl = document.querySelector('.plan-item[data-plan="dalet"] .plan-item-price');
+        
+        if (bethPriceEl) bethPriceEl.innerHTML = renderPrice('beth', days);
+        if (gimelPriceEl) gimelPriceEl.innerHTML = renderPrice('gimel', days);
+        if (daletPriceEl) daletPriceEl.innerHTML = renderPrice('dalet', days);
+        
+        const bethItem = document.querySelector('.plan-item[data-plan="beth"]');
+        if (bethItem) {
+            const isDisabled = days === '90' || days === '180';
+            bethItem.classList.toggle('plan-item--disabled', isDisabled);
+            if (isDisabled && selectedPlan === 'beth') {
+                // Switch selection to gimel if beth becomes disabled
+                bethItem.classList.remove('is-selected');
+                const gimelItem = document.querySelector('.plan-item[data-plan="gimel"]');
+                if (gimelItem) gimelItem.classList.add('is-selected');
+                selectedPlan = 'gimel';
+            }
         }
     }
 
@@ -455,6 +463,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function resetWizard() {
         showStep(1);
+        // Reset selection to default (gimel)
+        document.querySelectorAll('.plan-item').forEach(i => i.classList.remove('is-selected'));
+        const gimelItem = document.querySelector('.plan-item[data-plan="gimel"]');
+        if (gimelItem) gimelItem.classList.add('is-selected');
+        selectedPlan = 'gimel';
+        
+        // Reset duration to 30 days
+        durationBtns.forEach(b => b.classList.remove('is-active'));
+        if (durationBtns[0]) durationBtns[0].classList.add('is-active');
+        updatePrices('30');
     }
 
     openBtns.forEach(btn => {
@@ -479,12 +497,24 @@ document.addEventListener('DOMContentLoaded', () => {
     if (overlay)  overlay.addEventListener('click', closeModal);
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
+    // ── Plan list row selection ──
+    const planItems = document.querySelectorAll('.plan-item');
+    planItems.forEach(item => {
+        item.addEventListener('click', () => {
+            if (item.classList.contains('plan-item--disabled')) return;
+            planItems.forEach(i => i.classList.remove('is-selected'));
+            item.classList.add('is-selected');
+            selectedPlan = item.dataset.plan;
+        });
+    });
+
     // ── Wizard navigation ──
     const step1Panel = document.getElementById('wizardStep1');
     const step2Panel = document.getElementById('wizardStep2');
     const wizardStepEls = document.querySelectorAll('.wizard-step');
     const wizardDivider = document.querySelector('.wizard-step-divider');
     const backBtn = document.getElementById('wizardBackBtn');
+    const nextBtn = document.getElementById('wizardNextBtn');
 
     function showStep(num) {
         if (num === 1) {
@@ -502,38 +532,33 @@ document.addEventListener('DOMContentLoaded', () => {
             wizardStepEls[0].className = 'wizard-step is-done';
             wizardStepEls[1].className = 'wizard-step is-active';
             if (wizardDivider) wizardDivider.classList.add('is-filled');
-            // Scroll modal to top
+            
+            // Scroll modal container to top
             const container = document.querySelector('.pricing-modal-container');
             if (container) container.scrollTop = 0;
         }
     }
 
-    // Plan CTA clicks → go to step 2
-    document.querySelectorAll('.plan-cta[data-plan]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const plan = btn.dataset.plan;
-            const price = priceData[currentDays][plan];
-
-            // If plan is unavailable at this duration, do nothing
-            if (!price && plan === 'beth') return;
+    if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+            const val = priceData[currentDays][selectedPlan];
+            if (!val && selectedPlan === 'beth') return;
 
             // Fill order summary
             const nameMap = { beth: 'Beth', gimel: 'Gimel', dalet: 'Dalet' };
-            document.getElementById('orderPlanName').textContent = nameMap[plan];
+            document.getElementById('orderPlanName').textContent = nameMap[selectedPlan];
             document.getElementById('orderPlanDuration').textContent = durationLabels[currentDays];
 
-            if (plan === 'dalet') {
-                document.getElementById('orderPlanPrice').textContent = fromLabel + price;
+            if (selectedPlan === 'dalet') {
+                document.getElementById('orderPlanPrice').textContent = fromLabel + val;
             } else {
-                document.getElementById('orderPlanPrice').textContent = price;
+                document.getElementById('orderPlanPrice').textContent = val;
             }
 
             showStep(2);
         });
-    });
+    }
 
-    // Back button
     if (backBtn) backBtn.addEventListener('click', () => showStep(1));
 
     // Click on done step 1 indicator to go back
