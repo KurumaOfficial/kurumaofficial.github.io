@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../assets/css/main.css?v=13">
 <link rel="stylesheet" href="../../assets/css/profile.css?v=16">
-<link rel="stylesheet" href="../../assets/css/products/aleph-trust.css?v=1">
+<link rel="stylesheet" href="../../assets/css/products/aleph-trust.css?v=3">
 </head>
 <body>
 <!-- SVG icon sprite: all icons are inline, no external dependency -->
@@ -243,141 +243,129 @@
       <svg viewBox="0 0 24 24" width="24" height="24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>
     <div class="pricing-modal-content">
-      <div class="pricing-wizard">
-        <!-- Step indicator -->
-        <div class="wizard-steps">
-          <div class="wizard-step is-active" data-step="1"><span class="wizard-step-num">1</span> <span>Вибір плану</span></div>
-          <div class="wizard-step-divider"></div>
-          <div class="wizard-step" data-step="2"><span class="wizard-step-num">2</span> <span>Оплата</span></div>
+      <!-- Pricing section inside modal -->
+      <div class="pricing-section" id="pricing">
+        <div class="eyebrow">Тарифи та підписка</div>
+        <h2 class="s-title">Плани Aleph Trust</h2>
+        <p class="s-desc">Оберіть тариф, що підходить для вашого сервера. Чим довший термін, тим нижча ціна.</p>
+        
+        <div class="duration-selector">
+          <button class="duration-option is-active" data-days="30">30 днів</button>
+          <button class="duration-option" data-days="60">60 днів <span class="duration-save">-8%</span></button>
+          <button class="duration-option" data-days="90">90 днів <span class="duration-save">-12%</span></button>
+          <button class="duration-option" data-days="180">180 днів <span class="duration-save">-15%</span></button>
         </div>
 
-        <!-- Step 1: Plans -->
-        <div class="wizard-panel" id="wizardStep1">
-          <div class="pricing-section" id="pricing">
-            <div class="eyebrow">Тарифи та підписка</div>
-            <h2 class="s-title">Плани Aleph&nbsp;Trust</h2>
-            <p class="s-desc">Оберіть тариф, що підходить для вашого сервера. Чим довший термін, тим нижча ціна.</p>
-
-            <div class="duration-selector">
-              <button class="duration-option is-active" data-days="30">30 днів</button>
-              <button class="duration-option" data-days="60">60 днів <span class="duration-save">-8%</span></button>
-              <button class="duration-option" data-days="90">90 днів <span class="duration-save">-12%</span></button>
-              <button class="duration-option" data-days="180">180 днів <span class="duration-save">-15%</span></button>
+        <div class="pricing-grid">
+          <!-- Beth plan -->
+          <div class="plan-card plan-card--beth">
+            <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
+            <div class="plan-name">Beth</div>
+            <div class="plan-desc">Для невеликих серверів з базовим лаунчер-гейтом</div>
+            <div class="plan-price">$19<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>до 100 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>до 3 інстансів</dd></dl>
             </div>
+            <ul class="plan-features">
+            <li>Вхід лише через AMCLauncher</li>
+            <li>Перевірка цілісності лаунчера</li>
+            <li>Перевірка modset_hash</li>
+            <li>Довірені джерела модів</li>
+            <li>Режим WetID акаунту</li>
+            <li>Базові Trust Sessions</li>
+            <li>Paper / Purpur / Velocity</li>
+            <li>Базова панель керування</li>
+            <li>Базові логи підключень</li>
+            <li class="feat-unavailable">WetID верифікація документів</li>
+            <li class="feat-unavailable">Підписані модпаки</li>
+            <li class="feat-unavailable">Власний лаунчер</li>
+            <li class="feat-unavailable">White-label</li>
+            </ul>
+            <a class="plan-cta" href="#">Обрати Beth</a>
+          </div>
 
-            <div class="pricing-grid">
-              <!-- Beth plan -->
-              <div class="plan-card plan-card--beth">
-                <span class="plan-hebrew-letter" aria-hidden="true">ב</span>
-                <div class="plan-name">Beth</div>
-                <div class="plan-desc">Для невеликих серверів з базовим лаунчер-гейтом</div>
-                <div class="plan-price">$19<span class="plan-period">/міс</span></div>
-                <div class="plan-limits">
-                  <dl><dt>Онлайн</dt><dd>до 100 гравців</dd></dl>
-                  <dl><dt>Інстанси</dt><dd>до 3 інстансів</dd></dl>
-                </div>
-                <ul class="plan-features">
-                  <li>Вхід лише через AMCLauncher</li>
-                  <li>Перевірка цілісності лаунчера</li>
-                  <li>Перевірка modset_hash</li>
-                  <li>Базові Trust Sessions</li>
-                  <li>Paper / Purpur / Velocity</li>
-                </ul>
-                <button class="plan-cta" type="button" data-plan="beth">Обрати Beth</button>
-              </div>
-
-              <!-- Gimel plan -->
-              <div class="plan-card plan-card--gimel">
-                <span class="plan-badge">Популярний</span>
-                <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
-                <div class="plan-name">Gimel</div>
-                <div class="plan-desc">Повна система довіри для PvP, Survival та RPG серверів</div>
-                <div class="plan-price">$49<span class="plan-period">/міс</span></div>
-                <div class="plan-limits">
-                  <dl><dt>Онлайн</dt><dd>до 500 гравців</dd></dl>
-                  <dl><dt>Інстанси</dt><dd>до 20 інстансів</dd></dl>
-                </div>
-                <ul class="plan-features">
-                  <li class="feat-highlight">Все з Beth</li>
-                  <li>WetID верифікація документів</li>
-                  <li>Підписані модпаки</li>
-                  <li>Risk dashboard та API</li>
-                  <li>Пріоритетна підтримка</li>
-                </ul>
-                <button class="plan-cta" type="button" data-plan="gimel">Обрати Gimel</button>
-              </div>
-
-              <!-- Dalet plan -->
-              <div class="plan-card plan-card--dalet">
-                <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
-                <div class="plan-name">Dalet</div>
-                <div class="plan-desc">Enterprise для великих мереж з власним лаунчером</div>
-                <div class="plan-price"><span class="plan-price-from">від </span>$199<span class="plan-period">/міс</span></div>
-                <div class="plan-limits">
-                  <dl><dt>Онлайн</dt><dd>від 2 000 гравців</dd></dl>
-                  <dl><dt>Інстанси</dt><dd>без ліміту</dd></dl>
-                </div>
-                <ul class="plan-features">
-                  <li class="feat-highlight">Все з Gimel</li>
-                  <li>Власний лаунчер SDK</li>
-                  <li>White-label режим</li>
-                  <li>Enterprise API та SLA</li>
-                  <li>Виділений канал підтримки</li>
-                </ul>
-                <button class="plan-cta" type="button" data-plan="dalet">Зв'язатися</button>
-              </div>
+          <!-- Gimel plan -->
+          <div class="plan-card plan-card--gimel">
+            <span class="plan-badge">Популярний</span>
+            <span class="plan-hebrew-letter" aria-hidden="true">ג</span>
+            <div class="plan-name">Gimel</div>
+            <div class="plan-desc">Повна система довіри для PvP, Survival та RPG серверів</div>
+            <div class="plan-price">$49<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>до 500 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>до 20 інстансів</dd></dl>
             </div>
+            <ul class="plan-features">
+            <li class="feat-highlight">Все з Beth</li>
+            <li>Усі режими безпеки</li>
+            <li>WetID верифікація документів</li>
+            <li>Allowlist модів сервера</li>
+            <li>Підписані модпаки</li>
+            <li>Політики Trust Level</li>
+            <li>Risk dashboard</li>
+            <li>Розширені audit logs</li>
+            <li>Відкликання сесій</li>
+            <li>Доступ до API</li>
+            <li>Webhooks для Discord</li>
+            <li>Пріоритетна підтримка</li>
+            <li class="feat-unavailable">Власний лаунчер SDK</li>
+            <li class="feat-unavailable">White-label</li>
+            </ul>
+            <a class="plan-cta" href="#">Обрати Gimel</a>
+          </div>
 
-            <p class="pricing-note">Beth обмежений максимумом у 60 днів. Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
+          <!-- Dalet plan -->
+          <div class="plan-card plan-card--dalet">
+            <span class="plan-hebrew-letter" aria-hidden="true">ד</span>
+            <div class="plan-name">Dalet</div>
+            <div class="plan-desc">Enterprise для великих мереж з власним лаунчером</div>
+            <div class="plan-price"><span class="plan-price-from">від </span>$199<span class="plan-period">/міс</span></div>
+            <div class="plan-limits">
+              <dl><dt>Онлайн</dt><dd>від 2 000 гравців</dd></dl>
+              <dl><dt>Інстанси</dt><dd>без ліміту</dd></dl>
+            </div>
+            <ul class="plan-features">
+            <li class="feat-highlight">Все з Gimel</li>
+            <li>Власний лаунчер SDK</li>
+            <li>Vendor certificate</li>
+            <li>White-label режим</li>
+            <li>Окремі ключі підпису</li>
+            <li>Enterprise API</li>
+            <li>Team management</li>
+            <li>Рольовий доступ</li>
+            <li>Виділені audit logs</li>
+            <li>SLA за договором</li>
+            <li>Виділений канал підтримки</li>
+            <li>Кастомні інтеграції</li>
+            </ul>
+            <a class="plan-cta" href="#">Зв'язатися</a>
           </div>
         </div>
 
-        <!-- Step 2: Payment -->
-        <div class="wizard-panel" id="wizardStep2" style="display: none;">
-          <div class="pricing-section">
-            <div class="eyebrow">Оплата</div>
-            <h2 class="s-title">Ваше замовлення</h2>
+        <p class="pricing-note">Beth обмежений максимумом у 60 днів. Підписки довше 180 днів доступні лише на тарифі Dalet.</p>
 
-            <div class="order-summary">
-              <div class="order-summary-row">
-                <span class="order-summary-label">Тариф</span>
-                <span class="order-summary-value" id="orderPlanName"></span>
-              </div>
-              <div class="order-summary-row">
-                <span class="order-summary-label">Термін</span>
-                <span class="order-summary-value" id="orderPlanDuration"></span>
-              </div>
-              <div class="order-summary-row">
-                <span class="order-summary-label">Ціна</span>
-                <span class="order-summary-value order-price" id="orderPlanPrice"></span>
-              </div>
-            </div>
+        <div class="promo-wrap">
+          <input class="promo-input" type="text" placeholder="Промокод" maxlength="32">
+          <button class="promo-btn" type="button">Застосувати</button>
+        </div>
 
-            <div class="promo-wrap">
-              <input class="promo-input" type="text" placeholder="Промокод" maxlength="32">
-              <button class="promo-btn" type="button">Застосувати</button>
-            </div>
-
-            <div class="payment-methods">
-              <div class="payment-option" data-method="card">
-                <svg viewBox="0 0 24 24" width="28" height="28"><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
-                <span>Картка</span>
-              </div>
-              <div class="payment-option" data-method="crypto">
-                <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 8h4.5a2.5 2.5 0 010 5H9V8zm0 5h5a2.5 2.5 0 010 5H9v-5z" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="6" x2="10" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="6" x2="14" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="18" x2="14" y2="20" stroke="currentColor" stroke-width="1.3"/></svg>
-                <span>Крипто</span>
-              </div>
-              <div class="payment-option" data-method="paypal">
-                <svg viewBox="0 0 24 24" width="28" height="28"><path d="M7.5 21L9 13h3.5c4 0 7-2.5 7.5-6.5S17 2 14 2H8L5 21h2.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 17l1-5h3c3.2 0 5.5-2 6-5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.5"/></svg>
-                <span>PayPal</span>
-              </div>
-              <div class="payment-option" data-method="qiwi">
-                <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="15" cy="15" r="0.8" fill="currentColor"/></svg>
-                <span>QIWI</span>
-              </div>
-            </div>
-
-            <button class="wizard-back" type="button" id="wizardBackBtn">← Назад до планів</button>
+        <div class="payment-methods">
+          <div class="payment-option" data-method="card">
+            <svg viewBox="0 0 24 24" width="28" height="28"><rect x="1" y="4" width="22" height="16" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="1.5"/></svg>
+            <span>Картка</span>
+          </div>
+          <div class="payment-option" data-method="crypto">
+            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 8h4.5a2.5 2.5 0 010 5H9V8zm0 5h5a2.5 2.5 0 010 5H9v-5z" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="6" x2="10" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="6" x2="14" y2="8" stroke="currentColor" stroke-width="1.3"/><line x1="10" y1="18" x2="10" y2="20" stroke="currentColor" stroke-width="1.3"/><line x1="14" y1="18" x2="14" y2="20" stroke="currentColor" stroke-width="1.3"/></svg>
+            <span>Крипто</span>
+          </div>
+          <div class="payment-option" data-method="paypal">
+            <svg viewBox="0 0 24 24" width="28" height="28"><path d="M7.5 21L9 13h3.5c4 0 7-2.5 7.5-6.5S17 2 14 2H8L5 21h2.5z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 17l1-5h3c3.2 0 5.5-2 6-5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" opacity="0.5"/></svg>
+            <span>PayPal</span>
+          </div>
+          <div class="payment-option" data-method="qiwi">
+            <svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="15" cy="15" r="2.5" fill="none" stroke="currentColor" stroke-width="1.3"/><circle cx="15" cy="15" r="0.8" fill="currentColor"/></svg>
+            <span>QIWI</span>
           </div>
         </div>
       </div>
@@ -387,158 +375,126 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const locale = window.__ALEPH_LOCALE__ || 'ru';
-
-    // ── Price data ──
-    const priceData = {
-        '30':  { beth: '$19',  gimel: '$49',  dalet: '$199' },
-        '60':  { beth: '$35',  gimel: '$89',  dalet: '$379' },
-        '90':  { beth: null,   gimel: '$129', dalet: '$549' },
-        '180': { beth: null,   gimel: '$249', dalet: '$999' }
-    };
-
-    const periodLabels = {
-        ru:  { '30': '/мес', '60': '/2 мес', '90': '/3 мес', '180': '/6 мес' },
-        en:  { '30': '/mo',  '60': '/2 mo',  '90': '/3 mo',  '180': '/6 mo' },
-        ua:  { '30': '/міс', '60': '/2 міс', '90': '/3 міс', '180': '/6 міс' }
-    }[locale];
-
-    const durationLabels = {
-        ru:  { '30': '30 дней', '60': '60 дней', '90': '90 дней', '180': '180 дней' },
-        en:  { '30': '30 days', '60': '60 days', '90': '90 days', '180': '180 days' },
-        ua:  { '30': '30 днів', '60': '60 днів', '90': '90 днів', '180': '180 днів' }
-    }[locale];
-
-    const fromLabel = { ru: 'от ', en: 'from ', ua: 'від ' }[locale];
-    const naLabel = { ru: 'Недоступно', en: 'N/A', ua: 'Недоступно' }[locale];
-
-    let currentDays = '30';
-
-    // ── Duration selector ──
     const durationBtns = document.querySelectorAll('.duration-option');
-    const priceBeth  = document.querySelector('.plan-card--beth .plan-price');
+    const priceBeth = document.querySelector('.plan-card--beth .plan-price');
     const priceGimel = document.querySelector('.plan-card--gimel .plan-price');
     const priceDalet = document.querySelector('.plan-card--dalet .plan-price');
-
-    function renderPrice(plan, days) {
-        const val = priceData[days][plan];
-        if (!val) return `<span class="price-na">${naLabel}</span>`;
-        const prefix = plan === 'dalet' ? `<span class="plan-price-from">${fromLabel}</span>` : '';
-        return `${prefix}${val}<span class="plan-period">${periodLabels[days]}</span>`;
-    }
-
-    function updatePrices(days) {
-        currentDays = days;
-        if (priceBeth)  priceBeth.innerHTML  = renderPrice('beth', days);
-        if (priceGimel) priceGimel.innerHTML = renderPrice('gimel', days);
-        if (priceDalet) priceDalet.innerHTML = renderPrice('dalet', days);
-
-        const bethCard = document.querySelector('.plan-card--beth');
-        if (bethCard) {
-            bethCard.classList.toggle('plan-card--disabled', days === '90' || days === '180');
+    
+    const locale = window.__ALEPH_LOCALE__ || 'ru';
+    
+    const priceData = {
+        '30': {
+            beth: '$19<span class="plan-period">/mo</span>',
+            gimel: '$49<span class="plan-period">/mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $199<span class="plan-period">/mo</span>'
+        },
+        '60': {
+            beth: '$35<span class="plan-period">/2 mo</span>',
+            gimel: '$89<span class="plan-period">/2 mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $379<span class="plan-period">/2 mo</span>'
+        },
+        '90': {
+            beth: '—<span class="plan-period"></span>',
+            gimel: '$129<span class="plan-period">/3 mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $549<span class="plan-period">/3 mo</span>'
+        },
+        '180': {
+            beth: '—<span class="plan-period"></span>',
+            gimel: '$249<span class="plan-period">/6 mo</span>',
+            dalet: '<span class="plan-price-from">from</span> $999<span class="plan-period">/6 mo</span>'
         }
+    };
+    
+    const trans = {
+        ru: {
+            'mo': '/мес',
+            '2 mo': '/2 мес',
+            '3 mo': '/3 мес',
+            '6 mo': '/6 мес',
+            'from': 'от ',
+            'na': 'Недоступно'
+        },
+        en: {
+            'mo': '/mo',
+            '2 mo': '/2 mo',
+            '3 mo': '/3 mo',
+            '6 mo': '/6 mo',
+            'from': 'from ',
+            'na': 'N/A'
+        },
+        ua: {
+            'mo': '/міс',
+            '2 mo': '/2 міс',
+            '3 mo': '/3 міс',
+            '6 mo': '/6 міс',
+            'from': 'від ',
+            'na': 'Недоступно'
+        }
+    }[locale];
+    
+    function getPriceHtml(plan, days) {
+        if (plan === 'beth' && (days === '90' || days === '180')) {
+            return `<span class="price-na">${trans.na}</span>`;
+        }
+        const data = priceData[days][plan];
+        let html = data;
+        html = html.replace('/mo', trans['mo']);
+        html = html.replace('/2 mo', trans['2 mo']);
+        html = html.replace('/3 mo', trans['3 mo']);
+        html = html.replace('/6 mo', trans['6 mo']);
+        html = html.replace('from', trans['from']);
+        return html;
     }
-
+    
     durationBtns.forEach(btn => {
         btn.addEventListener('click', () => {
             durationBtns.forEach(b => b.classList.remove('is-active'));
             btn.classList.add('is-active');
-            updatePrices(btn.dataset.days);
+            const days = btn.dataset.days;
+            
+            if (priceBeth) priceBeth.innerHTML = getPriceHtml('beth', days);
+            if (priceGimel) priceGimel.innerHTML = getPriceHtml('gimel', days);
+            if (priceDalet) priceDalet.innerHTML = getPriceHtml('dalet', days);
+            
+            const bethCard = document.querySelector('.plan-card--beth');
+            if (bethCard) {
+                if (days === '90' || days === '180') {
+                    bethCard.classList.add('plan-card--disabled');
+                } else {
+                    bethCard.classList.remove('plan-card--disabled');
+                }
+            }
         });
     });
 
-    // ── Modal open/close ──
-    const modal   = document.getElementById('pricingModal');
+    // ── Modal Actions ──
+    const modal = document.getElementById('pricingModal');
     const openBtns = document.querySelectorAll('.acquire-trust-btn');
     const closeBtn = document.getElementById('pricingModalClose');
-    const overlay  = document.getElementById('pricingModalOverlay');
-
-    function resetWizard() {
-        showStep(1);
-    }
-
+    const overlay = document.getElementById('pricingModalOverlay');
+    
     openBtns.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             if (modal) {
-                resetWizard();
                 modal.classList.add('is-open');
                 document.body.classList.add('modal-open');
             }
         });
     });
-
+    
     function closeModal() {
         if (modal) {
             modal.classList.remove('is-open');
             document.body.classList.remove('modal-open');
         }
     }
-
+    
     if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (overlay)  overlay.addEventListener('click', closeModal);
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
-
-    // ── Wizard navigation ──
-    const step1Panel = document.getElementById('wizardStep1');
-    const step2Panel = document.getElementById('wizardStep2');
-    const wizardStepEls = document.querySelectorAll('.wizard-step');
-    const wizardDivider = document.querySelector('.wizard-step-divider');
-    const backBtn = document.getElementById('wizardBackBtn');
-
-    function showStep(num) {
-        if (num === 1) {
-            step1Panel.style.display = '';
-            step2Panel.style.display = 'none';
-            wizardStepEls[0].className = 'wizard-step is-active';
-            wizardStepEls[1].className = 'wizard-step';
-            if (wizardDivider) wizardDivider.classList.remove('is-filled');
-        } else {
-            step1Panel.style.display = 'none';
-            step2Panel.style.display = '';
-            step2Panel.style.animation = 'none';
-            step2Panel.offsetHeight; // reflow
-            step2Panel.style.animation = '';
-            wizardStepEls[0].className = 'wizard-step is-done';
-            wizardStepEls[1].className = 'wizard-step is-active';
-            if (wizardDivider) wizardDivider.classList.add('is-filled');
-            // Scroll modal to top
-            const container = document.querySelector('.pricing-modal-container');
-            if (container) container.scrollTop = 0;
-        }
-    }
-
-    // Plan CTA clicks → go to step 2
-    document.querySelectorAll('.plan-cta[data-plan]').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            const plan = btn.dataset.plan;
-            const price = priceData[currentDays][plan];
-
-            // If plan is unavailable at this duration, do nothing
-            if (!price && plan === 'beth') return;
-
-            // Fill order summary
-            const nameMap = { beth: 'Beth', gimel: 'Gimel', dalet: 'Dalet' };
-            document.getElementById('orderPlanName').textContent = nameMap[plan];
-            document.getElementById('orderPlanDuration').textContent = durationLabels[currentDays];
-
-            if (plan === 'dalet') {
-                document.getElementById('orderPlanPrice').textContent = fromLabel + price;
-            } else {
-                document.getElementById('orderPlanPrice').textContent = price;
-            }
-
-            showStep(2);
-        });
-    });
-
-    // Back button
-    if (backBtn) backBtn.addEventListener('click', () => showStep(1));
-
-    // Click on done step 1 indicator to go back
-    wizardStepEls[0].addEventListener('click', () => {
-        if (wizardStepEls[0].classList.contains('is-done')) showStep(1);
+    if (overlay) overlay.addEventListener('click', closeModal);
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
     });
 });
 </script>
