@@ -46,8 +46,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100dvh - var(--nav-height, 92px) - 80px);
-  padding: var(--space-16, 64px) var(--page-gutter, 64px);
+  min-height: 100dvh;
+  box-sizing: border-box;
+  padding: calc(var(--nav-height, 92px) + 48px) var(--page-gutter, 64px) 64px var(--page-gutter, 64px);
   position: relative;
   z-index: var(--z-base, 1);
 }
@@ -275,8 +276,4 @@
   letter-spacing: 0.02em;
 }
 
-@media (min-height: 700px) {
-  body {
-    overflow: hidden;
-  }
-}
+
