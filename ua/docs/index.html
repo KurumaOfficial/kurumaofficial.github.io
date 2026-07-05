@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ua" dir="ltr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aleph Studio — Документація</title>
+<meta name="theme-color" content="#080606">
+<meta name="color-scheme" content="dark light">
+<script>window.__ALEPH_LOCALE__ = 'ua';</script>
+<script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
+<link rel="icon" href="../../favicon.ico" sizes="48x48">
+<link rel="icon" href="../../assets/icons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../assets/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="../../assets/icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
+<link rel="stylesheet" href="../../assets/css/main.css?v=13">
+<link rel="stylesheet" href="../../assets/css/docs.css?v=3">
+</head>
+<body>
+<a id="skipLink" class="skip-link" href="#main">Перейти до основного вмісту</a>
+<nav class="nav" aria-label="Main navigation">
+    <a id="logoLink" class="nav-logo" href="../../ua/" aria-label="Aleph Studio">
+        <span class="logo-sq" aria-hidden="true"></span>
+        <span class="logo-text">Aleph Studio</span>
+    </a>
+    <div class="nav-links">
+        <a id="navLinkProducts" class="nav__link" href="../../ua/products/">Продукти</a>
+        <a id="navLinkDonate" class="nav__link" href="../../ua/donate/" data-donate-link>Підтримати</a>
+    </div>
+    <div class="nav-right">
+        <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
+            <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </button>
+        <div id="localeSwitcher" class="locale-switcher">
+            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Вибір мови">
+                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
+                <span id="localeSwitcherLabel">UA</span>
+                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Вибір мови" hidden></div>
+        </div>
+    </div>
+</nav>
+<main id="main">
+<div class="docs-page">
+    <div class="docs-hub-hero">
+        <h1 class="reveal">Документація</h1>
+        <p class="reveal">Інструкції, правила використання, API-інтеграції та технічна підтримка щодо всіх продуктів Aleph Studio.</p>
+        <div class="docs-search-wrap reveal">
+            <input type="text" placeholder="Пошук по документації..." class="docs-search-input">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+    </div>
+    
+    <div class="docs-hub-grid reveal">
+        <!-- Card 1: Agreements -->
+        <div class="docs-hub-card" onclick="if(!event.target.closest('a')) location.href='privacy/'" style="cursor: pointer;">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            </div>
+            <h2>Угоди та правила</h2>
+            <p>Офіційні юридичні документи, правила використання продуктів, політика конфіденційності та використання Cookies.</p>
+            <ul class="hub-links-list">
+                <li><a href="privacy/">Конфіденційність</a></li>
+                <li><a href="terms/">Правила використання</a></li>
+                <li><a href="user-agreement/">Угода користувача</a></li>
+                <li><a href="cookies/">Використання Cookies</a></li>
+            </ul>
+        </div>
+        
+        <!-- Card 2: Troubleshooting -->
+        <div class="docs-hub-card" onclick="if(!event.target.closest('a')) location.href='launcher/'" style="cursor: pointer;">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </div>
+            <h2>Вирішення проблем</h2>
+            <p>Посібники з усунення проблем у роботі AMCLauncher, помилок перевірки цілісності та мережевого з'єднання.</p>
+            <ul class="hub-links-list">
+                <li><a href="#launcher">Проблеми з AMCLauncher</a></li>
+                <li><a href="#integrity">Помилки цілісності модів</a></li>
+                <li><a href="#network">Мережеве підключення</a></li>
+                <li><a href="#faq">Часті запитання (FAQ)</a></li>
+            </ul>
+        </div>
+        
+        <!-- Card 3: API & Integrations -->
+        <div class="docs-hub-card" onclick="if(!event.target.closest('a')) location.href='aleph-trust-api/'" style="cursor: pointer;">
+            <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h2>API та інтеграції</h2>
+            <p>Документація для розробників щодо інтеграції WetID авторизації, вебхуків Discord та запитів до API Aleph Trust.</p>
+            <ul class="hub-links-list">
+                <li><a href="#aleph-trust-api">API-документація Aleph Trust</a></li>
+                <li><a href="#wetid-auth">Авторизація через WetID</a></li>
+                <li><a href="#webhooks">Налаштування вебхуків</a></li>
+                <li><a href="#sdk">Приклади інтеграції (SDK)</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+</main>
+<footer class="site-footer">
+    <div class="site-footer__main">
+        <div class="site-footer__left">
+            <a class="site-footer__logo" href="../../ua/">
+                <span class="site-footer__sq" aria-hidden="true"></span>
+                <span class="site-footer__name">Aleph Studio</span>
+            </a>
+            <span class="site-footer__divider" aria-hidden="true"></span>
+            <span id="footerTagline" class="site-footer__tagline">Дочірній проєкт WeTTeA</span>
+        </div>
+        <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
+            <a href="../../ua/products/">Продукти</a>
+            <a href="../../ua/#manifesto">Принцип</a>
+            <a href="../../ua/#team">Команда</a>
+            <span class="site-footer__nav-sep" aria-hidden="true"></span>
+            <a id="footerDonateLink" href="../../ua/donate/">Підтримати</a>
+        </nav>
+        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div>
+    </div>
+    <div class="site-footer__bottom">
+        <span id="footerCopyright" class="site-footer__copy">© 2026. Усі права захищено.</span>
+    </div>
+    <span id="footerDesc" hidden></span>
+    <span id="footerNavHeading" hidden></span>
+    <span id="footerWetteaHeading" hidden></span>
+</footer>
+<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
+<script type="module" src="../../src/docs/docs.js?v=2"></script>
+</body>
+</html>

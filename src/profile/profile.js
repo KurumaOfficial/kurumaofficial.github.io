@@ -151,7 +151,7 @@ function boot() {
         
         const ringUnit = document.querySelector('#overview .license-card.merged-card .progress-ring .ring-label .unit');
         if (ringUnit) {
-            const units = { ru: 'д', en: 'd', ua: 'д' };
+            const units = { ru: 'дн', en: 'd', ua: 'дн' };
             ringUnit.textContent = units[locale] || 'd';
         }
 

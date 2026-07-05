@@ -1341,6 +1341,12 @@ body.modal-open {
 .at-app {
   display: block;
   width: 100%;
+  margin-top: -16px;
+}
+
+.at-nav-item svg.icon {
+  width: 14px;
+  height: 14px;
 }
 
 .at-nav {
@@ -1643,8 +1649,13 @@ body.modal-open {
 
 .at-appeal-item {
   border: 1px solid var(--at-line);
-  padding: 12px;
-  margin-bottom: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+  background: var(--at-panel-2);
+  transition: border-color 0.15s;
+}
+.at-appeal-item:hover {
+  border-color: var(--at-accent-light);
 }
 .at-appeal-head {
   display: flex;
@@ -1652,6 +1663,95 @@ body.modal-open {
   align-items: center;
   margin-bottom: 6px;
 }
+
+/* Custom dashboard forms, fields and tables */
+#aleph-trust input[type="text"] {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--at-panel-2);
+  border: 1px solid var(--at-line);
+  color: var(--at-text);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  transition: border-color 0.15s, background-color 0.15s;
+  outline: none;
+}
+#aleph-trust input[type="text"]:focus {
+  border-color: var(--at-accent-light);
+  background: var(--at-panel);
+}
+
+#aleph-trust select {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--at-panel-2);
+  border: 1px solid var(--at-line);
+  color: var(--at-text);
+  font-family: var(--font-body), sans-serif;
+  font-size: 13px;
+  transition: border-color 0.15s, background-color 0.15s;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='none' stroke='%23b52239' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 14px;
+  padding-right: 36px;
+}
+#aleph-trust select:focus {
+  border-color: var(--at-accent-light);
+  background-color: var(--at-panel);
+}
+
+#aleph-trust table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  text-align: left;
+  margin-top: 10px;
+}
+#aleph-trust th {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--at-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--at-line);
+  background: var(--at-panel-2);
+}
+#aleph-trust td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--at-line-soft);
+  color: var(--at-text);
+  vertical-align: middle;
+}
+#aleph-trust tbody tr:hover {
+  background: rgba(255, 255, 255, 0.015);
+}
+[data-theme="light"] #aleph-trust tbody tr:hover {
+  background: rgba(0, 0, 0, 0.015);
+}
+
+#aleph-trust .field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+#aleph-trust .field label {
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--at-text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
 
 @media (max-width: 780px) {
   .at-nav {
