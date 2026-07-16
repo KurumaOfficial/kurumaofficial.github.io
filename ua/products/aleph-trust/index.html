@@ -82,13 +82,46 @@
     <div class="hero-store-card">
       <div class="hero-icon-wrap" id="heroIconWrap">
         <div class="hero-app-icon">
-          <svg viewBox="0 0 300 300" fill="none" stroke="#dc1e46">
-            <!-- Outer shield -->
-            <path d="M150 44 L238 78 L238 152 Q238 218 150 260 Q62 218 62 152 L62 78 Z" stroke-width="14" stroke-linejoin="round" fill="#32000a"/>
-            <!-- Inner shield -->
-            <path d="M150 64 L211 88 L211 140 Q211 186 150 216 Q89 186 89 140 L89 88 Z" stroke-width="6" stroke-linejoin="round" fill="#1e000a" opacity="0.9"/>
-            <!-- Central division line -->
-            <line x1="150" y1="44" x2="150" y2="260" stroke-width="6" stroke="#dc1446" opacity="0.7"/>
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#25060e"/>
+                <stop offset="100%" stop-color="#3a0713"/>
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="400" height="400" fill="url(#bg)"/>
+
+            <!-- soft glow duplicate (outer) -->
+            <path d="M 198,30 L 69,82 L 64,89 L 64,218
+                     C 74.7,289.2 140,338 200,370
+                     C 260,338 325.3,289.2 336,218
+                     L 336,89 L 331,82 L 202,30 Z"
+                  fill="none" stroke="#e51e4a" stroke-width="12" opacity="0.45" filter="url(#glow)"/>
+
+            <!-- inner shield: fill + second (muted) border -->
+            <path d="M 198.2,44.5 L 80.1,92.1 L 75.6,98.5 L 75.6,216.6
+                     C 85.4,281.7 145.1,326.4 200,355.6
+                     C 254.9,326.4 314.6,281.7 324.4,216.6
+                     L 324.4,98.5 L 319.9,92.1 L 201.8,44.5 Z"
+                  fill="#480918" stroke="#6e1226" stroke-width="14"/>
+
+            <!-- crisp outer stroke -->
+            <path d="M 198,30 L 69,82 L 64,89 L 64,218
+                     C 74.7,289.2 140,338 200,370
+                     C 260,338 325.3,289.2 336,218
+                     L 336,89 L 331,82 L 202,30 Z"
+                  fill="none" stroke="#e51e4a" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+
+            <!-- vertical divider -->
+            <line x1="200" y1="42" x2="200" y2="358" stroke="#80122c" stroke-width="6"/>
           </svg>
         </div>
       </div>
