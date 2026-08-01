@@ -473,64 +473,52 @@ button.docs-nav-link {
   color: var(--text);
 }
 
-/* ── §4  Documentation Hub ─────────────────────────────────── */
-
-/* ── §4  Documentation Hub Hero with Right-aligned Search ───────────────── */
+/* ── §4  Documentation Hub Hero ─────────────────────────────────────────── */
 
 .docs-hub-hero {
   max-width: 1320px;
-  margin: 32px auto 56px;
+  margin: 48px auto 64px;
+  text-align: center;
   padding: 0 var(--page-gutter, 64px);
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 32px;
-  box-sizing: border-box;
-}
-
-.docs-hub-hero-left {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 720px;
-  text-align: left;
+  position: relative;
 }
 
 .docs-hub-hero h1 {
   font-family: var(--font-display, 'Unbounded', sans-serif);
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 40px;
+  font-weight: 800;
   color: var(--text);
-  margin: 0;
-  line-height: 1.2;
+  margin-bottom: 16px;
   letter-spacing: -0.02em;
 }
 
 .docs-hub-hero p {
   font-family: var(--font-body, 'Cormorant Garamond', serif);
-  font-size: 18px;
-  line-height: 1.6;
+  font-size: 20px;
+  line-height: 1.65;
   color: var(--text-dim);
-  margin: 0;
+  margin-bottom: 32px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .docs-search-wrap {
-  width: 360px;
-  max-width: 100%;
+  position: absolute;
+  top: 0;
+  right: var(--page-gutter, 64px);
+  width: 320px;
+  max-width: calc(100% - 32px);
   margin: 0;
-  flex-shrink: 0;
-  position: relative;
+  z-index: 10;
 }
 
-@media (max-width: 860px) {
-  .docs-hub-hero {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 24px;
-    margin-bottom: 40px;
-  }
+@media (max-width: 960px) {
   .docs-search-wrap {
+    position: static;
+    margin: 24px auto 0;
     width: 100%;
+    max-width: 480px;
   }
 }
 
