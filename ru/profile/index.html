@@ -940,6 +940,74 @@
 
         </div>
 
+          <!-- Intermittent Re-Authentication Block -->
+          <div class="security-card reauth-card" id="reauthBlock">
+            <div class="reauth-head">
+              <div>
+                <span class="reauth-badge">
+                  <svg class="icon icon-stroke"><use href="#i-shield"/></svg>
+                  Security Module
+                </span>
+                <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">
+                  Периодическая аутентификация (Intermittent Re-Auth)
+                </h3>
+                <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                  Защита от физического захвата устройства и RAT-троянов. Запрашивает мастер-код через заданный интервал или при открытии защищенных вкладок.
+                </p>
+              </div>
+              <div class="reauth-switch-wrap" id="reauthToggleWrap" title="Toggle Module">
+                <div class="reauth-toggle" id="reauthToggleBtn"></div>
+                <span style="font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--text-secondary);" id="reauthToggleState">ВЫКЛ</span>
+              </div>
+            </div>
+
+            <div class="reauth-settings-grid" id="reauthSettingsGrid" style="opacity: 0.4; pointer-events: none;">
+              <div class="reauth-field">
+                <label class="reauth-label">Интервал повторного запроса</label>
+                <select class="reauth-select" id="reauthIntervalSelect">
+                  <option value="15">Каждые 15 минут</option>
+                  <option value="30" selected>Каждые 30 минут</option>
+                  <option value="60">Каждый 1 час</option>
+                  <option value="random">Случайный интервал (15-45 мин)</option>
+                </select>
+              </div>
+
+              <div class="reauth-field">
+                <label class="reauth-label">Запрос при переключении вкладок</label>
+                <div class="reauth-checkboxes">
+                  <label class="reauth-checkbox-item">
+                    <input type="checkbox" id="reauthTriggerTrust" checked>
+                    <span>Панель управления Aleph Trust</span>
+                  </label>
+                  <label class="reauth-checkbox-item">
+                    <input type="checkbox" id="reauthTriggerSecurity" checked>
+                    <span>Раздел "Дополнительно" / 2FA</span>
+                  </label>
+                  <label class="reauth-checkbox-item">
+                    <input type="checkbox" id="reauthTriggerStore">
+                    <span>Магазин продуктов</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="reauth-field">
+                <label class="reauth-label">Контрольный мастер-код (PIN)</label>
+                <input class="reauth-input" type="password" id="reauthPasscodeInput" placeholder="• • • • • •" maxlength="12" value="123456">
+                <span style="font-size: 11px; color: var(--text-tertiary);">Используется для снятия внезапной блокировки</span>
+              </div>
+            </div>
+
+            <div class="reauth-footer-actions">
+              <button class="save-btn" type="button" id="reauthSaveBtn" style="width: auto; padding: 0 24px; height: 42px; margin: 0;" disabled>
+                Сохранить изменения
+              </button>
+              <button class="license-btn" type="button" id="reauthTestPromptBtn" style="height: 42px; padding: 0 20px; font-size: 12px;">
+                ⚡ Протестировать модальный запрос
+              </button>
+            </div>
+          </div>
+
+
       </section>
 
     </div>
@@ -1462,6 +1530,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
 </script>
 
+
+
+<!-- RE-AUTH PROMPT OVERLAY MODAL -->
+<div class="auth-modal" id="reauthPromptModal" aria-hidden="true">
+  <div class="auth-modal-backdrop" id="reauthPromptBackdrop"></div>
+  <div class="auth-modal-box" role="dialog" aria-modal="true" style="max-width: 440px;">
+    <div class="auth-modal-head">
+      <span class="auth-modal-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><rect x="3" y="3" width="18" height="18" fill="none" stroke-width="2.5"/></svg>
+        <span>WetID Intermittent Shield</span>
+      </span>
+      <button class="auth-modal-close" id="reauthPromptCloseBtn" type="button" aria-label="Close">✕</button>
+    </div>
+    <h2 class="auth-modal-title">Повторная верификация сессии</h2>
+    <div class="auth-modal-body">
+      Сработало правило проверки присутствия <strong>Intermittent Re-Authentication</strong>. Для продолжения работы введите ваш 6-значный мастер-код.
+    </div>
+    <form class="auth-form" id="reauthPromptForm" onsubmit="event.preventDefault();">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="reauthModalCodeInput">Мастер-код доступа</label>
+        <input class="form-input" type="password" id="reauthModalCodeInput" placeholder="000 000" maxlength="12" style="text-align: center; letter-spacing: 0.2em; font-family: var(--font-mono);" required autocomplete="off">
+      </div>
+      <div id="reauthModalErrorMsg" style="color: var(--accent-light); font-size: 12px; font-family: var(--font-mono); display: none; margin-top: 8px;">Неверный мастер-код доступа</div>
+      <div class="auth-modal-footer" style="padding-top: 16px;">
+        <button class="auth-modal-btn" type="submit" id="reauthPromptSubmitBtn">Подтвердить доступ</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- RE-AUTH 2FA CONFIRMATION MODAL -->
+<div class="auth-modal" id="reauth2faModal" aria-hidden="true">
+  <div class="auth-modal-backdrop" id="reauth2faBackdrop"></div>
+  <div class="auth-modal-box" role="dialog" aria-modal="true" style="max-width: 440px;">
+    <div class="auth-modal-head">
+      <span class="auth-modal-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"><rect x="3" y="3" width="18" height="18" fill="none" stroke-width="2.5"/></svg>
+        <span>2FA Security Action</span>
+      </span>
+      <button class="auth-modal-close" id="reauth2faCloseBtn" type="button" aria-label="Close">✕</button>
+    </div>
+    <h2 class="auth-modal-title">Подтверждение 2FA</h2>
+    <div class="auth-modal-body">
+      Для изменения параметров Intermittent Re-Auth введите 6-значный код из вашего приложения двухфакторной аутентификации.
+    </div>
+    <form class="auth-form" id="reauth2faForm" onsubmit="event.preventDefault();">
+      <div class="form-group" style="margin-bottom: 0;">
+        <label class="form-label" for="reauth2faInput">Код 2FA Authenticator</label>
+        <input class="form-input" type="text" id="reauth2faInput" placeholder="000 000" maxlength="7" style="text-align: center; letter-spacing: 0.2em; font-family: var(--font-mono);" required autocomplete="off">
+      </div>
+      <div class="auth-modal-footer" style="padding-top: 16px;">
+        <button class="auth-modal-btn" type="submit" id="reauth2faSubmitBtn">Подтвердить операцию</button>
+      </div>
+    </form>
+  </div>
+</div>
 </body>
 
 </html>

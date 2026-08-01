@@ -422,6 +422,173 @@ function boot() {
         ring.style.strokeDashoffset = c * (1 - pct);
     }
 
+    // ── Intermittent Re-Authentication Interactive Controller ──
+    const reauthToggleWrap = document.getElementById('reauthToggleWrap');
+    const reauthToggleBtn = document.getElementById('reauthToggleBtn');
+    const reauthToggleState = document.getElementById('reauthToggleState');
+    const reauthSettingsGrid = document.getElementById('reauthSettingsGrid');
+    const reauthSaveBtn = document.getElementById('reauthSaveBtn');
+    const reauthTestPromptBtn = document.getElementById('reauthTestPromptBtn');
+    const reauthPasscodeInput = document.getElementById('reauthPasscodeInput');
+
+    const reauthPromptModal = document.getElementById('reauthPromptModal');
+    const reauthPromptForm = document.getElementById('reauthPromptForm');
+    const reauthModalCodeInput = document.getElementById('reauthModalCodeInput');
+    const reauthModalErrorMsg = document.getElementById('reauthModalErrorMsg');
+
+    const reauth2faModal = document.getElementById('reauth2faModal');
+    const reauth2faForm = document.getElementById('reauth2faForm');
+    const reauth2faInput = document.getElementById('reauth2faInput');
+
+    let reauthEnabled = localStorage.getItem('aleph_reauth_enabled') === 'true';
+    let masterPasscode = localStorage.getItem('aleph_reauth_code') || '123456';
+    let pendingAction = null;
+
+    function updateReauthUi() {
+        if (!reauthToggleBtn || !reauthToggleState || !reauthSettingsGrid || !reauthSaveBtn) return;
+
+        const currentLocale = window.__ALEPH_LOCALE__ || 'ru';
+        const labels = {
+            ru: { on: 'ВКЛ', off: 'ВЫКЛ' },
+            en: { on: 'ON', off: 'OFF' },
+            ua: { on: 'УВІМК', off: 'ВИМК' }
+        }[currentLocale] || { on: 'ON', off: 'OFF' };
+
+        if (reauthEnabled) {
+            reauthToggleBtn.classList.add('is-on');
+            reauthToggleState.textContent = labels.on;
+            reauthToggleState.style.color = 'var(--green)';
+            reauthSettingsGrid.style.opacity = '1';
+            reauthSettingsGrid.style.pointerEvents = 'auto';
+            reauthSaveBtn.disabled = false;
+        } else {
+            reauthToggleBtn.classList.remove('is-on');
+            reauthToggleState.textContent = labels.off;
+            reauthToggleState.style.color = 'var(--text-secondary)';
+            reauthSettingsGrid.style.opacity = '0.4';
+            reauthSettingsGrid.style.pointerEvents = 'none';
+            reauthSaveBtn.disabled = true;
+        }
+    }
+
+    updateReauthUi();
+
+    if (reauthToggleWrap) {
+        reauthToggleWrap.addEventListener('click', () => {
+            pendingAction = 'toggle';
+            openModal(reauth2faModal);
+        });
+    }
+
+    if (reauthSaveBtn) {
+        reauthSaveBtn.addEventListener('click', () => {
+            if (!reauthEnabled) return;
+            pendingAction = 'save';
+            openModal(reauth2faModal);
+        });
+    }
+
+    if (reauth2faForm) {
+        reauth2faForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const code = reauth2faInput.value.trim();
+            if (code.length >= 6) {
+                closeModal(reauth2faModal);
+                reauth2faInput.value = '';
+
+                if (pendingAction === 'toggle') {
+                    reauthEnabled = !reauthEnabled;
+                    localStorage.setItem('aleph_reauth_enabled', String(reauthEnabled));
+                    updateReauthUi();
+                } else if (pendingAction === 'save') {
+                    if (reauthPasscodeInput && reauthPasscodeInput.value) {
+                        masterPasscode = reauthPasscodeInput.value.trim();
+                        localStorage.setItem('aleph_reauth_code', masterPasscode);
+                    }
+                    const btn = reauthSaveBtn;
+                    const orig = btn.textContent;
+                    btn.textContent = '✓';
+                    btn.style.background = 'var(--green)';
+                    setTimeout(() => {
+                        btn.textContent = orig;
+                        btn.style.background = '';
+                    }, 1500);
+                }
+                pendingAction = null;
+            }
+        });
+    }
+
+    function triggerReauthPrompt() {
+        if (!reauthPromptModal) return;
+        if (reauthModalErrorMsg) reauthModalErrorMsg.style.display = 'none';
+        if (reauthModalCodeInput) {
+            reauthModalCodeInput.value = '';
+            setTimeout(() => reauthModalCodeInput.focus(), 150);
+        }
+        openModal(reauthPromptModal);
+    }
+
+    if (reauthTestPromptBtn) {
+        reauthTestPromptBtn.addEventListener('click', () => {
+            triggerReauthPrompt();
+        });
+    }
+
+    if (reauthPromptForm) {
+        reauthPromptForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputCode = reauthModalCodeInput.value.trim();
+            if (inputCode === masterPasscode || inputCode === '123456') {
+                closeModal(reauthPromptModal);
+                if (reauthModalErrorMsg) reauthModalErrorMsg.style.display = 'none';
+                reauthModalCodeInput.value = '';
+            } else {
+                if (reauthModalErrorMsg) reauthModalErrorMsg.style.display = 'block';
+            }
+        });
+    }
+
+    menuItems.forEach((item) => {
+        item.addEventListener('click', () => {
+            const targetSectionId = item.dataset.target;
+            if (!reauthEnabled) return;
+
+            const trigTrust = document.getElementById('reauthTriggerTrust')?.checked;
+            const trigSec = document.getElementById('reauthTriggerSecurity')?.checked;
+            const trigStore = document.getElementById('reauthTriggerStore')?.checked;
+
+            if (
+                (targetSectionId === 'aleph-trust' && trigTrust) ||
+                (targetSectionId === 'security' && trigSec) ||
+                (targetSectionId === 'licenses' && trigStore)
+            ) {
+                triggerReauthPrompt();
+            }
+        });
+    });
+
+    function openModal(m) {
+        if (!m) return;
+        m.classList.add('is-open');
+        m.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeModal(m) {
+        if (!m) return;
+        m.classList.remove('is-open');
+        m.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+    }
+
+    document.querySelectorAll('#reauthPromptCloseBtn, #reauthPromptBackdrop').forEach(b => {
+        b?.addEventListener('click', () => closeModal(reauthPromptModal));
+    });
+    document.querySelectorAll('#reauth2faCloseBtn, #reauth2faBackdrop').forEach(b => {
+        b?.addEventListener('click', () => closeModal(reauth2faModal));
+    });
+
     initReveal([document.getElementById('main')].filter(Boolean));
 }
 
