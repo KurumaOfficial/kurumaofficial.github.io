@@ -46,15 +46,15 @@
 <div class="docs-page">
     <div class="docs-hub-hero">
         <h1 class="reveal">Документація Aleph Studio</h1>
-        <p class="reveal">Детальна технічна документація, інструкції з налаштування, довідники REST API та юридична інформація.</p>
+        <p class="reveal">Офіційні угоди, юридичні правила та інструкції з усунення неполадок у продуктах Aleph Studio.</p>
         <div class="docs-search-wrap reveal">
             <input type="text" placeholder="Пошук по документації..." class="docs-search-input">
             <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
         </div>
     </div>
     
-    <div class="docs-hub-grid reveal">
-        <!-- Card 1: Agreements -->
+    <div class="docs-hub-grid reveal" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px;">
+        <!-- Card 1: Agreements & Policies -->
         <div class="docs-hub-card" onclick="if(!event.target.closest('a')) location.href='privacy/'" style="cursor: pointer;">
             <div class="card-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -69,33 +69,18 @@
             </ul>
         </div>
         
-        <!-- Card 2: Troubleshooting -->
+        <!-- Card 2: Troubleshooting in Aleph Studio Products -->
         <div class="docs-hub-card" onclick="if(!event.target.closest('a')) location.href='launcher/'" style="cursor: pointer;">
             <div class="card-icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
             </div>
-            <h2>Усунення неполадок</h2>
-            <p>Інструкції з усунення неполадок в AMCLauncher, виправлення помилок мережі та перевірки цілісності модів.</p>
+            <h2>Усунення неполадок у продуктах</h2>
+            <p>Інструкції з усунення неполадок у продуктах Aleph Studio</p>
             <ul class="hub-links-list">
                 <li><a href="launcher/">AMCLauncher</a></li>
-                <li><a href="integrity/">Цілісність модів</a></li>
-                <li><a href="network/">Мережеве підключення</a></li>
-                <li><a href="faq/">Часті питання</a></li>
-            </ul>
-        </div>
-        
-        <!-- Card 3: API & Integrations -->
-        <div class="docs-hub-card" onclick="if(!event.target.closest('a')) location.href='aleph-trust-api/'" style="cursor: pointer;">
-            <div class="card-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            </div>
-            <h2>API та інтеграції</h2>
-            <p>Посібник для розробників з інтеграції автентифікації WetID, вебхуків Discord та API Aleph Trust.</p>
-            <ul class="hub-links-list">
-                <li><a href="aleph-trust-api/">API Aleph Trust</a></li>
-                <li><a href="wetid-auth/">Автентифікація WetID</a></li>
-                <li><a href="webhooks/">Налаштування Webhooks</a></li>
-                <li><a href="sdk/">Приклади інтеграції (SDK)</a></li>
+                <li><a href="strange-visuals/">Strange Visuals</a></li>
+                <li><a href="client/">AMC Client</a></li>
+                <li><a href="aleph-trust/">Aleph Trust</a></li>
             </ul>
         </div>
     </div>

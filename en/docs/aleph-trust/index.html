@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>WetID Authentication — Aleph Studio Documentation</title>
+<title>Aleph Trust Troubleshooting — Aleph Studio Documentation</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'en';</script>
@@ -53,73 +53,18 @@
 <div class="docs-page">
 <div class="docs-container">
     <div class="docs-nav">
-        <div class="docs-nav-title">API & Integrations</div>
-        <a class="docs-nav-link" href="../aleph-trust-api/">Aleph Trust API</a>
-        <a class="docs-nav-link is-active" href="../wetid-auth/">WetID Authentication</a>
-        <a class="docs-nav-link" href="../webhooks/">Webhooks Setup</a>
-        <a class="docs-nav-link" href="../sdk/">Integration SDK</a>
+        <div class="docs-nav-title">Product Troubleshooting</div>
+        <a class="docs-nav-link" href="../launcher/">AMCLauncher</a>
+        <a class="docs-nav-link" href="../strange-visuals/">Strange Visuals</a>
+        <a class="docs-nav-link" href="../client/">AMC Client</a>
+        <a class="docs-nav-link is-active" href="../aleph-trust/">Aleph Trust</a>
     </div>
 
     <div class="docs-content">
     <section>
-      <h1>WetID Authentication (Unified SSO & OAuth 2.0)</h1>
+      <h1>Aleph Trust Troubleshooting</h1>
       <div class="docs-update-date">Last updated: August 1, 2026</div>
-      <div class="docs-alert docs-alert-warning" style="background: rgba(192, 122, 48, 0.1); border: 1px solid rgba(192, 122, 48, 0.3); padding: 16px; margin: 20px 0; font-size: 14px; line-height: 1.6;">
-        <strong>⚠️ Notice! WetID Limited Access Mode:</strong><br>
-        WetID authorization system servers are currently operating under limited access mode. Full registration and login capabilities will open in the upcoming release.
-      </div>
-      <p>The <strong>WetID</strong> unified single sign-on system connects user accounts, product licenses (Strange Visuals, Aleph Trust), and hardware trust credentials (Trust Level / Passkeys).</p>
-    </section>
-
-    <section>
-      <h2>1. OAuth 2.0 Protocol Architecture</h2>
-      <p>WetID operates using OAuth 2.0 (RFC 6749) and OpenID Connect standards. Game clients, web services, and Minecraft servers query the single authorization endpoint for player UUIDs and session tokens.</p>
-      <ul>
-        <li><strong>Authorization Endpoint:</strong> <code>https://wetid.aleph.icu/oauth/authorize</code></li>
-        <li><strong>Token Endpoint:</strong> <code>https://wetid.aleph.icu/oauth/token</code></li>
-        <li><strong>Userinfo Endpoint:</strong> <code>https://wetid.aleph.icu/api/v1/user/me</code></li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>2. Authorization Request Parameters</h2>
-      <p>Redirect the user to the login form using the following HTTP GET request:</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">GET /oauth/authorize?
-  response_type=code&amp;
-  client_id=YOUR_CLIENT_ID&amp;
-  redirect_uri=https%3A%2F%2Fyourserver.com%2Fcallback&amp;
-  scope=openid+profile+email+trust_level&amp;
-  state=xyz_random_nonce HTTP/1.1
-Host: wetid.aleph.icu</pre>
-    </section>
-
-    <section>
-      <h2>3. Code Exchange for Access Token (Backend)</h2>
-      <p>After user confirmation, exchange the authorization <code>code</code> via HTTP POST from your backend server:</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">POST /oauth/token HTTP/1.1
-Host: wetid.aleph.icu
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=authorization_code
-&amp;client_id=YOUR_CLIENT_ID
-&amp;client_secret=YOUR_CLIENT_SECRET
-&amp;code=AUTH_CODE_RECEIVED
-&amp;redirect_uri=https%3A%2F%2Fyourserver.com%2Fcallback</pre>
-
-      <p>Successful Response (200 OK):</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">{{
-  "access_token": "wt_at_99218204812a3b4c",
-  "token_type": "Bearer",
-  "expires_in": 86400,
-  "refresh_token": "wt_rt_77182930411a2b",
-  "scope": "openid profile email trust_level",
-  "trust_level": "VERIFIED_DOC"
-}}</pre>
-    </section>
-
-    <section>
-      <h2>4. Anti-Hijacking Protection (Intermittent Re-Authentication)</h2>
-      <p>WetID includes an <strong>Intermittent Re-Authentication</strong> module that protects accounts against physical device access and RAT trojans. When requesting sensitive resources, the server may issue <code>403 Forbidden</code> with header <code>X-WetID-ReAuth-Required: true</code> requiring the user's 6-digit master passcode.</p>
+      <p>Server administrator guide for resolving Aleph Trust plugin licensing errors and session drops.</p>
     </section>
 </div>
 </div>

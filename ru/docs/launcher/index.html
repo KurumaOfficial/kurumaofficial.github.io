@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AMCLauncher — Установка и Устранение Ошибок — Документация Aleph Studio</title>
+<title>AMCLauncher — Устранение неполадок — Документация Aleph Studio</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
@@ -53,42 +53,28 @@
 <div class="docs-page">
 <div class="docs-container">
     <div class="docs-nav">
-        <div class="docs-nav-title">Решение проблем</div>
+        <div class="docs-nav-title">Решение проблем в продуктах</div>
         <a class="docs-nav-link is-active" href="../launcher/">AMCLauncher</a>
-        <a class="docs-nav-link" href="../integrity/">Целостность модов</a>
-        <a class="docs-nav-link" href="../network/">Сетевое подключение</a>
-        <a class="docs-nav-link" href="../faq/">Часто задаваемые вопросы</a>
+        <a class="docs-nav-link" href="../strange-visuals/">Strange Visuals</a>
+        <a class="docs-nav-link" href="../client/">AMC Client</a>
+        <a class="docs-nav-link" href="../aleph-trust/">Aleph Trust</a>
     </div>
 
     <div class="docs-content">
     <section>
-      <h1>Решение проблем с AMCLauncher</h1>
+      <h1>Устранение неполадок в AMCLauncher</h1>
       <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
-      <p>Официальный лаунчер <strong>AMCLauncher</strong> обеспечивает безопасный вход на сервера с поддержкой защиты Aleph Trust и автоматической проверкой целостности клиента.</p>
+      <p>Руководство по решению технических проблем и исправлению ошибок запуска в официальном лаунчере AMCLauncher.</p>
     </section>
 
     <section>
-      <h2>1. Системные требования и Java Runtime</h2>
-      <ul>
-        <li><strong>Операционная система:</strong> Windows 10/11 (64-bit), Linux (x86_64), macOS 12+ (Apple Silicon / Intel).</li>
-        <li><strong>Версия Java:</strong> Java 17 или Java 21 (Рекомендуется дистрибутив Eclipse Temurin или GraalVM).</li>
-        <li><strong>Оперативная память (ОЗУ):</strong> Минимум 4 ГБ доступной оперативной памяти для сборки с модами.</li>
-      </ul>
+      <h2>1. Выбор среды выполнения Java</h2>
+      <p>Для стабильной работы с модами рекомендуются дистрибутивы <strong>Java 17 / Java 21 (Eclipse Temurin или GraalVM)</strong>.</p>
     </section>
 
     <section>
-      <h2>2. Рекомендуемые аргументы JVM</h2>
-      <p>Для предотвращения подвисаний (Garbage Collection freezes) используйте следующий набор флагов в настройках лаунчера:</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">-Xms4G -Xmx8G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:G1ReservePercent=15 -XX:MaxGCPauseMillis=50</pre>
-    </section>
-
-    <section>
-      <h2>3. Устранение ошибок запуска</h2>
-      <p><strong>Ошибка "Exit Code: 1" / Crash при старте:</strong></p>
-      <p>Очистите папку <code>.amclauncher/runtime</code> и убедитесь, что драйвер видеокарты обновлен до последней версии.</p>
-
-      <p><strong>Ошибка "ERR_ANTI_CHEAT_DRIVER":</strong></p>
-      <p>Возникает при конфликте с античит-системами сторонних игр (Vanguard, Easy Anti-Cheat). Перезагрузите ПК и добавьте `amclauncher.exe` в исключения Брандмауэра Windows.</p>
+      <h2>2. Ошибка "Exit Code: 1" при старте</h2>
+      <p>Очистите каталог <code>.amclauncher/runtime</code> и убедитесь, что выделено достаточное количество ОЗУ (от 4 ГБ до 8 ГБ).</p>
     </section>
 </div>
 </div>
