@@ -521,12 +521,26 @@ body {
   transform: translateY(-1px);
 }
 
-/* TFA and Security layout overrides */
+/* TFA, Key Activation and Intermittent Re-Auth side-by-side layout */
 .security-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.security-col-left {
+  display: flex;
+  flex-direction: column;
   gap: 24px;
 }
+
+.security-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .security-card {
   border: 1px solid var(--panel-border);
   padding: 24px;
