@@ -15,7 +15,7 @@
   --bg2:            #1a1917;
   --text:           #e4e2dc;
   --text-dim:       #8a8780;
-  --text-muted:     #4a4845;
+  --text-muted:     var(--color-text-muted, #7c6b64);
   --accent:         #8b1a2a;
   --accent-dim:     rgba(139, 26, 42, 0.12);
 
