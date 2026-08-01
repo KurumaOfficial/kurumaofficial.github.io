@@ -14,7 +14,7 @@
   --bg2:          #0f0b0b;
   --text:         #e8dada;
   --text-dim:     #b09c97;
-  --text-muted:   #5a4a44;
+  --text-muted:   var(--color-text-muted, #7c6b64);
   --accent:       #8b1a2a;
   --accent-light: #b52239;
   --accent-dim:   rgba(139,26,42,0.12);

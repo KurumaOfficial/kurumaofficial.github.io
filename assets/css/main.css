@@ -21,7 +21,7 @@
     /* Text */
     --color-text-primary:   #e8dada;
     --color-text-heading:   #d4c4bb;
-    --color-text-muted:     #5a4a44;
+    --color-text-muted:     #7c6b64;
 
     /* Semantic */
     --color-success:        #50b050;
@@ -77,6 +77,12 @@
     --z-overlay:  300;
     --z-toast:    400;
 }
+
+/* ============================================================
+ * [ARCHIVED / DEPRECATED] Light Theme Specification
+ * NOTE: The UI toggle button has been removed from all pages/routes.
+ * The CSS variables and selectors below are preserved for potential future reuse.
+ * ============================================================ */
 
 [data-theme="light"] {
     color-scheme: light;
