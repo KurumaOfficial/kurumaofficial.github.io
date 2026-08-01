@@ -419,6 +419,43 @@ body::after {
     color: var(--color-ruby-light);
 }
 
+/* Styled red CTA button for Sign In / Cabinet in Header */
+.nav-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 18px;
+    background: var(--color-ruby);
+    color: #ffffff !important;
+    font-family: var(--font-display, 'Unbounded', sans-serif);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--color-ruby);
+    border-radius: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color var(--duration-base) var(--ease-default),
+        border-color var(--duration-base) var(--ease-default),
+        transform var(--duration-fast) var(--ease-default),
+        box-shadow var(--duration-base) var(--ease-default);
+}
+
+.nav-auth-btn:hover {
+    background: var(--color-ruby-light);
+    border-color: var(--color-ruby-light);
+    color: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(139, 26, 42, 0.35);
+}
+
+.nav-auth-btn:active {
+    transform: scale(0.97);
+}
+
 .theme-btn {
     width: 36px;
     height: 36px;
