@@ -138,9 +138,9 @@
 
 .docs-container {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 260px 1fr;
   gap: 48px;
-  max-width: 1100px;
+  max-width: 1320px;
   margin: 0 auto;
   padding: 48px var(--page-gutter, 64px) 140px;
 }
@@ -306,19 +306,21 @@ button.docs-nav-link {
 }
 
 
-/* ── §3  Document content ──────────────────────────────────── */
+/* ── §3  Document content (A4 Paper Proportions & No Hover Line) ──────────────────────────────────── */
 
 .docs-content {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  background: rgba(15, 11, 11, 0.6);
+  background: rgba(15, 11, 11, 0.7);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border);
-  padding: 48px;
+  border: 1px solid var(--border-hi, rgba(139,26,42,0.20));
+  padding: 56px 64px;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .docs-content::before {
@@ -344,13 +346,8 @@ button.docs-nav-link {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding-left: 16px;
-  border-left: 2px solid transparent;
-  transition: border-color 0.3s ease;
-}
-
-.docs-content section:hover {
-  border-left-color: var(--accent-light);
+  padding-left: 0;
+  border-left: none;
 }
 
 .docs-content h1 {
@@ -539,9 +536,9 @@ button.docs-nav-link {
 
 .docs-hub-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 32px;
-  max-width: 1100px;
+  max-width: 1320px;
   margin: 0 auto 120px;
   padding: 0 var(--page-gutter, 64px);
 }
