@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AMCLauncher — Aleph Studio</title>
+<title>AMCLauncher — Setup & Troubleshooting — Aleph Studio Documentation</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'en';</script>
@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=3">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Skip to main content</a>
@@ -26,9 +27,9 @@
         <span class="logo-text">Aleph Studio</span>
     </a>
     <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../products/">Products</a>
-        <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Support</a>
-          <a id="navLinkDocs" class="nav__link" href="../../docs/">Docs</a>
+        <a id="navLinkProducts" class="nav__link" href="../../../en/products/">Products</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../en/donate/" data-donate-link>Support</a>
+        <a id="navLinkDocs" class="nav__link" href="../../../en/docs/">Documentation</a>
     </div>
     <div class="nav-right">
         <div id="localeSwitcher" class="locale-switcher">
@@ -39,44 +40,45 @@
             </button>
             <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div>
         </div>
-        <a id="navAuthBtn" class="nav-auth-btn" href="../../auth/login/">Sign In</a>
-        </div>
+        <a id="navAuthBtn" class="nav-auth-btn" href="../../../en/auth/login/">Sign In</a>
+    </div>
 </nav>
 <main id="main">
 <div class="docs-top">
-    <a href="../" class="hero-store-back" aria-label="Back to documentation">
-      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="hero-store-back-label">BACK TO DOCUMENTATION</span>
-    </a>
+  <a href="../" class="hero-store-back" aria-label="BACK TO DOCUMENTATION">
+    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="hero-store-back-label">BACK TO DOCUMENTATION</span>
+  </a>
 </div>
 <div class="docs-page">
 <div class="docs-container">
-        <div class="docs-nav">
+    <div class="docs-nav">
         <div class="docs-nav-title">Troubleshooting</div>
         <a class="docs-nav-link is-active" href="../launcher/">AMCLauncher</a>
-        <a class="docs-nav-link" href="../integrity/">Mod Integrity</a>
-        <a class="docs-nav-link" href="../network/">Network Connection</a>
-        <a class="docs-nav-link" href="../faq/">Frequently Asked Questions</a>
+        <a class="docs-nav-link" href="../integrity/">Modset Integrity</a>
+        <a class="docs-nav-link" href="../network/">Network & Proxy</a>
+        <a class="docs-nav-link" href="../faq/">FAQ</a>
     </div>
+
     <div class="docs-content">
     <section>
-      <h1>AMCLauncher Troubleshooting</h1>
-      <div class="docs-update-date">Last Updated: July 5, 2026</div>
-      <p>This section describes fixes for common issues encountered when running the official AMCLauncher.</p>
+      <h1>AMCLauncher Setup & Troubleshooting</h1>
+      <div class="docs-update-date">Last updated: August 1, 2026</div>
+      <p>The official <strong>AMCLauncher</strong> enables secure admission to servers protected by Aleph Trust with automated client integrity checks.</p>
     </section>
+
     <section>
-      <h2>1. Launcher won't start</h2>
-      <p>If nothing happens after launching, try the following steps:</p>
+      <h2>1. System Requirements & Java Runtime</h2>
       <ul>
-        <li>Ensure you have Java 17 or higher installed (Eclipse Temurin is highly recommended).</li>
-        <li>Check for pending Windows/Linux/macOS system updates.</li>
-        <li>Add the launcher executable to your antivirus and Windows Firewall exclusion list.</li>
+        <li><strong>OS:</strong> Windows 10/11 (64-bit), Linux (x86_64), macOS 12+ (Apple Silicon / Intel).</li>
+        <li><strong>Java Version:</strong> Java 17 or Java 21 (Eclipse Temurin or GraalVM recommended).</li>
+        <li><strong>RAM:</strong> At least 4 GB allocated RAM for modded instances.</li>
       </ul>
     </section>
+
     <section>
-      <h2>2. Low Performance (FPS)</h2>
-      <p>To resolve lag and freezing:</p>
-      <p>Open the launcher settings and allocate more RAM to the game. For playing with mods, we recommend allocating <strong>at least 4 GB to 8 GB of RAM</strong>. Also, check that your GPU drivers are up to date.</p>
+      <h2>2. Recommended JVM Arguments</h2>
+      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">-Xms4G -Xmx8G -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:G1ReservePercent=15 -XX:MaxGCPauseMillis=50</pre>
     </section>
 </div>
 </div>
@@ -104,11 +106,7 @@
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. All rights reserved.</span>
     </div>
-    <span id="footerDesc" hidden></span>
-    <span id="footerNavHeading" hidden></span>
-    <span id="footerWetteaHeading" hidden></span>
 </footer>
-<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
 </body>
 </html>

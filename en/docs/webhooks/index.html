@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Webhooks Setup — Aleph Studio</title>
+<title>Webhooks Setup — Aleph Studio Documentation</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'en';</script>
@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=3">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Skip to main content</a>
@@ -26,9 +27,9 @@
         <span class="logo-text">Aleph Studio</span>
     </a>
     <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../products/">Products</a>
-        <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Support</a>
-          <a id="navLinkDocs" class="nav__link" href="../../docs/">Docs</a>
+        <a id="navLinkProducts" class="nav__link" href="../../../en/products/">Products</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../en/donate/" data-donate-link>Support</a>
+        <a id="navLinkDocs" class="nav__link" href="../../../en/docs/">Documentation</a>
     </div>
     <div class="nav-right">
         <div id="localeSwitcher" class="locale-switcher">
@@ -39,39 +40,31 @@
             </button>
             <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div>
         </div>
-        <a id="navAuthBtn" class="nav-auth-btn" href="../../auth/login/">Sign In</a>
-        </div>
+        <a id="navAuthBtn" class="nav-auth-btn" href="../../../en/auth/login/">Sign In</a>
+    </div>
 </nav>
 <main id="main">
 <div class="docs-top">
-    <a href="../" class="hero-store-back" aria-label="Back to documentation">
-      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="hero-store-back-label">BACK TO DOCUMENTATION</span>
-    </a>
+  <a href="../" class="hero-store-back" aria-label="BACK TO DOCUMENTATION">
+    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="hero-store-back-label">BACK TO DOCUMENTATION</span>
+  </a>
 </div>
 <div class="docs-page">
 <div class="docs-container">
-        <div class="docs-nav">
+    <div class="docs-nav">
         <div class="docs-nav-title">API & Integrations</div>
         <a class="docs-nav-link" href="../aleph-trust-api/">Aleph Trust API</a>
-        <a class="docs-nav-link" href="../wetid-auth/">WetID Auth</a>
+        <a class="docs-nav-link" href="../wetid-auth/">WetID Authentication</a>
         <a class="docs-nav-link is-active" href="../webhooks/">Webhooks Setup</a>
-        <a class="docs-nav-link" href="../sdk/">Integration Examples</a>
+        <a class="docs-nav-link" href="../sdk/">Integration SDK</a>
     </div>
+
     <div class="docs-content">
     <section>
-      <h1>Webhooks Configuration</h1>
-      <div class="docs-update-date">Last Updated: July 5, 2026</div>
-      <p>Guide to configuring instant webhook callbacks for logging security events.</p>
-    </section>
-    <section>
-      <h2>1. Discord Webhooks</h2>
-      <p>Log all blocked unauthorized login attempts directly to your Discord channel.</p>
-      <p>Create a webhook in your Discord channel settings, copy the URL, and paste it into the <strong>"Notifications"</strong> tab in your Aleph Trust dashboard.</p>
-    </section>
-    <section>
-      <h2>2. Webhook Event Types</h2>
-      <p>Supported callbacks: <code>session.created</code> (login successful), <code>session.denied</code> (login blocked with reason), <code>trust.anomaly</code> (unusual Trust Factor changes).</p>
+      <h1>Discord & Infrastructure Webhooks</h1>
+      <div class="docs-update-date">Last updated: August 1, 2026</div>
+      <p>Aleph Trust supports real-time event webhooks for Discord and backend monitoring services.</p>
     </section>
 </div>
 </div>
@@ -99,11 +92,7 @@
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. All rights reserved.</span>
     </div>
-    <span id="footerDesc" hidden></span>
-    <span id="footerNavHeading" hidden></span>
-    <span id="footerWetteaHeading" hidden></span>
 </footer>
-<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Часто задаваемые вопросы — Aleph Studio</title>
+<title>Часто задаваемые вопросы (FAQ) — Документация Aleph Studio</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=3">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
@@ -26,9 +27,9 @@
         <span class="logo-text">Aleph Studio</span>
     </a>
     <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../products/">Продукты</a>
-        <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Поддержать</a>
-          <a id="navLinkDocs" class="nav__link" href="../../docs/">Документация</a>
+        <a id="navLinkProducts" class="nav__link" href="../../../ru/products/">Продукты</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../ru/donate/" data-donate-link>Поддержать</a>
+        <a id="navLinkDocs" class="nav__link" href="../../../ru/docs/">Документация</a>
     </div>
     <div class="nav-right">
         <div id="localeSwitcher" class="locale-switcher">
@@ -39,38 +40,39 @@
             </button>
             <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div>
         </div>
-        <a id="navAuthBtn" class="nav-auth-btn" href="../../auth/login/">Войти</a>
-        </div>
+        <a id="navAuthBtn" class="nav-auth-btn" href="../../../ru/auth/login/">Войти</a>
+    </div>
 </nav>
 <main id="main">
 <div class="docs-top">
-    <a href="../" class="hero-store-back" aria-label="Назад к документации">
-      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="hero-store-back-label">НАЗАД К ДОКУМЕНТАЦИИ</span>
-    </a>
+  <a href="../" class="hero-store-back" aria-label="НАЗАД К ДОКУМЕНТАЦИИ">
+    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="hero-store-back-label">НАЗАД К ДОКУМЕНТАЦИИ</span>
+  </a>
 </div>
 <div class="docs-page">
 <div class="docs-container">
-        <div class="docs-nav">
+    <div class="docs-nav">
         <div class="docs-nav-title">Решение проблем</div>
         <a class="docs-nav-link" href="../launcher/">AMCLauncher</a>
         <a class="docs-nav-link" href="../integrity/">Целостность модов</a>
         <a class="docs-nav-link" href="../network/">Сетевое подключение</a>
         <a class="docs-nav-link is-active" href="../faq/">Часто задаваемые вопросы</a>
     </div>
+
     <div class="docs-content">
     <section>
       <h1>Часто задаваемые вопросы (FAQ)</h1>
-      <div class="docs-update-date">Последнее обновление: 5 июля 2026</div>
-      <p>Быстрые ответы на часто возникающие вопросы о проектах Aleph Studio.</p>
-    </section>
-    <section>
-      <h2>Как получить доступ к серверам?</h2>
-      <p>Для входа на наши сервера требуется учетная запись WetID. После авторизации в AMCLauncher система защиты автоматически проверяет наличие необходимых подписок или верифицированных документов для допуска.</p>
-    </section>
-    <section>
-      <h2>Платные ли продукты?</h2>
-      <p>Strange Visuals и AMCLauncher полностью бесплатны для обычных игроков. Aleph Trust представляет собой коммерческую SaaS-систему с платными тарифами (Beth, Gimel, Dalet) только для владельцев и администраторов серверов.</p>
+      <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
+
+      <h2>1. Почему не работает регистрация или вход на сайте?</h2>
+      <p>Серверы единой системы авторизации WetID временно находятся в режиме ограниченного доступа. Полноценная возможность регистрации и входа будет открыта в ближайшем релизе.</p>
+
+      <h2>2. В чем различие между тарифами Beth, Gimel и Dalet?</h2>
+      <p>Beth — базовый допуск до 100 игроков. Gimel — полная система проверок, API и верификация документов. Dalet — Enterprise для крупных сетей с собственным лаунчером.</p>
+
+      <h2>3. Что делать при утере 2FA или мастер-кода Intermittent Re-Auth?</h2>
+      <p>Воспользуйтесь резервными одноразовыми ключами восстановления, выданными при включении 2FA, или обратитесь в службу поддержки.</p>
     </section>
 </div>
 </div>
@@ -98,11 +100,7 @@
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. Все права защищены.</span>
     </div>
-    <span id="footerDesc" hidden></span>
-    <span id="footerNavHeading" hidden></span>
-    <span id="footerWetteaHeading" hidden></span>
 </footer>
-<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
 </body>
 </html>
