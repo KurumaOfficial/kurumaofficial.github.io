@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>AMCLauncher — Aleph Studio</title>
+<title>AMCLauncher — Налаштування та Виправлення Помилок — Документація Aleph Studio</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ua';</script>
@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=3">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти до основного вмісту</a>
@@ -26,9 +27,9 @@
         <span class="logo-text">Aleph Studio</span>
     </a>
     <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../products/">Продукти</a>
-        <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Підтримати</a>
-          <a id="navLinkDocs" class="nav__link" href="../../docs/">Документація</a>
+        <a id="navLinkProducts" class="nav__link" href="../../../ua/products/">Продукти</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../ua/donate/" data-donate-link>Підтримати</a>
+        <a id="navLinkDocs" class="nav__link" href="../../../ua/docs/">Документація</a>
     </div>
     <div class="nav-right">
         <div id="localeSwitcher" class="locale-switcher">
@@ -39,44 +40,31 @@
             </button>
             <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div>
         </div>
-        <a id="navAuthBtn" class="nav-auth-btn" href="../../auth/login/">Увійти</a>
-        </div>
+        <a id="navAuthBtn" class="nav-auth-btn" href="../../../ua/auth/login/">Увійти</a>
+    </div>
 </nav>
 <main id="main">
 <div class="docs-top">
-    <a href="../" class="hero-store-back" aria-label="Назад до документації">
-      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="hero-store-back-label">НАЗАД ДО ДОКУМЕНТАЦІЇ</span>
-    </a>
+  <a href="../" class="hero-store-back" aria-label="НАЗАД ДО ДОКУМЕНТАЦІЇ">
+    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="hero-store-back-label">НАЗАД ДО ДОКУМЕНТАЦІЇ</span>
+  </a>
 </div>
 <div class="docs-page">
 <div class="docs-container">
-        <div class="docs-nav">
-        <div class="docs-nav-title">Вирішення проблем</div>
+    <div class="docs-nav">
+        <div class="docs-nav-title">Усунення неполадок</div>
         <a class="docs-nav-link is-active" href="../launcher/">AMCLauncher</a>
         <a class="docs-nav-link" href="../integrity/">Цілісність модів</a>
         <a class="docs-nav-link" href="../network/">Мережеве підключення</a>
-        <a class="docs-nav-link" href="../faq/">Часті запитання (FAQ)</a>
+        <a class="docs-nav-link" href="../faq/">Часті питання</a>
     </div>
+
     <div class="docs-content">
     <section>
-      <h1>Вирішення проблем з AMCLauncher</h1>
-      <div class="docs-update-date">Останнє оновлення: 5 липня 2026</div>
-      <p>У цьому розділі описано вирішення поширених проблем, які виникають під час запуску офіційного лаунчера AMCLauncher.</p>
-    </section>
-    <section>
-      <h2>1. Лаунчер не запускається</h2>
-      <p>Якщо після кліку на ярлик нічого не відбувається, спробуйте виконати такі дії:</p>
-      <ul>
-        <li>Переконайтеся, що на вашому комп'ютері встановлена версія Java 17 або вище (рекомендується офіційний збірка Eclipse Temurin).</li>
-        <li>Перевірте оновлення операційної системи Windows/Linux/macOS.</li>
-        <li>Додайте лаунчер у білий список вашого антивірусу та вбудованого брандмауера Windows.</li>
-      </ul>
-    </section>
-    <section>
-      <h2>2. Низька продуктивність (FPS)</h2>
-      <p>Для виправлення фризів і лагів:</p>
-      <p>Відкрийте налаштування лаунчера і виділіть грі більше оперативної пам'яті. Для стабільної гри з модами рекомендується виділяти <strong>від 4 ГБ до 8 ГБ ОЗУ</strong>. Також переконайтеся, що у системі оновлені драйвери відеокарти.</p>
+      <h1>Усунення неполадок з AMCLauncher</h1>
+      <div class="docs-update-date">Останнє оновлення: 1 серпня 2026 р.</div>
+      <p>Офіційний лаунчер <strong>AMCLauncher</strong> забезпечує безпечний вхід на сервери з підтримкою захисту Aleph Trust та автоматичною перевіркою цілісності клієнта.</p>
     </section>
 </div>
 </div>
@@ -104,11 +92,7 @@
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. Усі права захищено.</span>
     </div>
-    <span id="footerDesc" hidden></span>
-    <span id="footerNavHeading" hidden></span>
-    <span id="footerWetteaHeading" hidden></span>
 </footer>
-<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Авторизация WetID — Aleph Studio</title>
+<title>Авторизация через WetID — Документация Aleph Studio</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=3">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
+<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
@@ -26,9 +27,9 @@
         <span class="logo-text">Aleph Studio</span>
     </a>
     <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../products/">Продукты</a>
-        <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Поддержать</a>
-          <a id="navLinkDocs" class="nav__link" href="../../docs/">Документация</a>
+        <a id="navLinkProducts" class="nav__link" href="../../../ru/products/">Продукты</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../ru/donate/" data-donate-link>Поддержать</a>
+        <a id="navLinkDocs" class="nav__link" href="../../../ru/docs/">Документация</a>
     </div>
     <div class="nav-right">
         <div id="localeSwitcher" class="locale-switcher">
@@ -39,38 +40,86 @@
             </button>
             <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div>
         </div>
-        <a id="navAuthBtn" class="nav-auth-btn" href="../../auth/login/">Войти</a>
-        </div>
+        <a id="navAuthBtn" class="nav-auth-btn" href="../../../ru/auth/login/">Войти</a>
+    </div>
 </nav>
 <main id="main">
 <div class="docs-top">
-    <a href="../" class="hero-store-back" aria-label="Назад к документации">
-      <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="hero-store-back-label">НАЗАД К ДОКУМЕНТАЦИИ</span>
-    </a>
+  <a href="../" class="hero-store-back" aria-label="НАЗАД К ДОКУМЕНТАЦИИ">
+    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="hero-store-back-label">НАЗАД К ДОКУМЕНТАЦИИ</span>
+  </a>
 </div>
 <div class="docs-page">
 <div class="docs-container">
-        <div class="docs-nav">
+    <div class="docs-nav">
         <div class="docs-nav-title">API и интеграции</div>
         <a class="docs-nav-link" href="../aleph-trust-api/">API Aleph Trust</a>
         <a class="docs-nav-link is-active" href="../wetid-auth/">Авторизация WetID</a>
         <a class="docs-nav-link" href="../webhooks/">Настройка Webhooks</a>
-        <a class="docs-nav-link" href="../sdk/">Примеры интеграции</a>
+        <a class="docs-nav-link" href="../sdk/">Примеры интеграции (SDK)</a>
     </div>
+
     <div class="docs-content">
     <section>
-      <h1>Авторизация через WetID</h1>
-      <div class="docs-update-date">Последнее обновление: 5 июля 2026</div>
-      <p> WetID предоставляет удобный сервис авторизации игроков по протоколу OAuth 2.0.</p>
+      <h1>Авторизация через WetID (Unified SSO & OAuth 2.0)</h1>
+      <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
+      <div class="docs-alert docs-alert-warning" style="background: rgba(192, 122, 48, 0.1); border: 1px solid rgba(192, 122, 48, 0.3); padding: 16px; margin: 20px 0; font-size: 14px; line-height: 1.6;">
+        <strong>⚠️ Внимание! Ограниченный доступ к серверам WetID:</strong><br>
+        Серверы единой системы авторизации WetID временно находятся в режиме ограниченного доступа. Полноценная возможность регистрации и входа будет открыта в ближайшем релизе.
+      </div>
+      <p>Единая система авторизации <strong>WetID</strong> связывает личный аккаунт пользователя, приобретенные лицензии продуктов (Strange Visuals, Aleph Trust) и статус аппаратного доверия (Trust Level / Passkeys).</p>
     </section>
+
     <section>
-      <h2>1. Регистрация приложения</h2>
-      <p>Чтобы интегрировать вход через WetID на свой сайт, перейдите в панель разработчика в своем аккаунте WetID, создайте приложение и настройте параметры Client ID, Client Secret и Redirect URI.</p>
+      <h2>1. Архитектура протокола OAuth 2.0</h2>
+      <p>WetID работает по стандарту OAuth 2.0 (RFC 6749) и OpenID Connect. Игровые клиенты, веб-приложения и серверы Minecraft подключаются к единой точке входа для безопасного получения идентификатора игрока (UUID) и токенов сессии.</p>
+      <ul>
+        <li><strong>Authorization Endpoint:</strong> <code>https://wetid.aleph.icu/oauth/authorize</code></li>
+        <li><strong>Token Endpoint:</strong> <code>https://wetid.aleph.icu/oauth/token</code></li>
+        <li><strong>Userinfo Endpoint:</strong> <code>https://wetid.aleph.icu/api/v1/user/me</code></li>
+      </ul>
     </section>
+
     <section>
-      <h2>2. Протокол OAuth 2.0</h2>
-      <p>Перенаправьте пользователя на: <code>https://wetid.aleph.icu/oauth/authorize?response_type=code&amp;client_id=YOUR_CLIENT_ID</code>. После подтверждения пользователь вернется с кодом авторизации, который вы сможете обменять на токен доступа на бэкенде.</p>
+      <h2>2. Параметры запроса авторизации</h2>
+      <p>Для перенаправления пользователя на форму входа сформируйте следующий HTTP GET запрос:</p>
+      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">GET /oauth/authorize?
+  response_type=code&amp;
+  client_id=YOUR_CLIENT_ID&amp;
+  redirect_uri=https%3A%2F%2Fyourserver.com%2Fcallback&amp;
+  scope=openid+profile+email+trust_level&amp;
+  state=xyz_random_nonce HTTP/1.1
+Host: wetid.aleph.icu</pre>
+    </section>
+
+    <section>
+      <h2>3. Обмен кода на Access Token (Backend Exchange)</h2>
+      <p>После подтверждения входа перенаправьте полученный <code>code</code> на Token Endpoint с бэкенда вашей системы:</p>
+      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">POST /oauth/token HTTP/1.1
+Host: wetid.aleph.icu
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code
+&amp;client_id=YOUR_CLIENT_ID
+&amp;client_secret=YOUR_CLIENT_SECRET
+&amp;code=AUTH_CODE_RECEIVED
+&amp;redirect_uri=https%3A%2F%2Fyourserver.com%2Fcallback</pre>
+
+      <p>Успешный ответ сервера (200 OK):</p>
+      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">{{
+  "access_token": "wt_at_99218204812a3b4c",
+  "token_type": "Bearer",
+  "expires_in": 86400,
+  "refresh_token": "wt_rt_77182930411a2b",
+  "scope": "openid profile email trust_level",
+  "trust_level": "VERIFIED_DOC"
+}}</pre>
+    </section>
+
+    <section>
+      <h2>4. Защита от перехвата (Intermittent Re-Authentication)</h2>
+      <p>В систему WetID интегрирован модуль <strong>Intermittent Re-Authentication</strong>, защищающий аккаунт от физического захвата устройства и RAT-троянов. При вызове чувствительных методов API сервер может вернуть ответ <code>403 Forbidden</code> с заголовком <code>X-WetID-ReAuth-Required: true</code>, требующим ввода 6-значного мастер-кода пользователя.</p>
     </section>
 </div>
 </div>
@@ -98,11 +147,7 @@
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. Все права защищены.</span>
     </div>
-    <span id="footerDesc" hidden></span>
-    <span id="footerNavHeading" hidden></span>
-    <span id="footerWetteaHeading" hidden></span>
 </footer>
-<div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
 </body>
 </html>

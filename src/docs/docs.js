@@ -6,6 +6,40 @@ function boot() {
     const localeController = createLocaleController();
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
+
+    // Live search on docs hub
+    const searchInput = document.querySelector('.docs-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const hubCards = document.querySelectorAll('.docs-hub-card');
+            hubCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (query === '' || text.includes(query)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+
+    // Code blocks copy on click
+    document.querySelectorAll('.docs-content pre').forEach(pre => {
+        pre.style.cursor = 'pointer';
+        pre.title = 'Click to copy snippet';
+        pre.addEventListener('click', () => {
+            const code = pre.textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                const origBg = pre.style.background;
+                pre.style.background = 'rgba(63, 207, 127, 0.15)';
+                setTimeout(() => {
+                    pre.style.background = origBg;
+                }, 800);
+            }).catch(() => {});
+        });
+    });
+
     initReveal([document.getElementById('main')].filter(Boolean));
 }
 
