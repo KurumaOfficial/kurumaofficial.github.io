@@ -871,74 +871,49 @@
       <!-- SECURITY (Key activation and 2FA setup) -->
 
       <section class="profile-section" id="security">
-
         <h2 class="section-title" style="font-size: 20px; font-weight: 700; margin-bottom: 24px;">Безопасность и Активация</h2>
 
         <div class="security-grid">
-
-          <!-- Key Activation Block -->
-
-          <div class="security-card">
-
-            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Активация ключа продукта</h3>
-
-            <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5;">Введите лицензионный ключ продукта для его активации на вашем аккаунте.</p>
-
-            <form class="activation-form" style="display: flex; gap: 12px; margin: 0;" onsubmit="event.preventDefault();">
-
-              <input class="form-input" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" style="flex: 1; height: 42px; padding: 0 16px; font-size: 14px;" required>
-
-              <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Активировать</button>
-
-            </form>
-
-          </div>
-
-          <!-- 2FA Activation Block -->
-
-          <div class="security-card">
-
-            <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Двухфакторная аутентификация (2FA)</h3>
-
-            <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 20px; line-height: 1.5;">Защитите свой аккаунт с помощью 2FA. Отсканируйте QR-код в приложении-аутентификаторе (Google Authenticator, Aegis и др.) и введите 6-значный код подтверждения.</p>
-
-            
-
-            <div class="tfa-setup-wrap" style="margin-bottom: 20px;">
-
-              <div class="tfa-qr" style="width: 100px; height: 100px; background: #fff; padding: 6px; border-radius: var(--radius-sm); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
-
-                <svg viewBox="0 0 29 29" width="100%" height="100%" shape-rendering="crispEdges">
-
-                  <path fill="#ffffff" d="M0 0h29v29H0z"/>
-
-                  <path fill="#000000" d="M0 0h7v7H0zm22 0h7v7h-7zM0 22h7v7H0zm9 0h1v1H9zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1H22v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zM2 2h3v3H2zm20 0h3v3h-3zM2 24h3v3H2zm7-22h1v1H9zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-10 2h1v1h-1zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1z"/>
-
-                </svg>
-
-              </div>
-
-              <div class="tfa-secret-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-left: 4px;">
-
-                <span style="font-size: 10px; text-transform: uppercase; color: var(--text-tertiary); font-family: var(--font-mono); letter-spacing: 0.05em;">Секретный код</span>
-
-                <span class="mono copyable" data-copy="JBSWY3DPEHPK3PXP" style="font-size: 14px; font-weight: 700; color: var(--text-primary); cursor: pointer;" title="Нажмите, чтобы скопировать">JBSWY3DPEHPK3PXP <span class="copy-hint" style="font-size: 10px; margin-left: 6px; color: var(--accent-light); font-weight: normal;">Копировать</span></span>
-
-              </div>
-
+          <!-- LEFT COLUMN: Key Activation + 2FA -->
+          <div class="security-col-left">
+            <!-- Key Activation Block -->
+            <div class="security-card">
+              <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Активация ключа продукта</h3>
+              <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 16px; line-height: 1.5;">Введите лицензионный ключ продукта для его активации на вашем аккаунте.</p>
+              <form class="activation-form" style="display: flex; gap: 12px; margin: 0;" onsubmit="event.preventDefault();">
+                <input class="form-input" type="text" placeholder="XXXX-XXXX-XXXX-XXXX" style="flex: 1; height: 42px; padding: 0 16px; font-size: 14px;" required>
+                <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Активировать</button>
+              </form>
             </div>
 
-            <form class="tfa-confirm-form" style="display: flex; gap: 12px; align-items: center; margin: 0;" onsubmit="event.preventDefault();">
+            <!-- 2FA Activation Block -->
+            <div class="security-card">
+              <h3 class="cabinet-sub-title" style="font-size: 16px; font-weight: 700; font-family: var(--font-display); margin: 0 0 6px;">Двухфакторная аутентификация (2FA)</h3>
+              <p style="font-size: 13px; color: var(--text-secondary); margin: 0 0 20px; line-height: 1.5;">Защитите свой аккаунт с помощью 2FA. Отсканируйте QR-код в приложении-аутентификаторе (Google Authenticator, Aegis и др.) и введите 6-значный код подтверждения.</p>
 
-              <input class="form-input" type="text" placeholder="000 000" maxlength="7" style="flex: 1; height: 42px; text-align: center; font-family: var(--font-mono); letter-spacing: 0.15em; font-size: 14px; padding: 0;" required>
+              <div class="tfa-setup-wrap" style="margin-bottom: 20px;">
+                <div class="tfa-qr" style="width: 100px; height: 100px; background: #fff; padding: 6px; border-radius: var(--radius-sm); flex-shrink: 0; display: flex; align-items: center; justify-content: center;">
+                  <svg viewBox="0 0 29 29" width="100%" height="100%" shape-rendering="crispEdges">
+                    <path fill="#ffffff" d="M0 0h29v29H0z"/>
+                    <path fill="#000000" d="M0 0h7v7H0zm22 0h7v7h-7zM0 22h7v7H0zm9 0h1v1H9zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1H22v1zm2 0h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm-1-1v-1h-1v1zM2 2h3v3H2zm20 0h3v3h-3zM2 24h3v3H2zm7-22h1v1H9zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-10 2h1v1h-1zm2 0h1v1h-1zm0 2h1v1h-1zm2-2h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1zm-14 3h1v1H9zm1 1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm0-2h-1v1h1zm2 1h1v1h-1zm1 1h1v1h-1zm1-1h1v1h-1zm2-1h1v1h-1zm1 1h1v1h-1zm-2 1h1v1h-1zm3-2h1v1h-1zm0 2h1v1h-1z"/>
+                  </svg>
+                </div>
+                <div class="tfa-secret-info" style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; padding-left: 4px;">
+                  <span style="font-size: 10px; text-transform: uppercase; color: var(--text-tertiary); font-family: var(--font-mono); letter-spacing: 0.05em;">Секретный код</span>
+                  <span class="mono copyable" data-copy="JBSWY3DPEHPK3PXP" style="font-size: 14px; font-weight: 700; color: var(--text-primary); cursor: pointer;" title="Нажмите, чтобы скопировать">JBSWY3DPEHPK3PXP <span class="copy-hint" style="font-size: 10px; margin-left: 6px; color: var(--accent-light); font-weight: normal;">Копировать</span></span>
+                </div>
+              </div>
 
-              <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Включить 2FA</button>
-
-            </form>
-
+              <form class="tfa-confirm-form" style="display: flex; gap: 12px; align-items: center; margin: 0;" onsubmit="event.preventDefault();">
+                <input class="form-input" type="text" placeholder="000 000" maxlength="7" style="flex: 1; height: 42px; text-align: center; font-family: var(--font-mono); letter-spacing: 0.15em; font-size: 14px; padding: 0;" required>
+                <button class="save-btn" type="submit" style="width: auto; padding: 0 24px; height: 42px; margin: 0;">Включить 2FA</button>
+              </form>
+            </div>
           </div>
 
-<!-- Intermittent Re-Authentication Block -->
+          <!-- RIGHT COLUMN: Intermittent Re-Auth -->
+          <div class="security-col-right">
+            <!-- Intermittent Re-Authentication Block -->
           <div class="security-card reauth-card" id="reauthBlock">
             <div class="reauth-head">
               <div>
@@ -1004,8 +979,8 @@
               </button>
             </div>
           </div>
-
-
+          </div>
+        </div>
       </section>
 
     </div>
