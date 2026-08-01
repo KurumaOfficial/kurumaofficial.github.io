@@ -7,6 +7,20 @@ function boot() {
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
 
+    const currentLocale = window.__ALEPH_LOCALE__ || 'ru';
+    if (sessionStorage.getItem('aleph_demo_auth') !== 'true') {
+        window.location.href = `/${currentLocale}/auth/login/`;
+        return;
+    }
+
+    document.querySelectorAll('.logout-btn, #logoutBtn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.removeItem('aleph_demo_auth');
+            window.location.href = `/${currentLocale}/auth/login/`;
+        });
+    });
+
     // ── Tab Navigation (sidebar-link & profile-section) ──
     const menuItems = document.querySelectorAll('.sidebar-link');
     const contentSections = document.querySelectorAll('.profile-section');

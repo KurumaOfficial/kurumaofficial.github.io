@@ -23,6 +23,7 @@ meta_data = {
         "sidebar_title_api": "API и интеграции",
         "nav_products": "Продукты",
         "nav_donate": "Поддержать",
+        "nav_profile": "Кабинет",
         "tagline": "Дочерний проект WeTTeA",
         "copyright": "© 2026. Все права защищены.",
         "skip_link": "Перейти к основному содержимому",
@@ -50,6 +51,7 @@ meta_data = {
         "sidebar_title_api": "API & Integrations",
         "nav_products": "Products",
         "nav_donate": "Support",
+        "nav_profile": "Cabinet",
         "tagline": "A subsidiary of WeTTeA",
         "copyright": "© 2026. All rights reserved.",
         "skip_link": "Skip to main content",
@@ -77,6 +79,7 @@ meta_data = {
         "sidebar_title_api": "API та інтеграції",
         "nav_products": "Продукти",
         "nav_donate": "Підтримати",
+        "nav_profile": "Кабінет",
         "tagline": "Дочірній проєкт WeTTeA",
         "copyright": "© 2026. Усі права захищено.",
         "skip_link": "Перейти до основного вмісту",
@@ -574,6 +577,7 @@ html_template = """<!doctype html>
     <div class="nav-links">
         <a id="navLinkProducts" class="nav__link" href="../../../[LOC]/products/">[NAV_PRODUCTS]</a>
         <a id="navLinkDonate" class="nav__link" href="../../../[LOC]/donate/" data-donate-link>[NAV_DONATE]</a>
+        <a id="navLinkProfile" class="nav__link" href="../../../[LOC]/auth/login/">[NAV_PROFILE]</a>
     </div>
     <div class="nav-right">
         <div id="localeSwitcher" class="locale-switcher">
@@ -750,6 +754,7 @@ def generate_all_pages():
             page_text = page_text.replace("[SKIP_LINK]", meta["skip_link"])
             page_text = page_text.replace("[NAV_PRODUCTS]", meta["nav_products"])
             page_text = page_text.replace("[NAV_DONATE]", meta["nav_donate"])
+            page_text = page_text.replace("[NAV_PROFILE]", meta["nav_profile"])
             page_text = page_text.replace("[BACK_ARIA]", meta["back_aria"])
             page_text = page_text.replace("[BACK_LABEL]", meta["back_label"])
             page_text = page_text.replace("[TAGLINE]", meta["tagline"])
