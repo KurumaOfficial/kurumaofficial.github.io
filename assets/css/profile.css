@@ -523,10 +523,9 @@ body {
 
 /* TFA and Security layout overrides */
 .security-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-  max-width: 680px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 24px;
 }
 .security-card {
   border: 1px solid var(--panel-border);
@@ -880,7 +879,6 @@ body {
 
 /* ---------- Intermittent Re-Authentication Block ---------- */
 .reauth-card {
-  grid-column: 1 / -1;
   background: var(--panel);
   border: 1px solid var(--panel-border);
   padding: 24px;
