@@ -131,11 +131,46 @@ body {
     letter-spacing: .12em; text-transform: uppercase; color: inherit;
     min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.hero-store-actions {
-    margin-left: auto; margin-top: 10px;
-    display: flex; gap: 14px; align-items: center; pointer-events: auto;
-}
 .hero-store-actions:empty { display: none; }
+
+/* Product page header auth button styling */
+.nav-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 18px;
+    background: var(--accent, #8b1a2a);
+    color: #ffffff !important;
+    font-family: var(--font-display, 'Unbounded', sans-serif);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--accent, #8b1a2a);
+    border-radius: 8px;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(139, 26, 42, 0.25);
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+.nav-auth-btn:hover {
+    background: var(--accent-light, #b52239);
+    border-color: var(--accent-light, #b52239);
+    color: #ffffff !important;
+    box-shadow: 0 4px 20px rgba(139, 26, 42, 0.4);
+    transform: translateY(-1px);
+}
+
+.nav-auth-btn:active {
+    transform: translateY(0) scale(0.97);
+}
 
 /* ── §6  hero-store section ─────────────────────────────────  */
 
