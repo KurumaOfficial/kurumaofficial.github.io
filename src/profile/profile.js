@@ -570,9 +570,14 @@ function boot() {
 
     function openModal(m) {
         if (!m) return;
-        m.classList.add('is-open');
         m.setAttribute('aria-hidden', 'false');
         document.body.classList.add('modal-open');
+        m.style.visibility = 'visible';
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                m.classList.add('is-open');
+            });
+        });
     }
 
     function closeModal(m) {
@@ -580,6 +585,11 @@ function boot() {
         m.classList.remove('is-open');
         m.setAttribute('aria-hidden', 'true');
         document.body.classList.remove('modal-open');
+        setTimeout(() => {
+            if (!m.classList.contains('is-open')) {
+                m.style.visibility = '';
+            }
+        }, 350);
     }
 
     document.querySelectorAll('#reauthPromptCloseBtn, #reauthPromptBackdrop').forEach(b => {
