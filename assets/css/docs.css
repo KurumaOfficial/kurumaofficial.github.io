@@ -506,9 +506,9 @@ button.docs-nav-link {
 .docs-search-wrap {
   position: absolute;
   top: 0;
-  right: var(--page-gutter, 64px);
-  width: 320px;
-  max-width: calc(100% - 32px);
+  right: 0;
+  width: 480px;
+  max-width: 100%;
   margin: 0;
   z-index: 10;
 }
