@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>API Aleph Trust — Документация Aleph Studio</title>
+<title>Strange Visuals — Устранение неполадок — Документация Aleph Studio</title>
 <meta name="theme-color" content="#080606">
 <meta name="color-scheme" content="dark light">
 <script>window.__ALEPH_LOCALE__ = 'ru';</script>
@@ -53,66 +53,28 @@
 <div class="docs-page">
 <div class="docs-container">
     <div class="docs-nav">
-        <div class="docs-nav-title">API и интеграции</div>
-        <a class="docs-nav-link is-active" href="../aleph-trust-api/">API Aleph Trust</a>
-        <a class="docs-nav-link" href="../wetid-auth/">Авторизация WetID</a>
-        <a class="docs-nav-link" href="../webhooks/">Настройка Webhooks</a>
-        <a class="docs-nav-link" href="../sdk/">Примеры интеграции (SDK)</a>
+        <div class="docs-nav-title">Решение проблем в продуктах</div>
+        <a class="docs-nav-link" href="../launcher/">AMCLauncher</a>
+        <a class="docs-nav-link is-active" href="../strange-visuals/">Strange Visuals</a>
+        <a class="docs-nav-link" href="../client/">AMC Client</a>
+        <a class="docs-nav-link" href="../aleph-trust/">Aleph Trust</a>
     </div>
 
     <div class="docs-content">
     <section>
-      <h1>API-документация Aleph Trust (REST API v1)</h1>
+      <h1>Устранение неполадок в Strange Visuals</h1>
       <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
-      <p>Справочник REST API для взаимодействия серверов Minecraft (Paper, Purpur, Velocity) с SaaS-системой допуска Aleph Trust.</p>
+      <p>Руководство по настройке визуального мода Strange Visuals, решению конфликтов шейдеров и оптимизации FPS.</p>
     </section>
 
     <section>
-      <h2>1. Базовый URL и Авторизация Запросов</h2>
-      <p>Все API-запросы должны отправляться по протоколу HTTPS на адрес <code>https://api.aleph.icu/v1/trust</code>.</p>
-      <p>Для авторизации сервера передавайте секретный ключ в заголовке <code>X-Aleph-Server-Token</code>:</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px;">X-Aleph-Server-Token: at_sec_99182a3b4c5d6e7f8</pre>
+      <h2>1. Конфликты с шейдерами и графическими модами</h2>
+      <p>Strange Visuals полностью совместим с <strong>Sodium / Iris / Lithium</strong>. Если при включении шейдеров возникают артефакты текстур, отключите опцию "Advanced Shader Blending" в настройках мода.</p>
     </section>
 
     <section>
-      <h2>2. Проверка сессии входа (Session Verification)</h2>
-      <p>Вызывается при попытке подключения игрока к серверу для проверки целостности клиента и уровня доверия.</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">POST /v1/trust/verify HTTP/1.1
-Host: api.aleph.icu
-Content-Type: application/json
-X-Aleph-Server-Token: at_sec_99182a3b4c5d6e7f8
-
-{{
-  "username": "FrostCraft_Admin",
-  "uuid": "069a79f7-b59f-474d-b3d6-d6284b39f418",
-  "client_ip": "198.51.100.42",
-  "launcher_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "modset_hash": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
-  "hwid_token": "hw_tok_88192a3b"
-}}</pre>
-
-      <p>Успешный ответ (Допуск разрешен):</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">{{
-  "status": "ALLOWED",
-  "trust_level": "GIMEL_STRICT",
-  "risk_score": 0.01,
-  "session_id": "tsess_771829031",
-  "features_enabled": ["CUSTOM_MODSET", "PASSTHROUGH_FORWARDING"],
-  "message": "Verified official AMCLauncher client"
-}}</pre>
-    </section>
-
-    <section>
-      <h2>3. Отзыв сессии (Session Revocation)</h2>
-      <p>Позволяет принудительно кикнуть игрока и отменить сессию допуска при обнаружении нарушений:</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px; overflow-x: auto;">POST /v1/sessions/revoke HTTP/1.1
-Host: api.aleph.icu
-Content-Type: application/json
-
-{{
-  "session_id": "tsess_771829031",
-  "reason": "MODSET_HASH_MUTATION"
-}}</pre>
+      <h2>2. Повышение производительности (FPS)</h2>
+      <p>Включите опцию <em>Fast Particle Rendering</em> и снизьте дистанцию отрисовки микро-анимаций интерфейса.</p>
     </section>
 </div>
 </div>
