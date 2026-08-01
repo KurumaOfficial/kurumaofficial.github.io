@@ -476,16 +476,17 @@ button.docs-nav-link {
 /* ── §4  Documentation Hub Hero ─────────────────────────────────────────── */
 
 .docs-hub-hero {
-  max-width: 1320px;
+  max-width: 100%;
   margin: 48px auto 64px;
   text-align: center;
-  padding: 0 var(--page-gutter, 64px);
+  padding: 0 calc(var(--page-gutter, 52px) + 24px);
   position: relative;
+  box-sizing: border-box;
 }
 
 .docs-hub-hero h1 {
   font-family: var(--font-display, 'Unbounded', sans-serif);
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 800;
   color: var(--text);
   margin-bottom: 16px;
@@ -498,22 +499,22 @@ button.docs-nav-link {
   line-height: 1.65;
   color: var(--text-dim);
   margin-bottom: 32px;
-  max-width: 720px;
+  max-width: 680px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .docs-search-wrap {
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 480px;
-  max-width: 100%;
+  top: 4px;
+  right: calc(var(--page-gutter, 52px) + 24px);
+  width: 340px;
+  max-width: 35vw;
   margin: 0;
   z-index: 10;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1080px) {
   .docs-search-wrap {
     position: static;
     margin: 24px auto 0;
