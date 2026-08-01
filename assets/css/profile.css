@@ -877,3 +877,148 @@ body {
     overflow: hidden;
   }
 }
+
+/* ---------- Intermittent Re-Authentication Block ---------- */
+.reauth-card {
+  grid-column: 1 / -1;
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reauth-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.reauth-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent-light);
+  background: rgba(139, 26, 42, 0.12);
+  border: 1px solid rgba(139, 26, 42, 0.25);
+  padding: 3px 8px;
+  margin-bottom: 8px;
+}
+
+.reauth-switch-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.reauth-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--panel-border);
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.reauth-toggle::before {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  background: var(--text-secondary);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.reauth-toggle.is-on {
+  background: rgba(63, 207, 127, 0.15);
+  border-color: rgba(63, 207, 127, 0.35);
+}
+
+.reauth-toggle.is-on::before {
+  transform: translateX(20px);
+  background: var(--green);
+}
+
+.reauth-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
+  transition: opacity 0.25s ease;
+}
+
+.reauth-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reauth-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.reauth-select,
+.reauth-input {
+  height: 42px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--panel-border);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 0 14px;
+  border-radius: 0;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.reauth-select:focus,
+.reauth-input:focus {
+  border-color: var(--accent-light);
+}
+
+.reauth-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reauth-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.reauth-checkbox-item input[type="checkbox"] {
+  accent-color: var(--accent-light);
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.reauth-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 1px solid var(--divider);
+}
