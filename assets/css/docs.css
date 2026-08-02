@@ -669,3 +669,66 @@ button.docs-nav-link {
 .hub-links-list a:hover::before {
   transform: translateX(2px);
 }
+
+/* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */
+
+.docs-hub-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 48px 64px;
+  max-width: 1320px;
+  margin: 0 auto 120px;
+  padding: 0 var(--page-gutter, 64px);
+}
+
+.docs-cat-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.docs-cat-title {
+  font-family: var(--font-display, 'Unbounded', sans-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border-hi, rgba(139,26,42,0.25));
+  margin: 0;
+}
+
+.docs-cat-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.docs-cat-link {
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: var(--text-dim);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.docs-cat-link::before {
+  content: '→';
+  color: var(--accent-light);
+  font-size: 13px;
+  transition: transform 0.2s ease;
+}
+
+.docs-cat-link:hover {
+  color: var(--text);
+  transform: translateX(4px);
+}
+
+.docs-cat-link:hover::before {
+  transform: translateX(3px);
+}

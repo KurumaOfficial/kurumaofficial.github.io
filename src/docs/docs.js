@@ -7,19 +7,32 @@ function boot() {
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
 
-    // Live search on docs hub
+        // Live search on docs hub
     const searchInput = document.querySelector('.docs-search-input');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const query = e.target.value.toLowerCase().trim();
+
+            const catGroups = document.querySelectorAll('.docs-cat-group');
+            catGroups.forEach(group => {
+                let hasMatch = false;
+                const links = group.querySelectorAll('.docs-cat-link');
+                links.forEach(link => {
+                    const text = link.textContent.toLowerCase();
+                    if (query === '' || text.includes(query)) {
+                        link.style.display = '';
+                        hasMatch = true;
+                    } else {
+                        link.style.display = 'none';
+                    }
+                });
+                group.style.display = (query === '' || hasMatch) ? '' : 'none';
+            });
+
             const hubCards = document.querySelectorAll('.docs-hub-card');
             hubCards.forEach(card => {
                 const text = card.textContent.toLowerCase();
-                if (query === '' || text.includes(query)) {
-                    card.style.display = '';
-                } else {
-                    card.style.display = 'none';
-                }
+                card.style.display = (query === '' || text.includes(query)) ? '' : 'none';
             });
         });
     }
