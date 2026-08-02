@@ -673,9 +673,9 @@ button.docs-nav-link {
 /* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */
 
 .docs-hub-categories {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 48px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
   max-width: 1320px;
   margin: 0 auto 120px;
   padding: 0 var(--page-gutter, 64px);
