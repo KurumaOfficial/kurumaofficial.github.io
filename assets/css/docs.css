@@ -693,8 +693,8 @@ button.docs-nav-link {
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.01em;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--border-hi, rgba(139,26,42,0.25));
+  padding-bottom: 0;
+  border-bottom: none;
   margin: 0;
 }
 
