@@ -735,3 +735,9 @@ button.docs-nav-link {
 .docs-cat-link:hover::before {
   transform: translateX(3px);
 }
+
+.docs-hub-back {
+  align-self: flex-start;
+  margin-bottom: -12px;
+  cursor: pointer;
+}
