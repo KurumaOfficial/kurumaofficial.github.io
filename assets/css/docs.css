@@ -477,7 +477,7 @@ button.docs-nav-link {
 
 .docs-hub-hero {
   max-width: 100%;
-  margin: 36px auto 24px;
+  margin: 28px auto 0;
   text-align: center;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   position: relative;
@@ -498,7 +498,7 @@ button.docs-nav-link {
   font-size: 20px;
   line-height: 1.65;
   color: var(--text-dim);
-  margin-bottom: 32px;
+  margin-bottom: 8px;
   max-width: 680px;
   margin-left: auto;
   margin-right: auto;
@@ -677,7 +677,7 @@ button.docs-nav-link {
   flex-direction: column;
   gap: 40px;
   max-width: 100%;
-  margin: -8px auto 100px;
+  margin: -24px auto 100px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   align-items: flex-start;
   text-align: left;
