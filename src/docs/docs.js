@@ -53,6 +53,36 @@ function boot() {
         });
     });
 
+    
+    // Track initial entry point into documentation system from non-docs page
+    try {
+        const currentRef = document.referrer;
+        if (currentRef && !currentRef.includes('/docs/')) {
+            sessionStorage.setItem('aleph_docs_entry_referrer', currentRef);
+        }
+    } catch (e) {}
+
+    // Handle "Back" button click (skips internal docs history and returns to non-docs referrer)
+    const backBtns = document.querySelectorAll('.hero-store-back, .docs-hub-back');
+    backBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const entryRef = sessionStorage.getItem('aleph_docs_entry_referrer');
+            if (entryRef && !entryRef.includes('/docs/')) {
+                window.location.href = entryRef;
+            } else {
+                const currentPath = window.location.pathname;
+                if (currentPath.includes('/en/')) {
+                    window.location.href = '/en/';
+                } else if (currentPath.includes('/ua/')) {
+                    window.location.href = '/ua/';
+                } else {
+                    window.location.href = '/ru/';
+                }
+            }
+        });
+    });
+
     initReveal([document.getElementById('main')].filter(Boolean));
 }
 
