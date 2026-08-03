@@ -16,8 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
-<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=5">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
@@ -44,15 +43,19 @@
     </div>
 </nav>
 <main id="main">
-<div class="docs-top">
-  <a href="../" class="hero-store-back" aria-label="НАЗАД К ДОКУМЕНТАЦИИ">
-    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="hero-store-back-label">НАЗАД К ДОКУМЕНТАЦИИ</span>
-  </a>
-</div>
 <div class="docs-page">
-<div class="docs-container">
-    <div class="docs-content">
+    <div class="docs-hub-hero">
+        <a href="../" class="hero-store-back docs-hub-back" aria-label="НАЗАД">
+            <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hero-store-back-label">НАЗАД</span>
+        </a>
+        <div class="docs-search-wrap reveal">
+            <input type="text" placeholder="Поиск по документации..." class="docs-search-input">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+    </div>
+    <div class="docs-article-center">
+        <div class="docs-content">
     <section>
       <h1>Сетевое подключение и Proxy (Velocity & Paper)</h1>
       <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
@@ -65,8 +68,28 @@
 forwarding-secret-file = "forwarding.secret"
 online-mode = false # controlled via Aleph Trust Proxy Gate</pre>
     </section>
-</div>
-</div>
+    </div>
+    </div>
+    <div class="docs-hub-categories reveal">
+        <div class="docs-cat-group">
+            <h2 class="docs-cat-title">Соглашения и правила</h2>
+            <div class="docs-cat-links">
+            <a class="docs-cat-link" href="../privacy/">Конфиденциальность</a>
+            <a class="docs-cat-link" href="../terms/">Правила</a>
+            <a class="docs-cat-link" href="../user-agreement/">Соглашение</a>
+            <a class="docs-cat-link" href="../cookies/">Cookies</a>
+            </div>
+        </div>
+        <div class="docs-cat-group">
+            <h2 class="docs-cat-title">Решение проблем</h2>
+            <div class="docs-cat-links">
+            <a class="docs-cat-link" href="../launcher/">AMCLauncher</a>
+            <a class="docs-cat-link" href="../strange-visuals/">Strange Visuals</a>
+            <a class="docs-cat-link" href="../client/">AMC Client</a>
+            <a class="docs-cat-link" href="../aleph-trust/">Aleph Trust</a>
+            </div>
+        </div>
+    </div>
 </div>
 </main>
 <footer class="site-footer">

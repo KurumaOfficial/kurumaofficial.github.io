@@ -16,8 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
-<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=5">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти до основного вмісту</a>
@@ -44,22 +43,46 @@
     </div>
 </nav>
 <main id="main">
-<div class="docs-top">
-  <a href="../" class="hero-store-back" aria-label="НАЗАД ДО ДОКУМЕНТАЦІЇ">
-    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="hero-store-back-label">НАЗАД ДО ДОКУМЕНТАЦІЇ</span>
-  </a>
-</div>
 <div class="docs-page">
-<div class="docs-container">
-    <div class="docs-content">
+    <div class="docs-hub-hero">
+        <a href="../" class="hero-store-back docs-hub-back" aria-label="НАЗАД">
+            <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hero-store-back-label">НАЗАД</span>
+        </a>
+        <div class="docs-search-wrap reveal">
+            <input type="text" placeholder="Пошук по документації..." class="docs-search-input">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+    </div>
+    <div class="docs-article-center">
+        <div class="docs-content">
     <section>
       <h1>Мережеве підключення та Proxy</h1>
       <div class="docs-update-date">Останнє оновлення: 1 серпня 2026 р.</div>
       <p>Налаштування зв'язки проксі-сервера Velocity з ігровими серверами Paper за гейтом Aleph Trust.</p>
     </section>
-</div>
-</div>
+    </div>
+    </div>
+    <div class="docs-hub-categories reveal">
+        <div class="docs-cat-group">
+            <h2 class="docs-cat-title">Угоди та правила</h2>
+            <div class="docs-cat-links">
+            <a class="docs-cat-link" href="../privacy/">Конфіденційність</a>
+            <a class="docs-cat-link" href="../terms/">Правила</a>
+            <a class="docs-cat-link" href="../user-agreement/">Угода</a>
+            <a class="docs-cat-link" href="../cookies/">Cookies</a>
+            </div>
+        </div>
+        <div class="docs-cat-group">
+            <h2 class="docs-cat-title">Усунення неполадок</h2>
+            <div class="docs-cat-links">
+            <a class="docs-cat-link" href="../launcher/">AMCLauncher</a>
+            <a class="docs-cat-link" href="../strange-visuals/">Strange Visuals</a>
+            <a class="docs-cat-link" href="../client/">AMC Client</a>
+            <a class="docs-cat-link" href="../aleph-trust/">Aleph Trust</a>
+            </div>
+        </div>
+    </div>
 </div>
 </main>
 <footer class="site-footer">
@@ -70,7 +93,7 @@
                 <span class="site-footer__name">Aleph Studio</span>
             </a>
             <span class="site-footer__divider" aria-hidden="true"></span>
-            <span id="footerTagline" class="site-footer__tagline">Дочірній проєкт WeTTeA</span>
+            <span id="footerTagline" class="site-footer__tagline">Дочірній проект WeTTeA</span>
         </div>
         <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
             <a href="../../../ua/products/">Продукти</a>
@@ -82,7 +105,7 @@
         <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div>
     </div>
     <div class="site-footer__bottom">
-        <span id="footerCopyright" class="site-footer__copy">© 2026. Усі права захищено.</span>
+        <span id="footerCopyright" class="site-footer__copy">© 2026. Всі права захищено.</span>
     </div>
 </footer>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
