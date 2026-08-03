@@ -16,8 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 <link rel="stylesheet" href="../../../assets/css/main.css?v=13">
-<link rel="stylesheet" href="../../../assets/css/docs.css?v=4">
-<link rel="stylesheet" href="../../../assets/css/auth.css?v=2">
+<link rel="stylesheet" href="../../../assets/css/docs.css?v=5">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Skip to main content</a>
@@ -28,7 +27,7 @@
     </a>
     <div class="nav-links">
         <a id="navLinkProducts" class="nav__link" href="../../../en/products/">Products</a>
-        <a id="navLinkDonate" class="nav__link" href="../../../en/donate/" data-donate-link>Support</a>
+        <a id="navLinkDonate" class="nav__link" href="../../../en/donate/" data-donate-link>Donate</a>
         <a id="navLinkDocs" class="nav__link" href="../../../en/docs/">Documentation</a>
     </div>
     <div class="nav-right">
@@ -44,22 +43,46 @@
     </div>
 </nav>
 <main id="main">
-<div class="docs-top">
-  <a href="../" class="hero-store-back" aria-label="BACK TO DOCUMENTATION">
-    <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-    <span class="hero-store-back-label">BACK TO DOCUMENTATION</span>
-  </a>
-</div>
 <div class="docs-page">
-<div class="docs-container">
-    <div class="docs-content">
+    <div class="docs-hub-hero">
+        <a href="../" class="hero-store-back docs-hub-back" aria-label="BACK">
+            <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="hero-store-back-label">BACK</span>
+        </a>
+        <div class="docs-search-wrap reveal">
+            <input type="text" placeholder="Search documentation..." class="docs-search-input">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
+        </div>
+    </div>
+    <div class="docs-article-center">
+        <div class="docs-content">
     <section>
       <h1>Network & Proxy Setup (Velocity & Paper)</h1>
       <div class="docs-update-date">Last updated: August 1, 2026</div>
       <p>Configuration guide for bridging Velocity proxy with Paper/Purpur backends under the Aleph Trust admission gate.</p>
     </section>
-</div>
-</div>
+    </div>
+    </div>
+    <div class="docs-hub-categories reveal">
+        <div class="docs-cat-group">
+            <h2 class="docs-cat-title">Agreements & Policies</h2>
+            <div class="docs-cat-links">
+            <a class="docs-cat-link" href="../privacy/">Privacy</a>
+            <a class="docs-cat-link" href="../terms/">Terms</a>
+            <a class="docs-cat-link" href="../user-agreement/">Agreement</a>
+            <a class="docs-cat-link" href="../cookies/">Cookies</a>
+            </div>
+        </div>
+        <div class="docs-cat-group">
+            <h2 class="docs-cat-title">Troubleshooting</h2>
+            <div class="docs-cat-links">
+            <a class="docs-cat-link" href="../launcher/">AMCLauncher</a>
+            <a class="docs-cat-link" href="../strange-visuals/">Strange Visuals</a>
+            <a class="docs-cat-link" href="../client/">AMC Client</a>
+            <a class="docs-cat-link" href="../aleph-trust/">Aleph Trust</a>
+            </div>
+        </div>
+    </div>
 </div>
 </main>
 <footer class="site-footer">
@@ -70,14 +93,14 @@
                 <span class="site-footer__name">Aleph Studio</span>
             </a>
             <span class="site-footer__divider" aria-hidden="true"></span>
-            <span id="footerTagline" class="site-footer__tagline">A subsidiary of WeTTeA</span>
+            <span id="footerTagline" class="site-footer__tagline">WeTTeA Subsidiary</span>
         </div>
         <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
             <a href="../../../en/products/">Products</a>
-            <a href="../../../en/#manifesto">Принцип</a>
-            <a href="../../../en/#team">Команда</a>
+            <a href="../../../en/#manifesto">Principle</a>
+            <a href="../../../en/#team">Team</a>
             <span class="site-footer__nav-sep" aria-hidden="true"></span>
-            <a id="footerDonateLink" href="../../../en/donate/">Support</a>
+            <a id="footerDonateLink" href="../../../en/donate/">Donate</a>
         </nav>
         <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div>
     </div>

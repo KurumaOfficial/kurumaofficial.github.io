@@ -682,6 +682,28 @@ button.docs-nav-link {
   transform: translateX(2px);
 }
 
+
+/* ── §4.2  Centered Article Content (replaces hero title on article pages) ─── */
+
+.docs-article-center {
+  max-width: 860px;
+  width: 100%;
+  margin: 0 auto 48px;
+  padding: 0 calc(var(--page-gutter, 52px) + 24px);
+  box-sizing: border-box;
+}
+
+.docs-article-center .docs-content {
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .docs-article-center {
+    padding: 0 20px;
+    margin-bottom: 32px;
+  }
+}
+
 /* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */
 
 .docs-hub-categories {
