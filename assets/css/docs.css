@@ -705,7 +705,7 @@ button.docs-nav-link {
 }
 
 .docs-hub-categories + .docs-article-center {
-  margin-top: 48px;
+  margin-top: 0;
 }
 
 /* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */
@@ -720,6 +720,12 @@ button.docs-nav-link {
   align-items: flex-start;
   text-align: left;
   box-sizing: border-box;
+}
+
+/* On article pages (where category list precedes centered article content) */
+.docs-hub-categories:has(+ .docs-article-center),
+.docs-hub-categories.docs-article-categories {
+  margin: 24px auto 48px;
 }
 
 .docs-cat-group {
