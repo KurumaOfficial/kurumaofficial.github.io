@@ -420,3 +420,43 @@
 }
 
 
+
+
+/* Password Input Wrapper & Visibility Toggle Eye Button */
+.input-wrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrap .form-input {
+  padding-right: 44px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  padding: 6px;
+  margin: 0;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s ease, opacity 0.2s ease;
+  line-height: 1;
+  border-radius: 0;
+}
+
+.password-toggle-btn:hover {
+  color: var(--text);
+}
+
+.password-toggle-btn:focus-visible {
+  outline: 1px solid var(--accent-light);
+}
