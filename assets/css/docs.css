@@ -704,8 +704,8 @@ button.docs-nav-link {
   }
 }
 
-.docs-article-center ~ .docs-hub-categories {
-  margin-top: 0;
+.docs-hub-categories + .docs-article-center {
+  margin-top: 48px;
 }
 
 /* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */

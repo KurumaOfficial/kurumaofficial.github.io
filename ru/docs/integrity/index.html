@@ -54,26 +54,6 @@
             <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
         </div>
     </div>
-    <div class="docs-article-center">
-        <div class="docs-content">
-    <section>
-      <h1>Проверка целостности модов (Modset Hash)</h1>
-      <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
-      <p>Система Aleph Trust проверяет каждый подгружаемый `.jar` файл в папке модов клиента для исключения чит-модификаций и инъекций стороннего кода.</p>
-    </section>
-
-    <section>
-      <h2>1. Алгоритм вычисления Modset Hash</h2>
-      <p>При запуске AMCLauncher строит криптографическое дерево Merkle Tree по содержимому всех `.jar` файлов и генерирует итоговый хэш SHA-256:</p>
-      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px;">SHA256(Mod_1.jar + Mod_2.jar + ... + Mod_N.jar) = modset_hash</pre>
-    </section>
-
-    <section>
-      <h2>2. Разрешенные источники модов (Allowlist)</h2>
-      <p>Моды должны быть скачаны из доверенных репозиториев (Modrinth / CurseForge) или подписаны цифровой подписью администратора сервера на тарифах Gimel и Dalet.</p>
-    </section>
-    </div>
-    </div>
     <div class="docs-hub-categories reveal">
         <div class="docs-cat-group">
             <h2 class="docs-cat-title">Соглашения и правила</h2>
@@ -94,6 +74,29 @@
             </div>
         </div>
     </div>
+    <div class="docs-article-center">
+        <div class="docs-content">
+    <section>
+      <h1>Проверка целостности модов (Modset Hash)</h1>
+      <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
+      <p>Система Aleph Trust проверяет каждый подгружаемый `.jar` файл в папке модов клиента для исключения чит-модификаций и инъекций стороннего кода.</p>
+    </section>
+
+    <section>
+      <h2>1. Алгоритм вычисления Modset Hash</h2>
+      <p>При запуске AMCLauncher строит криптографическое дерево Merkle Tree по содержимому всех `.jar` файлов и генерирует итоговый хэш SHA-256:</p>
+      <pre style="background: var(--surface); padding: 16px; border: 1px solid var(--border); font-family: var(--font-mono); font-size: 13px;">SHA256(Mod_1.jar + Mod_2.jar + ... + Mod_N.jar) = modset_hash</pre>
+    </section>
+
+    <section>
+      <h2>2. Разрешенные источники модов (Allowlist)</h2>
+      <p>Моды должны быть скачаны из доверенных репозиториев (Modrinth / CurseForge) или подписаны цифровой подписью администратора сервера на тарифах Gimel и Dalet.</p>
+    </section>
+    </div>
+    </div>
+
+    
+    
 </div>
 </main>
 <footer class="site-footer">
