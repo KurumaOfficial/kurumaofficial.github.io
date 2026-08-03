@@ -137,19 +137,17 @@
 }
 
 .docs-container {
-  display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 48px;
-  max-width: 1320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 48px var(--page-gutter, 64px) 140px;
+  padding: 24px var(--page-gutter, 64px) 140px;
 }
 
 @media (max-width: 860px) {
   .docs-container {
-    grid-template-columns: 1fr;
-    gap: 28px;
-    padding-bottom: 100px;
+    padding: 16px 20px 100px;
   }
 }
 
@@ -320,6 +318,7 @@ button.docs-nav-link {
   position: relative;
   box-shadow: 0 24px 70px rgba(0, 0, 0, 0.5);
   width: 100%;
+  max-width: 860px;
   box-sizing: border-box;
 }
 
