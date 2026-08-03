@@ -677,7 +677,7 @@ button.docs-nav-link {
   flex-direction: column;
   gap: 40px;
   max-width: 100%;
-  margin: -76px auto 100px;
+  margin: -110px auto 100px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   align-items: flex-start;
   text-align: left;
