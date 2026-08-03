@@ -20,110 +20,12 @@
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Перейти к основному содержимому</a>
-<nav class="nav" aria-label="Main navigation">
-    <a id="logoLink" class="nav-logo" href="../../../ru/" aria-label="Aleph Studio">
-        <span class="logo-sq" aria-hidden="true"></span>
-        <span class="logo-text">Aleph Studio</span>
-    </a>
-    <div class="nav-links">
-        <a id="navLinkProducts" class="nav__link" href="../../../ru/products/">Продукты</a>
-        <a id="navLinkDonate" class="nav__link" href="../../../ru/donate/" data-donate-link>Поддержать</a>
-        <a id="navLinkDocs" class="nav__link" href="../../../ru/docs/">Документация</a>
-    </div>
-    <div class="nav-right">
-        <div id="localeSwitcher" class="locale-switcher">
-            <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Select language">
-                <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
-                <span id="localeSwitcherLabel">RU</span>
-                <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div>
-        </div>
-        <a id="navAuthBtn" class="nav-auth-btn" href="../../../ru/auth/login/">Войти</a>
-    </div>
+<nav class="nav" aria-label="Main navigation"> <a id="logoLink" class="nav-logo" href="../../../ru/" aria-label="Aleph Studio"> <span class="logo-sq" aria-hidden="true"></span> <span class="logo-text">Aleph Studio</span> </a> <div class="nav-links"> <a id="navLinkProducts" class="nav__link" href="../../../ru/products/">Продукты</a> <a id="navLinkDonate" class="nav__link" href="../../../ru/donate/" data-donate-link>Поддержать</a> <a id="navLinkDocs" class="nav__link" href="../../../ru/docs/">Документация</a> </div> <div class="nav-right"> <div id="localeSwitcher" class="locale-switcher"> <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Select language"> <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span> <span id="localeSwitcherLabel">RU</span> <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg> </button> <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Select language" hidden></div> </div> <a id="navAuthBtn" class="nav-auth-btn" href="../../../ru/auth/login/">Войти</a> </div>
 </nav>
 <main id="main">
-<div class="docs-page">
-    <div class="docs-hub-hero">
-        <a href="../" class="hero-store-back docs-hub-back" aria-label="НАЗАД">
-            <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <span class="hero-store-back-label">НАЗАД</span>
-        </a>
-        <div class="docs-search-wrap">
-            <input type="text" placeholder="Поиск по документации..." class="docs-search-input">
-            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg>
-        </div>
-    </div>
-    <div class="docs-hub-categories docs-article-categories">
-        <div class="docs-cat-group">
-            <h2 class="docs-cat-title">Соглашения и правила</h2>
-            <div class="docs-cat-links">
-            <a class="docs-cat-link" href="../privacy/">Конфиденциальность</a>
-            <a class="docs-cat-link" href="../terms/">Правила</a>
-            <a class="docs-cat-link" href="../user-agreement/">Соглашение</a>
-            <a class="docs-cat-link is-active" href="../cookies/">Cookies</a>
-            </div>
-        </div>
-        <div class="docs-cat-group">
-            <h2 class="docs-cat-title">Решение проблем</h2>
-            <div class="docs-cat-links">
-            <a class="docs-cat-link" href="../launcher/">AMCLauncher</a>
-            <a class="docs-cat-link" href="../strange-visuals/">Strange Visuals</a>
-            <a class="docs-cat-link" href="../client/">AMC Client</a>
-            <a class="docs-cat-link" href="../aleph-trust/">Aleph Trust</a>
-            </div>
-        </div>
-    </div>
-    <div class="docs-article-center">
-        <div class="docs-content">
-    <section>
-      <h1>Политика использования файлов Cookie</h1>
-      <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div>
-      <p>Файлы cookie и локальное хранилище браузера (LocalStorage) используются для работы ключевых функций сервиса.</p>
-    </section>
-
-    <section>
-      <h2>1. Используемые типы данных хранилища</h2>
-      <ul>
-        <li><code>aleph-theme</code>: Сохранение выбранного визуального оформления (dark / light).</li>
-        <li><code>aleph_demo_auth</code>: Сессионный токен авторизации в личном кабинете.</li>
-        <li><code>aleph_reauth_enabled</code> / <code>aleph_reauth_code</code>: Сохранение настроек модуля защиты Intermittent Re-Authentication.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>2. Управление файлами Cookie</h2>
-      <p>Вы можете полностью отключить сохранение cookie в настройках вашего браузера, однако это может привести к невозможности сохранения темы и входа в личный кабинет.</p>
-    </section>
-    </div>
-    </div>
-
-    
-    
-</div>
+<div class="docs-page"> <div class="docs-hub-hero"> <a href="../" class="hero-store-back docs-hub-back" aria-label="НАЗАД"> <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span> <span class="hero-store-back-label">НАЗАД</span> </a> <div class="docs-search-wrap"> <input type="text" placeholder="Поиск по документации..." class="docs-search-input"> <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg> </div> </div> <div class="docs-hub-categories docs-article-categories"> <div class="docs-cat-group"> <h2 class="docs-cat-title">Соглашения и правила</h2> <div class="docs-cat-links"> <a class="docs-cat-link" href="../privacy/">Конфиденциальность</a> <a class="docs-cat-link" href="../terms/">Правила</a> <a class="docs-cat-link" href="../user-agreement/">Соглашение</a> <a class="docs-cat-link is-active" href="../cookies/">Cookies</a> </div> </div> <div class="docs-cat-group"> <h2 class="docs-cat-title">Решение проблем</h2> <div class="docs-cat-links"> <a class="docs-cat-link" href="../launcher/">AMCLauncher</a> <a class="docs-cat-link" href="../strange-visuals/">Strange Visuals</a> <a class="docs-cat-link" href="../client/">AMC Client</a> <a class="docs-cat-link" href="../aleph-trust/">Aleph Trust</a> </div> </div> </div> <div class="docs-article-center"> <div class="docs-content"> <section> <h1>Политика использования файлов Cookie</h1> <div class="docs-update-date">Последнее обновление: 1 августа 2026 г.</div> <p>Файлы cookie и локальное хранилище браузера (LocalStorage) используются для работы ключевых функций сервиса.</p> </section> <section> <h2>1. Используемые типы данных хранилища</h2> <ul> <li><code>aleph-theme</code>: Сохранение выбранного визуального оформления (dark / light).</li> <li><code>aleph_demo_auth</code>: Сессионный токен авторизации в личном кабинете.</li> <li><code>aleph_reauth_enabled</code> / <code>aleph_reauth_code</code>: Сохранение настроек модуля защиты Intermittent Re-Authentication.</li> </ul> </section> <section> <h2>2. Управление файлами Cookie</h2> <p>Вы можете полностью отключить сохранение cookie в настройках вашего браузера, однако это может привести к невозможности сохранения темы и входа в личный кабинет.</p> </section> </div> </div> </div>
 </main>
-<footer class="site-footer">
-    <div class="site-footer__main">
-        <div class="site-footer__left">
-            <a class="site-footer__logo" href="../../../ru/">
-                <span class="site-footer__sq" aria-hidden="true"></span>
-                <span class="site-footer__name">Aleph Studio</span>
-            </a>
-            <span class="site-footer__divider" aria-hidden="true"></span>
-            <span id="footerTagline" class="site-footer__tagline">Дочерний проект WeTTeA</span>
-        </div>
-        <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
-            <a href="../../../ru/products/">Продукты</a>
-            <a href="../../../ru/#manifesto">Принцип</a>
-            <a href="../../../ru/#team">Команда</a>
-            <span class="site-footer__nav-sep" aria-hidden="true"></span>
-            <a id="footerDonateLink" href="../../../ru/donate/">Поддержать</a>
-        </nav>
-        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div>
-    </div>
-    <div class="site-footer__bottom">
-        <span id="footerCopyright" class="site-footer__copy">© 2026. Все права защищены.</span>
-    </div>
+<footer class="site-footer"> <div class="site-footer__main"> <div class="site-footer__left"> <a class="site-footer__logo" href="../../../ru/"> <span class="site-footer__sq" aria-hidden="true"></span> <span class="site-footer__name">Aleph Studio</span> </a> <span class="site-footer__divider" aria-hidden="true"></span> <span id="footerTagline" class="site-footer__tagline">Дочерний проект WeTTeA</span> </div> <nav id="footerNav" class="site-footer__nav" aria-label="Footer"> <a href="../../../ru/products/">Продукты</a> <a href="../../../ru/#manifesto">Принцип</a> <a href="../../../ru/#team">Команда</a> <span class="site-footer__nav-sep" aria-hidden="true"></span> <a id="footerDonateLink" href="../../../ru/donate/">Поддержать</a> </nav> <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social"></div> </div> <div class="site-footer__bottom"> <span id="footerCopyright" class="site-footer__copy">© 2026. Все права защищены.</span> </div>
 </footer>
 <script type="module" src="../../../src/docs/docs.js?v=2"></script>
 </body>

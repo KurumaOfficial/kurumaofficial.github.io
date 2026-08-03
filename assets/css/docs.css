@@ -45,6 +45,13 @@
   overflow: hidden;
 }
 
+/* Disable reveal lift/slide animations inside docs for seamless instant route transitions */
+.docs-page .reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
 @media(max-width:768px) {
   .docs-page {
     padding-top: calc(76px + var(--safe-top, 0px));
