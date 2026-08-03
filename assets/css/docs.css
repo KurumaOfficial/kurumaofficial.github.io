@@ -45,8 +45,10 @@
   overflow: hidden;
 }
 
-/* Disable reveal lift/slide animations inside docs for seamless instant route transitions */
-.docs-page .reveal {
+/* Disable reveal lift/slide animations ONLY on article pages for seamless transitions between articles */
+.docs-article-categories.reveal,
+.docs-article-center .reveal,
+.docs-page:has(.docs-article-center) .reveal {
   opacity: 1 !important;
   transform: none !important;
   transition: none !important;
