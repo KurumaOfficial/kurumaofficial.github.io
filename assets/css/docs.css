@@ -689,7 +689,7 @@ button.docs-nav-link {
 .docs-article-center {
   max-width: 860px;
   width: 100%;
-  margin: 0 auto 80px;
+  margin: -220px auto 80px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   box-sizing: border-box;
 }
@@ -698,10 +698,16 @@ button.docs-nav-link {
   max-width: 100%;
 }
 
+@media (max-width: 1180px) {
+  .docs-article-center {
+    margin: 24px auto 60px;
+  }
+}
+
 @media (max-width: 640px) {
   .docs-article-center {
     padding: 0 20px;
-    margin-bottom: 48px;
+    margin: 20px auto 48px;
   }
 }
 
@@ -722,14 +728,7 @@ button.docs-nav-link {
 /* On article pages (where category list precedes centered article content) */
 .docs-hub-categories:has(+ .docs-article-center),
 .docs-hub-categories.docs-article-categories {
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 48px;
-  margin: 12px auto 20px;
-}
-
-.docs-article-categories .docs-cat-group {
-  gap: 8px;
+  margin: 16px auto 0;
 }
 
 .docs-cat-group {
