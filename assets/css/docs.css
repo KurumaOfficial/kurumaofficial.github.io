@@ -722,8 +722,14 @@ button.docs-nav-link {
 /* On article pages (where category list precedes centered article content) */
 .docs-hub-categories:has(+ .docs-article-center),
 .docs-hub-categories.docs-article-categories {
-  margin: 16px auto 32px;
-  gap: 24px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 48px;
+  margin: 12px auto 20px;
+}
+
+.docs-article-categories .docs-cat-group {
+  gap: 8px;
 }
 
 .docs-cat-group {
