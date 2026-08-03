@@ -88,22 +88,9 @@
   opacity: 0.7;
 }
 
-/* Ultra-smooth square gradient glow without stepping artifacts (80px core, 1.5x scaled) */
+/* Background cube light glow removed per user request */
 .auth-card::after {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 80px; height: 80px;
-  transform: translate(-50%, -50%);
-  background:
-    linear-gradient(90deg, transparent 0%, rgba(139, 26, 42, 0.07) 50%, transparent 100%),
-    linear-gradient(0deg,  transparent 0%, rgba(139, 26, 42, 0.07) 50%, transparent 100%);
-  background-blend-mode: screen;
-  box-shadow: 0 0 90px 45px rgba(139, 26, 42, 0.05);
-  filter: blur(40px);
-  pointer-events: none;
-  z-index: -1;
-  border-radius: 0;
+  display: none;
 }
 
 
