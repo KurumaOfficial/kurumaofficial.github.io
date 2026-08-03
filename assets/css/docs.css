@@ -689,7 +689,7 @@ button.docs-nav-link {
 .docs-article-center {
   max-width: 860px;
   width: 100%;
-  margin: -220px auto 80px;
+  margin: -280px auto 80px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   box-sizing: border-box;
 }
