@@ -704,6 +704,10 @@ button.docs-nav-link {
   }
 }
 
+.docs-article-center ~ .docs-hub-categories {
+  margin-top: 0;
+}
+
 /* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */
 
 .docs-hub-categories {
@@ -768,6 +772,15 @@ button.docs-nav-link {
 
 .docs-cat-link:hover::before {
   transform: translateX(3px);
+}
+
+.docs-cat-link.is-active {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.docs-cat-link.is-active::before {
+  color: var(--accent);
 }
 
 .docs-hub-back {
