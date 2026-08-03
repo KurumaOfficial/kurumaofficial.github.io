@@ -477,7 +477,7 @@ button.docs-nav-link {
 
 .docs-hub-hero {
   max-width: 100%;
-  margin: -12px auto 0;
+  margin: 36px auto 0;
   text-align: center;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   position: relative;
@@ -498,7 +498,7 @@ button.docs-nav-link {
   font-size: 20px;
   line-height: 1.65;
   color: var(--text-dim);
-  margin-bottom: 0;
+  margin-bottom: 24px;
   max-width: 680px;
   margin-left: auto;
   margin-right: auto;
@@ -506,7 +506,7 @@ button.docs-nav-link {
 
 .docs-search-wrap {
   position: absolute;
-  top: -12px;
+  top: 4px;
   right: calc(var(--page-gutter, 52px) + 24px);
   width: 340px;
   max-width: 35vw;
@@ -677,7 +677,7 @@ button.docs-nav-link {
   flex-direction: column;
   gap: 40px;
   max-width: 100%;
-  margin: -60px auto 100px;
+  margin: -76px auto 100px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   align-items: flex-start;
   text-align: left;
