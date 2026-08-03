@@ -477,6 +477,7 @@ button.docs-nav-link {
 .docs-hub-hero {
   max-width: 100%;
   margin: 36px auto 0;
+  min-height: 46px;
   text-align: center;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   position: relative;
@@ -688,7 +689,7 @@ button.docs-nav-link {
 .docs-article-center {
   max-width: 860px;
   width: 100%;
-  margin: 0 auto 48px;
+  margin: 0 auto 80px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   box-sizing: border-box;
 }
@@ -700,12 +701,8 @@ button.docs-nav-link {
 @media (max-width: 640px) {
   .docs-article-center {
     padding: 0 20px;
-    margin-bottom: 32px;
+    margin-bottom: 48px;
   }
-}
-
-.docs-hub-categories + .docs-article-center {
-  margin-top: 0;
 }
 
 /* ── §4.1  Documentation Category List Layout (No Cards) ──────────────────── */
@@ -725,7 +722,8 @@ button.docs-nav-link {
 /* On article pages (where category list precedes centered article content) */
 .docs-hub-categories:has(+ .docs-article-center),
 .docs-hub-categories.docs-article-categories {
-  margin: 24px auto 48px;
+  margin: 16px auto 32px;
+  gap: 24px;
 }
 
 .docs-cat-group {
