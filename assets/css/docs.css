@@ -473,7 +473,7 @@ button.docs-nav-link {
   color: var(--text);
 }
 
-/* ── §4  Documentation Hub Hero ─────────────────────────────────────────── */
+/* ── §4  Documentation Hub Hero with Aligned Top Row ─────────────────────── */
 
 .docs-hub-hero {
   max-width: 100%;
@@ -504,6 +504,15 @@ button.docs-nav-link {
   margin-right: auto;
 }
 
+.docs-hub-back {
+  position: absolute;
+  top: 4px;
+  left: calc(var(--page-gutter, 52px) + 24px);
+  margin: 0;
+  z-index: 10;
+  cursor: pointer;
+}
+
 .docs-search-wrap {
   position: absolute;
   top: 4px;
@@ -515,6 +524,10 @@ button.docs-nav-link {
 }
 
 @media (max-width: 1080px) {
+  .docs-hub-back {
+    position: static;
+    margin-bottom: 16px;
+  }
   .docs-search-wrap {
     position: static;
     margin: 24px auto 0;
@@ -677,7 +690,7 @@ button.docs-nav-link {
   flex-direction: column;
   gap: 40px;
   max-width: 100%;
-  margin: -160px auto 100px;
+  margin: 36px auto 100px;
   padding: 0 calc(var(--page-gutter, 52px) + 24px);
   align-items: flex-start;
   text-align: left;
