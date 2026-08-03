@@ -676,11 +676,12 @@ button.docs-nav-link {
   display: flex;
   flex-direction: column;
   gap: 40px;
-  max-width: 1320px;
+  max-width: 100%;
   margin: -8px auto 100px;
-  padding: 0 var(--page-gutter, 64px);
+  padding: 0 calc(var(--page-gutter, 52px) + 24px);
   align-items: flex-start;
   text-align: left;
+  box-sizing: border-box;
 }
 
 .docs-cat-group {
