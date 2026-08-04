@@ -29,7 +29,7 @@ const ROUTE_MODULE_LABELS = Object.freeze({
 
 const ADMIN_VIEW_COPY = Object.freeze({
     ru: {
-        home: { title: 'Главная', subtitle: 'Центр управления черновиком, публикацией и быстрыми переходами по админке.' },
+        home: { title: 'Главная', subtitle: '' },
         products: { title: 'Продукты', subtitle: 'Управление карточками, ссылками, порядком и публикацией релизов.' },
         support: { title: 'Поддержка', subtitle: 'Управление страницей donate, способами оплаты и карточками поддержавших.' },
         misc: { title: 'Прочее', subtitle: 'Команда, социальные ссылки и дополнительные настройки витрины.' },
@@ -38,7 +38,7 @@ const ADMIN_VIEW_COPY = Object.freeze({
         locale: { triggerLabel: 'Выбор языка', menuLabel: 'Сменить язык' },
     },
     en: {
-        home: { title: 'Home', subtitle: 'Control draft state, publication and quick admin navigation.' },
+        home: { title: 'Home', subtitle: '' },
         products: { title: 'Products', subtitle: 'Manage cards, links, order and publication state for releases.' },
         support: { title: 'Support', subtitle: 'Manage the donate route, support buttons and supporter cards.' },
         misc: { title: 'Misc', subtitle: 'Team, social links and additional showcase settings.' },
@@ -47,7 +47,7 @@ const ADMIN_VIEW_COPY = Object.freeze({
         locale: { triggerLabel: 'Choose language', menuLabel: 'Change language' },
     },
     ua: {
-        home: { title: 'Головна', subtitle: 'Центр керування чернеткою, публікацією та швидкими переходами в адмінці.' },
+        home: { title: 'Головна', subtitle: '' },
         products: { title: 'Продукти', subtitle: 'Керування картками, посиланнями, порядком та публікацією релізів.' },
         support: { title: 'Підтримка', subtitle: 'Керування donate-сторінкою, способами підтримки та картками тих, хто підтримав.' },
         misc: { title: 'Інше', subtitle: 'Команда, соціальні посилання та додаткові налаштування вітрини.' },
