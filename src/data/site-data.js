@@ -355,6 +355,14 @@ export const DEFAULT_SITE_DATA = {
             "avatarUrl": "https://i.pinimg.com/736x/25/60/e1/2560e1cbf27a9cfa78faccde40971482.jpg",
             "description": "Всегда в сети",
             "sortOrder": 4
+        },
+        {
+            "id": "team-member-1785807031088-1",
+            "name": "mqclass",
+            "role": "Разработчик",
+            "avatarUrl": "https://i.pinimg.com/736x/1a/a9/57/1aa9578832f914e1a1113b317246df56.jpg",
+            "description": "Гений, миллиардер, плейбой, филантроп.",
+            "sortOrder": 4
         }
     ],
     "supportPage": {
