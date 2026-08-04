@@ -819,10 +819,6 @@ mark.docs-search-mark {
   box-shadow: 0 0 8px rgba(139, 26, 42, 0.3);
 }
 
-.docs-search-wrap {
-  position: relative;
-}
-
 .docs-search-results {
   position: absolute;
   top: calc(100% + 8px);
