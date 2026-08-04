@@ -26,7 +26,8 @@
 <link rel="alternate" hreflang="ru" href="https://www.aleph.icu/ru/products/aleph-trust/">
 <link rel="alternate" hreflang="en" href="https://www.aleph.icu/en/products/aleph-trust/">
 <link rel="alternate" hreflang="uk" href="https://www.aleph.icu/ua/products/aleph-trust/">
-<link rel="alternate" hreflang="x-default" href="https://www.aleph.icu/ru/products/aleph-trust/"><script>window.__ALEPH_LOCALE__ = 'en';</script>
+<link rel="alternate" hreflang="x-default" href="https://www.aleph.icu/ru/products/aleph-trust/">
+<script>window.__ALEPH_LOCALE__ = 'en';</script>
 <script>(function(){try{var t=localStorage.getItem('aleph-theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;}}catch(e){}}());</script>
 <link rel="icon" href="../../../favicon.ico" sizes="48x48">
 <link rel="icon" href="../../../assets/icons/favicon.svg" type="image/svg+xml">
@@ -35,43 +36,44 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/css/main.css?v=12">
-<link rel="stylesheet" href="../../../assets/css/products/product-page.css?v=3">
+<link rel="stylesheet" href="../../../assets/css/main.css?v=13">
+<link rel="stylesheet" href="../../../assets/css/products/product-page.css?v=4">
 <link rel="modulepreload" href="../../../src/products/strange-visuals.js?v=20260606b">
 </head>
 <body>
 <a id="skipLink" class="skip-link" href="#main">Skip to main content</a>
-<nav class="nav" aria-label="Main navigation">
+<nav class="nav" aria-label="Language">
   <a id="logoLink" class="nav-logo" href="../../" aria-label="Aleph Studio — home">
     <span class="logo-sq" aria-hidden="true"></span>
     <span class="logo-text">Aleph Studio</span>
   </a>
-    <div class="nav-links">
-      <a id="navLinkProducts" class="nav__link" href="../">Products</a>
-      <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Support</a>
-      </div>
+  <div class="nav-links">
+    <a id="navLinkProducts" class="nav__link" href="../">Products</a>
+    <a id="navLinkDonate" class="nav__link" href="../../donate/" data-donate-link>Support</a>
+          <a id="navLinkDocs" class="nav__link" href="../../docs/">Docs</a>
+  </div>
   <div class="nav-right">
-    <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
-      <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
-    </button>
     <div id="localeSwitcher" class="locale-switcher">
-      <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Choose language">
+      <button id="localeSwitcherTrigger" class="locale-switcher__trigger" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Language">
         <span id="localeSwitcherFlag" class="locale-switcher__flag" aria-hidden="true"></span>
         <span id="localeSwitcherLabel">EN</span>
         <svg class="locale-switcher__caret" viewBox="0 0 12 12" aria-hidden="true"><polyline points="2,4 6,8 10,4" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div id="localeSwitcherMenu" class="locale-switcher__menu" role="menu" aria-label="Change language" hidden></div>
     </div>
-  </div>
+      <a id="navAuthBtn" class="nav-auth-btn" href="../../auth/login/">Sign In</a>
+        </div>
 </nav>
+
 <main id="main">
 <div class="hero-store-top">
-  <a href="../" class="hero-store-back" aria-label="Back to product list">
+  <a href="../" class="hero-store-back" aria-label="BACK TO PRODUCT LIST">
     <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     <span class="hero-store-back-label">BACK TO PRODUCT LIST</span>
   </a>
   <div class="hero-store-actions"></div>
 </div>
+
 <section class="hero-store">
   <div class="hero-left-fog"></div>
   <div class="hero-left-shade"></div>
@@ -79,9 +81,40 @@
     <div class="hero-store-card">
       <div class="hero-icon-wrap" id="heroIconWrap">
         <div class="hero-app-icon">
-          <svg viewBox="0 0 300 300" fill="currentColor">
-            <!-- Shield outline -->
-            <path d="M150 44 L238 78 L238 152 Q238 218 150 260 Q62 218 62 152 L62 78 Z" fill="none" stroke="currentColor" stroke-width="14" stroke-linejoin="round"/>
+          <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="8" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- soft glow duplicate (outer) -->
+            <path d="M 198,30 L 69,82 L 64,89 L 64,218
+                     C 74.7,289.2 140,338 200,370
+                     C 260,338 325.3,289.2 336,218
+                     L 336,89 L 331,82 L 202,30 Z"
+                  fill="none" stroke="#e51e4a" stroke-width="12" opacity="0.45" filter="url(#glow)"/>
+
+            <!-- inner shield: fill + second (muted) border -->
+            <path d="M 198.2,44.5 L 80.1,92.1 L 75.6,98.5 L 75.6,216.6
+                     C 85.4,281.7 145.1,326.4 200,355.6
+                     C 254.9,326.4 314.6,281.7 324.4,216.6
+                     L 324.4,98.5 L 319.9,92.1 L 201.8,44.5 Z"
+                  fill="#480918" stroke="#6e1226" stroke-width="14"/>
+
+            <!-- crisp outer stroke -->
+            <path d="M 198,30 L 69,82 L 64,89 L 64,218
+                     C 74.7,289.2 140,338 200,370
+                     C 260,338 325.3,289.2 336,218
+                     L 336,89 L 331,82 L 202,30 Z"
+                  fill="none" stroke="#e51e4a" stroke-width="9" stroke-linejoin="round" stroke-linecap="round"/>
+
+            <!-- vertical divider -->
+            <line x1="200" y1="42" x2="200" y2="358" stroke="#80122c" stroke-width="6"/>
           </svg>
         </div>
       </div>
@@ -91,7 +124,7 @@
           Aleph Studio
           <span class="hero-verified"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5.5 12.5 10 17l8.5-8.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></span>
         </a>
-        <div class="hero-category">Server plugin · Minecraft · Subscription</div>
+        <div class="hero-category">Plugin · Minecraft · Subscription</div>
         <div class="hero-meta">
           <div class="hero-meta-item">
             <div class="hero-meta-value">4.9 <span class="hero-star">★</span></div>
@@ -120,7 +153,7 @@
               <span class="hero-share-toggle-icon hero-share-toggle-icon--close ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
             </button>
             <div class="hero-share-menu" id="shareMenu" aria-label="Share on social platforms">
-              <a class="hero-share-link hero-share-link--telegram" id="shareTelegramBtn" data-social-link="telegram" href="https://t.me/AlephStudio_Official" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.518 2.814a1.49 1.49 0 0 0-1.532-.178L2.92 10.563c-.62.28-.58 1.19.06 1.415l4.27 1.46 1.62 5.25c.182.59.95.73 1.327.241l2.407-3.113 4.716 3.463c.53.39 1.284.091 1.407-.556L21.95 4.235a1.49 1.49 0 0 0-.432-1.421ZM9.38 12.824l8.456-6.25-6.84 7.67a.75.75 0 0 0-.17.31l-.89 2.96-.725-2.35a.75.75 0 0 0-.475-.489l-2.32-.793 2.964-1.058Z"/></svg></a>
+              <a class="hero-share-link hero-share-link--telegram" id="shareTelegramBtn" data-social-link="telegram" href="https://t.me/AlephStudio_Official" target="_blank" rel="noopener noreferrer" title="Telegram" aria-label="Telegram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.518 2.814a1.49 1.49 0 0 0-1.532-.178L2.92 10.563c-.62.28-.58 1.19.06 1.415l4.27 1.46 1.62 5.25c.182.59.95.73.182.59.95.73 1.327.241l2.407-3.113 4.716 3.463c.53.39 1.284.091 1.407-.556L21.95 4.235a1.49 1.49 0 0 0-.432-1.421ZM9.38 12.824l8.456-6.25-6.84 7.67a.75.75 0 0 0-.17.31l-.89 2.96-.725-2.35a.75.75 0 0 0-.475-.489l-2.32-.793 2.964-1.058Z"/></svg></a>
               <a class="hero-share-link hero-share-link--discord" id="shareDiscordBtn" data-social-link="discord" href="https://discord.gg/3YxB2R6eqQ" target="_blank" rel="noopener noreferrer" title="Discord" aria-label="Discord"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.54 5.34A16.4 16.4 0 0 0 15.5 4.1a.19.19 0 0 0-.2.1c-.17.3-.36.7-.49 1.01a15.2 15.2 0 0 0-4.62 0 10.7 10.7 0 0 0-.5-1.01.2.2 0 0 0-.2-.1A16.37 16.37 0 0 0 5.46 5.34a.17.17 0 0 0-.08.07C2.8 9.27 2.1 13.03 2.44 16.74c0 .06.03.11.08.14a16.5 16.5 0 0 0 4.96 2.5.2.2 0 0 0 .22-.07c.38-.52.72-1.07 1.01-1.64a.19.19 0 0 0-.1-.26 10.8 10.8 0 0 1-1.55-.74.2.2 0 0 1-.02-.32c.1-.07.2-.15.3-.23a.2.2 0 0 1 .2-.03c3 1.37 6.24 1.37 9.2 0a.2.2 0 0 1 .2.03l.3.23a.2.2 0 0 1-.01.32c-.5.3-1.02.55-1.56.74a.19.19 0 0 0-.1.27c.3.57.63 1.12 1.01 1.63.05.07.14.1.22.07a16.4 16.4 0 0 0 4.96-2.5.2.2 0 0 0 .08-.14c.4-4.3-.67-8.02-2.95-11.33a.16.16 0 0 0-.08-.07ZM9.76 14.48c-.98 0-1.79-.9-1.79-2 0-1.1.79-2 1.79-2 .99 0 1.8.9 1.79 2 0 1.1-.8 2-1.79 2Zm4.48 0c-.99 0-1.79-.9-1.79-2 0-1.1.8-2 1.79-2 1 0 1.8.9 1.8 2 0 1.1-.8 2-1.8 2Z"/></svg></a>
               <a class="hero-share-link hero-share-link--youtube" id="shareYoutubeBtn" data-social-link="youtube" href="https://www.youtube.com/@KurumaBestWaify" target="_blank" rel="noopener noreferrer" title="YouTube" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 7.2a3 3 0 0 0-2.1-2.12C19.54 4.5 12 4.5 12 4.5s-7.54 0-9.4.58A3 3 0 0 0 .5 7.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 4.8 3 3 0 0 0 2.1 2.12c1.86.58 9.4.58 9.4.58s7.54 0 9.4-.58a3 3 0 0 0 2.1-2.12A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-4.8ZM9.6 15.49V8.51L15.82 12 9.6 15.49Z"/></svg></a>
             </div>
@@ -130,6 +163,7 @@
     </div>
   </div>
 </section>
+
 <div class="wrap" id="gallery">
   <div class="compare-section-head reveal">
     <div>
@@ -160,58 +194,60 @@
     <div class="gallery-dots" id="galleryDots" aria-hidden="true"><div class="gallery-dot active"></div><div class="gallery-dot"></div></div>
   </div>
 </div>
+
 <div class="wrap" id="features">
   <div class="feat-head reveal">
     <div>
-      <div class="eyebrow">Information</div>
-      <h2 class="s-title">Everything about the plugin</h2>
+      <div class="eyebrow">Capabilities</div>
+      <h2 class="s-title">All about Aleph&nbsp;Trust</h2>
     </div>
-    <p class="s-desc">Aleph Trust is a Minecraft server plugin. Early concept — details are being refined.</p>
+    <p class="s-desc">SaaS admission system for Minecraft servers. Launcher, mod, identity and client integrity verification.</p>
   </div>
   <div class="feat-grid reveal">
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>For servers</h3>
-      <p>Aleph Trust is a Minecraft server plugin. Built for server owners and distributed by subscription.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" fill="currentColor"/></svg></span></div>
-      <h3>Subscription</h3>
-      <p>The plugin source code will be closed — protection against unauthorized distribution.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.7 3.8 6.8 13h4.2l-.8 7.2 6.8-9.2h-4.2Z" fill="currentColor"/></svg></span></div>
-      <h3>Early concept</h3>
-      <p>The product is at an early concept stage. Functionality and subscription pricing are not yet defined.</p>
-    </div>
-    <div class="feat-card w2">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.7 9.4h14.6M4.9 14.6h14.2M12 3.8c2.1 2.1 3.3 5 3.3 8.2S14.1 18.1 12 20.2M12 3.8C9.9 5.9 8.7 8.8 8.7 12s1.2 6.1 3.3 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
-      <h3>Subscription model</h3>
-      <p>Aleph Trust will be available on a subscription basis. Pricing and plans will be announced closer to release. Follow our socials.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8.1 3.6h3.05L12 7.1l-2.1 4.12-3.2-4.35Z" fill="currentColor" opacity=".78"/><path d="M12.85 3.6h3.05l1.4 3.27-3.2 4.35L12 7.1Z" fill="currentColor" opacity=".56"/><circle cx="12" cy="14.6" r="5.15" fill="currentColor"/><circle cx="12" cy="14.6" r="2.15" fill="#ffffff" opacity=".16"/></svg></span></div>
-      <h3>Support us</h3>
-      <p>Want to help the team? You can support us on the <a href="../../donate/" data-donate-link>support page</a>.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 4.5 20 18.5H4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 9v4.4M12 16.4h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span></div>
-      <h3>Questions and ideas</h3>
-      <p>Have suggestions? Write to us on <a id="supportDiscordLink" href="https://discord.gg/3YxB2R6eqQ" target="_blank" rel="noopener noreferrer">Discord</a>.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>Server protection</h3>
-      <p>Aleph Trust provides reliable protection against cheaters and griefers. Automatic detection of suspicious activity.</p>
-    </div>
-    <div class="feat-card">
-      <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
-      <h3>Flexible configuration</h3>
-      <p>Full control over plugin configuration. Customize rules, limits, and parameters to fit your server's needs.</p>
-    </div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M4.7 9.4h14.6M4.9 14.6h14.2M12 3.8c2.1 2.1 3.3 5 3.3 8.2S14.1 18.1 12 20.2M12 3.8C9.9 5.9 8.7 8.8 8.7 12s1.2 6.1 3.3 8.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div>
+  <h3>Trusted Environment</h3>
+  <p>Aleph Trust ensures access only through the official AMCLauncher. Any modified clients are automatically blocked.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>Mod Verification</h3>
+  <p>Launcher integrity checks, modset_hash verification, and mod validation through trusted sources. Protection against tampering and injection.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span></div>
+  <h3>WetID Integration</h3>
+  <p>WetID account and verified document support. Multi-level trust system for serious servers.</p>
+</div>
+<div class="feat-card w2">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>Flexible Policies</h3>
+  <p>Configure security modes per server: from basic launcher gate to full document verification. Separate policies for lobby, survival, pvp.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 300 300" fill="currentColor"><path d="M150 44 L238 78 L238 152 Q238 218 150 260 Q62 218 62 152 L62 78 Z" fill="none" stroke="currentColor" stroke-width="14" stroke-linejoin="round"/></svg></span></div>
+  <h3>Control Panel</h3>
+  <p>Risk dashboard, advanced audit logs, session revocation. Full control over connections to your server.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" viewBox="0 0 30 24"><path d="M10.1 7.1 3.6 12l6.5 4.9M19.9 7.1 26.4 12l-6.5 4.9M16.4 5.05 13.6 18.95" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>API & Webhooks</h3>
+  <p>Open API for trust session verification, webhooks for Discord and your backend. Integration into any infrastructure.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M13.7 3.8 6.8 13h4.2l-.8 7.2 6.8-9.2h-4.2Z" fill="currentColor"/></svg></span></div>
+  <h3>Server Support</h3>
+  <p>Paper, Purpur, Velocity. The plugin is compatible with popular Minecraft server platforms.</p>
+</div>
+<div class="feat-card">
+  <div class="feat-ico"><span class="ui-icon" aria-hidden="true"><svg class="ui-icon-svg" class="ui-icon-svg" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+  <h3>Enterprise SDK</h3>
+  <p>For large networks: custom launcher, white-label, vendor certificate, separate signing keys and team management.</p>
+</div>
   </div>
 </div>
 </main>
+
 <footer class="site-footer">
     <div class="site-footer__main">
         <div class="site-footer__left">
@@ -235,6 +271,7 @@
         <span id="footerCopyright" class="site-footer__copy">© 2026. All rights reserved.</span>
     </div>
 </footer>
+
 <script type="module" src="../../../src/products/strange-visuals.js?v=20260606b"></script>
 </body>
 </html>

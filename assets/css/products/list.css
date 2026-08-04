@@ -14,7 +14,7 @@
     --plist-bg: transparent;
     padding: 0 calc(var(--page-gutter, 24px) + var(--safe-right, 0px))
              0 calc(var(--page-gutter, 24px) + var(--safe-left, 0px));
-    max-width: 1280px;
+    max-width: 1680px;
     margin: 0 auto;
 }
 
@@ -213,11 +213,14 @@
     border: 1px solid var(--plist-card-border);
     background: var(--plist-card-border);
 }
-@media (min-width: 720px) {
+@media (min-width: 640px) {
     .plist-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (min-width: 1100px) {
+@media (min-width: 1024px) {
     .plist-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1400px) {
+    .plist-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 
 /* ── Card ────────────────────────────────────────────────── *
@@ -457,4 +460,44 @@
 .plist-empty button:hover {
     color: var(--plist-card-accent);
     border-color: var(--plist-card-accent);
+}
+
+/* ── Plist Card Banners ────────────────────────────────────── */
+
+.plist-card-bg-banner {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    transition: transform 0.6s var(--ease-default, cubic-bezier(.22, 1, .36, 1));
+    pointer-events: none;
+}
+
+.plist-card-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(8, 6, 6, 0.72) 0%, rgba(8, 6, 6, 0.94) 100%);
+    z-index: 1;
+    transition: background 0.3s ease;
+    pointer-events: none;
+}
+
+.plist-card:hover .plist-card-bg-banner {
+    transform: scale(1.05);
+}
+
+.plist-card:hover .plist-card-bg-overlay {
+    background: linear-gradient(to bottom, rgba(8, 6, 6, 0.58) 0%, rgba(8, 6, 6, 0.88) 100%);
+}
+
+.plist-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+.plist-card > .plist-card-bg-banner,
+.plist-card > .plist-card-bg-overlay {
+    position: absolute;
+    z-index: 0;
 }

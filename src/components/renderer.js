@@ -7,19 +7,19 @@
  * @module components/renderer
  */
 
-import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { localizeSiteData } from '../data/localized-site-data.js';
-import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
-import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
-import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
-import { resolveLocaleRootRelativePath } from '../i18n/config.js';
+import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260703a';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
+import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260703a';
+import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js?v=20260703a';
+import { cleanUrl, escapeHtml, linkify, optimizeDiscordAvatarUrl, $ } from '../core/dom.js?v=20260703a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
+import { resolveLocaleRootRelativePath } from '../i18n/config.js?v=20260703a';
 
 // ── Factory ─────────────────────────────────────────────────
 
 /**
  * Create the public-site renderer.
- * @param {{ localeController: ReturnType<import('../i18n/controller.js').createLocaleController> }} deps
+ * @param {{ localeController: ReturnType<import('../i18n/controller.js?v=20260703a').createLocaleController> }} deps
  */
 export function createRenderer({ localeController }) {
     const featuredEl = $('featured-products');
@@ -29,7 +29,7 @@ export function createRenderer({ localeController }) {
     const teamShowcaseEl = $('teamShowcase');
     const collationLocale = localeController.locale === 'ua' ? 'uk' : localeController.locale;
 
-    /** @type {import('../core/data-utils.js').SiteData} */
+    /** @type {import('../core/data-utils.js?v=20260703a').SiteData} */
     let siteData = localizeSiteData(normalizeData(DEFAULT_SITE_DATA), localeController.locale);
 
     /** Shorthand for translations. */
@@ -165,6 +165,9 @@ export function createRenderer({ localeController }) {
         featuredEl.innerHTML = products.map((product) => {
             const dotClass = (product.downloadUrl || product.detailUrl) ? 'status-dot' : 'status-dot inactive';
             const badge = flagBadgeHtml(product.flag);
+            const bannerHtml = product.cardBannerUrl
+                ? `<div class="product-card-bg-banner" style="background-image: url('${escapeHtml(localeController.resolveSitePath(product.cardBannerUrl))}')"></div><div class="product-card-bg-overlay"></div>`
+                : '';
 
             /* Card with detail page link */
             if (product.detailUrl) {
@@ -178,6 +181,7 @@ export function createRenderer({ localeController }) {
                     : '';
                 return `
 <article class="product-card ${product.autoRouteRedirect ? 'is-route-card' : ''}" id="${escapeHtml(product.id)}" role="listitem"${cardAttrs}>
+  ${bannerHtml}
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>
@@ -205,6 +209,7 @@ export function createRenderer({ localeController }) {
 
             return `
 <article class="product-card" id="${escapeHtml(product.id)}" role="listitem">
+  ${bannerHtml}
   <div class="product-status"><span class="${dotClass}"></span>${escapeHtml(lifecycleLabel(product.status || product.tag))} ${badge}</div>
   <h3 class="product-name">${escapeHtml(product.title)}</h3>
   <p class="product-version">v${escapeHtml(product.version)}</p>

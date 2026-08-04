@@ -1,9 +1,9 @@
 import { initReveal } from '../components/reveal.js';
-import { $, cleanUrl, createElement, optimizeDiscordAvatarUrl, sanitizeHref } from '../core/dom.js';
+import { $, cleanUrl, createElement, optimizeDiscordAvatarUrl, sanitizeHref } from '../core/dom.js?v=20260703a';
 import { createInlineIcon } from '../core/icons.js';
-import { localizeSiteData } from '../data/localized-site-data.js';
-import { resolveRouteRelativePath } from '../i18n/config.js';
-import { createLocaleController } from '../i18n/controller.js';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
+import { resolveRouteRelativePath } from '../i18n/config.js?v=20260703a';
+import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import {
     getAdminHref,
     getEffectiveSiteData,
@@ -11,7 +11,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js?v=20260510a';
+} from '../core/site-shell.js?v=20260703a';
 
 const COPY = Object.freeze({
     ru: {

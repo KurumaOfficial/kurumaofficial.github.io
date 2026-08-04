@@ -19,6 +19,7 @@ export const DEFAULT_SITE_DATA = {
             "featuredOrder": 1,
             "sortOrder": 1,
             "tone": "green",
+            "cardBannerUrl": "./assets/media/strange-visuals/card-banner.jpg",
             "summary": "Strange Visuals сфокусирован на визуальных улучшениях, которые не нарушают правила серверов.",
             "instructions": [
                 "Установите Minecraft Fabric 1.21.8 в вашем лаунчере.",
@@ -280,6 +281,7 @@ export const DEFAULT_SITE_DATA = {
             "featuredOrder": 2,
             "sortOrder": 2,
             "tone": "green",
+            "cardBannerUrl": "./assets/media/aleph-minecraft-launcher/card-banner.jpg",
             "summary": "Лаунчер для Minecraft от Aleph Studio. Открытый исходный код, бесплатно. В разработке.",
             "instructions": [],
             "sourceUrl": "https://github.com/KurumaOfficial",
@@ -309,6 +311,7 @@ export const DEFAULT_SITE_DATA = {
             "featuredOrder": 3,
             "sortOrder": 3,
             "tone": "red",
+            "cardBannerUrl": "./assets/media/aleph-trust/card-banner.jpg",
             "summary": "Плагин для Minecraft-серверов от Aleph Studio. Подписочная модель, закрытый код. Ранний концепт.",
             "instructions": [],
             "sourceUrl": "",

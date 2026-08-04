@@ -1,5 +1,5 @@
-import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
+import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260703a';
+import { GITHUB_CONFIG, LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260703a';
 import {
     deepClone,
     formatBytes,
@@ -13,11 +13,11 @@ import {
     normalizeTeamMember,
     ROUTE_MODULE_KEYS,
     toNumber,
-} from '../core/data-utils.js';
-import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
+} from '../core/data-utils.js?v=20260703a';
+import { cleanUrl, escapeHtml, optimizeDiscordAvatarUrl } from '../core/dom.js?v=20260703a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 import { createGitHubPublisher, fetchPublishedSiteData } from '../github/publisher.js';
-import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js';
+import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js?v=20260703a';
 
 const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
 const PREVIEW_DISCORD_IMAGE_SIZE = 256;
@@ -29,7 +29,7 @@ const ROUTE_MODULE_LABELS = Object.freeze({
 
 const ADMIN_VIEW_COPY = Object.freeze({
     ru: {
-        home: { title: 'Главная', subtitle: 'Центр управления черновиком, публикацией и быстрыми переходами по админке.' },
+        home: { title: 'Главная', subtitle: '' },
         products: { title: 'Продукты', subtitle: 'Управление карточками, ссылками, порядком и публикацией релизов.' },
         support: { title: 'Поддержка', subtitle: 'Управление страницей donate, способами оплаты и карточками поддержавших.' },
         misc: { title: 'Прочее', subtitle: 'Команда, социальные ссылки и дополнительные настройки витрины.' },
@@ -38,7 +38,7 @@ const ADMIN_VIEW_COPY = Object.freeze({
         locale: { triggerLabel: 'Выбор языка', menuLabel: 'Сменить язык' },
     },
     en: {
-        home: { title: 'Home', subtitle: 'Control draft state, publication and quick admin navigation.' },
+        home: { title: 'Home', subtitle: '' },
         products: { title: 'Products', subtitle: 'Manage cards, links, order and publication state for releases.' },
         support: { title: 'Support', subtitle: 'Manage the donate route, support buttons and supporter cards.' },
         misc: { title: 'Misc', subtitle: 'Team, social links and additional showcase settings.' },
@@ -47,7 +47,7 @@ const ADMIN_VIEW_COPY = Object.freeze({
         locale: { triggerLabel: 'Choose language', menuLabel: 'Change language' },
     },
     ua: {
-        home: { title: 'Головна', subtitle: 'Центр керування чернеткою, публікацією та швидкими переходами в адмінці.' },
+        home: { title: 'Головна', subtitle: '' },
         products: { title: 'Продукти', subtitle: 'Керування картками, посиланнями, порядком та публікацією релізів.' },
         support: { title: 'Підтримка', subtitle: 'Керування donate-сторінкою, способами підтримки та картками тих, хто підтримав.' },
         misc: { title: 'Інше', subtitle: 'Команда, соціальні посилання та додаткові налаштування вітрини.' },
@@ -122,7 +122,7 @@ const ADMIN_MESSAGES = Object.freeze({
         statusCardTitle: 'Статус черновика',
         statusCardSub: 'Синхронизация, публикация и очередь загрузок',
         syncpubCardTitle: 'Публикация и синхронизация',
-        syncpubCardSub: 'Состояние черновика, очередь файлов и ключ глобальной публикации',
+        syncpubCardSub: '',
         publishCardTitle: 'Глобальная публикация',
         publishCardSub: 'Введите пароль и опубликуйте черновик для всех пользователей',
         publishPasswordLabel: 'Пароль',
@@ -344,7 +344,7 @@ const ADMIN_MESSAGES = Object.freeze({
         statusCardTitle: 'Draft status',
         statusCardSub: 'Sync, publication and upload queue',
         syncpubCardTitle: 'Publication & sync',
-        syncpubCardSub: 'Draft state, upload queue and global publish key',
+        syncpubCardSub: '',
         publishCardTitle: 'Global publication',
         publishCardSub: 'Enter the password and publish the draft for every visitor',
         publishPasswordLabel: 'Password',
@@ -566,7 +566,7 @@ const ADMIN_MESSAGES = Object.freeze({
         statusCardTitle: 'Статус чернетки',
         statusCardSub: 'Синхронізація, публікація та черга завантажень',
         syncpubCardTitle: 'Публікація та синхронізація',
-        syncpubCardSub: 'Стан чернетки, черга файлів і ключ глобальної публікації',
+        syncpubCardSub: '',
         publishCardTitle: 'Глобальна публікація',
         publishCardSub: 'Введіть пароль і опублікуйте чернетку для всіх відвідувачів',
         publishPasswordLabel: 'Пароль',

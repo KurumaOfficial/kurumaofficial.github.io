@@ -1,8 +1,8 @@
-import { DEFAULT_SITE_DATA } from '../data/site-data.js';
-import { detectLocaleFromPath, getLocalePath } from '../i18n/config.js';
-import { normalizeData } from './data-utils.js';
+import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260703a';
+import { detectLocaleFromPath, getLocalePath } from '../i18n/config.js?v=20260703a';
+import { normalizeData } from './data-utils.js?v=20260703a';
 import { setInlineIcon } from './icons.js';
-import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js';
+import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js?v=20260703a';
 
 const THEME_STORAGE_KEY = 'aleph-theme';
 const THEME_SWITCH_ATTR = 'data-theme-switching';
@@ -61,12 +61,27 @@ function mergeDefaultProducts(stored) {
         /* Add products present in defaults but missing from stored snapshot */
         const missing = defaultProducts.filter((p) => !storedIds.has(p.id));
 
-        /* Remove products that no longer exist in defaults —
-         * e.g. old placeholder slots ("next-release", "third-project") that
-         * were deleted from site-data.js but are still in a user's localStorage. */
-        const filtered = storedProducts.filter((p) => defaultIds.has(p.id));
+        /* Remove products that no longer exist in defaults, and merge newer default properties */
+        let propertiesUpdated = false;
+        const filtered = storedProducts
+            .filter((p) => defaultIds.has(p.id))
+            .map((sp) => {
+                const dp = defaultProducts.find((p) => p.id === sp.id);
+                if (!dp) return sp;
+                // If version is different, overwrite with default product
+                if (sp.version !== dp.version) {
+                    propertiesUpdated = true;
+                    return dp;
+                }
+                const merged = { ...sp };
+                if (dp.cardBannerUrl && merged.cardBannerUrl !== dp.cardBannerUrl) {
+                    merged.cardBannerUrl = dp.cardBannerUrl;
+                    propertiesUpdated = true;
+                }
+                return merged;
+            });
 
-        const changed = missing.length > 0 || filtered.length !== storedProducts.length;
+        const changed = missing.length > 0 || filtered.length !== storedProducts.length || propertiesUpdated;
         if (!changed) return stored;
 
         const merged = { ...stored, products: [...filtered, ...missing] };
