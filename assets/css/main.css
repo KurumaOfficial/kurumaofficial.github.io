@@ -21,7 +21,7 @@
     /* Text */
     --color-text-primary:   #e8dada;
     --color-text-heading:   #d4c4bb;
-    --color-text-muted:     #5a4a44;
+    --color-text-muted:     #7c6b64;
 
     /* Semantic */
     --color-success:        #50b050;
@@ -77,6 +77,12 @@
     --z-overlay:  300;
     --z-toast:    400;
 }
+
+/* ============================================================
+ * [ARCHIVED / DEPRECATED] Light Theme Specification
+ * NOTE: The UI toggle button has been removed from all pages/routes.
+ * The CSS variables and selectors below are preserved for potential future reuse.
+ * ============================================================ */
 
 [data-theme="light"] {
     color-scheme: light;
@@ -411,6 +417,43 @@ body::after {
 .nav-badge:hover {
     border-color: var(--color-ruby);
     color: var(--color-ruby-light);
+}
+
+/* Styled red CTA button for Sign In / Cabinet in Header */
+.nav-auth-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 18px;
+    background: var(--color-ruby);
+    color: #ffffff !important;
+    font-family: var(--font-display, 'Unbounded', sans-serif);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--color-ruby);
+    border-radius: 0;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:
+        background-color var(--duration-base) var(--ease-default),
+        border-color var(--duration-base) var(--ease-default),
+        transform var(--duration-fast) var(--ease-default),
+        box-shadow var(--duration-base) var(--ease-default);
+}
+
+.nav-auth-btn:hover {
+    background: var(--color-ruby-light);
+    border-color: var(--color-ruby-light);
+    color: #ffffff !important;
+    box-shadow: 0 4px 18px rgba(139, 26, 42, 0.35);
+}
+
+.nav-auth-btn:active {
+    transform: scale(0.97);
 }
 
 .theme-btn {
@@ -786,8 +829,8 @@ section {
 }
 
 .p-sq-outer {
-    width: 240px;
-    height: 240px;
+    width: 312px;
+    height: 312px;
     border: 1px solid var(--color-ruby-dim);
     position: relative;
     animation: sq-rotate 12s ease-in-out infinite;
@@ -795,14 +838,14 @@ section {
 
 .p-sq-inner {
     position: absolute;
-    inset: 32px;
+    inset: 42px;
     background: var(--color-ruby);
     opacity: 0.12;
 }
 
 .p-sq-center {
     position: absolute;
-    inset: 64px;
+    inset: 83px;
     border: 1px solid var(--color-ruby);
 }
 
@@ -1951,4 +1994,135 @@ footer {
         min-height: 36px;
         padding: 6px 10px 6px 8px;
     }
+}
+
+
+/* ── §10.1 Cube 3D Visual ──────────────────────────────────── */
+
+.cube-stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    --cube-size: 320px;
+    --cube-half: 160px;
+    --cube-half-neg: -160px;
+    pointer-events: none;
+}
+
+@media (max-width: 960px) {
+    .cube-stage {
+        --cube-size: 160px;
+        --cube-half: 80px;
+        --cube-half-neg: -80px;
+    }
+}
+
+.cube-wrap {
+    position: absolute;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    transform-style: preserve-3d;
+    animation: spin 18s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotateX(20deg) rotateY(0deg); }
+    to   { transform: rotateX(380deg) rotateY(360deg); }
+}
+
+.face {
+    position: absolute;
+    width: var(--cube-size);
+    height: var(--cube-size);
+    border: 1.5px solid var(--color-ruby-light);
+    box-shadow:
+        0 0 12px rgba(181, 34, 57, 0.35) inset,
+        0 0 18px rgba(181, 34, 57, 0.35);
+    background: rgba(139, 26, 42, 0.03);
+    transition: all 0.3s ease;
+}
+
+.face--front  { transform: translateZ(var(--cube-half)); }
+.face--back   { transform: translateZ(var(--cube-half-neg)) rotateY(180deg); }
+.face--right  { transform: rotateY(90deg) translateZ(var(--cube-half)); }
+.face--left   { transform: rotateY(-90deg) translateZ(var(--cube-half)); }
+.face--top    { transform: rotateX(90deg) translateZ(var(--cube-half)); }
+.face--bottom { transform: rotateX(-90deg) translateZ(var(--cube-half)); }
+
+/* ── §13.1 Manifesto layout & visual ───────────────────────── */
+
+.manifesto-visual {
+    position: absolute;
+    right: calc(var(--page-gutter) + 60px);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 360px;
+    height: 360px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@media (max-width: 1100px) {
+    .manifesto-visual {
+        right: 5%;
+        opacity: 0.15;
+    }
+}
+
+@media (max-width: 960px) {
+    .manifesto-visual {
+        left: 50%;
+        right: auto;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 0.08;
+        z-index: 0;
+    }
+}
+
+/* ── §10.2 Product Card Banners ────────────────────────────── */
+
+.product-card-bg-banner {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+    transition: transform 0.6s var(--ease-default);
+    pointer-events: none;
+}
+
+.product-card-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(8, 6, 6, 0.72) 0%, rgba(8, 6, 6, 0.94) 100%);
+    z-index: 1;
+    transition: background 0.3s ease;
+    pointer-events: none;
+}
+
+.product-card:hover .product-card-bg-banner {
+    transform: scale(1.05);
+}
+
+.product-card:hover .product-card-bg-overlay {
+    background: linear-gradient(to bottom, rgba(8, 6, 6, 0.58) 0%, rgba(8, 6, 6, 0.88) 100%);
+}
+
+.product-card > * {
+    position: relative;
+    z-index: 2;
+}
+
+.product-card > .product-card-bg-banner,
+.product-card > .product-card-bg-overlay {
+    position: absolute;
+    z-index: 0;
 }

@@ -37,9 +37,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Unbounded:wght@200;400;700&display=swap">
 
-    <link rel="stylesheet" href="../../assets/css/main.css?v=12">
-    <link rel="stylesheet" href="../../assets/css/products/list.css?v=3">
-    <link rel="modulepreload" href="../../src/products/list.js?v=20260606a">
+    <link rel="stylesheet" href="../../assets/css/main.css?v=13">
+    <link rel="stylesheet" href="../../assets/css/products/list.css?v=4">
+    <link rel="modulepreload" href="../../src/products/list.js?v=20260703a">
 
 </head>
 <body>
@@ -55,13 +55,10 @@
         <div class="nav-links">
           <a id="navLinkProducts" class="nav__link" href="./">Products</a>
           <a id="navLinkDonate" class="nav__link" href="../donate/" data-donate-link>Support</a>
+          <a id="navLinkDocs" class="nav__link" href="../docs/">Docs</a>
           </div>
 
         <div class="nav-right">
-            <button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle theme" aria-pressed="false">
-                <span class="theme-icon" id="themeIco" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="4.1" fill="none" stroke="currentColor" stroke-width="1.8"></circle><path d="M12 2.8v2.6M12 18.6v2.6M4.8 12H2.2M21.8 12h-2.6M5.9 5.9l1.9 1.9M16.2 16.2l1.9 1.9M18.1 5.9l-1.9 1.9M7.8 16.2l-1.9 1.9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg></span>
-            </button>
-
             <div id="localeSwitcher" class="locale-switcher">
                 <button
                     id="localeSwitcherTrigger"
@@ -85,6 +82,7 @@
                     hidden
                 ></div>
             </div>
+            <a id="navAuthBtn" class="nav-auth-btn" href="../auth/login/">Sign In</a>
         </div>
     </nav>
 
@@ -170,6 +168,6 @@
 
     <div id="toast" class="toast" role="status" aria-live="polite" aria-hidden="true"></div>
 
-    <script type="module" src="../../src/products/list.js?v=20260606a"></script>
+    <script type="module" src="../../src/products/list.js?v=20260703a"></script>
 </body>
 </html>

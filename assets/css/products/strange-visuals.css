@@ -15,7 +15,7 @@
   --bg2:            #1a1917;
   --text:           #e4e2dc;
   --text-dim:       #8a8780;
-  --text-muted:     #4a4845;
+  --text-muted:     var(--color-text-muted, #7c6b64);
   --accent:         #8b1a2a;
   --accent-dim:     rgba(139, 26, 42, 0.12);
 
@@ -272,6 +272,45 @@ html[data-theme-switching="true"] .gui-w {
 .nav__link:hover { color:var(--text); }
 
 .nav-right { display:flex; align-items:center; gap:12px; }
+
+.nav-auth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  padding: 0 18px;
+  background: var(--text, #e4e2dc);
+  color: var(--bg, #111110) !important;
+  font-family: var(--font-display, 'Unbounded', sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid var(--text, #e4e2dc);
+  border-radius: 8px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.2s ease;
+}
+
+.nav-auth-btn:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000 !important;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.nav-auth-btn:active {
+  transform: translateY(0) scale(0.97);
+}
 
 .theme-btn {
   width:36px; height:36px; border-radius:0;
@@ -2825,4 +2864,10 @@ footer {
   .hero-install-btn {
     min-width:min(100%, 320px);
   }
+}
+
+/* Scale SVG logo inside the box to be larger */
+.hero-app-icon svg {
+  width: 54% !important;
+  height: 54% !important;
 }

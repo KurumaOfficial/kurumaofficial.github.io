@@ -4,7 +4,7 @@
  * @module core/data-utils
  */
 
-import { FLAG_META } from './constants.js';
+import { FLAG_META } from './constants.js?v=20260703a';
 
 // ── Primitives ──────────────────────────────────────────────
 
@@ -407,6 +407,7 @@ export function normalizeProduct(raw = {}, index = 0) {
         featuredOrder: toNumber(raw.featuredOrder, index + 1),
         sortOrder: toNumber(raw.sortOrder, index + 1),
         tone: raw.tone === 'green' ? 'green' : 'red',
+        cardBannerUrl: cleanText(raw.cardBannerUrl, ''),
         summary: cleanText(raw.summary, ''),
         instructions,
         sourceUrl: cleanText(raw.sourceUrl, ''),

@@ -1,11 +1,11 @@
 import { initReveal } from '../components/reveal.js';
-import { createLocaleController } from '../i18n/controller.js';
-import { resolveRouteRelativePath } from '../i18n/config.js';
-import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js';
-import { cleanUrl, escapeHtml } from '../core/dom.js';
+import { createLocaleController } from '../i18n/controller.js?v=20260703a';
+import { resolveRouteRelativePath } from '../i18n/config.js?v=20260703a';
+import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260703a';
+import { cleanUrl, escapeHtml } from '../core/dom.js?v=20260703a';
 import { getIconMarkup, setInlineIcon } from '../core/icons.js';
-import { localizeSiteData } from '../data/localized-site-data.js';
-import { getRouteModuleDisplayName } from '../core/data-utils.js';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
+import { getRouteModuleDisplayName } from '../core/data-utils.js?v=20260703a';
 import {
   getAdminHref,
   getEffectiveSiteData,
@@ -15,7 +15,7 @@ import {
   initSharedThemeToggle,
   initSmoothRouteTransitions,
   navigateWithRouteTransition,
-} from '../core/site-shell.js?v=20260510a';
+} from '../core/site-shell.js?v=20260703a';
 
 const CATEGORY_ORDER = Object.freeze(['player', 'world', 'utils', 'other', 'interface', 'themes']);
 

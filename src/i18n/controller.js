@@ -17,9 +17,9 @@ import {
     getLocaleOptions,
     normalizeLocale,
     resolveRouteRelativePath,
-} from './config.js';
+} from './config.js?v=20260703a';
 import { MESSAGES } from './messages.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260510a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/social/og-banner.png';
 const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/png';
@@ -190,6 +190,7 @@ export function createLocaleController() {
         ['navLinkManifesto', 'nav.manifesto'],
         ['navLinkTeam',      'nav.team'],
         ['navLinkDonate',    'nav.donate'],
+        ['navLinkDocs',      'nav.docs'],
         /* Hero CTAs */
         ['heroCta1',         'hero.ctaPrimary'],
         ['heroCta2',         'hero.ctaSecondary'],
@@ -246,6 +247,12 @@ export function createLocaleController() {
 
         const footerSocialLinks = document.getElementById('footerSocialLinks');
         if (footerSocialLinks) footerSocialLinks.setAttribute('aria-label', t('footer.socialsAria', footerSocialLinks.getAttribute('aria-label') ?? ''));
+
+        /* Auth CTA Button ALWAYS points to login page with "Войти" text */
+        const navAuthBtn = document.getElementById('navAuthBtn');
+        if (navAuthBtn) {
+            navAuthBtn.textContent = t('nav.signIn', 'Войти');
+        }
     }
 
     // ── Language switcher ───────────────────────────────────

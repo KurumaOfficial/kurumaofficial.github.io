@@ -8,7 +8,7 @@
  * @module products/list
  */
 
-import { createLocaleController } from '../i18n/controller.js';
+import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import { initReveal } from '../components/reveal.js';
 import {
     applyGlobalRouteRedirect,
@@ -18,11 +18,11 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js?v=20260510a';
-import { resolveLocaleRootRelativePath } from '../i18n/config.js';
-import { localizeSiteData } from '../data/localized-site-data.js';
-import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js';
-import { escapeHtml, linkify } from '../core/dom.js';
+} from '../core/site-shell.js?v=20260703a';
+import { resolveLocaleRootRelativePath } from '../i18n/config.js?v=20260703a';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
+import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js?v=20260703a';
+import { escapeHtml, linkify } from '../core/dom.js?v=20260703a';
 
 const STATUS_KEYS = ['active', 'frozen', 'abandoned'];
 const FLAG_KEYS = ['alpha', 'beta', 'release'];
@@ -214,8 +214,12 @@ function boot() {
             const summary = product.summary
                 ? `<p class="plist-card-desc">${linkify(product.summary)}</p>`
                 : '';
+            const bannerHtml = product.cardBannerUrl
+                ? `<div class="plist-card-bg-banner" style="background-image: url('${escapeHtml(lc.resolveSitePath(product.cardBannerUrl))}')"></div><div class="plist-card-bg-overlay"></div>`
+                : '';
             return `
 <article class="plist-card" id="plist-${escapeHtml(product.id)}">
+  ${bannerHtml}
   <div class="plist-card-status">
     <span class="${dotClass}"></span>
     <span>${escapeHtml(lifecycleLabel(product.status || product.tag))}</span>
