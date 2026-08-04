@@ -25,34 +25,21 @@
 <main id="main">
 <div class="docs-page"> <div class="docs-hub-hero"> <a href="../" class="hero-store-back docs-hub-back" aria-label="НАЗАД"> <span class="ui-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M19 12H6.75M6.75 12l5.1-5.1M6.75 12l5.1 5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span> <span class="hero-store-back-label">НАЗАД</span> </a> <div class="docs-search-wrap"> <input type="text" placeholder="Пошук по документації..." class="docs-search-input"> <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" stroke-width="1.5"/></svg> </div> </div> <div class="docs-hub-categories docs-article-categories"> <div class="docs-cat-group"> <h2 class="docs-cat-title">Угоди та правила</h2> <div class="docs-cat-links"> <a class="docs-cat-link is-active" href="../privacy/">Конфіденційність</a> <a class="docs-cat-link" href="../terms/">Правила</a> <a class="docs-cat-link" href="../user-agreement/">Угода</a> <a class="docs-cat-link" href="../cookies/">Cookies</a> </div> </div> <div class="docs-cat-group"> <h2 class="docs-cat-title">Усунення неполадок</h2> <div class="docs-cat-links"> <a class="docs-cat-link" href="../launcher/">AMCLauncher</a> <a class="docs-cat-link" href="../strange-visuals/">Strange Visuals</a> <a class="docs-cat-link" href="../client/">AMC Client</a> <a class="docs-cat-link" href="../aleph-trust/">Aleph Trust</a> </div> </div> </div> <div class="docs-article-center"> <div class="docs-content">
     <section>
-      <h1>Захист даних та конфіденційність</h1>
+      <h1>Захист даних</h1>
       <div class="docs-update-date">Оновлено: 4 серпня 2026 р.</div>
-      <p>Ми розробляємо екосистему продуктів безпеки (WetID, Aleph Trust, AMCLauncher, Strange Visuals). Конфіденційність користувачів — фундаментальний принцип архітектури Aleph Studio (WeTTeA). Ми збираємо лише необхідний мінімум інформації для роботи авторизації та захисту від чітів.</p>
+      <p>Aleph Studio (WeTTeA) обробляє мінімальний обсяг даних, необхідний для надання доступу до сервісів, аутентифікації користувачів та безпеки продуктів.</p>
     </section>
     <section>
-      <h2>1. Інформація, що обробляється</h2>
-      <ul>
-        <li><strong>Обліковий запис WetID SSO:</strong> Email, захищений криптографічний хеш пароля (Argon2id), логін та параметри 2FA.</li>
-        <li><strong>Апаратний HWID-токен:</strong> Знеособлений цифровий зліпок обладнання (процесор, материнська плата, відеокарта). Використовується виключно для захисту ігрових серверів від повторного входу заблокованих порушників. Не містить персональних даних.</li>
-        <li><strong>Технічні метрики:</strong> Маскована IP-адреса, сесійні токени верифікації Aleph Trust та службовий заголовок клієнта.</li>
-      </ul>
+      <h2>1. Оброблювані дані</h2>
+      <p>Ми обробляємо технічні ідентифікатори пристрою, електронну пошту, логін, параметри авторизації WetID SSO та системні логи підключень.</p>
     </section>
     <section>
-      <h2>2. Для чого використовуються дані</h2>
-      <ol>
-        <li>Єдиний вхід (SSO) через WetID в усі продукти екосистеми.</li>
-        <li>Перевірка цифрового підпису модів та захист Strange Visuals від сторонніх чіт-ін'єкцій.</li>
-        <li>Валідація підписок Aleph Trust (тарифи Beth, Gimel, Dalet) та видача токенів допуску.</li>
-        <li>Захист інфраструктури від DDoS-атак та обходу банів.</li>
-      </ol>
+      <h2>2. Мета обробки</h2>
+      <p>Дані використовуються виключно для авторизації користувачів, валідації ліцензій, запобігання несанкціонованому доступу та безпеки мережі.</p>
     </section>
     <section>
-      <h2>3. Безпека та зберігання</h2>
-      <p>Усі дані шифруються за стандартом AES-256 у спокої та передаються через TLS 1.3. Тимчасові логи видаляються кожні 30 днів. Логи аудиту зберігаються 90 днів.</p>
-    </section>
-    <section>
-      <h2>4. Ваші права</h2>
-      <p>Ви можете запросити вивантаження даних або повне видалення профілю WetID у будь-який момент через <code>privacy@aleph.icu</code>. Обліковий запис і токени видаляються безповоротно.</p>
+      <h2>3. Безпека та права</h2>
+      <p>Інформація передається захищеними каналами та зберігається на ізольованих серверах. Ви можете запросити видалення акаунту через <code>privacy@aleph.icu</code>.</p>
     </section>
 </div>
 </div>
