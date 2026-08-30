@@ -35,10 +35,10 @@ export function initPasswordToggles() {
     });
 }
 
-import { createLocaleController } from '../i18n/controller.js?v=20260703a';
+import { createLocaleController } from '../i18n/controller.js?v=20260830b';
 import { initSharedThemeToggle } from '../core/site-shell.js';
 import { initReveal } from '../components/reveal.js';
-import { showAuthNoticeModal } from './modal.js?v=1';
+import { showAuthNoticeModal } from './modal.js?v=20260830b';
 
 function boot() {
     initPasswordToggles();

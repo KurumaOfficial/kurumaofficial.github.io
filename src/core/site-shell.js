@@ -1,8 +1,8 @@
-import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260703a';
-import { detectLocaleFromPath, getLocalePath } from '../i18n/config.js?v=20260703a';
-import { normalizeData } from './data-utils.js?v=20260703a';
+import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260830b';
+import { detectLocaleFromPath, getLocalePath } from '../i18n/config.js?v=20260830b';
+import { normalizeData } from './data-utils.js?v=20260830b';
 import { setInlineIcon } from './icons.js';
-import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js?v=20260703a';
+import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js?v=20260830b';
 
 const THEME_STORAGE_KEY = 'aleph-theme';
 const THEME_SWITCH_ATTR = 'data-theme-switching';

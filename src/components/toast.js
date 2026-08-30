@@ -4,7 +4,7 @@
  * @module components/toast
  */
 
-import { $ } from '../core/dom.js?v=20260703a';
+import { $ } from '../core/dom.js?v=20260830b';
 
 /** @type {number | undefined} */
 let timer;

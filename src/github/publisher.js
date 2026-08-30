@@ -1,5 +1,5 @@
-import { GITHUB_CONFIG, DATA_MARKERS } from '../core/constants.js?v=20260703a';
-import { normalizeData } from '../core/data-utils.js?v=20260703a';
+import { GITHUB_CONFIG, DATA_MARKERS } from '../core/constants.js?v=20260830b';
+import { normalizeData } from '../core/data-utils.js?v=20260830b';
 
 const HTML_PATH_PATTERN = /\.html?$/i;
 const JS_PATH_PATTERN = /\.js$/i;
