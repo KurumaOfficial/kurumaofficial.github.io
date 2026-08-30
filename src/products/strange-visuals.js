@@ -1,5 +1,6 @@
 import { initReveal } from '../components/reveal.js';
 import { createLocaleController } from '../i18n/controller.js?v=20260703a';
+import { initLoginModal } from '../auth/login-modal.js?v=9';
 import { resolveRouteRelativePath } from '../i18n/config.js?v=20260703a';
 import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260703a';
 import { cleanUrl, escapeHtml } from '../core/dom.js?v=20260703a';
@@ -1262,6 +1263,7 @@ function boot() {
   initReveal([document.getElementById('main')].filter(Boolean));
   document.documentElement.removeAttribute('data-booting');
   initSmoothRouteTransitions();
+  initLoginModal();
 }
 
 if (document.readyState === 'loading') {
