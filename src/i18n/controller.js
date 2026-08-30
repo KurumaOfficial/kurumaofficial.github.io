@@ -210,10 +210,10 @@ export function createLocaleController() {
         ['teamTitle',        'team.title'],
         ['teamIntro',        'team.intro'],
         /* Footer */
-        ['footerDesc',       'footer.desc'],
         ['footerNavHeading', 'footer.navHeading'],
         ['footerWetteaHeading', 'footer.wetteaHeading'],
-        ['footerTagline',    'footer.tagline'],
+        ['footerNavLinkProducts', 'footer.products'],
+        ['footerNavLinkDocs', 'footer.docs'],
         ['footerDonateLink', 'footer.donate'],
         ['footerCopyright',  'footer.copyright'],
     ];
@@ -223,6 +223,8 @@ export function createLocaleController() {
         ['heroIntro',      'hero.intro'],
         ['approachLead',   'approach.lead'],
         ['manifestoText',  'manifesto.text'],
+        ['footerTagline',  'footer.tagline'],
+        ['footerDesc',     'footer.desc'],
     ];
 
     function applyStaticCopy() {
