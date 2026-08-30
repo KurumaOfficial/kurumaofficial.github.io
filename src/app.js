@@ -11,6 +11,7 @@ import { createLocaleController } from './i18n/controller.js?v=20260703a';
 import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
+import { initLoginModal }        from './auth/login-modal.js?v=9';
 import {
     applyGlobalRouteRedirect,
     getAdminHref,
@@ -91,6 +92,7 @@ function boot() {
     initSharedThemeToggle();
     initSmoothRouteTransitions();
     initHeroParallax();
+    initLoginModal();
 
     /* 8 — Expose toast globally for admin / dev use ---------------- */
     /** @type {any} */ (window).__alephToast = showToast;
