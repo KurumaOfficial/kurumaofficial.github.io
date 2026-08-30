@@ -1,11 +1,13 @@
 import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import { initSharedThemeToggle } from '../core/site-shell.js';
 import { initReveal } from '../components/reveal.js';
+import { initLoginModal } from '../auth/login-modal.js?v=9';
 
 function boot() {
     const localeController = createLocaleController();
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
+    initLoginModal();
 
     const searchInput = document.querySelector('.docs-search-input');
     const searchWrap = document.querySelector('.docs-search-wrap');

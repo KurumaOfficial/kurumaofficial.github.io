@@ -10,6 +10,7 @@
 
 import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import { initReveal } from '../components/reveal.js';
+import { initLoginModal } from '../auth/login-modal.js?v=9';
 import {
     applyGlobalRouteRedirect,
     getAdminHref,
@@ -285,6 +286,7 @@ function boot() {
     initSharedThemeToggle();
     initSmoothRouteTransitions();
     initAdminRouteAccess({ adminHref: getAdminHref() });
+    initLoginModal();
 }
 
 if (document.readyState === 'loading') {
