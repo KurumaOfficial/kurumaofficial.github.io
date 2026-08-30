@@ -22,9 +22,10 @@ meta_data = {
         "sidebar_title_issues": "Решение проблем",
         "sidebar_title_api": "API и интеграции",
         "nav_products": "Продукты",
+        "nav_docs": "Документация",
         "nav_donate": "Поддержать",
         "nav_profile": "Кабинет",
-        "tagline": "Дочерний проект WeTTeA",
+        "tagline": 'Дочерний проект <a href="https://wettea.net" target="_blank" rel="noopener">WeTTeA</a>',
         "copyright": "© 2026. Все права защищены.",
         "skip_link": "Перейти к основному содержимому",
         "sidebar_links": {
@@ -50,9 +51,10 @@ meta_data = {
         "sidebar_title_issues": "Troubleshooting",
         "sidebar_title_api": "API & Integrations",
         "nav_products": "Products",
+        "nav_docs": "Documentation",
         "nav_donate": "Support",
         "nav_profile": "Cabinet",
-        "tagline": "A subsidiary of WeTTeA",
+        "tagline": 'A subsidiary of <a href="https://wettea.net" target="_blank" rel="noopener">WeTTeA</a>',
         "copyright": "© 2026. All rights reserved.",
         "skip_link": "Skip to main content",
         "sidebar_links": {
@@ -78,9 +80,10 @@ meta_data = {
         "sidebar_title_issues": "Вирішення проблем",
         "sidebar_title_api": "API та інтеграції",
         "nav_products": "Продукти",
+        "nav_docs": "Документація",
         "nav_donate": "Підтримати",
         "nav_profile": "Кабінет",
-        "tagline": "Дочірній проєкт WeTTeA",
+        "tagline": 'Дочірній проєкт <a href="https://wettea.net" target="_blank" rel="noopener">WeTTeA</a>',
         "copyright": "© 2026. Усі права захищено.",
         "skip_link": "Перейти до основного вмісту",
         "sidebar_links": {
@@ -616,8 +619,7 @@ html_template = """<!doctype html>
         </div>
         <nav id="footerNav" class="site-footer__nav" aria-label="Footer">
             <a href="../../../[LOC]/products/">[NAV_PRODUCTS]</a>
-            <a href="../../../[LOC]/#manifesto">Принцип</a>
-            <a href="../../../[LOC]/#team">Команда</a>
+            <a href="../../../[LOC]/docs/">[NAV_DOCS]</a>
             <span class="site-footer__nav-sep" aria-hidden="true"></span>
             <a id="footerDonateLink" href="../../../[LOC]/donate/">[NAV_DONATE]</a>
         </nav>
@@ -753,6 +755,7 @@ def generate_all_pages():
             page_text = page_text.replace("[PAGE_TITLE]", meta["sidebar_links"][cat])
             page_text = page_text.replace("[SKIP_LINK]", meta["skip_link"])
             page_text = page_text.replace("[NAV_PRODUCTS]", meta["nav_products"])
+            page_text = page_text.replace("[NAV_DOCS]", meta["nav_docs"])
             page_text = page_text.replace("[NAV_DONATE]", meta["nav_donate"])
             page_text = page_text.replace("[NAV_PROFILE]", meta["nav_profile"])
             page_text = page_text.replace("[BACK_ARIA]", meta["back_aria"])
