@@ -1,15 +1,17 @@
 import { createLocaleController } from '../i18n/controller.js?v=20260703a';
 import { initSharedThemeToggle } from '../core/site-shell.js';
 import { initReveal } from '../components/reveal.js';
+import { initLoginModal } from '../auth/login-modal.js?v=9';
 
 function boot() {
     const localeController = createLocaleController();
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
+    initLoginModal();
 
     const currentLocale = window.__ALEPH_LOCALE__ || 'ru';
     if (sessionStorage.getItem('aleph_demo_auth') !== 'true') {
-        window.location.href = `/${currentLocale}/auth/login/`;
+        window.location.href = `/${currentLocale}/`;
         return;
     }
 
@@ -17,7 +19,7 @@ function boot() {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
             sessionStorage.removeItem('aleph_demo_auth');
-            window.location.href = `/${currentLocale}/auth/login/`;
+            window.location.href = `/${currentLocale}/`;
         });
     });
 

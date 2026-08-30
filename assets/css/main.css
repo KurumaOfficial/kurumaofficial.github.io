@@ -1416,6 +1416,19 @@ footer {
     white-space: nowrap;
 }
 
+.site-footer__tagline a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: rgba(139, 26, 42, 0.45);
+    text-underline-offset: 2px;
+    transition: color var(--duration-base) var(--ease-default), text-decoration-color var(--duration-base) var(--ease-default);
+}
+
+.site-footer__tagline a:hover {
+    color: var(--color-text-heading);
+    text-decoration-color: var(--color-primary, #b31b2c);
+}
+
 .site-footer__nav {
     display: flex;
     align-items: center;

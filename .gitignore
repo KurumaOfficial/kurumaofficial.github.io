@@ -3,3 +3,7 @@ __pycache__/
 _gen_*.py
 _update_*.py
 _rebuild_*.py
+scratch/
+.DS_Store
+Thumbs.db
+

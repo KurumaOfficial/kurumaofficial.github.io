@@ -64,6 +64,14 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                 role: 'Junior Developer',
                 description: 'Helps with bugs, support and smaller fixes. Watches issues and breaks down errors.',
             }),
+            'team-member-1781008791243-1': Object.freeze({
+                role: 'Staff',
+                description: 'Always online',
+            }),
+            'team-member-1785807031088-1': Object.freeze({
+                role: 'Developer',
+                description: 'Genius, billionaire, playboy, philanthropist.',
+            }),
         }),
         supportPage: Object.freeze({
             buttons: Object.freeze({
@@ -135,6 +143,14 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
             'team-member-04': Object.freeze({
                 role: 'Молодший розробник',
                 description: 'Допомагає з багами, підтримкою та дрібними правками. Стежить за проблемами й розбирає помилки.',
+            }),
+            'team-member-1781008791243-1': Object.freeze({
+                role: 'Персонал',
+                description: 'Завжди в мережі',
+            }),
+            'team-member-1785807031088-1': Object.freeze({
+                role: 'Розробник',
+                description: 'Геній, мільярдер, плейбой, філантроп.',
             }),
         }),
         supportPage: Object.freeze({

@@ -1,6 +1,7 @@
 import { initReveal } from '../components/reveal.js';
 import { $, cleanUrl, createElement, optimizeDiscordAvatarUrl, sanitizeHref } from '../core/dom.js?v=20260703a';
 import { createInlineIcon } from '../core/icons.js';
+import { initLoginModal } from '../auth/login-modal.js?v=9';
 import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
 import { resolveRouteRelativePath } from '../i18n/config.js?v=20260703a';
 import { createLocaleController } from '../i18n/controller.js?v=20260703a';
@@ -1389,6 +1390,7 @@ function boot() {
     initAdminRouteAccess({ adminHref: getAdminHref() });
     initSkipLink();
     initSmoothRouteTransitions();
+    initLoginModal();
 
     applyStaticCopy(elements, copy);
     applyOriginContext(elements, copy, siteData);
