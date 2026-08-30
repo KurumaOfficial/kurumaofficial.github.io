@@ -7,11 +7,11 @@
  * @module app
  */
 
-import { createLocaleController } from './i18n/controller.js?v=20260703a';
+import { createLocaleController } from './i18n/controller.js?v=20260830b';
 import { createRenderer }        from './components/renderer.js';
 import { initReveal }            from './components/reveal.js';
 import { showToast }             from './components/toast.js';
-import { initLoginModal }        from './auth/login-modal.js?v=9';
+import { initLoginModal }        from './auth/login-modal.js?v=20260830b';
 import {
     applyGlobalRouteRedirect,
     getAdminHref,
@@ -20,7 +20,7 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from './core/site-shell.js?v=20260703a';
+} from './core/site-shell.js?v=20260830b';
 
 /* ------------------------------------------------------------------ */
 /*  Boot                                                              */
@@ -69,7 +69,7 @@ function boot() {
     /* 5.1 — Admin: lazy-load editor on admin page, otherwise just
              wire up the secret key-sequence redirect. --------------- */
     if (isAdminPage) {
-        import('./admin/editor.js?v=20260703a').then(({ createEditorController }) => {
+        import('./admin/editor.js?v=20260830b').then(({ createEditorController }) => {
             const editor = createEditorController({
                 renderSite: renderer.renderSite,
                 showToast,

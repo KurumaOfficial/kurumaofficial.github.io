@@ -4,7 +4,7 @@
  * @module i18n/config
  */
 
-import { normalizeBareWebUrl } from '../core/dom.js?v=20260703a';
+import { normalizeBareWebUrl } from '../core/dom.js?v=20260830b';
 
 /** @type {string} */
 export const DEFAULT_LOCALE = 'ru';

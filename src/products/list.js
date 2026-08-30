@@ -8,9 +8,9 @@
  * @module products/list
  */
 
-import { createLocaleController } from '../i18n/controller.js?v=20260703a';
+import { createLocaleController } from '../i18n/controller.js?v=20260830b';
 import { initReveal } from '../components/reveal.js';
-import { initLoginModal } from '../auth/login-modal.js?v=9';
+import { initLoginModal } from '../auth/login-modal.js?v=20260830b';
 import {
     applyGlobalRouteRedirect,
     getAdminHref,
@@ -19,11 +19,11 @@ import {
     initSkipLink,
     initSharedThemeToggle,
     initSmoothRouteTransitions,
-} from '../core/site-shell.js?v=20260703a';
-import { resolveLocaleRootRelativePath } from '../i18n/config.js?v=20260703a';
-import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
-import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js?v=20260703a';
-import { escapeHtml, linkify } from '../core/dom.js?v=20260703a';
+} from '../core/site-shell.js?v=20260830b';
+import { resolveLocaleRootRelativePath } from '../i18n/config.js?v=20260830b';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260830b';
+import { normalizeData, toNumber, getFlagMeta, getProductLifecycleKey } from '../core/data-utils.js?v=20260830b';
+import { escapeHtml, linkify } from '../core/dom.js?v=20260830b';
 
 const STATUS_KEYS = ['active', 'frozen', 'abandoned'];
 const FLAG_KEYS = ['alpha', 'beta', 'release'];

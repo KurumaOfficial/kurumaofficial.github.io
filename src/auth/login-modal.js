@@ -5,7 +5,7 @@
  * @module auth/login-modal
  */
 
-import { showAuthNoticeModal } from './modal.js?v=1';
+import { showAuthNoticeModal } from './modal.js?v=20260830b';
 import { MESSAGES } from '../i18n/messages.js';
 
 /** @type {(key: string) => string} */
@@ -17,28 +17,38 @@ function initModalI18n() {
     _t = (key) => msgs[key] ?? MESSAGES.ru?.loginModal?.[key] ?? key;
 }
 
+function ensureModalStyles() {
+    if (typeof document === 'undefined') return;
+    if (document.querySelector('link[href*="auth-login-modal.css"]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    const pathDepth = window.location.pathname.replace(/^\/|\/$/g, '').split('/').filter(Boolean).length;
+    const prefix = pathDepth > 0 ? '../'.repeat(pathDepth) : './';
+    link.href = `${prefix}assets/css/auth-login-modal.css?v=14`;
+    document.head.appendChild(link);
+}
+
 /**
  * Initialise the login modal.
  * Binds to the #navAuthBtn element and manages form switching,
  * password visibility, and choreographed entrance animations.
  */
 export function initLoginModal() {
-    const trigger = document.getElementById('navAuthBtn');
-    if (!trigger || trigger.dataset.loginModalBound === '1') return;
-    trigger.dataset.loginModalBound = '1';
-
+    if (typeof document === 'undefined') return;
+    ensureModalStyles();
     initModalI18n();
-
-    /* Prevent the default link navigation — use capture phase so it fires
-       before initSmoothRouteTransitions' document-level click listener. */
-    trigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        openLoginModal('login');
-    }, true);
-
     buildModalHTML();
     bindModalEvents();
+
+    const trigger = document.getElementById('navAuthBtn');
+    if (trigger && trigger.dataset.loginModalBound !== '1') {
+        trigger.dataset.loginModalBound = '1';
+        trigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openLoginModal('login');
+        }, true);
+    }
 
     /* Split the brand text into per-character spans so each letter
        "draws" in sequence on open. */
@@ -64,10 +74,18 @@ let _currentMode = 'login';
 let _backdrop = null;
 
 function openLoginModal(mode) {
+    if (typeof document === 'undefined') return;
+    if (!_backdrop) {
+        initModalI18n();
+        buildModalHTML();
+        bindModalEvents();
+    }
     if (!_backdrop) return;
     Object.values(_forms).forEach((f) => {
-        f.classList.add('hidden');
-        f.classList.remove('form-enter', 'form-exit');
+        if (f) {
+            f.classList.add('hidden');
+            f.classList.remove('form-enter', 'form-exit');
+        }
     });
 
     const target = mode || 'login';
@@ -390,5 +408,27 @@ function bindModalEvents() {
         codeInput.addEventListener('input', () => {
             codeInput.value = codeInput.value.replace(/\D/g, '');
         });
+    }
+}
+
+export { openLoginModal, closeLoginModal };
+
+/* Global fallback: Catch any click on login triggers across the DOM */
+if (typeof document !== 'undefined') {
+    document.addEventListener('click', (e) => {
+        const target = e.target instanceof Element ? e.target : null;
+        if (!target) return;
+        const btn = target.closest('#navAuthBtn, .nav-auth-btn, [data-open-login]');
+        if (btn) {
+            e.preventDefault();
+            e.stopPropagation();
+            openLoginModal('login');
+        }
+    }, true);
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => initLoginModal(), { once: true });
+    } else {
+        initLoginModal();
     }
 }

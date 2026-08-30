@@ -17,9 +17,9 @@ import {
     getLocaleOptions,
     normalizeLocale,
     resolveRouteRelativePath,
-} from './config.js?v=20260703a';
+} from './config.js?v=20260830b';
 import { MESSAGES } from './messages.js';
-import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260703a';
+import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260830b';
 
 const DEFAULT_SOCIAL_IMAGE_PATH = './assets/images/social/og-banner.png';
 const DEFAULT_SOCIAL_IMAGE_TYPE = 'image/png';

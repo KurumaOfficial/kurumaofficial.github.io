@@ -1,12 +1,12 @@
 import { initReveal } from '../components/reveal.js';
-import { createLocaleController } from '../i18n/controller.js?v=20260703a';
-import { initLoginModal } from '../auth/login-modal.js?v=9';
-import { resolveRouteRelativePath } from '../i18n/config.js?v=20260703a';
-import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260703a';
-import { cleanUrl, escapeHtml } from '../core/dom.js?v=20260703a';
+import { createLocaleController } from '../i18n/controller.js?v=20260830b';
+import { initLoginModal } from '../auth/login-modal.js?v=20260830b';
+import { resolveRouteRelativePath } from '../i18n/config.js?v=20260830b';
+import { SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from '../core/constants.js?v=20260830b';
+import { cleanUrl, escapeHtml } from '../core/dom.js?v=20260830b';
 import { getIconMarkup, setInlineIcon } from '../core/icons.js';
-import { localizeSiteData } from '../data/localized-site-data.js?v=20260703a';
-import { getRouteModuleDisplayName } from '../core/data-utils.js?v=20260703a';
+import { localizeSiteData } from '../data/localized-site-data.js?v=20260830b';
+import { getRouteModuleDisplayName } from '../core/data-utils.js?v=20260830b';
 import {
   getAdminHref,
   getEffectiveSiteData,
@@ -16,7 +16,7 @@ import {
   initSharedThemeToggle,
   initSmoothRouteTransitions,
   navigateWithRouteTransition,
-} from '../core/site-shell.js?v=20260703a';
+} from '../core/site-shell.js?v=20260830b';
 
 const CATEGORY_ORDER = Object.freeze(['player', 'world', 'utils', 'other', 'interface', 'themes']);
 
