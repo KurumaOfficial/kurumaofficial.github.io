@@ -230,11 +230,27 @@ export const DEFAULT_SITE_DATA = {
             "media": [
                 {
                     "type": "video",
-                    "url": "https://www.youtube.com/watch?v=phyUKzde6o8",
+                    "url": "https://youtu.be/phyUKzde6o8",
                     "dataUrl": "",
                     "alt": "",
                     "fileName": "",
                     "uploadKey": ""
+                },
+                {
+                    "type": "image",
+                    "url": "./assets/media/strange-visuals/4.webp",
+                    "dataUrl": "",
+                    "alt": "",
+                    "fileName": "4.webp",
+                    "uploadKey": "strange-visuals::media::assets/media/strange-visuals/4.webp"
+                },
+                {
+                    "type": "image",
+                    "url": "./assets/media/strange-visuals/photo_2026-09-10_21-34-41.webp",
+                    "dataUrl": "",
+                    "alt": "",
+                    "fileName": "photo_2026-09-10_21-34-41.webp",
+                    "uploadKey": "strange-visuals::media::assets/media/strange-visuals/photo_2026-09-10_21-34-41.webp"
                 },
                 {
                     "type": "image",
@@ -246,11 +262,27 @@ export const DEFAULT_SITE_DATA = {
                 },
                 {
                     "type": "image",
+                    "url": "./assets/media/strange-visuals/photo_2026-09-10_18-20-15.webp",
+                    "dataUrl": "",
+                    "alt": "",
+                    "fileName": "photo_2026-09-10_18-20-15.webp",
+                    "uploadKey": "strange-visuals::media::assets/media/strange-visuals/photo_2026-09-10_18-20-15.webp"
+                },
+                {
+                    "type": "image",
                     "url": "./assets/media/strange-visuals/2.webp",
                     "dataUrl": "",
                     "alt": "",
                     "fileName": "2.webp",
                     "uploadKey": "strange-visuals::media::assets/media/strange-visuals/2.webp"
+                },
+                {
+                    "type": "image",
+                    "url": "./assets/media/strange-visuals/photo_2026-09-10_22-27-22.webp",
+                    "dataUrl": "",
+                    "alt": "",
+                    "fileName": "photo_2026-09-10_22-27-22.webp",
+                    "uploadKey": "strange-visuals::media::assets/media/strange-visuals/photo_2026-09-10_22-27-22.webp"
                 },
                 {
                     "type": "image",
@@ -262,11 +294,11 @@ export const DEFAULT_SITE_DATA = {
                 },
                 {
                     "type": "image",
-                    "url": "./assets/media/strange-visuals/4.webp",
+                    "url": "./assets/media/strange-visuals/photo_2026-09-10_16-50-02.webp",
                     "dataUrl": "",
                     "alt": "",
-                    "fileName": "4.webp",
-                    "uploadKey": "strange-visuals::media::assets/media/strange-visuals/4.webp"
+                    "fileName": "photo_2026-09-10_16-50-02.webp",
+                    "uploadKey": "strange-visuals::media::assets/media/strange-visuals/photo_2026-09-10_16-50-02.webp"
                 }
             ]
         },
