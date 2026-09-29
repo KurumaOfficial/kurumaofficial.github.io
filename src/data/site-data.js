@@ -230,7 +230,7 @@ export const DEFAULT_SITE_DATA = {
             "media": [
                 {
                     "type": "video",
-                    "url": "https://www.youtube.com/watch?v=OvoJATIyCj4",
+                    "url": "https://www.youtube.com/watch?v=phyUKzde6o8",
                     "dataUrl": "",
                     "alt": "",
                     "fileName": "",
