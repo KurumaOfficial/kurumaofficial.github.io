@@ -1232,6 +1232,7 @@ function boot() {
   };
 
   syncRouteIcons(elements);
+  localeController.applyStaticCopy();
   localeController.mountLanguageSwitcher();
   initSharedThemeToggle();
   initAdminRouteAccess({ adminHref: getAdminHref() });
