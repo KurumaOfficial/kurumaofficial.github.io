@@ -5,6 +5,7 @@ import { initLoginModal } from '../auth/login-modal.js?v=20260830b';
 
 function boot() {
     const localeController = createLocaleController();
+    localeController.applyStaticCopy();
     localeController.mountLanguageSwitcher();
     initSharedThemeToggle();
     initLoginModal();

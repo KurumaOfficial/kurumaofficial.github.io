@@ -1393,6 +1393,7 @@ function boot() {
     initLoginModal();
 
     applyStaticCopy(elements, copy);
+    localeController.applyStaticCopy();
     applyOriginContext(elements, copy, siteData);
     localeController.applyDocumentMeta({
         title: copy.metaTitle,

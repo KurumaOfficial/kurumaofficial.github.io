@@ -2,7 +2,8 @@ import { DEFAULT_SITE_DATA } from '../data/site-data.js?v=20260830b';
 import { detectLocaleFromPath, getLocalePath } from '../i18n/config.js?v=20260830b';
 import { normalizeData } from './data-utils.js?v=20260830b';
 import { setInlineIcon } from './icons.js';
-import { LOCAL_DATA_KEY, SECRET_SEQUENCE } from './constants.js?v=20260830b';
+import { cleanUrl, escapeHtml } from './dom.js?v=20260830b';
+import { LOCAL_DATA_KEY, SECRET_SEQUENCE, SOCIAL_PLATFORMS, SOCIAL_ICON_SVG } from './constants.js?v=20260830b';
 
 const THEME_STORAGE_KEY = 'aleph-theme';
 const THEME_SWITCH_ATTR = 'data-theme-switching';
@@ -311,12 +312,31 @@ export function initSharedThemeToggle() {
         updateColorSchemeMeta(currentTheme);
     }
 
-    if (btn.dataset.themeToggleBound === '1') return;
+    if (btn.dataset.themeToggleBound === '1') {
+        initFooterSocials(getEffectiveSiteData());
+        return;
+    }
     btn.dataset.themeToggleBound = '1';
 
     btn.addEventListener('click', () => {
         applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark', { animate: true });
     });
+
+    initFooterSocials(getEffectiveSiteData());
+}
+
+export function initFooterSocials(siteData = getEffectiveSiteData()) {
+    const target = document.getElementById('footerSocialLinks');
+    if (!(target instanceof HTMLElement) || target.children.length > 0) return;
+
+    target.innerHTML = SOCIAL_PLATFORMS.map(({ key, label }) => {
+        const href = cleanUrl(siteData?.socials?.[key] || '');
+        const icon = SOCIAL_ICON_SVG[key] || '';
+        if (!href) {
+            return `<a class="social-link" aria-disabled="true" tabindex="-1" aria-label="${escapeHtml(label)}">${icon}</a>`;
+        }
+        return `<a class="social-link" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer" aria-label="${escapeHtml(label)}">${icon}</a>`;
+    }).join('');
 }
 
 export function initSkipLink() {
