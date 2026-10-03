@@ -1305,22 +1305,35 @@ body.route-ready {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--color-text-muted);
+    color: #ffffff;
     text-decoration: none;
     transition:
         border-color var(--duration-base) var(--ease-default),
         color var(--duration-base) var(--ease-default);
 }
 
+[data-theme="light"] .social-link {
+    color: #1a1916;
+}
+
 .social-link:hover {
     border-color: var(--color-ruby);
-    color: var(--color-text-heading);
+    color: #ffffff;
+}
+
+[data-theme="light"] .social-link:hover {
+    border-color: var(--color-ruby);
+    color: #1a1916;
 }
 
 .social-link svg {
     width: 16px;
     height: 16px;
-    fill: currentColor;
+    fill: #ffffff;
+}
+
+[data-theme="light"] .social-link svg {
+    fill: #1a1916;
 }
 
 .social-link[aria-disabled="true"] {
@@ -1479,11 +1492,31 @@ footer {
     width: 32px;
     height: 32px;
     border: 1px solid var(--border-accent);
+    color: #ffffff;
+}
+
+[data-theme="light"] .site-footer__socials .social-link {
+    color: #1a1916;
+}
+
+.site-footer__socials .social-link:hover {
+    border-color: var(--color-ruby-light);
+    color: #ffffff;
+}
+
+[data-theme="light"] .site-footer__socials .social-link:hover {
+    border-color: var(--color-ruby);
+    color: #1a1916;
 }
 
 .site-footer__socials .social-link svg {
     width: 14px;
     height: 14px;
+    fill: #ffffff;
+}
+
+[data-theme="light"] .site-footer__socials .social-link svg {
+    fill: #1a1916;
 }
 
 .site-footer__bottom {

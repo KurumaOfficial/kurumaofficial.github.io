@@ -2354,16 +2354,33 @@ footer.site-footer {
   border-radius: 0;
   border: 1px solid rgba(139, 26, 42, 0.20);
   background: transparent;
+  color: #ffffff;
 }
 
 [data-theme="light"] .site-footer__socials .social-link {
   border-color: rgba(139, 26, 42, 0.15);
   background: transparent;
+  color: #1a1916;
+}
+
+.site-footer__socials .social-link:hover {
+  border-color: #b52239;
+  color: #ffffff;
+}
+
+[data-theme="light"] .site-footer__socials .social-link:hover {
+  border-color: #8b1a2a;
+  color: #1a1916;
 }
 
 .site-footer__socials .social-link svg {
   width: 14px;
   height: 14px;
+  fill: #ffffff;
+}
+
+[data-theme="light"] .site-footer__socials .social-link svg {
+  fill: #1a1916;
 }
 
 .social-link {
@@ -2375,32 +2392,36 @@ footer.site-footer {
   border-radius: 0;
   border: 1px solid rgba(139, 26, 42, 0.20);
   background: transparent;
-  color: #7c6b64;
+  color: #ffffff;
   text-decoration: none;
   transition: border-color .3s cubic-bezier(0.4, 0, 0.2, 1), color .3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 [data-theme="light"] .social-link {
   border-color: rgba(139, 26, 42, 0.15);
-  color: #9a7068;
+  color: #1a1916;
 }
 
 .social-link:hover {
   border-color: #8b1a2a;
-  color: #d4c4bb;
+  color: #ffffff;
   background: transparent;
 }
 
 [data-theme="light"] .social-link:hover {
   border-color: #8b1a2a;
-  color: #2d1512;
+  color: #1a1916;
   background: transparent;
 }
 
 .social-link svg {
   width: 16px;
   height: 16px;
-  fill: currentColor;
+  fill: #ffffff;
+}
+
+[data-theme="light"] .social-link svg {
+  fill: #1a1916;
 }
 
 .social-link[aria-disabled="true"] {
