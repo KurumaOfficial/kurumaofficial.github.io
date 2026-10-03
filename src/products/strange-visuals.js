@@ -653,16 +653,6 @@ function renderFooterSocials(siteData) {
   }).join('');
 }
 
-function initFooterBackToTop() {
-  const topBtn = document.querySelector('.sv-footer-top-btn');
-  if (!(topBtn instanceof HTMLElement)) return;
-
-  topBtn.addEventListener('click', (event) => {
-    event.preventDefault();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-
 /* ── Admin-managed gallery media rendering ───────────────────────
  * When the route product carries a non-empty `media[]` (managed from
  * the admin Media tab), it replaces the static gallery markup on every
@@ -1254,7 +1244,6 @@ function boot() {
   initActionButtons(elements, routeProduct);
   initShareDock(elements, siteData, shareMeta);
   renderFooterSocials(siteData);
-  initFooterBackToTop();
   renderProductMediaGallery(routeProduct);
   renderGuiPreview(elements, previewContexts, previewState);
 
