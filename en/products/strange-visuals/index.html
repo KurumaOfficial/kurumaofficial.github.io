@@ -421,57 +421,25 @@
 </main>
 
 <footer class="site-footer">
-    <div class="site-footer__inner">
-        <div class="site-footer__top">
-            <div class="sv-footer-brand">
-                <div class="sv-footer-icon-wrap" aria-hidden="true">
-                    <svg class="sv-footer-icon" viewBox="0 0 300 300" fill="currentColor">
-                        <rect x="30"  y="20"  width="80"  height="80"/>
-                        <rect x="190" y="20"  width="80"  height="80"/>
-                        <rect x="110" y="100" width="80"  height="40"/>
-                        <rect x="70"  y="140" width="160" height="80"/>
-                        <rect x="70"  y="220" width="40"  height="40"/>
-                        <rect x="190" y="220" width="40"  height="40"/>
-                    </svg>
-                </div>
-                <div class="sv-footer-meta">
-                    <div class="sv-footer-title-row">
-                        <span class="sv-footer-name">Strange <em>Visuals</em></span>
-                        <span class="sv-footer-tag">1.21.8</span>
-                    </div>
-                    <div class="sv-footer-desc">
-                        <span class="sv-footer-summary">Visual client modification for Minecraft</span>
-                    </div>
-                </div>
-            </div>
-            <a href="#main" class="sv-footer-top-btn" aria-label="Back to top" data-no-route-transition>
-                <svg class="sv-footer-top-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
-                <span>Back to top</span>
+    <div class="site-footer__main">
+        <div class="site-footer__left">
+            <a class="site-footer__logo" href="../../">
+                <span class="site-footer__sq" aria-hidden="true"></span>
+                <span class="site-footer__name">Aleph Studio</span>
             </a>
+            <span class="site-footer__divider" aria-hidden="true"></span>
+            <span id="footerTagline" class="site-footer__tagline">A subsidiary of <a href="https://wettea.net" target="_blank" rel="noopener">WeTTeA</a></span>
         </div>
-        <div class="site-footer__main">
-            <div class="site-footer__left">
-                <a class="site-footer__logo" href="../../">
-                    <span class="site-footer__sq" aria-hidden="true"></span>
-                    <span class="site-footer__name">Aleph Studio</span>
-                </a>
-                <span class="site-footer__divider" aria-hidden="true"></span>
-                <span id="footerTagline" class="site-footer__tagline">A subsidiary of <a href="https://wettea.net" target="_blank" rel="noopener">WeTTeA</a></span>
-            </div>
-            <div class="site-footer__actions">
-                <nav id="footerNav" class="site-footer__nav" aria-label="Footer — navigation">
-                    <a id="footerNavLinkProducts" href="../" class="sv-footer-nav-link">Products</a>
-                    <a id="footerNavLinkDocs" href="../../docs/" class="sv-footer-nav-link">Documentation</a>
-                    <span class="site-footer__nav-sep" aria-hidden="true"></span>
-                    <a id="footerDonateLink" href="../../donate/" data-donate-link class="sv-footer-nav-link sv-footer-nav-link--accent">Support</a>
-                </nav>
-                <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social links"></div>
-            </div>
-        </div>
+        <nav id="footerNav" class="site-footer__nav" aria-label="Footer — navigation">
+            <a href="../">Products</a>
+            <a href="../../docs/">Documentation</a>
+            <span class="site-footer__nav-sep" aria-hidden="true"></span>
+            <a id="footerDonateLink" href="../../donate/" data-donate-link>Support</a>
+        </nav>
+        <div id="footerSocialLinks" class="site-footer__socials" aria-label="Social links"></div>
     </div>
     <div class="site-footer__bottom">
         <span id="footerCopyright" class="site-footer__copy">© 2026. All rights reserved.</span>
-        <span class="sv-footer-tech-note">// 100% VISUAL · FABRIC &amp; NEOFORGE</span>
     </div>
     <span id="footerDesc" hidden></span>
     <span id="footerNavHeading" hidden></span>
