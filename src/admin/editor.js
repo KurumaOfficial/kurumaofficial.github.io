@@ -19,7 +19,7 @@ import { navigateWithRouteTransition } from '../core/site-shell.js?v=20260830b';
 import { createGitHubPublisher, fetchPublishedSiteData } from '../github/publisher.js';
 import { FLAG_SVG, getLocaleMeta, getLocalePath, getSiteBasePath, LOCALE_ORDER, normalizeLocale } from '../i18n/config.js?v=20260830b';
 
-const GITHUB_CONTENTS_MAX_FILE_BYTES = 100 * 1024 * 1024;
+const GITHUB_CONTENTS_MAX_FILE_BYTES = 25 * 1024 * 1024;
 const PREVIEW_DISCORD_IMAGE_SIZE = 256;
 const ROUTE_MODULE_LABELS = Object.freeze({
     ru: { player: 'Player (На игроке)', world: 'World (В мире)', utils: 'Utilities (Утилиты)', other: 'Other (Остальное)', interface: 'Interface (Интерфейс)', themes: 'Themes (Темы)' },
@@ -104,7 +104,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastJsonImported: 'JSON импортирован в редактор.',
         toastJsonExported: 'JSON выгружен.',
         toastJsonImportFailed: 'Не удалось импортировать JSON.',
-        toastFileTooLarge: 'Сервис публикации не принимает файлы больше 100 MB.',
+        toastFileTooLarge: 'Сервис веб-публикации не принимает файлы больше 25 MB (лимит GitHub API). Файлы до 100 MB нужно добавлять через локальный git-клон.',
         toastFileQueued: 'Файл добавлен в очередь публикации.',
         toastFileRemoved: 'Файл убран из очереди публикации.',
         toastMediaReadFailed: 'Не удалось прочитать файл.',
@@ -326,7 +326,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastJsonImported: 'JSON imported into the editor.',
         toastJsonExported: 'JSON exported.',
         toastJsonImportFailed: 'Could not import JSON.',
-        toastFileTooLarge: 'The publishing service does not accept files larger than 100 MB.',
+        toastFileTooLarge: 'The web publishing service does not accept files larger than 25 MB (GitHub API limit). Files up to 100 MB must be pushed via a local git clone.',
         toastFileQueued: 'File added to the publish queue.',
         toastFileRemoved: 'File removed from the publish queue.',
         toastMediaReadFailed: 'Could not read the file.',
@@ -548,7 +548,7 @@ const ADMIN_MESSAGES = Object.freeze({
         toastJsonImported: 'JSON імпортовано в редактор.',
         toastJsonExported: 'JSON експортовано.',
         toastJsonImportFailed: 'Не вдалося імпортувати JSON.',
-        toastFileTooLarge: 'Сервіс публікації не приймає файли більше 100 MB.',
+        toastFileTooLarge: 'Сервіс веб-публікації не приймає файли більше 25 MB (ліміт GitHub API). Файли до 100 MB потрібно додавати через локальний git-клон.',
         toastFileQueued: 'Файл додано до черги публікації.',
         toastFileRemoved: 'Файл прибрано з черги публікації.',
         toastMediaReadFailed: 'Не вдалося прочитати файл.',

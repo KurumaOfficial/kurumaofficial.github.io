@@ -11,7 +11,7 @@ export const DEFAULT_SITE_DATA = {
         {
             "id": "strange-visuals",
             "title": "Strange Visuals",
-            "version": "1.6.0",
+            "version": "2.0.0",
             "tag": "active",
             "flag": "release",
             "status": "active",
@@ -22,175 +22,95 @@ export const DEFAULT_SITE_DATA = {
             "cardBannerUrl": "./assets/media/strange-visuals/card-banner.jpg",
             "summary": "Strange Visuals сфокусирован на визуальных улучшениях, которые не нарушают правила серверов.",
             "instructions": [
-                "Установите Minecraft Fabric 1.21.8 в вашем лаунчере.",
+                "Установите Minecraft Fabric 1.21.11 в вашем лаунчере.",
                 "Скачайте Fabric API: https://modrinth.com/mod/fabric-api и закиньте файл в папку mods.",
                 "После этого скачайте наш мод и тоже закиньте его в папку mods.",
                 "Готово — можно запускать."
             ],
             "sourceUrl": "https://github.com/KurumaOfficial/1.21.8-Strange-Visuals-legacy",
-            "downloadUrl": "./assets/files/strange-visuals-1.6.0.jar",
-            "downloadName": "1.6.0.jar",
+            "downloadUrl": "./assets/files/strangevisuals-2.0.32.jar",
+            "downloadName": "strangevisuals-2.0.32.jar",
             "detailUrl": "products/strange-visuals/",
             "note": "Файл мода доступен по кнопке ниже.",
             "autoRouteRedirect": false,
             "routeModules": {
                 "player": [
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
+                        "name": "Косметика",
+                        "nameEn": "Cosmetics",
+                        "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
+                        "name": "Улучшенные руки",
+                        "nameEn": "Better Hands",
+                        "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
+                        "name": "Эффекты ударов",
+                        "nameEn": "Hit Effect",
+                        "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
+                        "name": "Эффекты убийств",
+                        "nameEn": "Kill Effect",
+                        "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Неймтеги",
+                        "nameEn": "Name Tags",
+                        "enabled": false
+                    },
+                    {
+                        "name": "Таргет ESP",
+                        "nameEn": "Target ESP",
                         "enabled": false
                     }
                 ],
                 "world": [
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Шейдеры",
+                        "nameEn": "Shaders",
                         "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Атмосфера",
+                        "nameEn": "Ambience",
                         "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Фильтры",
+                        "nameEn": "Filters",
                         "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": false
                     }
                 ],
                 "utils": [
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": false
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Фейк игрок",
+                        "nameEn": "Fake Player",
                         "enabled": false
                     }
                 ],
                 "other": [
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": false
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": false
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Конфиг",
+                        "nameEn": "Config",
                         "enabled": true
                     }
                 ],
                 "interface": [
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "ClickGUI",
+                        "nameEn": "ClickGUI",
                         "enabled": true
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Медиаплеер",
+                        "nameEn": "Media Player",
                         "enabled": false
                     },
                     {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": false
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
-                        "enabled": true
-                    },
-                    {
-                        "name": "test1",
-                        "nameEn": "test1",
+                        "name": "Улучшенные анимации",
+                        "nameEn": "Better Animations",
                         "enabled": true
                     }
                 ],
