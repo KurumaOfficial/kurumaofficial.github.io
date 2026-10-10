@@ -98,6 +98,9 @@ function describeGitHubTokenAccessError(status, errorText, config) {
     if (status === 403 && /Resource not accessible by personal access token/i.test(text)) {
         return 'The provided password does not have permission to publish to the remote target. Check the access settings and try again.';
     }
+    if (/too large to process|creating the blob in a local clone/i.test(text)) {
+        return 'GitHub API limit exceeded: files larger than 25 MB cannot be uploaded via the web interface. Please commit and push large files via a local git clone.';
+    }
     return null;
 }
 
@@ -289,6 +292,10 @@ async function commitRepoFilesAtomically(config, token, files, message) {
         const bytes = file.bytes instanceof Uint8Array
             ? file.bytes
             : new Uint8Array(await file.file.arrayBuffer());
+        if (bytes.byteLength > 25 * 1024 * 1024) {
+            const sizeMb = (bytes.byteLength / (1024 * 1024)).toFixed(1);
+            throw new Error(`File "${file.path}" (${sizeMb} MB) exceeds GitHub REST API's 25 MB limit for web publishing. Files up to 100 MB must be pushed via a local git clone.`);
+        }
         const blobSha = await createGitHubBlob(config, headers, bytes);
         return {
             path: file.path,

@@ -13,7 +13,7 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                 status: 'active',
                 summary: 'Strange Visuals focuses on visual enhancements that do not violate server rules.',
                 instructions: Object.freeze([
-                    'Install Minecraft Fabric 1.21.8 in your launcher.',
+                    'Install Minecraft Fabric 1.21.11 in your launcher.',
                     'Download Fabric API: https://modrinth.com/mod/fabric-api and place the file into the mods folder.',
                     'Then download our mod and place it into the mods folder as well.',
                     'Done — you can launch it.',
@@ -93,7 +93,7 @@ export const SITE_DATA_LOCALE_OVERRIDES = Object.freeze({
                 status: 'active',
                 summary: 'Strange Visuals зосереджений на візуальних покращеннях, які не порушують правила серверів.',
                 instructions: Object.freeze([
-                    'Встановіть Minecraft Fabric 1.21.8 у своєму лаунчері.',
+                    'Встановіть Minecraft Fabric 1.21.11 у своєму лаунчері.',
                     'Завантажте Fabric API: https://modrinth.com/mod/fabric-api і покладіть файл у папку mods.',
                     'Після цього завантажте наш мод і також покладіть його у папку mods.',
                     'Готово — можна запускати.',
