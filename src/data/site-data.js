@@ -340,6 +340,13 @@ export const DEFAULT_SITE_DATA = {
         ],
         "supporters": [
             {
+                "id": "supporter-1793489419903-1",
+                "name": "arlan6178",
+                "avatarUrl": "",
+                "amountUsd": 2,
+                "sortOrder": 31
+            },
+            {
                 "id": "supporter-567713040351494174",
                 "name": "ᴡᴇʟᴡᴇʀ_ɢᴀɴ",
                 "avatarUrl": "https://cdn.discordapp.com/avatars/567713040351494174/35df3dbca620b7f1dfbad1b84f97998b.png?size=256",
